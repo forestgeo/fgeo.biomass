@@ -1,0 +1,36 @@
+Package: fgeo.biomass
+Title: Calculate Biomass
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Mauro",
+             family = "Lepore",
+             role = c("aut", "ctr", "cre"),
+             email = "leporem@si.edu"),
+      person(given = "Gabriel",
+             family = "Arellano",
+             role = c("aut", "rev"),
+             email = "gabriel.arellano.torres@gmail.com"),
+      person(given = "Stuart",
+             family = "Davies",
+             role = c("aut", "rev"),
+             email = "daviess@si.edu"),
+      person(given = "Erika",
+             family = "Gonzalez",
+             role = c("aut", "rev"),
+             email = "GonzalezEB@si.edu"),
+      person(given = "Sean",
+             family = "McMahon",
+             role = c("aut", "rev"),
+             email = "mcmahons@si.edu"),
+      person(given = "Kristina",
+             family = "Teixeira",
+             role = c("aut", "rev"),
+             email = "TeixeiraK@si.edu"),
+      person(given = "CTFS-ForestGEO",
+             role = c("cph", "fnd"),
+             email = "ForestGEO@si.edu"))
+Description: Calculate biomass using allometric equations from allodb.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
