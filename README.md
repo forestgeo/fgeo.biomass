@@ -105,6 +105,8 @@ biomass
 #> # ... with 30,219 more rows
 ```
 
+### Improvements
+
 But the function names will soon change to something like this:
 
 ``` r
@@ -115,6 +117,17 @@ census %>%
   allo_prioritize()         # instead of pick_best_equations()
   allo_evaluate()           # instead of evaluate_equations()
 ```
+
+Some other possible improvements:
+
+  - Allow using ViewFullTable and ViewTaxonomy.
+  - Allow using any table with the required columns.
+  - Simplify interfaces via generic functions that ‘know’ what to do
+    with different (S3) classes of ForestGEO data – i.e. census and
+    scpecies tables; ViewFullTable and ViewTaxonomy talbles; or any two
+    tables of unknown class.
+
+### fgeo.biomass and allodb
 
 Allometric equations come from the **allodb** package.
 

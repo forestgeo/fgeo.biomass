@@ -165,6 +165,9 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">#&gt;  9    84 scbi  fraxi~ 170.  0edaff      0.163~ default    species  2.81e 4</span></a>
 <a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">#&gt; 10    89 scbi  fagus~  27.2 74186d      2.039~ default    species  9.97e 3</span></a>
 <a class="sourceLine" id="cb3-63" data-line-number="63"><span class="co">#&gt; # ... with 30,219 more rows</span></a></code></pre></div>
+<div id="improvements" class="section level3">
+<h3 class="hasAnchor">
+<a href="#improvements" class="anchor"></a>Improvements</h3>
 <p>But the function names will soon change to something like this:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">census <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">add_species</span>(species) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># instead of census_species()</span></a>
@@ -172,6 +175,16 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">allo_customize</span>() <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># new function to insert custom equations</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">allo_prioritize</span>()         <span class="co"># instead of pick_best_equations()</span></a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="kw">allo_evaluate</span>()           <span class="co"># instead of evaluate_equations()</span></a></code></pre></div>
+<p>Some other possible improvements:</p>
+<ul>
+<li>Allow using ViewFullTable and ViewTaxonomy.</li>
+<li>Allow using any table with the required columns.</li>
+<li>Simplify interfaces via generic functions that ‘know’ what to do with different (S3) classes of ForestGEO data – i.e. census and scpecies tables; ViewFullTable and ViewTaxonomy talbles; or any two tables of unknown class.</li>
+</ul>
+</div>
+<div id="fgeo-biomass-and-allodb" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fgeo-biomass-and-allodb" class="anchor"></a>fgeo.biomass and allodb</h3>
 <p>Allometric equations come from the <strong>allodb</strong> package.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Internal</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">fgeo.biomass<span class="op">:::</span>.default_eqn</a>
@@ -210,6 +223,7 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt;  9 b95baf      exp(3.892+3.122*log(dba))  </span></a>
 <a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; 10 e8f868      exp(3.6123+2.9944*log(dba))</span></a>
 <a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; # ... with 15 more rows</span></a></code></pre></div>
+</div>
 </div>
 <div id="information" class="section level2">
 <h2 class="hasAnchor">
