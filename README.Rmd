@@ -39,11 +39,46 @@ For details on how to install packages from GitHub, see [this article](https://g
 
 ```{r, message=FALSE}
 library(tidyverse)
-library(allodb)
 library(fgeo.biomass)
 ```
 
-For now we are excluding some equations from __allodb__.
+Right now these are the key functions:
+
+```{r}
+census <- allodb::scbi_tree1
+species <- allodb::scbi_species
+dbh_species <- census_species(census, species, site = "scbi")
+dbh_species
+
+equations <- get_equations(dbh_species)
+equations
+
+best <- pick_best_equations(equations)
+best
+
+biomass <- evaluate_equations(best)
+biomass
+```
+
+But the function names will soon change to something like this:
+
+```R
+census %>%
+  add_species(species) %>%  # instead of census_species()
+  allo_find() %>%           # instead of get_equations()
+  allo_customize() %>%      # new function to insert custom equations
+  allo_prioritize()         # instead of pick_best_equations()
+  allo_evaluate()           # instead of evaluate_equations()
+```
+
+Allometric equations come from the __allodb__ package.
+
+```{r}
+# Internal
+fgeo.biomass:::.default_eqn
+```
+
+For now we are excluding some equations.
 
 ```{r}
 # Internal
@@ -53,6 +88,8 @@ allodb::equations %>%
   filter(equation_id %in% excluding) %>% 
   select(equation_id, equation_allometry)
 ```
+
+
 
 ## Information
 

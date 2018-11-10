@@ -100,29 +100,116 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(allodb)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">library</span>(fgeo.biomass)</a></code></pre></div>
-<p>For now we are excluding some equations from <strong>allodb</strong>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Internal</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">excluding &lt;-<span class="st"> </span>fgeo.biomass<span class="op">:::</span>.bad_eqn_id</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">allodb<span class="op">::</span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(equation_id <span class="op">%in%</span><span class="st"> </span>excluding) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">  </span><span class="kw">select</span>(equation_id, equation_allometry)</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; # A tibble: 25 x 2</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;    equation_id equation_allometry         </span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;                      </span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  1 76aa3c      38.111*(dba^2.9)           </span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  2 28dce6      51.996*(dba^2.77)          </span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  3 a1646f      37.637*(dba^2.779)         </span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;  4 b61369      43.992*(dba^2.86)          </span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;  5 5e2dea      29.615*(dba^3.243)         </span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  6 3cb95a      exp(2.025+3.527*log(dba))  </span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  7 c94845      51.68+0.02*BA              </span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  8 6b3b2a      exp(3.67+2.847*log(dba))   </span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;  9 b95baf      exp(3.892+3.122*log(dba))  </span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; 10 e8f868      exp(3.6123+2.9944*log(dba))</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; # ... with 15 more rows</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(fgeo.biomass)</a></code></pre></div>
+<p>Right now these are the key functions:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">census &lt;-<span class="st"> </span>allodb<span class="op">::</span>scbi_tree1</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">species &lt;-<span class="st"> </span>allodb<span class="op">::</span>scbi_species</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">dbh_species &lt;-<span class="st"> </span><span class="kw"><a href="reference/census_species.html">census_species</a></span>(census, species, <span class="dt">site =</span> <span class="st">"scbi"</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">dbh_species</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; # A tibble: 40,283 x 4</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;    rowid site  sp                     dbh</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;  * &lt;int&gt; &lt;chr&gt; &lt;chr&gt;                &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  1     1 scbi  lindera benzoin       27.9</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  2     2 scbi  lindera benzoin       23.7</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  3     3 scbi  lindera benzoin       22.2</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  4     4 scbi  nyssa sylvatica      135  </span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  5     5 scbi  hamamelis virginiana  87  </span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;  6     6 scbi  hamamelis virginiana  22.5</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;  7     7 scbi  unidentified unk      42.6</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  8     8 scbi  lindera benzoin       51.4</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  9     9 scbi  viburnum prunifolium  38.3</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; 10    10 scbi  asimina triloba       14.5</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; # ... with 40,273 more rows</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">equations &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_equations.html">get_equations</a></span>(dbh_species)</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">equations</a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; # A tibble: 5 x 2</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt;   eqn_type       data                 </span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt;   &lt;chr&gt;          &lt;list&gt;               </span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; 1 species        &lt;tibble [8,930 x 8]&gt; </span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; 2 genus          &lt;tibble [5,642 x 8]&gt; </span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; 3 mixed_hardwood &lt;tibble [5,516 x 8]&gt; </span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; 4 family         &lt;tibble [10,141 x 8]&gt;</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; 5 woody_species  &lt;tibble [0 x 8]&gt;</span></a>
+<a class="sourceLine" id="cb3-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31">best &lt;-<span class="st"> </span><span class="kw"><a href="reference/pick_best_equations.html">pick_best_equations</a></span>(equations)</a>
+<a class="sourceLine" id="cb3-32" data-line-number="32">best</a>
+<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt; # A tibble: 30,229 x 8</span></a>
+<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt;    rowid site  sp           dbh equation_id eqn        eqn_source eqn_type</span></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;   </span></a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt;  1     4 scbi  nyssa syl~ 135   8da09d      1.5416 * ~ default    species </span></a>
+<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt;  2    21 scbi  liriodend~ 232.  34fe5a      1.0259 * ~ default    species </span></a>
+<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt;  3    29 scbi  acer rubr~ 326.  7c72ed      exp(4.589~ default    species </span></a>
+<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt;  4    38 scbi  fraxinus ~  42.8 0edaff      0.1634 * ~ default    species </span></a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt;  5    72 scbi  acer rubr~ 289.  7c72ed      exp(4.589~ default    species </span></a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt;  6    77 scbi  quercus a~ 636.  07dba7      1.5647 * ~ default    species </span></a>
+<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt;  7    79 scbi  tilia ame~ 475   3f99ba      1.4416 * ~ default    species </span></a>
+<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt;  8    79 scbi  tilia ame~ 475   76d19b      0.004884 ~ default    species </span></a>
+<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt;  9    84 scbi  fraxinus ~ 170.  0edaff      0.1634 * ~ default    species </span></a>
+<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">#&gt; 10    89 scbi  fagus gra~  27.2 74186d      2.0394 * ~ default    species </span></a>
+<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">#&gt; # ... with 30,219 more rows</span></a>
+<a class="sourceLine" id="cb3-47" data-line-number="47"></a>
+<a class="sourceLine" id="cb3-48" data-line-number="48">biomass &lt;-<span class="st"> </span><span class="kw"><a href="reference/evaluate_equations.html">evaluate_equations</a></span>(best)</a>
+<a class="sourceLine" id="cb3-49" data-line-number="49">biomass</a>
+<a class="sourceLine" id="cb3-50" data-line-number="50"><span class="co">#&gt; # A tibble: 30,229 x 9</span></a>
+<a class="sourceLine" id="cb3-51" data-line-number="51"><span class="co">#&gt;    rowid site  sp       dbh equation_id eqn    eqn_source eqn_type biomass</span></a>
+<a class="sourceLine" id="cb3-52" data-line-number="52"><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb3-53" data-line-number="53"><span class="co">#&gt;  1     4 scbi  nyssa~ 135   8da09d      1.541~ default    species  1.10e12</span></a>
+<a class="sourceLine" id="cb3-54" data-line-number="54"><span class="co">#&gt;  2    21 scbi  lirio~ 232.  34fe5a      1.025~ default    species  2.99e 6</span></a>
+<a class="sourceLine" id="cb3-55" data-line-number="55"><span class="co">#&gt;  3    29 scbi  acer ~ 326.  7c72ed      exp(4~ default    species  1.26e 8</span></a>
+<a class="sourceLine" id="cb3-56" data-line-number="56"><span class="co">#&gt;  4    38 scbi  fraxi~  42.8 0edaff      0.163~ default    species  1.11e 3</span></a>
+<a class="sourceLine" id="cb3-57" data-line-number="57"><span class="co">#&gt;  5    72 scbi  acer ~ 289.  7c72ed      exp(4~ default    species  9.38e 7</span></a>
+<a class="sourceLine" id="cb3-58" data-line-number="58"><span class="co">#&gt;  6    77 scbi  querc~ 636.  07dba7      1.564~ default    species  5.41e 7</span></a>
+<a class="sourceLine" id="cb3-59" data-line-number="59"><span class="co">#&gt;  7    79 scbi  tilia~ 475   3f99ba      1.441~ default    species  2.97e 7</span></a>
+<a class="sourceLine" id="cb3-60" data-line-number="60"><span class="co">#&gt;  8    79 scbi  tilia~ 475   76d19b      0.004~ default    species  1.97e 3</span></a>
+<a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">#&gt;  9    84 scbi  fraxi~ 170.  0edaff      0.163~ default    species  2.81e 4</span></a>
+<a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">#&gt; 10    89 scbi  fagus~  27.2 74186d      2.039~ default    species  9.97e 3</span></a>
+<a class="sourceLine" id="cb3-63" data-line-number="63"><span class="co">#&gt; # ... with 30,219 more rows</span></a></code></pre></div>
+<p>But the function names will soon change to something like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">census <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">add_species</span>(species) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># instead of census_species()</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">allo_find</span>() <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># instead of get_equations()</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">allo_customize</span>() <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># new function to insert custom equations</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">allo_prioritize</span>()         <span class="co"># instead of pick_best_equations()</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="kw">allo_evaluate</span>()           <span class="co"># instead of evaluate_equations()</span></a></code></pre></div>
+<p>Allometric equations come from the <strong>allodb</strong> package.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Internal</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">fgeo.biomass<span class="op">:::</span>.default_eqn</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; # A tibble: 619 x 6</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;    equation_id site     sp           eqn               eqn_source eqn_type</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;  * &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;             &lt;chr&gt;      &lt;chr&gt;   </span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;  1 2060ea      lilly d~ acer rubrum  10^(1.1891 + 1.4~ default    species </span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;  2 2060ea      tyson    acer rubrum  10^(1.1891 + 1.4~ default    species </span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  3 a4d879      lilly d~ acer saccha~ 10^(1.2315 + 1.6~ default    species </span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  4 a4d879      tyson    acer saccha~ 10^(1.2315 + 1.6~ default    species </span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  5 c59e03      lilly d~ amelanchier~ exp(7.217 + 1.51~ default    genus   </span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  6 c59e03      scbi     amelanchier~ exp(7.217 + 1.51~ default    genus   </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  7 c59e03      serc     amelanchier~ exp(7.217 + 1.51~ default    genus   </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  8 c59e03      serc     amelanchier~ exp(7.217 + 1.51~ default    genus   </span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  9 c59e03      tyson    amelanchier~ exp(7.217 + 1.51~ default    genus   </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 10 c59e03      umbc     amelanchier~ exp(7.217 + 1.51~ default    genus   </span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; # ... with 609 more rows</span></a></code></pre></div>
+<p>For now we are excluding some equations.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># Internal</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">excluding &lt;-<span class="st"> </span>fgeo.biomass<span class="op">:::</span>.bad_eqn_id</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">allodb<span class="op">::</span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(equation_id <span class="op">%in%</span><span class="st"> </span>excluding) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">  </span><span class="kw">select</span>(equation_id, equation_allometry)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; # A tibble: 25 x 2</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;    equation_id equation_allometry         </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;                      </span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  1 76aa3c      38.111*(dba^2.9)           </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  2 28dce6      51.996*(dba^2.77)          </span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  3 a1646f      37.637*(dba^2.779)         </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  4 b61369      43.992*(dba^2.86)          </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;  5 5e2dea      29.615*(dba^3.243)         </span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  6 3cb95a      exp(2.025+3.527*log(dba))  </span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;  7 c94845      51.68+0.02*BA              </span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt;  8 6b3b2a      exp(3.67+2.847*log(dba))   </span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt;  9 b95baf      exp(3.892+3.122*log(dba))  </span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; 10 e8f868      exp(3.6123+2.9944*log(dba))</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; # ... with 15 more rows</span></a></code></pre></div>
 </div>
 <div id="information" class="section level2">
 <h2 class="hasAnchor">
