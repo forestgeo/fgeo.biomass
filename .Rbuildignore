@@ -1,3 +1,6 @@
+^tmp\.R$
+^tmp\.sh$
+^data-raw$
 ^docs$
 ^_pkgdown\.yml$
 ^\.github$

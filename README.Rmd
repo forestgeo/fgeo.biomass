@@ -37,13 +37,22 @@ For details on how to install packages from GitHub, see [this article](https://g
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-## TODO: Add example
+```{r, message=FALSE}
+library(tidyverse)
+library(allodb)
+library(fgeo.biomass)
 ```
 
-[Get started with __fgeo__](https://forestgeo.github.io/fgeo/articles/fgeo.html)
+For now we are excluding some equations from __allodb__.
+
+```{r}
+# Internal
+excluding <- fgeo.biomass:::.bad_eqn_id
+
+allodb::equations %>% 
+  filter(equation_id %in% excluding) %>% 
+  select(equation_id, equation_allometry)
+```
 
 ## Information
 

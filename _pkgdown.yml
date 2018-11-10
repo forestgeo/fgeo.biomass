@@ -42,3 +42,20 @@ navbar:
     - text: fgeo
       href: https://forestgeo.github.io/fgeo/
 
+
+
+reference:
+
+  - title: Main functions
+    contents:
+      - has_concept("constructors")
+      - has_concept("functions to manipulate equations")
+
+  - title: Helpers
+    contents:
+      - has_concept("helpers")
+
+  - title: Internal objects that will be eventually hidden or removed
+    contents:
+      - has_concept("internal objects that will be hidden or removed")
+

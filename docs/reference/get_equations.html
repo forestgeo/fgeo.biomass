@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • fgeo.biomass</title>
+<title>Get default equations of each type. — get_equations • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Get default equations of each type. — get_equations" />
+
+<meta property="og:description" content="Get default equations of each type." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -101,120 +104,70 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get default equations of each type.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/get_equations.R'><code>R/get_equations.R</code></a></small>
+    <div class="hidden name"><code>get_equations.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Get default equations of each type.</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-main-functions" class="hasAnchor"><a href="#section-main-functions" class="anchor"></a>Main functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="census_species.html">census_species()</a></code> </p>
-        </td>
-        <td><p>Add <code>species</code> to a ForestGEO-like dataframe of census data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="evaluate_equations.html">evaluate_equations()</a></code> </p>
-        </td>
-        <td><p>Evaluate equations, giving a biomass result per row.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_equations.html">get_equations()</a></code> </p>
-        </td>
-        <td><p>Get default equations of each type.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pick_best_equations.html">pick_best_equations()</a></code> </p>
-        </td>
-        <td><p>Find the best equations given a priority order.</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-helpers" class="hasAnchor"><a href="#section-helpers" class="anchor"></a>Helpers</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="bind_winner_loser.html">bind_winner_loser()</a></code> </p>
-        </td>
-        <td><p>Keep rows from a dataframe and add missing rows from another dataframe.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rowbind_inorder.html">rowbind_inorder()</a></code> </p>
-        </td>
-        <td><p>Reduce a list of dataframes row-binding each dataframe in a given order.</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-internal-objects-that-will-be-eventually-hidden-or-removed" class="hasAnchor"><a href="#section-internal-objects-that-will-be-eventually-hidden-or-removed" class="anchor"></a>Internal objects that will be eventually hidden or removed</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="bad_eqn_id.html">bad_eqn_id()</a></code> </p>
-        </td>
-        <td><p>Find equations that can't be evaluated.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="default_eqn.html">default_eqn()</a></code> </p>
-        </td>
-        <td><p>Restructure equations from <strong>allodb</strong>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dot-bad_eqn_id.html">.bad_eqn_id</a></code> </p>
-        </td>
-        <td><p>Character vector giving <code>equation_id</code> of equations that can't be evaluated.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dot-default_eqn.html">.default_eqn</a></code> </p>
-        </td>
-        <td><p>Dataframe of default equations, restructured from <strong>allodb</strong>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="handle_multiple_rowid.html">find_duplicated_rowid()</a></code> <code><a href="handle_multiple_rowid.html">pick_one_row_by_rowid()</a></code> </p>
-        </td>
-        <td><p>Handle multiple <code>rowid</code>s: find duplicates and pick a single row.</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>get_equations</span>(<span class='no'>dbh_species</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dbh_species</th>
+      <td><p>A dataframe as those created with <code><a href='census_species.html'>census_species()</a></code>.</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A nested dataframe with each row containing the data of an equation
+type.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other functions to manipulate equations: <code><a href='evaluate_equations.html'>evaluate_equations</a></code>,
+  <code><a href='pick_best_equations.html'>pick_best_equations</a></code></p></div>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_tree1</a></span>
+<span class='no'>species</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_species</a></span>
+<span class='no'>dbh_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='census_species.html'>census_species</a></span>(
+  <span class='no'>census</span>, <span class='no'>species</span>,
+  <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
+)
+
+<span class='fu'>get_equations</span>(<span class='no'>dbh_species</span>)</div><div class='output co'>#&gt; # A tibble: 5 x 2
+#&gt;   eqn_type       data                 
+#&gt;   &lt;chr&gt;          &lt;list&gt;               
+#&gt; 1 species        &lt;tibble [8,930 x 8]&gt; 
+#&gt; 2 genus          &lt;tibble [5,642 x 8]&gt; 
+#&gt; 3 mixed_hardwood &lt;tibble [5,516 x 8]&gt; 
+#&gt; 4 family         &lt;tibble [10,141 x 8]&gt;
+#&gt; 5 woody_species  &lt;tibble [0 x 8]&gt;     </div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-main-functions">Main functions</a></li>
-      <li><a href="#section-helpers">Helpers</a></li>
-      <li><a href="#section-internal-objects-that-will-be-eventually-hidden-or-removed">Internal objects that will be eventually hidden or removed</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

@@ -99,9 +99,30 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">## <span class="al">TODO</span>: Add example</a></code></pre></div>
-<p><a href="https://forestgeo.github.io/fgeo/articles/fgeo.html">Get started with <strong>fgeo</strong></a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(allodb)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">library</span>(fgeo.biomass)</a></code></pre></div>
+<p>For now we are excluding some equations from <strong>allodb</strong>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Internal</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">excluding &lt;-<span class="st"> </span>fgeo.biomass<span class="op">:::</span>.bad_eqn_id</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">allodb<span class="op">::</span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(equation_id <span class="op">%in%</span><span class="st"> </span>excluding) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">  </span><span class="kw">select</span>(equation_id, equation_allometry)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; # A tibble: 25 x 2</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;    equation_id equation_allometry         </span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;                      </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  1 76aa3c      38.111*(dba^2.9)           </span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  2 28dce6      51.996*(dba^2.77)          </span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  3 a1646f      37.637*(dba^2.779)         </span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;  4 b61369      43.992*(dba^2.86)          </span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;  5 5e2dea      29.615*(dba^3.243)         </span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  6 3cb95a      exp(2.025+3.527*log(dba))  </span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  7 c94845      51.68+0.02*BA              </span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  8 6b3b2a      exp(3.67+2.847*log(dba))   </span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;  9 b95baf      exp(3.892+3.122*log(dba))  </span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; 10 e8f868      exp(3.6123+2.9944*log(dba))</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; # ... with 15 more rows</span></a></code></pre></div>
 </div>
 <div id="information" class="section level2">
 <h2 class="hasAnchor">
