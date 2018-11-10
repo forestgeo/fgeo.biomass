@@ -29,10 +29,14 @@ Authors@R:
       person(given = "CTFS-ForestGEO",
              role = c("cph", "fnd"),
              email = "ForestGEO@si.edu"))
-Description: Calculate biomass using allometric equations from allodb.
+Description: Calculate biomass using allometric equations from
+    allodb.
 License: GPL-3
+URL: https://github.com/forestgeo/fgeo.biomass
+BugReports: https://github.com/forestgeo/fgeo.biomass/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-URL: https://github.com/forestgeo/fgeo.biomass
-BugReports: https://github.com/forestgeo/fgeo.biomass/issues
+Suggests: 
+    covr,
+    testthat

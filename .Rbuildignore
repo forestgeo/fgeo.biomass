@@ -1,3 +1,6 @@
+^\.github$
+^\.travis\.yml$
+^README\.Rmd$
 ^LICENSE\.md$
 ^fgeo\.Rproj$
 ^\.Rproj\.user$
