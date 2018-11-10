@@ -18,7 +18,11 @@ knitr::opts_chunk$set(
 [![Coverage status](https://coveralls.io/repos/github/forestgeo/fgeo.biomass/badge.svg)](https://coveralls.io/r/forestgeo/fgeo.biomass?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/fgeo.biomass)](https://cran.r-project.org/package=fgeo.biomass)
 
-The goal of __fgeo.biomass__ is to calculate biomass using allometric equations from the __allodb__ package.
+The goal of __fgeo.biomass__ is to calculate biomass using allometric equations from the __allodb__ package. 
+
+## Warning
+
+This package is not ready for research. This is work in progress and you are encouraged to try this package and suggest improvements but you should not trust the results yet.
 
 ## Installation
 

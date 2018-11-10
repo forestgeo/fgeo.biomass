@@ -14,6 +14,12 @@ status](https://www.r-pkg.org/badges/version/fgeo.biomass)](https://cran.r-proje
 The goal of **fgeo.biomass** is to calculate biomass using allometric
 equations from the **allodb** package.
 
+## Warning
+
+This package is not ready for research. This is work in progress and you
+are encouraged to try this package and suggest improvements but you
+should not trust the results yet.
+
 ## Installation
 
 Install the development version of **fgeo.biomass**:
