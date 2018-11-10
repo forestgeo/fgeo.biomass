@@ -1,4 +1,4 @@
-url: https://forestgeo.github.io/EDIT-PACKAGE-NAME/
+url: https://forestgeo.github.io/fgeo.biomass/
 
 authors:
   Mauro Lepore:
@@ -23,7 +23,7 @@ template:
 home:
   links:
     - text: Learn more about ForestGEO
-    href: http://www.forestgeo.si.edu/
+      href: http://www.forestgeo.si.edu/
 
 
 
@@ -37,7 +37,7 @@ navbar:
       href: https://github.com/maurolepore
 
     - icon: fa-github
-      href: https://github.com/forestgeo/EDIT-PACKAGE-NAME
+      href: https://github.com/forestgeo/fgeo.biomass
 
     - text: fgeo
       href: https://forestgeo.github.io/fgeo/
