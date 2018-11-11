@@ -11,8 +11,8 @@
 #' library(dplyr)
 #'
 #' best <- allodb::scbi_tree1 %>%
-#'   census_species(allodb::scbi_species, "scbi") %>%
-#'   get_equations() %>%
+#'   add_species(allodb::scbi_species, "scbi") %>%
+#'   allo_find() %>%
 #'   pick_best_equations()
 #'
 #' evaluate_equations(best)

@@ -35,8 +35,8 @@ test_that("returns the expected data structure", {
 
   # With real data
   eqn <- allodb::scbi_tree1 %>%
-    census_species(allodb::scbi_species, "scbi") %>%
-    get_equations()
+    add_species(allodb::scbi_species, "scbi") %>%
+    allo_find()
   best <- pick_best_equations(eqn)
   nms <- c(
       "eqn_type",

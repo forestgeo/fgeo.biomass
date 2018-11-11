@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @examples
-#' census_species(allodb::scbi_tree1, allodb::scbi_species, site = "scbi")
-census_species <- function(census, species, site) {
+#' add_species(allodb::scbi_tree1, allodb::scbi_species, site = "scbi")
+add_species <- function(census, species, site) {
   .census <- rlang::set_names(census, tolower)
   .species <- rlang::set_names(species, tolower)
   .site <- tolower(site)
@@ -26,12 +26,12 @@ census_species <- function(census, species, site) {
   }
 
   out <- all[c("rowid", "site", "sp", "dbh")]
-  new_census_species(dplyr::as_tibble(out))
+  new_add_species(dplyr::as_tibble(out))
 }
 
-new_census_species <- function(x) {
+new_add_species <- function(x) {
   stopifnot(tibble::is.tibble(x))
-  structure(x, class = c("census_species", class(x)))
+  structure(x, class = c("add_species", class(x)))
 }
 
 check_bms_cns <- function(census, species, site) {

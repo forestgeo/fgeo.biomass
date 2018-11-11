@@ -1,8 +1,8 @@
-context("census_species")
+context("add_species")
 
 test_that("outputs the expected data structure", {
   expect_output({
-    out <- census_species(allodb::scbi_tree1, allodb::scbi_species, "scbi")
+    out <- add_species(allodb::scbi_tree1, allodb::scbi_species, "scbi")
   },
     NA
   )

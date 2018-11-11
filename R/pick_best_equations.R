@@ -1,6 +1,6 @@
 #' Find the best equations given a priority order.
 #'
-#' This function orders the output of [get_equations()] by equation type, then
+#' This function orders the output of [allo_find()] by equation type, then
 #' reduces it in order, by overwriting equations of each type with the
 #' equations of a higher-priority type.
 #'
@@ -19,8 +19,8 @@
 #'
 #' @examples
 #' allodb::scbi_tree1 %>%
-#'   census_species(allodb::scbi_species, "scbi") %>%
-#'   get_equations() %>%
+#'   add_species(allodb::scbi_species, "scbi") %>%
+#'   allo_find() %>%
 #'   pick_best_equations()
 pick_best_equations <- function(.data, order = NULL) {
   check_pick_best_equations(.data)

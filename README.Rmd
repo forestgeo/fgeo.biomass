@@ -47,10 +47,10 @@ library(fgeo.biomass)
 ```{r}
 census <- allodb::scbi_tree1
 species <- allodb::scbi_species
-dbh_species <- census_species(census, species, site = "scbi")
+dbh_species <- add_species(census, species, site = "scbi")
 dbh_species
 
-equations <- get_equations(dbh_species)
+equations <- allo_find(dbh_species)
 equations
 ```
 
@@ -159,17 +159,17 @@ census_equations %>%
 ### Possible improvements
 
 ```R
-census_species <- add_species(census, species)  # instead of census_species()
+add_species <- add_species(census, species)  # instead of add_species()
 
 # Single interface to automatically calculates biomass
-auto_biomass(census_species)
+auto_biomass(add_species)
 
 # Single interface to automatically add equations to a census dataframe
-auto_equations(census_species)  # Instead of add_equations()
+auto_equations(add_species)  # Instead of add_equations()
 
 # Functions for greater control over each step of the process.
-census_species %>% 
-  allo_find() %>%           # instead of get_equations()
+add_species %>% 
+  allo_find() %>%           # instead of allo_find()
   allo_customize() %>%      # new function to insert custom equations
   allo_prioritize()         # instead of pick_best_equations()
   allo_evaluate()           # instead of evaluate_equations()

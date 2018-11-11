@@ -24,17 +24,17 @@ census <- allodb::scbi_tree1
 species <- allodb::scbi_species
 
 single_best <- census \%>\%
-  census_species(species, site = "scbi") \%>\%
-  get_equations() \%>\%
+  add_species(species, site = "scbi") \%>\%
+  allo_find() \%>\%
   pick_best_equations() \%>\%
   pick_one_row_by_rowid()
 
 add_equations(census, single_best)
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{allo_lookup}},
+Other functions to manipulate equations: \code{\link{allo_find}},
+  \code{\link{allo_lookup}},
   \code{\link{evaluate_equations}},
-  \code{\link{get_equations}},
   \code{\link{pick_best_equations}}
 }
 \concept{functions to manipulate equations}

@@ -13,8 +13,8 @@
 #' species <- allodb::scbi_species
 #'
 #' single_best <- census %>%
-#'   census_species(species, site = "scbi") %>%
-#'   get_equations() %>%
+#'   add_species(species, site = "scbi") %>%
+#'   allo_find() %>%
 #'   pick_best_equations() %>%
 #'   pick_one_row_by_rowid()
 #'

@@ -1,6 +1,6 @@
 #' Get default equations of each type.
 #'
-#' @param dbh_species A dataframe as those created with [census_species()].
+#' @param dbh_species A dataframe as those created with [add_species()].
 #'
 #' @family functions to manipulate equations
 #'
@@ -11,13 +11,13 @@
 #' @examples
 #' census <- allodb::scbi_tree1
 #' species <- allodb::scbi_species
-#' dbh_species <- census_species(
+#' dbh_species <- add_species(
 #'   census, species,
 #'   site = "scbi"
 #' )
 #'
-#' get_equations(dbh_species)
-get_equations <- function(dbh_species) {
+#' allo_find(dbh_species)
+allo_find <- function(dbh_species) {
   .default_eqn %>%
     dplyr::filter(!is.na(.data$eqn_type)) %>%
     dplyr::group_by(.data$eqn_type) %>%
@@ -45,3 +45,4 @@ add_eqn_type <- function(type_data) {
     )
   )
 }
+

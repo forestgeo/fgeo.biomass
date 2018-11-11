@@ -18,22 +18,21 @@ elements on the right.}
 A dataframe.
 }
 \description{
-This function orders the output of \code{\link[=get_equations]{get_equations()}} by equation type, then
+This function orders the output of \code{\link[=allo_find]{allo_find()}} by equation type, then
 reduces it in order, by overwriting equations of each type with the
 equations of a higher-priority type.
 }
 \examples{
 allodb::scbi_tree1 \%>\%
-  census_species(allodb::scbi_species, "scbi") \%>\%
-  get_equations() \%>\%
+  add_species(allodb::scbi_species, "scbi") \%>\%
+  allo_find() \%>\%
   pick_best_equations()
 }
 \seealso{
 \code{\link[=rowbind_inorder]{rowbind_inorder()}}.
 
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_lookup}},
-  \code{\link{evaluate_equations}},
-  \code{\link{get_equations}}
+  \code{\link{allo_find}}, \code{\link{allo_lookup}},
+  \code{\link{evaluate_equations}}
 }
 \concept{functions to manipulate equations}
