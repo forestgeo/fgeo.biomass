@@ -429,7 +429,7 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb14-20" data-line-number="20"><span class="co">#&gt; #   dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;,</span></a>
 <a class="sourceLine" id="cb14-21" data-line-number="21"><span class="co">#&gt; #   codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;,</span></a>
 <a class="sourceLine" id="cb14-22" data-line-number="22"><span class="co">#&gt; #   eqn &lt;chr&gt;, equation_id &lt;chr&gt;</span></a></code></pre></div>
-<p>If you need more information about each equation, you can it lookup in <strong>allodb</strong>.</p>
+<p>If you need more information about each equation, you can look it up in <strong>allodb</strong>.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">census_equations <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_lookup.html">allo_lookup</a></span>(allodb<span class="op">::</span>equations)</a>
 <a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt; Joining, by = "equation_id"</span></a>

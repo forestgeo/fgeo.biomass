@@ -408,7 +408,7 @@ census_equations
 #> #   eqn <chr>, equation_id <chr>
 ```
 
-If you need more information about each equation, you can it lookup in
+If you need more information about each equation, you can look it up in
 **allodb**.
 
 ``` r

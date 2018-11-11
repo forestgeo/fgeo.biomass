@@ -195,7 +195,7 @@ census_equations <- census %>%
 census_equations
 ```
 
-If you need more information about each equation, you can it lookup in __allodb__.
+If you need more information about each equation, you can look it up in __allodb__.
 
 ```{r}
 census_equations %>% 
