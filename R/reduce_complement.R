@@ -2,7 +2,7 @@
 #'
 #' This function orders a list of dataframes then reduces the list in order, by
 #' row-binding each dataframe with the following one and using
-#' [bind_winner_loser()].
+#' [complement()].
 #'
 #' @param .x List of dataframes. Each should have a `rowid` column giving the
 #'   index of each row. Otherwise, `rowid` will be added with a warning.
@@ -23,15 +23,15 @@
 #'   prio2 = tibble(rowid = 1:2, x = "prio2"),
 #'   prio3 = tibble(rowid = 1:3, x = "prio3")
 #' )
-#' rowbind_inorder(prio)
+#' reduce_complement(prio)
 #' # Same
-#' rowbind_inorder(prio, c(1, 2, 3))
+#' reduce_complement(prio, c(1, 2, 3))
 #'
 #' # 3 overwrites all other
-#' rowbind_inorder(prio, c("prio3", "prio2", "prio1"))
+#' reduce_complement(prio, c("prio3", "prio2", "prio1"))
 #'
 #' # 2 overwrites over 1
-#' rowbind_inorder(prio, c(2, 1))
+#' reduce_complement(prio, c(2, 1))
 #'
 #' # Adds `rowid` with a warning
 #' prio <- list(
@@ -39,8 +39,8 @@
 #'   prio2 = tibble(x = "prio2"),
 #'   prio3 = tibble(x = "prio3")
 #' )
-#' rowbind_inorder(prio)
-rowbind_inorder <- function(.x, order = NULL) {
+#' reduce_complement(prio)
+reduce_complement <- function(.x, order = NULL) {
   order <- order %||% names(.x)
 
   add_rowid_if_needed <- function(.x) {
@@ -59,5 +59,5 @@ rowbind_inorder <- function(.x, order = NULL) {
 
   .x <- add_rowid_if_needed(.x)
 
-  purrr::reduce(.x[order], bind_winner_loser)
+  purrr::reduce(.x[order], complement)
 }
