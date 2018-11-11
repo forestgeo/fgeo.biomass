@@ -1,14 +1,15 @@
-#' Reduce a list of dataframes row-binding each dataframe in a given order.
+#' Reduce a list of dataframes complementing each one with the following one.
 #'
-#' This function orders a list of dataframes then reduces the list in order, by
-#' row-binding each dataframe with the following one and using
-#' [complement()].
+#' Reduce a list of dataframes complementing each dataframe of the list with
+#' rows from the next dataframe in the list. You can optionally set the `order`
+#' to specify which elements to include, and in which order they will be
+#' reduced.
 #'
 #' @param .x List of dataframes. Each should have a `rowid` column giving the
-#'   index of each row. Otherwise, `rowid` will be added with a warning.
-#' @param order String giving the name or index of the list elements in the
-#'   order they should be row-bind, with elements on the left winning over
-#'   elements on the right.
+#'   index of each row, or `rowid` will be added with a warning.
+#' @param order The order to use when reducing the list of dataframes given
+#'   either as a numeric vector of the index of list elements, or as a string
+#'   giving the names of the list elements. Missing elements are excluded.
 #'
 #' @family helpers
 #'
@@ -16,59 +17,26 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#'
-#' prio <- list(
-#'   prio1 = tibble(rowid = 1:1, x = "prio1"),
-#'   prio2 = tibble(rowid = 1:2, x = "prio2"),
-#'   prio3 = tibble(rowid = 1:3, x = "prio3")
-#' )
-#' reduce_complement(prio)
-#' # Same
-#' reduce_complement(prio, c(1, 2, 3))
-#'
-#' # 3 overwrites all other
-#' reduce_complement(prio, c("prio3", "prio2", "prio1"))
-#'
-#' # 2 overwrites over 1
-#' reduce_complement(prio, c(2, 1))
-#'
-#' # Adds `rowid` with a warning
-#' prio <- list(
-#'   prio1 = tibble(rowid = 1, x = "prio1"),
-#'   prio2 = tibble(x = "prio2"),
-#'   prio3 = tibble(x = "prio3")
-#' )
-#' reduce_complement(prio)
-#'
-#'
-#'
-#' # Fun example
-#'
-#' piedra <- tribble(
-#'   ~rowid, ~player,
-#'   1, "Ana",
+#' suppressPackageStartupMessages(
+#'   library(dplyr)
 #' )
 #'
-#' papel <- tribble(
-#'   ~rowid, ~player,
-#'   1, "Maria",
-#'   2, "Maria; Jose",
+#' game <- tibble::tribble(
+#'   ~round, ~player,            ~result,
+#'        1, "Ana",              "piedra",
+#'        1, "Maria",            "papel",
+#'        1, "Jose",             "tijera",
+#'
+#'        2, "Maria; Jose",      "papel",
+#'        2, "Ana",              "tijera",
+#'
+#'        3, "Ana; Maria; Jose", "tijera"
 #' )
 #'
-#' tijera <- tribble(
-#'   ~rowid, ~player,
-#'   1, "Jose",
-#'   2, "Ana",
-#'   3, "Ana; Maria; Jose",
-#' )
-#'
-#' result <- list(piedra = piedra, papel = papel, tijera = tijera)
-#'
-#' rule <- c("piedra", "papel", "tijera")
-#'
-#' # Best player
-#' reduce_complement(result, order = rule)
+#' # Who wins each round?
+#' game %>%
+#'   split(.$result) %>%
+#'   reduce_complement()
 reduce_complement <- function(.x, order = NULL) {
   order <- order %||% names(.x)
 

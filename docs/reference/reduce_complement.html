@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Reduce a list of dataframes row-binding each dataframe in a given order. — reduce_complement • fgeo.biomass</title>
+<title>Reduce a list of dataframes complementing each one with the following one. — reduce_complement • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,11 +30,12 @@
 
 
 
-<meta property="og:title" content="Reduce a list of dataframes row-binding each dataframe in a given order. — reduce_complement" />
+<meta property="og:title" content="Reduce a list of dataframes complementing each one with the following one. — reduce_complement" />
 
-<meta property="og:description" content="This function orders a list of dataframes then reduces the list in order, by
-row-binding each dataframe with the following one and using
-complement()." />
+<meta property="og:description" content="Reduce a list of dataframes complementing each dataframe of the list with
+rows from the next dataframe in the list. You can optionally set the order
+to specify which elements to include, and in which order they will be
+reduced." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,16 +109,17 @@ complement()." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Reduce a list of dataframes row-binding each dataframe in a given order.</h1>
+    <h1>Reduce a list of dataframes complementing each one with the following one.</h1>
     <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/reduce_complement.R'><code>R/reduce_complement.R</code></a></small>
     <div class="hidden name"><code>reduce_complement.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function orders a list of dataframes then reduces the list in order, by
-row-binding each dataframe with the following one and using
-<code><a href='complement.html'>complement()</a></code>.</p>
+    <p>Reduce a list of dataframes complementing each dataframe of the list with
+rows from the next dataframe in the list. You can optionally set the <code>order</code>
+to specify which elements to include, and in which order they will be
+reduced.</p>
     
     </div>
 
@@ -129,13 +131,13 @@ row-binding each dataframe with the following one and using
     <tr>
       <th>.x</th>
       <td><p>List of dataframes. Each should have a <code>rowid</code> column giving the
-index of each row. Otherwise, <code>rowid</code> will be added with a warning.</p></td>
+index of each row, or <code>rowid</code> will be added with a warning.</p></td>
     </tr>
     <tr>
       <th>order</th>
-      <td><p>String giving the name or index of the list elements in the
-order they should be row-bind, with elements on the left winning over
-elements on the right.</p></td>
+      <td><p>The order to use when reducing the list of dataframes given
+either as a numeric vector of the index of list elements, or as a string
+giving the names of the list elements. Missing elements are excluded.</p></td>
     </tr>
     </table>
     
@@ -149,81 +151,31 @@ elements on the right.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
-
-<span class='no'>prio</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(
-  <span class='kw'>prio1</span> <span class='kw'>=</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>rowid</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>1</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"prio1"</span>),
-  <span class='kw'>prio2</span> <span class='kw'>=</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>rowid</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"prio2"</span>),
-  <span class='kw'>prio3</span> <span class='kw'>=</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>rowid</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"prio3"</span>)
-)
-<span class='fu'>reduce_complement</span>(<span class='no'>prio</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 2
-#&gt;   rowid x    
-#&gt;   &lt;int&gt; &lt;chr&gt;
-#&gt; 1     1 prio1
-#&gt; 2     2 prio2
-#&gt; 3     3 prio3</div><div class='input'><span class='co'># Same</span>
-<span class='fu'>reduce_complement</span>(<span class='no'>prio</span>, <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))</div><div class='output co'>#&gt; # A tibble: 3 x 2
-#&gt;   rowid x    
-#&gt;   &lt;int&gt; &lt;chr&gt;
-#&gt; 1     1 prio1
-#&gt; 2     2 prio2
-#&gt; 3     3 prio3</div><div class='input'>
-<span class='co'># 3 overwrites all other</span>
-<span class='fu'>reduce_complement</span>(<span class='no'>prio</span>, <span class='fu'>c</span>(<span class='st'>"prio3"</span>, <span class='st'>"prio2"</span>, <span class='st'>"prio1"</span>))</div><div class='output co'>#&gt; # A tibble: 3 x 2
-#&gt;   rowid x    
-#&gt;   &lt;int&gt; &lt;chr&gt;
-#&gt; 1     1 prio3
-#&gt; 2     2 prio3
-#&gt; 3     3 prio3</div><div class='input'>
-<span class='co'># 2 overwrites over 1</span>
-<span class='fu'>reduce_complement</span>(<span class='no'>prio</span>, <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; # A tibble: 2 x 2
-#&gt;   rowid x    
-#&gt;   &lt;int&gt; &lt;chr&gt;
-#&gt; 1     1 prio2
-#&gt; 2     2 prio2</div><div class='input'>
-<span class='co'># Adds `rowid` with a warning</span>
-<span class='no'>prio</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(
-  <span class='kw'>prio1</span> <span class='kw'>=</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>rowid</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"prio1"</span>),
-  <span class='kw'>prio2</span> <span class='kw'>=</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"prio2"</span>),
-  <span class='kw'>prio3</span> <span class='kw'>=</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"prio3"</span>)
-)
-<span class='fu'>reduce_complement</span>(<span class='no'>prio</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Adding `rowid` to "prio2" and "prio3"</span></div><div class='output co'>#&gt; # A tibble: 1 x 2
-#&gt;   rowid x    
-#&gt;   &lt;dbl&gt; &lt;chr&gt;
-#&gt; 1     1 prio1</div><div class='input'>
-
-
-<span class='co'># Fun example</span>
-
-<span class='no'>piedra</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tribble</a></span>(
-  ~<span class='no'>rowid</span>, ~<span class='no'>player</span>,
-  <span class='fl'>1</span>, <span class='st'>"Ana"</span>,
+    <pre class="examples"><div class='input'><span class='fu'>suppressPackageStartupMessages</span>(
+  <span class='fu'>library</span>(<span class='no'>dplyr</span>)
 )
 
-<span class='no'>papel</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tribble</a></span>(
-  ~<span class='no'>rowid</span>, ~<span class='no'>player</span>,
-  <span class='fl'>1</span>, <span class='st'>"Maria"</span>,
-  <span class='fl'>2</span>, <span class='st'>"Maria; Jose"</span>,
+<span class='no'>game</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/tibble/topics/tribble'>tribble</a></span>(
+  ~<span class='no'>round</span>, ~<span class='no'>player</span>,            ~<span class='no'>result</span>,
+       <span class='fl'>1</span>, <span class='st'>"Ana"</span>,              <span class='st'>"piedra"</span>,
+       <span class='fl'>1</span>, <span class='st'>"Maria"</span>,            <span class='st'>"papel"</span>,
+       <span class='fl'>1</span>, <span class='st'>"Jose"</span>,             <span class='st'>"tijera"</span>,
+
+       <span class='fl'>2</span>, <span class='st'>"Maria; Jose"</span>,      <span class='st'>"papel"</span>,
+       <span class='fl'>2</span>, <span class='st'>"Ana"</span>,              <span class='st'>"tijera"</span>,
+
+       <span class='fl'>3</span>, <span class='st'>"Ana; Maria; Jose"</span>, <span class='st'>"tijera"</span>
 )
 
-<span class='no'>tijera</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tribble</a></span>(
-  ~<span class='no'>rowid</span>, ~<span class='no'>player</span>,
-  <span class='fl'>1</span>, <span class='st'>"Jose"</span>,
-  <span class='fl'>2</span>, <span class='st'>"Ana"</span>,
-  <span class='fl'>3</span>, <span class='st'>"Ana; Maria; Jose"</span>,
-)
-
-<span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(<span class='kw'>piedra</span> <span class='kw'>=</span> <span class='no'>piedra</span>, <span class='kw'>papel</span> <span class='kw'>=</span> <span class='no'>papel</span>, <span class='kw'>tijera</span> <span class='kw'>=</span> <span class='no'>tijera</span>)
-
-<span class='no'>rule</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"piedra"</span>, <span class='st'>"papel"</span>, <span class='st'>"tijera"</span>)
-
-<span class='co'># Best player</span>
-<span class='fu'>reduce_complement</span>(<span class='no'>result</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='no'>rule</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 2
-#&gt;   rowid player          
-#&gt;   &lt;dbl&gt; &lt;chr&gt;           
-#&gt; 1     1 Ana             
-#&gt; 2     2 Maria; Jose     
-#&gt; 3     3 Ana; Maria; Jose</div></pre>
+<span class='co'># Who wins each round?</span>
+<span class='no'>game</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>split</span>(<span class='no'>.</span>$<span class='no'>result</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>reduce_complement</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Adding `rowid` to "papel", "piedra" and "tijera"</span></div><div class='output co'>#&gt; # A tibble: 3 x 4
+#&gt;   rowid round player           result
+#&gt;   &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt; 
+#&gt; 1     1     1 Maria            papel 
+#&gt; 2     2     2 Maria; Jose      papel 
+#&gt; 3     3     3 Ana; Maria; Jose tijera</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
