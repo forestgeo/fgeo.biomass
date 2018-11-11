@@ -4,8 +4,7 @@
 \alias{pick_best_equations}
 \title{Find the best equations given a priority order.}
 \usage{
-pick_best_equations(.data, order = c("species", "genus", "family",
-  "mixed_hardwood", "woody_species"))
+pick_best_equations(.data, order = NULL)
 }
 \arguments{
 \item{.data}{List of dataframes. Each should have a \code{rowid} column giving the

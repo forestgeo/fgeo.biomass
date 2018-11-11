@@ -147,7 +147,7 @@ toy_nested
 #> 2 genus    <tibble [2 x 4]>
 ```
 
-  - Alternative results.
+  - Alternative results (compare first rows).
 
 <!-- end list -->
 
@@ -177,9 +177,8 @@ Calculate biomass by evaluating each allometric equations using its
 corresponding `dbh`.
 
 ``` r
-equations %>% 
-  pick_best_equations() %>% 
-  evaluate_equations()
+best <- pick_best_equations(equations)
+evaluate_equations(best)
 #> # A tibble: 30,229 x 10
 #>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source eqn_type1
 #>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>      <chr>    
@@ -194,6 +193,106 @@ equations %>%
 #>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default    family   
 #> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default    family   
 #> # ... with 30,219 more rows, and 1 more variable: biomass <dbl>
+```
+
+### Known issues
+
+Right now there may be multiple rows per `rowid`. This is because, for a
+single stem, there may be multiple equations to reflect the allometries
+of different parts of the stem. **fgeo.biomass** doesn’t deal with this
+issue yet but helps you find them.
+
+``` r
+find_duplicated_rowid(best)
+#> # A tibble: 1,809 x 10
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source eqn_type1
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>      <chr>    
+#>  1 genus      106 scbi  amel~  13.8 c59e03      exp(~ default    genus    
+#>  2 genus      106 scbi  amel~  13.8 96c0af      10^(~ default    genus    
+#>  3 genus      106 scbi  amel~  13.8 529234      10^(~ default    genus    
+#>  4 genus      125 scbi  amel~  36.1 c59e03      exp(~ default    genus    
+#>  5 genus      125 scbi  amel~  36.1 96c0af      10^(~ default    genus    
+#>  6 genus      125 scbi  amel~  36.1 529234      10^(~ default    genus    
+#>  7 genus      131 scbi  amel~  79.1 c59e03      exp(~ default    genus    
+#>  8 genus      131 scbi  amel~  79.1 96c0af      10^(~ default    genus    
+#>  9 genus      131 scbi  amel~  79.1 529234      10^(~ default    genus    
+#> 10 genus      132 scbi  amel~  24   c59e03      exp(~ default    genus    
+#> # ... with 1,799 more rows, and 1 more variable: n <int>
+```
+
+Here you enter the danger zone. **fgeo.biomass** provides a quick and
+dirty way of getting a single equation per stem.
+
+``` r
+danger <- pick_one_row_by_rowid(best)
+danger
+#> # A tibble: 29,203 x 9
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source eqn_type1
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>      <chr>    
+#>  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default    family   
+#>  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default    family   
+#>  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default    family   
+#>  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default    family   
+#>  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default    family   
+#>  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default    family   
+#>  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default    family   
+#>  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default    family   
+#>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default    family   
+#> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default    family   
+#> # ... with 29,193 more rows
+```
+
+``` r
+# No longer has duplicated rowid
+find_duplicated_rowid(danger)
+#> # A tibble: 0 x 10
+#> # ... with 10 variables: eqn_type <chr>, rowid <int>, site <chr>,
+#> #   sp <chr>, dbh <dbl>, equation_id <chr>, eqn <chr>, eqn_source <chr>,
+#> #   eqn_type1 <chr>, n <int>
+
+evaluate_equations(danger)
+#> # A tibble: 29,203 x 10
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source eqn_type1
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>      <chr>    
+#>  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default    family   
+#>  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default    family   
+#>  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default    family   
+#>  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default    family   
+#>  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default    family   
+#>  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default    family   
+#>  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default    family   
+#>  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default    family   
+#>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default    family   
+#> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default    family   
+#> # ... with 29,193 more rows, and 1 more variable: biomass <dbl>
+```
+
+### Add equations for each row of your census dataset
+
+The `rowid`s were generated from the row-names of your original census
+data. Now that you have a single row per `rowid`, attach the equations
+to your census data with `dplyr::left_join()`.
+
+``` r
+add_equations(census, danger)
+#> # A tibble: 40,283 x 29
+#>    rowid treeID stemID tag   StemTag sp.x  quadrat    gx    gy DBHID
+#>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>
+#>  1     1      1      1 10079 1       libe  0104     3.70  73       1
+#>  2     2      2      2 10168 1       libe  0103    17.3   58.9     3
+#>  3     3      3      3 10567 1       libe  0110     9    197.      5
+#>  4     4      4      4 12165 1       nysy  0122    14.2  428.      7
+#>  5     5      5      5 12190 1       havi  0122     9.40 436.      9
+#>  6     6      6      6 12192 1       havi  0122     1.30 434      13
+#>  7     7      7      7 12212 1       unk   0123    17.8  447.     15
+#>  8     8      8      8 12261 1       libe  0125    18    484.     17
+#>  9     9      9      9 12456 1       vipr  0130    18    598.     19
+#> 10    10     10     10 12551 1       astr  0132     5.60 628.     22
+#> # ... with 40,273 more rows, and 19 more variables: CensusID <int>,
+#> #   dbh.x <dbl>, pom <chr>, hom <dbl>, ExactDate <chr>, DFstatus <chr>,
+#> #   codes <chr>, nostems <dbl>, date <dbl>, status <chr>, agb <dbl>,
+#> #   eqn_type <chr>, site <chr>, sp.y <chr>, dbh.y <dbl>,
+#> #   equation_id <chr>, eqn <chr>, eqn_source <chr>, eqn_type1 <chr>
 ```
 
 ### Improvements

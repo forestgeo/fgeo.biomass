@@ -149,20 +149,20 @@
   <span class='fu'><a href='get_equations.html'>get_equations</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='pick_best_equations.html'>pick_best_equations</a></span>()
 
-<span class='fu'><a href='evaluate_equations.html'>evaluate_equations</a></span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; # A tibble: 30,229 x 9
-#&gt;    rowid site  sp         dbh equation_id eqn       eqn_source eqn_type biomass
-#&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt;
-#&gt;  1     4 scbi  nyssa s~ 135   8da09d      1.5416 *~ default    species  1.10e12
-#&gt;  2    21 scbi  liriode~ 232.  34fe5a      1.0259 *~ default    species  2.99e 6
-#&gt;  3    29 scbi  acer ru~ 326.  7c72ed      exp(4.58~ default    species  1.26e 8
-#&gt;  4    38 scbi  fraxinu~  42.8 0edaff      0.1634 *~ default    species  1.11e 3
-#&gt;  5    72 scbi  acer ru~ 289.  7c72ed      exp(4.58~ default    species  9.38e 7
-#&gt;  6    77 scbi  quercus~ 636.  07dba7      1.5647 *~ default    species  5.41e 7
-#&gt;  7    79 scbi  tilia a~ 475   3f99ba      1.4416 *~ default    species  2.97e 7
-#&gt;  8    79 scbi  tilia a~ 475   76d19b      0.004884~ default    species  1.97e 3
-#&gt;  9    84 scbi  fraxinu~ 170.  0edaff      0.1634 *~ default    species  2.81e 4
-#&gt; 10    89 scbi  fagus g~  27.2 74186d      2.0394 *~ default    species  9.97e 3
-#&gt; # ... with 30,219 more rows</div></pre>
+<span class='fu'><a href='evaluate_equations.html'>evaluate_equations</a></span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; # A tibble: 30,229 x 10
+#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source eqn_type1
+#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;    
+#&gt;  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default    family   
+#&gt;  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default    family   
+#&gt;  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default    family   
+#&gt;  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default    family   
+#&gt;  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default    family   
+#&gt;  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default    family   
+#&gt;  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default    family   
+#&gt;  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default    family   
+#&gt;  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default    family   
+#&gt; 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default    family   
+#&gt; # ... with 30,219 more rows, and 1 more variable: biomass &lt;dbl&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -89,7 +89,7 @@ toy_nested <- nest(toy_equations, -eqn_type)
 toy_nested
 ```
 
-* Alternative results.
+* Alternative results (compare first rows). 
 
 ```{r}
 species_overwrites_genus <- c("species", "genus")
@@ -104,10 +104,55 @@ pick_best_equations(toy_nested, order = genus_overwrites_species)
 Calculate biomass by evaluating each allometric equations using its corresponding `dbh`.
 
 ```{r}
-equations %>% 
-  pick_best_equations() %>% 
-  evaluate_equations()
+best <- pick_best_equations(equations)
+evaluate_equations(best)
 ```
+
+### Known issues
+
+Right now there may be multiple rows per `rowid`. This is because, for a single stem, there may be multiple equations to reflect the allometries of different parts of the stem. __fgeo.biomass__ doesn't deal with this issue yet but helps you find them.
+
+```{r}
+find_duplicated_rowid(best)
+```
+
+Here you enter the danger zone. __fgeo.biomass__ provides a quick and dirty way of getting a single equation per stem.
+
+```{r}
+danger <- pick_one_row_by_rowid(best)
+danger
+```
+
+```{r}
+# No longer has duplicated rowid
+find_duplicated_rowid(danger)
+
+evaluate_equations(danger)
+```
+
+### Add equations for each row of your census dataset
+
+The `rowid`s were generated from the row-names of your original census data. Now that you have a single row per `rowid`, you can add the equations to your census data with `dplyr::left_join()`.
+
+```{r}
+census_equations <- add_equations(census, danger)
+census_equations
+```
+
+Thus you can now calculate and summarize biomass in the context of your census data.
+
+```{r}
+census_equations %>% 
+  evaluate_equations() %>% 
+  group_by(sp) %>% 
+  summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
+  arrange(desc(total_biomass))
+```
+
+
+
+
+
 
 ### Improvements
 

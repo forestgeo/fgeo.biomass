@@ -20,8 +20,12 @@ census_species <- function(census, species, site) {
   all <- dplyr::left_join(.census, .species, by = "sp")
   all$sp <- tolower(all$latin)
   all$site <- .site
-  out <- all[c("site", "sp", "dbh")]
-  out <- tibble::rowid_to_column(out)
+
+  if (!rlang::has_name(all, "rowid")) {
+    all <- tibble::rowid_to_column(all)
+  }
+
+  out <- all[c("rowid", "site", "sp", "dbh")]
   new_census_species(dplyr::as_tibble(out))
 }
 

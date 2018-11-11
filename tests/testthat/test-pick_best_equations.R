@@ -32,7 +32,39 @@ test_that("returns the expected data structure", {
   out <- pick_best_equations(toy_nested)
   nms <- c("eqn_type", "eqn", "dbh", "rowid", "where")
   expect_named(out, nms)
+
+  # With real data
+  eqn <- allodb::scbi_tree1 %>%
+    census_species(allodb::scbi_species, "scbi") %>%
+    get_equations()
+  best <- pick_best_equations(eqn)
+  nms <- c(
+      "eqn_type",
+      "rowid",
+      "site",
+      "sp",
+      "dbh",
+      "equation_id",
+      "eqn",
+      "eqn_source"
+    )
+  expect_named(best, nms, ignore.order = TRUE)
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 test_that("errs with informative message", {
   expect_error(pick_best_equations(1), "must be a dataframe")
