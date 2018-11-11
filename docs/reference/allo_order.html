@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial • fgeo.biomass</title>
+<title>Find the best equations given a priority order. — allo_order • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial" />
+<meta property="og:title" content="Find the best equations given a priority order. — allo_order" />
 
-<meta property="og:description" content="Crucial columns form allodb equations-table." />
+<meta property="og:description" content="This function orders the output of allo_find() by equation type, then
+reduces it in order, by overwriting equations of each type with the
+equations of a higher-priority type." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,33 +108,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Crucial columns form <strong>allodb</strong> equations-table.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/add_species.R'><code>R/add_species.R</code></a></small>
-    <div class="hidden name"><code>allodb_eqn_crucial.Rd</code></div>
+    <h1>Find the best equations given a priority order.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/allo_order.R'><code>R/allo_order.R</code></a></small>
+    <div class="hidden name"><code>allo_order.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Crucial columns form <strong>allodb</strong> equations-table.</p>
+    <p>This function orders the output of <code><a href='allo_find.html'>allo_find()</a></code> by equation type, then
+reduces it in order, by overwriting equations of each type with the
+equations of a higher-priority type.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>allodb_eqn_crucial</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>allo_order</span>(<span class='no'>.data</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>.data</th>
+      <td><p>List of dataframes. Each should have a <code>rowid</code> column giving the
+index of each row. Otherwise, <code>rowid</code> will be added with a warning.</p></td>
+    </tr>
+    <tr>
+      <th>order</th>
+      <td><p>String giving the name or index of the list elements in the
+order they should be row-bind, with elements on the left winning over
+elements on the right.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string.</p>
+    <p>A dataframe.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='rowbind_inorder.html'>rowbind_inorder()</a></code>.</p>
+<p>Other functions to manipulate equations: <code><a href='add_equations.html'>add_equations</a></code>,
+  <code><a href='allo_evaluate.html'>allo_evaluate</a></code>, <code><a href='allo_find.html'>allo_find</a></code>,
+  <code><a href='allo_lookup.html'>allo_lookup</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>allodb_eqn_crucial</span>()</div><div class='output co'>#&gt; [1] "equation_id"           "site"                  "species"              
-#&gt; [4] "equation_allometry"    "allometry_specificity"</div></pre>
+    <pre class="examples"><div class='input'><span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>allo_order</span>()</div><div class='output co'>#&gt; # A tibble: 30,229 x 8
+#&gt;    eqn_type rowid site  sp           dbh equation_id eqn             eqn_source
+#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;           &lt;chr&gt;     
+#&gt;  1 family       1 scbi  lindera b~  27.9 f08fff      exp(-2.2118 + ~ default   
+#&gt;  2 family       2 scbi  lindera b~  23.7 f08fff      exp(-2.2118 + ~ default   
+#&gt;  3 family       3 scbi  lindera b~  22.2 f08fff      exp(-2.2118 + ~ default   
+#&gt;  4 family       8 scbi  lindera b~  51.4 f08fff      exp(-2.2118 + ~ default   
+#&gt;  5 family      13 scbi  lindera b~  15.4 f08fff      exp(-2.2118 + ~ default   
+#&gt;  6 family      14 scbi  lindera b~  14.8 f08fff      exp(-2.2118 + ~ default   
+#&gt;  7 family      15 scbi  lindera b~  15.5 f08fff      exp(-2.2118 + ~ default   
+#&gt;  8 family      16 scbi  lindera b~  17.4 f08fff      exp(-2.2118 + ~ default   
+#&gt;  9 family      17 scbi  lindera b~  68.2 f08fff      exp(-2.2118 + ~ default   
+#&gt; 10 family      18 scbi  lindera b~  19.3 f08fff      exp(-2.2118 + ~ default   
+#&gt; # ... with 30,219 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

@@ -8,7 +8,6 @@ Output of \code{\link[=default_eqn]{default_eqn()}} -- stored for speed.
 }
 \seealso{
 Other internal objects that will be hidden or removed: \code{\link{.bad_eqn_id}},
-  \code{\link{bad_eqn_id}}, \code{\link{default_eqn}},
-  \code{\link{handle_multiple_rowid}}
+  \code{\link{bad_eqn_id}}, \code{\link{default_eqn}}
 }
 \concept{internal objects that will be hidden or removed}

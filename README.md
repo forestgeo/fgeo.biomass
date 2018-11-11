@@ -37,12 +37,64 @@ library(tidyverse)
 library(fgeo.biomass)
 ```
 
-### Basics
+### Overview
 
 ``` r
 census <- allodb::scbi_tree1
 species <- allodb::scbi_species
-dbh_species <- census_species(census, species, site = "scbi")
+
+census_species <- census %>%
+  add_species(species, "scbi")
+
+census_species
+#> # A tibble: 40,283 x 4
+#>    rowid site  sp                     dbh
+#>  * <int> <chr> <chr>                <dbl>
+#>  1     1 scbi  lindera benzoin       27.9
+#>  2     2 scbi  lindera benzoin       23.7
+#>  3     3 scbi  lindera benzoin       22.2
+#>  4     4 scbi  nyssa sylvatica      135  
+#>  5     5 scbi  hamamelis virginiana  87  
+#>  6     6 scbi  hamamelis virginiana  22.5
+#>  7     7 scbi  unidentified unk      42.6
+#>  8     8 scbi  lindera benzoin       51.4
+#>  9     9 scbi  viburnum prunifolium  38.3
+#> 10    10 scbi  asimina triloba       14.5
+#> # ... with 40,273 more rows
+```
+
+``` r
+species_overwrites_genus <- c("species", "genus")
+
+census_species %>% 
+  allo_find() %>%
+  allo_order(species_overwrites_genus) %>% 
+  allo_evaluate()
+#> # A tibble: 14,572 x 9
+#>    eqn_type rowid site  sp       dbh equation_id eqn    eqn_source biomass
+#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>  <chr>        <dbl>
+#>  1 species      4 scbi  nyssa~ 135   8da09d      1.541~ default    1.10e12
+#>  2 species     21 scbi  lirio~ 232.  34fe5a      1.025~ default    2.99e 6
+#>  3 species     29 scbi  acer ~ 326.  7c72ed      exp(4~ default    1.26e 8
+#>  4 species     38 scbi  fraxi~  42.8 0edaff      0.163~ default    1.11e 3
+#>  5 species     72 scbi  acer ~ 289.  7c72ed      exp(4~ default    9.38e 7
+#>  6 species     77 scbi  querc~ 636.  07dba7      1.564~ default    5.41e 7
+#>  7 species     79 scbi  tilia~ 475   3f99ba      1.441~ default    2.97e 7
+#>  8 species     79 scbi  tilia~ 475   76d19b      0.004~ default    1.97e 3
+#>  9 species     84 scbi  fraxi~ 170.  0edaff      0.163~ default    2.81e 4
+#> 10 species     89 scbi  fagus~  27.2 74186d      2.039~ default    9.97e 3
+#> # ... with 14,562 more rows
+```
+
+### Step by step
+
+``` r
+census <- allodb::scbi_tree1
+species <- allodb::scbi_species
+
+dbh_species <- census %>% 
+  add_species(species, site = "scbi")
+
 dbh_species
 #> # A tibble: 40,283 x 4
 #>    rowid site  sp                     dbh
@@ -59,7 +111,9 @@ dbh_species
 #> 10    10 scbi  asimina triloba       14.5
 #> # ... with 40,273 more rows
 
-equations <- get_equations(dbh_species)
+equations <- dbh_species %>% 
+  allo_find()
+
 equations
 #> # A tibble: 5 x 2
 #>   eqn_type       data                 
@@ -77,14 +131,17 @@ You can use general purpose tools to manipulate the nested dataframe of
 equations. For example:
 
 ``` r
-filter(equations, eqn_type %in% c("species", "mixed_hardwood"))
+equations %>% 
+  filter(eqn_type %in% c("species", "mixed_hardwood"))
 #> # A tibble: 2 x 2
 #>   eqn_type       data                
 #>   <chr>          <list>              
 #> 1 species        <tibble [8,930 x 7]>
 #> 2 mixed_hardwood <tibble [5,516 x 7]>
+
 # Same
-equations %>% slice(c(1, 3))
+equations %>% 
+  slice(c(1, 3))
 #> # A tibble: 2 x 2
 #>   eqn_type       data                
 #>   <chr>          <list>              
@@ -138,7 +195,9 @@ toy_equations
 #> 3 dbh + 2    10 genus        2 rowid only in genus              
 #> 4 dbh + 2    10 genus        3 rowid in both: lhs overwrites rhs
 
-toy_nested <- nest(toy_equations, -eqn_type)
+toy_nested <- toy_equations %>% 
+  nest(-eqn_type)
+
 toy_nested
 #> # A tibble: 2 x 2
 #>   eqn_type data            
@@ -153,7 +212,8 @@ toy_nested
 
 ``` r
 species_overwrites_genus <- c("species", "genus")
-pick_best_equations(toy_nested, order = species_overwrites_genus)
+
+allo_order(toy_nested, order = species_overwrites_genus)
 #> # A tibble: 3 x 5
 #>   eqn_type eqn       dbh rowid where                            
 #>   <chr>    <chr>   <dbl> <dbl> <chr>                            
@@ -162,7 +222,8 @@ pick_best_equations(toy_nested, order = species_overwrites_genus)
 #> 3 genus    dbh + 2    10     2 rowid only in genus
 
 genus_overwrites_species <- c("genus", "species")
-pick_best_equations(toy_nested, order = genus_overwrites_species)
+
+allo_order(toy_nested, order = genus_overwrites_species)
 #> # A tibble: 3 x 5
 #>   eqn_type eqn       dbh rowid where                            
 #>   <chr>    <chr>   <dbl> <dbl> <chr>                            
@@ -177,8 +238,28 @@ Calculate biomass by evaluating each allometric equations using its
 corresponding `dbh`.
 
 ``` r
-best <- pick_best_equations(equations)
-with_biomass <- evaluate_equations(best)
+best <- equations %>% 
+  allo_order()
+
+best
+#> # A tibble: 30,229 x 8
+#>    eqn_type rowid site  sp         dbh equation_id eqn          eqn_source
+#>    <chr>    <int> <chr> <chr>    <dbl> <chr>       <chr>        <chr>     
+#>  1 family       1 scbi  lindera~  27.9 f08fff      exp(-2.2118~ default   
+#>  2 family       2 scbi  lindera~  23.7 f08fff      exp(-2.2118~ default   
+#>  3 family       3 scbi  lindera~  22.2 f08fff      exp(-2.2118~ default   
+#>  4 family       8 scbi  lindera~  51.4 f08fff      exp(-2.2118~ default   
+#>  5 family      13 scbi  lindera~  15.4 f08fff      exp(-2.2118~ default   
+#>  6 family      14 scbi  lindera~  14.8 f08fff      exp(-2.2118~ default   
+#>  7 family      15 scbi  lindera~  15.5 f08fff      exp(-2.2118~ default   
+#>  8 family      16 scbi  lindera~  17.4 f08fff      exp(-2.2118~ default   
+#>  9 family      17 scbi  lindera~  68.2 f08fff      exp(-2.2118~ default   
+#> 10 family      18 scbi  lindera~  19.3 f08fff      exp(-2.2118~ default   
+#> # ... with 30,219 more rows
+
+with_biomass <- best %>% 
+  allo_evaluate()
+
 with_biomass
 #> # A tibble: 30,229 x 9
 #>    eqn_type rowid site  sp       dbh equation_id eqn    eqn_source biomass
@@ -228,7 +309,8 @@ of different parts of the stem. **fgeo.biomass** doesn’t deal with this
 issue yet but helps you find them.
 
 ``` r
-find_duplicated_rowid(best)
+best %>% 
+  fixme_find_duplicated_rowid()
 #> # A tibble: 1,809 x 9
 #>    eqn_type rowid site  sp        dbh equation_id eqn     eqn_source     n
 #>    <chr>    <int> <chr> <chr>   <dbl> <chr>       <chr>   <chr>      <int>
@@ -249,7 +331,9 @@ Here you enter the danger zone. **fgeo.biomass** provides a quick and
 dirty way of getting a single equation per stem.
 
 ``` r
-danger <- pick_one_row_by_rowid(best)
+danger <- best %>% 
+  fixme_pick_one_row_by_rowid()
+
 danger
 #> # A tibble: 29,203 x 8
 #>    eqn_type rowid site  sp         dbh equation_id eqn          eqn_source
@@ -269,12 +353,14 @@ danger
 
 ``` r
 # No longer has duplicated rowid
-find_duplicated_rowid(danger)
+danger %>% 
+  fixme_find_duplicated_rowid()
 #> # A tibble: 0 x 9
 #> # ... with 9 variables: eqn_type <chr>, rowid <int>, site <chr>, sp <chr>,
 #> #   dbh <dbl>, equation_id <chr>, eqn <chr>, eqn_source <chr>, n <int>
 
-evaluate_equations(danger)
+danger %>% 
+  allo_evaluate()
 #> # A tibble: 29,203 x 9
 #>    eqn_type rowid site  sp       dbh equation_id eqn    eqn_source biomass
 #>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>  <chr>        <dbl>
@@ -298,8 +384,10 @@ data. Now that you have a single row per `rowid`, you can add the
 equations to your census data.
 
 ``` r
-census_equations <- add_equations(census, danger)
+census_equations <- census %>% 
+  add_equations(danger)
 #> Joining, by = "rowid"
+
 census_equations
 #> # A tibble: 40,283 x 23
 #>    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID
@@ -354,26 +442,26 @@ census_equations %>%
 ### Possible improvements
 
 ``` r
-census_species <- add_species(census, species)  # instead of census_species()
+# Stays as is
+census_species <- census %>% 
+  add_species(species)
 
-# Single interface to automatically calculates biomass
-auto_biomass(census_species)
-
-# Single interface to automatically add equations to a census dataframe
-auto_equations(census_species)  # Instead of add_equations()
-
-# Functions for greater control over each step of the process.
+# New single interface to automatically calculates biomass
 census_species %>% 
-  allo_find() %>%           # instead of get_equations()
-  allo_customize() %>%      # new function to insert custom equations
-  allo_prioritize()         # instead of pick_best_equations()
-  allo_evaluate()           # instead of evaluate_equations()
+  auto_biomass()
+
+# New single interface to automatically add equations to a census dataframe
+census_species %>% 
+  auto_equations()
 ```
 
-Some other possible improvements:
+  - New `allo_customize()` to insert custom equations. Some other
+    possible improvements:
 
   - Allow using ViewFullTable and ViewTaxonomy.
+
   - Allow using any table with the required columns.
+
   - Simplify interfaces via generic functions that ‘know’ what to do
     with different (S3) classes of ForestGEO data – i.e. census and
     species tables; ViewFullTable and ViewTaxonomy tables; or any two

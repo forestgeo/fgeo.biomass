@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial • fgeo.biomass</title>
+<title>Evaluate equations, giving a biomass result per row. — allo_evaluate • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial" />
+<meta property="og:title" content="Evaluate equations, giving a biomass result per row. — allo_evaluate" />
 
-<meta property="og:description" content="Crucial columns form allodb equations-table." />
+<meta property="og:description" content="Evaluate equations, giving a biomass result per row." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,33 +106,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Crucial columns form <strong>allodb</strong> equations-table.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/add_species.R'><code>R/add_species.R</code></a></small>
-    <div class="hidden name"><code>allodb_eqn_crucial.Rd</code></div>
+    <h1>Evaluate equations, giving a biomass result per row.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/allo_evaluate.R'><code>R/allo_evaluate.R</code></a></small>
+    <div class="hidden name"><code>allo_evaluate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Crucial columns form <strong>allodb</strong> equations-table.</p>
+    <p>Evaluate equations, giving a biomass result per row.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>allodb_eqn_crucial</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>allo_evaluate</span>(<span class='no'>.data</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>.data</th>
+      <td><p>A dataframe as those created with <code><a href='allo_order.html'>allo_order()</a></code>.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string.</p>
+    <p>A dataframe with a single row by each value of <code>rowid</code>.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other functions to manipulate equations: <code><a href='add_equations.html'>add_equations</a></code>,
+  <code><a href='allo_find.html'>allo_find</a></code>, <code><a href='allo_lookup.html'>allo_lookup</a></code>,
+  <code><a href='allo_order.html'>allo_order</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>allodb_eqn_crucial</span>()</div><div class='output co'>#&gt; [1] "equation_id"           "site"                  "species"              
-#&gt; [4] "equation_allometry"    "allometry_specificity"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:testthat':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
+<span class='no'>best</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='allo_order.html'>allo_order</a></span>()
+
+<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; # A tibble: 30,229 x 9
+#&gt;    eqn_type rowid site  sp        dbh equation_id eqn        eqn_source biomass
+#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;        &lt;dbl&gt;
+#&gt;  1 family       1 scbi  linder~  27.9 f08fff      exp(-2.21~ default      337. 
+#&gt;  2 family       2 scbi  linder~  23.7 f08fff      exp(-2.21~ default      228. 
+#&gt;  3 family       3 scbi  linder~  22.2 f08fff      exp(-2.21~ default      194. 
+#&gt;  4 family       8 scbi  linder~  51.4 f08fff      exp(-2.21~ default     1474. 
+#&gt;  5 family      13 scbi  linder~  15.4 f08fff      exp(-2.21~ default       80.4
+#&gt;  6 family      14 scbi  linder~  14.8 f08fff      exp(-2.21~ default       73.0
+#&gt;  7 family      15 scbi  linder~  15.5 f08fff      exp(-2.21~ default       81.7
+#&gt;  8 family      16 scbi  linder~  17.4 f08fff      exp(-2.21~ default      108. 
+#&gt;  9 family      17 scbi  linder~  68.2 f08fff      exp(-2.21~ default     2917. 
+#&gt; 10 family      18 scbi  linder~  19.3 f08fff      exp(-2.21~ default      139. 
+#&gt; # ... with 30,219 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

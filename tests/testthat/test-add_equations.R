@@ -6,8 +6,8 @@ species <- allodb::scbi_species
 single_best <- census %>%
   add_species(species, site = "scbi") %>%
   allo_find() %>%
-  pick_best_equations() %>%
-  pick_one_row_by_rowid()
+  allo_order() %>%
+  fixme_pick_one_row_by_rowid()
 
 test_that("handles census with existing `rowid`", {
   expect_error(

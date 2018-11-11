@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial • fgeo.biomass</title>
+<title>Get default equations of each type. — allo_find • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial" />
+<meta property="og:title" content="Get default equations of each type. — allo_find" />
 
-<meta property="og:description" content="Crucial columns form allodb equations-table." />
+<meta property="og:description" content="Get default equations of each type." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,33 +106,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Crucial columns form <strong>allodb</strong> equations-table.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/add_species.R'><code>R/add_species.R</code></a></small>
-    <div class="hidden name"><code>allodb_eqn_crucial.Rd</code></div>
+    <h1>Get default equations of each type.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/allo_find.R'><code>R/allo_find.R</code></a></small>
+    <div class="hidden name"><code>allo_find.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Crucial columns form <strong>allodb</strong> equations-table.</p>
+    <p>Get default equations of each type.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>allodb_eqn_crucial</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>allo_find</span>(<span class='no'>dbh_species</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dbh_species</th>
+      <td><p>A dataframe as those created with <code><a href='add_species.html'>add_species()</a></code>.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string.</p>
+    <p>A nested dataframe with each row containing the data of an equation
+type.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other functions to manipulate equations: <code><a href='add_equations.html'>add_equations</a></code>,
+  <code><a href='allo_evaluate.html'>allo_evaluate</a></code>, <code><a href='allo_lookup.html'>allo_lookup</a></code>,
+  <code><a href='allo_order.html'>allo_order</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>allodb_eqn_crucial</span>()</div><div class='output co'>#&gt; [1] "equation_id"           "site"                  "species"              
-#&gt; [4] "equation_allometry"    "allometry_specificity"</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_tree1</a></span>
+<span class='no'>species</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_species</a></span>
+<span class='no'>dbh_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='add_species.html'>add_species</a></span>(
+  <span class='no'>census</span>, <span class='no'>species</span>,
+  <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
+)
+
+<span class='fu'>allo_find</span>(<span class='no'>dbh_species</span>)</div><div class='output co'>#&gt; # A tibble: 5 x 2
+#&gt;   eqn_type       data                 
+#&gt;   &lt;chr&gt;          &lt;list&gt;               
+#&gt; 1 species        &lt;tibble [8,930 x 7]&gt; 
+#&gt; 2 genus          &lt;tibble [5,642 x 7]&gt; 
+#&gt; 3 mixed_hardwood &lt;tibble [5,516 x 7]&gt; 
+#&gt; 4 family         &lt;tibble [10,141 x 7]&gt;
+#&gt; 5 woody_species  &lt;tibble [0 x 7]&gt;     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

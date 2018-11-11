@@ -19,14 +19,14 @@
 #' single_best <- census %>%
 #'   add_species(species, site = "scbi") %>%
 #'   allo_find() %>%
-#'   pick_best_equations() %>%
-#'   pick_one_row_by_rowid()
+#'   allo_order() %>%
+#'   fixme_pick_one_row_by_rowid()
 #'
 #' add_equations(census, single_best)
 add_equations <- function(census, equations) {
-  duplicated_rowid <- nrow(find_duplicated_rowid(equations)) > 0
+  duplicated_rowid <- nrow(fixme_find_duplicated_rowid(equations)) > 0
   if (duplicated_rowid) {
-    abort("Can't deal duplicated rowid. See ?find_duplicated_rowid()")
+    abort("Can't deal duplicated rowid. See ?fixme_find_duplicated_rowid()")
   }
 
   if (rlang::has_name(census, "rowid")) {

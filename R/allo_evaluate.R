@@ -1,6 +1,6 @@
 #' Evaluate equations, giving a biomass result per row.
 #'
-#' @param .data A dataframe as those created with [pick_best_equations()].
+#' @param .data A dataframe as those created with [allo_order()].
 #'
 #' @family functions to manipulate equations
 #'
@@ -13,10 +13,10 @@
 #' best <- allodb::scbi_tree1 %>%
 #'   add_species(allodb::scbi_species, "scbi") %>%
 #'   allo_find() %>%
-#'   pick_best_equations()
+#'   allo_order()
 #'
-#' evaluate_equations(best)
-evaluate_equations <- function(.data) {
+#' allo_evaluate(best)
+allo_evaluate <- function(.data) {
   .biomass <- purrr::map2_dbl(
     .data$eqn, .data$dbh,
     ~eval(parse(text = .x), envir = list(dbh = .y))

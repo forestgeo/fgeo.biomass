@@ -21,9 +21,9 @@
 #' allodb::scbi_tree1 %>%
 #'   add_species(allodb::scbi_species, "scbi") %>%
 #'   allo_find() %>%
-#'   pick_best_equations()
-pick_best_equations <- function(.data, order = NULL) {
-  check_pick_best_equations(.data)
+#'   allo_order()
+allo_order <- function(.data, order = NULL) {
+  check_allo_order(.data)
 
   unnst <- tidyr::unnest(.data)
   .x <- split(unnst, unnst$eqn_type)
@@ -33,7 +33,7 @@ pick_best_equations <- function(.data, order = NULL) {
   rowbind_inorder(.x, order = order)
 }
 
-check_pick_best_equations <- function(.data) {
+check_allo_order <- function(.data) {
   if (!is.data.frame(.data)) {
     abort("`.data` must be a dataframe.")
   }

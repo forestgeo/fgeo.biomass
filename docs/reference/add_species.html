@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial • fgeo.biomass</title>
+<title>Add <code>species</code> to a ForestGEO-like dataframe of census data. — add_species • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial" />
+<meta property="og:title" content="Add <code>species</code> to a ForestGEO-like dataframe of census data. — add_species" />
 
-<meta property="og:description" content="Crucial columns form allodb equations-table." />
+<meta property="og:description" content="Add species to a ForestGEO-like dataframe of census data." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,31 +106,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Crucial columns form <strong>allodb</strong> equations-table.</h1>
+    <h1>Add <code>species</code> to a ForestGEO-like dataframe of census data.</h1>
     <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/add_species.R'><code>R/add_species.R</code></a></small>
-    <div class="hidden name"><code>allodb_eqn_crucial.Rd</code></div>
+    <div class="hidden name"><code>add_species.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Crucial columns form <strong>allodb</strong> equations-table.</p>
+    <p>Add <code>species</code> to a ForestGEO-like dataframe of census data.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>allodb_eqn_crucial</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>add_species</span>(<span class='no'>census</span>, <span class='no'>species</span>, <span class='no'>site</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>census</th>
+      <td><p>A ForestGEO-like census-dataframe.</p></td>
+    </tr>
+    <tr>
+      <th>species</th>
+      <td><p>A ForestGEO-like species-dataframe.</p></td>
+    </tr>
+    <tr>
+      <th>site</th>
+      <td><p>The name of the site. One of <code>allodb::sites_info$site</code>.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string.</p>
+    <p>A dataframe.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>allodb_eqn_crucial</span>()</div><div class='output co'>#&gt; [1] "equation_id"           "site"                  "species"              
-#&gt; [4] "equation_allometry"    "allometry_specificity"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>add_species</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_tree1</a></span>, <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_species</a></span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>)</div><div class='output co'>#&gt; # A tibble: 40,283 x 4
+#&gt;    rowid site  sp                     dbh
+#&gt;  * &lt;int&gt; &lt;chr&gt; &lt;chr&gt;                &lt;dbl&gt;
+#&gt;  1     1 scbi  lindera benzoin       27.9
+#&gt;  2     2 scbi  lindera benzoin       23.7
+#&gt;  3     3 scbi  lindera benzoin       22.2
+#&gt;  4     4 scbi  nyssa sylvatica      135  
+#&gt;  5     5 scbi  hamamelis virginiana  87  
+#&gt;  6     6 scbi  hamamelis virginiana  22.5
+#&gt;  7     7 scbi  unidentified unk      42.6
+#&gt;  8     8 scbi  lindera benzoin       51.4
+#&gt;  9     9 scbi  viburnum prunifolium  38.3
+#&gt; 10    10 scbi  asimina triloba       14.5
+#&gt; # ... with 40,273 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
       

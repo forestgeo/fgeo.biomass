@@ -26,15 +26,14 @@ species <- allodb::scbi_species
 single_best <- census \%>\%
   add_species(species, site = "scbi") \%>\%
   allo_find() \%>\%
-  pick_best_equations() \%>\%
-  pick_one_row_by_rowid()
+  allo_order() \%>\%
+  fixme_pick_one_row_by_rowid()
 
 add_equations(census, single_best)
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{allo_find}},
-  \code{\link{allo_lookup}},
-  \code{\link{evaluate_equations}},
-  \code{\link{pick_best_equations}}
+Other functions to manipulate equations: \code{\link{allo_evaluate}},
+  \code{\link{allo_find}}, \code{\link{allo_lookup}},
+  \code{\link{allo_order}}
 }
 \concept{functions to manipulate equations}

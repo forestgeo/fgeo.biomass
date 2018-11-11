@@ -28,8 +28,7 @@ allo_find(dbh_species)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_lookup}},
-  \code{\link{evaluate_equations}},
-  \code{\link{pick_best_equations}}
+  \code{\link{allo_evaluate}}, \code{\link{allo_lookup}},
+  \code{\link{allo_order}}
 }
 \concept{functions to manipulate equations}

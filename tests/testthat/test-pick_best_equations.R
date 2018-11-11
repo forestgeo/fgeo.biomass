@@ -1,4 +1,4 @@
-context("pick_best_equations")
+context("allo_order")
 
 toy_equations <- tibble::tribble(
   ~eqn,       ~dbh,  ~eqn_type, ~rowid, ~where,
@@ -12,13 +12,13 @@ toy_equations <- tibble::tribble(
 toy_nested <- tidyr::nest(toy_equations, -eqn_type)
 
 test_that("is sensitive to `order`", {
-  species_genus <- pick_best_equations(toy_nested, order = c("species", "genus"))
+  species_genus <- allo_order(toy_nested, order = c("species", "genus"))
   expect_equal(nrow(species_genus), 3)
   n_type <- dplyr::count(species_genus, eqn_type)
   expect_equal(filter(n_type, eqn_type == "species")$n, 2)
   expect_equal(filter(n_type, eqn_type == "genus")$n, 1)
 
-  genus_species <- pick_best_equations(toy_nested, order = c("genus", "species"))
+  genus_species <- allo_order(toy_nested, order = c("genus", "species"))
   expect_equal(nrow(genus_species), 3)
   n_type <- dplyr::count(genus_species, eqn_type)
   expect_equal(filter(n_type, eqn_type == "genus")$n, 2)
@@ -29,7 +29,7 @@ test_that("is sensitive to `order`", {
 
 
 test_that("returns the expected data structure", {
-  out <- pick_best_equations(toy_nested)
+  out <- allo_order(toy_nested)
   nms <- c("eqn_type", "eqn", "dbh", "rowid", "where")
   expect_named(out, nms)
 
@@ -37,7 +37,7 @@ test_that("returns the expected data structure", {
   eqn <- allodb::scbi_tree1 %>%
     add_species(allodb::scbi_species, "scbi") %>%
     allo_find()
-  best <- pick_best_equations(eqn)
+  best <- allo_order(eqn)
   nms <- c(
       "eqn_type",
       "rowid",
@@ -52,7 +52,7 @@ test_that("returns the expected data structure", {
 })
 
 test_that("errs with informative message", {
-  expect_error(pick_best_equations(1), "must be a dataframe")
-  expect_error(pick_best_equations(data.frame(1)), "Ensure your data")
+  expect_error(allo_order(1), "must be a dataframe")
+  expect_error(allo_order(data.frame(1)), "Ensure your data")
 })
 

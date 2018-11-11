@@ -15,8 +15,8 @@
 #' single_best <- census %>%
 #'   add_species(species, site = "scbi") %>%
 #'   allo_find() %>%
-#'   pick_best_equations() %>%
-#'   pick_one_row_by_rowid()
+#'   allo_order() %>%
+#'   fixme_pick_one_row_by_rowid()
 #'
 #' ids <- add_equations(census, single_best)
 #' allo_lookup(ids)

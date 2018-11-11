@@ -7,19 +7,28 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_equations.html</loc>
   </url>
   <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_species.html</loc>
+  </url>
+  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/allodb_eqn_crucial.html</loc>
   </url>
   <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_evaluate.html</loc>
+  </url>
+  <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_find.html</loc>
+  </url>
+  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_lookup.html</loc>
+  </url>
+  <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_order.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/bad_eqn_id.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/bind_winner_loser.html</loc>
-  </url>
-  <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/census_species.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/default_eqn.html</loc>
@@ -31,19 +40,10 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/dot-default_eqn.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/evaluate_equations.html</loc>
-  </url>
-  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/fgeo.biomass-package.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/get_equations.html</loc>
-  </url>
-  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/handle_multiple_rowid.html</loc>
-  </url>
-  <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/pick_best_equations.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/pipe.html</loc>
