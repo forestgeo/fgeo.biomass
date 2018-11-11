@@ -31,7 +31,8 @@ allodb::scbi_tree1 \%>\%
 \seealso{
 \code{\link[=rowbind_inorder]{rowbind_inorder()}}.
 
-Other functions to manipulate equations: \code{\link{evaluate_equations}},
+Other functions to manipulate equations: \code{\link{add_equations}},
+  \code{\link{evaluate_equations}},
   \code{\link{get_equations}}
 }
 \concept{functions to manipulate equations}

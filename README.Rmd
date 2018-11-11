@@ -142,8 +142,10 @@ census_equations
 Thus you can now calculate and summarize biomass in the context of your census data.
 
 ```{r}
-census_equations %>% 
-  evaluate_equations() %>% 
+with_biomass <- census_equations %>% 
+  evaluate_equations()
+
+with_biomass %>% 
   group_by(sp) %>% 
   summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
   arrange(desc(total_biomass))
@@ -154,13 +156,19 @@ census_equations %>%
 
 
 
-### Improvements
-
-But the function names will soon change to something like this:
+### Possible improvements
 
 ```R
-census %>%
-  add_species(species) %>%  # instead of census_species()
+census_species <- add_species(census, species)  # instead of census_species()
+
+# Single interface to automatically calculates biomass
+auto_biomass(census_species)
+
+# Single interface to automatically add equations to a census dataframe
+auto_equations(census_species)  # Instead of add_equations()
+
+# Functions for greater control over each step of the process.
+census_species %>% 
   allo_find() %>%           # instead of get_equations()
   allo_customize() %>%      # new function to insert custom equations
   allo_prioritize()         # instead of pick_best_equations()

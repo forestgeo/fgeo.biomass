@@ -51,21 +51,6 @@ test_that("returns the expected data structure", {
   expect_named(best, nms, ignore.order = TRUE)
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 test_that("errs with informative message", {
   expect_error(pick_best_equations(1), "must be a dataframe")
   expect_error(pick_best_equations(data.frame(1)), "Ensure your data")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_equations.R
 \name{add_equations}
 \alias{add_equations}
-\title{Add equations to a census dataset.}
+\title{Add allometric equations to a census dataset.}
 \usage{
 add_equations(census, equations)
 }
@@ -15,7 +15,7 @@ add_equations(census, equations)
 A dataframe.
 }
 \description{
-Add equations to a census dataset.
+Add allometric equations to a census dataset.
 }
 \examples{
 census <- allodb::scbi_tree1
@@ -26,5 +26,12 @@ single_best <- census \%>\%
   get_equations() \%>\%
   pick_best_equations() \%>\%
   pick_one_row_by_rowid()
+
 add_equations(census, single_best)
 }
+\seealso{
+Other functions to manipulate equations: \code{\link{evaluate_equations}},
+  \code{\link{get_equations}},
+  \code{\link{pick_best_equations}}
+}
+\concept{functions to manipulate equations}

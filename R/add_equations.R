@@ -1,9 +1,12 @@
-#' Add equations to a census dataset.
+#' Add allometric equations to a census dataset.
 #'
 #' @param census A ForestGEO-like census dataframe.
 #' @param equations An equations dataframe with unique `rowid`s.
 #'
-#' @return A dataframe.
+#' @family functions to manipulate equations
+#'
+#' @return A dataframe with all columns from `census` plus additional columns
+#'   `rowid`, `eqn` `equation_id`.
 #' @export
 #'
 #' @examples
@@ -15,20 +18,18 @@
 #'   get_equations() %>%
 #'   pick_best_equations() %>%
 #'   pick_one_row_by_rowid()
+#'
 #' add_equations(census, single_best)
 add_equations <- function(census, equations) {
   duplicated_rowid <- nrow(find_duplicated_rowid(equations)) > 0
   if (duplicated_rowid) {
-    abort("Can't deal duplicated rowid. See ?find_duplicated_rowid")
+    abort("Can't deal duplicated rowid. See ?find_duplicated_rowid()")
   }
 
   if (rlang::has_name(census, "rowid")) {
-    abort(glue("
-      `rowid` already exists.
-        Remove `rowid` from `census` and retry"
-    ))
+    abort("`rowid` already exists.\n  Remove `rowid` from `census` and retry.")
   }
 
   .census <- tibble::rowid_to_column(census)
-  dplyr::left_join(.census, equations)
+  dplyr::left_join(.census, equations[c("rowid", "eqn", "equation_id")])
 }

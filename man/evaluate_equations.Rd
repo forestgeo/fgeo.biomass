@@ -26,7 +26,8 @@ best <- allodb::scbi_tree1 \%>\%
 evaluate_equations(best)
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{get_equations}},
+Other functions to manipulate equations: \code{\link{add_equations}},
+  \code{\link{get_equations}},
   \code{\link{pick_best_equations}}
 }
 \concept{functions to manipulate equations}

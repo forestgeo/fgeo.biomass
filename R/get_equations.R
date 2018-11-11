@@ -24,8 +24,10 @@ get_equations <- function(dbh_species) {
     tidyr::nest() %>%
     dplyr::mutate(
       data = purrr::map(.data$data, ~get_this_eqn(.x, dbh_species))
-    ) %>%
-    add_eqn_type()
+    )
+  # %>%
+  # FIXME: Moves to pick_eqn?
+  #   add_eqn_type()
 }
 
 get_this_eqn <- function(.type, dbh_species) {

@@ -27,7 +27,8 @@ dbh_species <- census_species(
 get_equations(dbh_species)
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{evaluate_equations}},
+Other functions to manipulate equations: \code{\link{add_equations}},
+  \code{\link{evaluate_equations}},
   \code{\link{pick_best_equations}}
 }
 \concept{functions to manipulate equations}
