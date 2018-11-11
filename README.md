@@ -71,9 +71,9 @@ equations
 #> 5 woody_species  <tibble [0 x 7]>
 ```
 
-### Manipulate equations
+### General manipulatetion of equations
 
-You can use popular(tools to manipulate the nested dataframe of
+You can use general purpose tools to manipulate the nested dataframe of
 equations. For example:
 
 ``` r
@@ -178,7 +178,8 @@ corresponding `dbh`.
 
 ``` r
 best <- pick_best_equations(equations)
-evaluate_equations(best)
+with_biomass <- evaluate_equations(best)
+with_biomass
 #> # A tibble: 30,229 x 9
 #>    eqn_type rowid site  sp       dbh equation_id eqn    eqn_source biomass
 #>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>  <chr>        <dbl>
@@ -193,6 +194,30 @@ evaluate_equations(best)
 #>  9 family      17 scbi  linde~  68.2 f08fff      exp(-~ default     2917. 
 #> 10 family      18 scbi  linde~  19.3 f08fff      exp(-~ default      139. 
 #> # ... with 30,219 more rows
+```
+
+Summarize your results as you would normally do with general purpose
+tools.
+
+``` r
+with_biomass %>% 
+  group_by(sp) %>% 
+  summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
+  arrange(desc(total_biomass))
+#> # A tibble: 52 x 2
+#>    sp                      total_biomass
+#>    <chr>                           <dbl>
+#>  1 platanus occidentalis         2.24e17
+#>  2 nyssa sylvatica               5.07e16
+#>  3 liriodendron tulipifera       4.63e10
+#>  4 acer rubrum                   1.31e10
+#>  5 quercus alba                  1.26e10
+#>  6 quercus falcata               9.21e 9
+#>  7 quercus velutina              7.47e 9
+#>  8 sassafras albidum             6.37e 9
+#>  9 quercus rubra                 4.64e 9
+#> 10 fraxinus americana            2.80e 9
+#> # ... with 42 more rows
 ```
 
 ### Known issues
@@ -270,7 +295,7 @@ evaluate_equations(danger)
 
 The `rowid`s were generated from the row-names of your original census
 data. Now that you have a single row per `rowid`, you can add the
-equations to your census data with `dplyr::left_join()`.
+equations to your census data.
 
 ``` r
 census_equations <- add_equations(census, danger)
@@ -324,33 +349,6 @@ census_equations %>%
 #> #   log_biomass <chr>, bias_corrected <chr>, bias_correction_factor <chr>,
 #> #   notes_fitting_model <chr>, original_data_availability <chr>,
 #> #   warning <chr>
-```
-
-You can now calculate and summarize biomass in the context of your
-census data.
-
-``` r
-with_biomass <- census_equations %>% 
-  evaluate_equations()
-
-with_biomass %>% 
-  group_by(sp) %>% 
-  summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
-  arrange(desc(total_biomass))
-#> # A tibble: 73 x 2
-#>    sp    total_biomass
-#>    <chr>         <dbl>
-#>  1 ploc        2.24e17
-#>  2 nysy        5.07e16
-#>  3 litu        4.63e10
-#>  4 acru        1.31e10
-#>  5 qual        1.26e10
-#>  6 qufa        9.18e 9
-#>  7 saal        6.37e 9
-#>  8 quve        5.50e 9
-#>  9 quru        4.64e 9
-#> 10 fram        2.80e 9
-#> # ... with 63 more rows
 ```
 
 ### Possible improvements

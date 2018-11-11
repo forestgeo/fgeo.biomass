@@ -54,9 +54,9 @@ equations <- get_equations(dbh_species)
 equations
 ```
 
-### Manipulate equations
+### General manipulatetion of equations
 
-You can use popular(tools to manipulate the nested dataframe of equations. For example:
+You can use general purpose tools to manipulate the nested dataframe of equations. For example:
 
 ```{r}
 filter(equations, eqn_type %in% c("species", "mixed_hardwood"))
@@ -105,7 +105,17 @@ Calculate biomass by evaluating each allometric equations using its correspondin
 
 ```{r}
 best <- pick_best_equations(equations)
-evaluate_equations(best)
+with_biomass <- evaluate_equations(best)
+with_biomass
+```
+
+Summarize your results as you would normally do with general purpose tools.
+
+```{r}
+with_biomass %>% 
+  group_by(sp) %>% 
+  summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
+  arrange(desc(total_biomass))
 ```
 
 ### Known issues
@@ -132,7 +142,7 @@ evaluate_equations(danger)
 
 ### Add equations for each row of your census dataset
 
-The `rowid`s were generated from the row-names of your original census data. Now that you have a single row per `rowid`, you can add the equations to your census data with `dplyr::left_join()`.
+The `rowid`s were generated from the row-names of your original census data. Now that you have a single row per `rowid`, you can add the equations to your census data.
 
 ```{r}
 census_equations <- add_equations(census, danger)
@@ -144,18 +154,6 @@ If you need more information about each equation, you can it lookup in __allodb_
 ```{r}
 census_equations %>% 
   allo_lookup(allodb::equations)
-```
-
-You can now calculate and summarize biomass in the context of your census data.
-
-```{r}
-with_biomass <- census_equations %>% 
-  evaluate_equations()
-
-with_biomass %>% 
-  group_by(sp) %>% 
-  summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
-  arrange(desc(total_biomass))
 ```
 
 ### Possible improvements
