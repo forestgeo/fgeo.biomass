@@ -12,7 +12,7 @@
 #'
 #' @family functions to manipulate equations
 #'
-#' @seealso [rowbind_inorder()].
+#' @seealso [reduce_complement()].
 #'
 #' @return A dataframe.
 #' @export
@@ -30,7 +30,7 @@ allo_order <- function(.data, order = NULL) {
 
   order <- order %||% names(.x)
 
-  rowbind_inorder(.x, order = order)
+  reduce_complement(.x, order = order)
 }
 
 check_allo_order <- function(.data) {

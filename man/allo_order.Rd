@@ -29,7 +29,7 @@ allodb::scbi_tree1 \%>\%
   allo_order()
 }
 \seealso{
-\code{\link[=rowbind_inorder]{rowbind_inorder()}}.
+\code{\link[=reduce_complement]{reduce_complement()}}.
 
 Other functions to manipulate equations: \code{\link{add_equations}},
   \code{\link{allo_evaluate}}, \code{\link{allo_find}},

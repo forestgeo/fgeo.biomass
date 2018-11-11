@@ -28,7 +28,7 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/bad_eqn_id.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/bind_winner_loser.html</loc>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/complement.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/default_eqn.html</loc>
@@ -49,6 +49,6 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/rowbind_inorder.html</loc>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/reduce_complement.html</loc>
   </url>
 </urlset>
