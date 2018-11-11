@@ -1,5 +1,7 @@
 context("allo_order")
 
+library(dplyr)
+
 toy_equations <- tibble::tribble(
   ~eqn,       ~dbh,  ~eqn_type, ~rowid, ~where,
   "dbh + 1",    10,  "species",      1, "rowid only in species",

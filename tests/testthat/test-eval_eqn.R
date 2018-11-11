@@ -1,4 +1,4 @@
-context("evaluate_eqn.R")
+context("eval_eqn.R")
 
 library(purrr)
 library(dplyr)
