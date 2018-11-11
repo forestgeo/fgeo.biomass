@@ -22,16 +22,23 @@
 #'   census_species(allodb::scbi_species, "scbi") %>%
 #'   get_equations() %>%
 #'   pick_best_equations()
-pick_best_equations <- function(.data,
-  order = c(
-    "species",
-    "genus",
-    "family",
-    "mixed_hardwood",
-    "woody_species"
-  )) {
-  .data %>%
-    dplyr::pull(.data$data) %>%
-    rlang::set_names(.data$eqn_type) %>%
-    rowbind_inorder(order = order)
+pick_best_equations <- function(.data, order = NULL) {
+  check_pick_best_equations(.data)
+
+  unnst <- tidyr::unnest(.data)
+  .x <- split(unnst, unnst$eqn_type)
+
+  order <- order %||% names(.x)
+
+  rowbind_inorder(.x, order = order)
+}
+
+check_pick_best_equations <- function(.data) {
+  if (!is.data.frame(.data)) {
+    abort("`.data` must be a dataframe.")
+  }
+
+  check_crucial_names(.data, "data")
+
+  invisible(.data)
 }

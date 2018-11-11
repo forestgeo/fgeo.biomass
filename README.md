@@ -37,7 +37,7 @@ library(tidyverse)
 library(fgeo.biomass)
 ```
 
-Right now these are the key functions:
+### Basics
 
 ``` r
 census <- allodb::scbi_tree1
@@ -69,40 +69,131 @@ equations
 #> 3 mixed_hardwood <tibble [5,516 x 8]> 
 #> 4 family         <tibble [10,141 x 8]>
 #> 5 woody_species  <tibble [0 x 8]>
+```
 
-best <- pick_best_equations(equations)
-best
-#> # A tibble: 30,229 x 8
-#>    rowid site  sp           dbh equation_id eqn        eqn_source eqn_type
-#>    <int> <chr> <chr>      <dbl> <chr>       <chr>      <chr>      <chr>   
-#>  1     4 scbi  nyssa syl~ 135   8da09d      1.5416 * ~ default    species 
-#>  2    21 scbi  liriodend~ 232.  34fe5a      1.0259 * ~ default    species 
-#>  3    29 scbi  acer rubr~ 326.  7c72ed      exp(4.589~ default    species 
-#>  4    38 scbi  fraxinus ~  42.8 0edaff      0.1634 * ~ default    species 
-#>  5    72 scbi  acer rubr~ 289.  7c72ed      exp(4.589~ default    species 
-#>  6    77 scbi  quercus a~ 636.  07dba7      1.5647 * ~ default    species 
-#>  7    79 scbi  tilia ame~ 475   3f99ba      1.4416 * ~ default    species 
-#>  8    79 scbi  tilia ame~ 475   76d19b      0.004884 ~ default    species 
-#>  9    84 scbi  fraxinus ~ 170.  0edaff      0.1634 * ~ default    species 
-#> 10    89 scbi  fagus gra~  27.2 74186d      2.0394 * ~ default    species 
-#> # ... with 30,219 more rows
+### Manipulate equations
 
-biomass <- evaluate_equations(best)
-biomass
-#> # A tibble: 30,229 x 9
-#>    rowid site  sp       dbh equation_id eqn    eqn_source eqn_type biomass
-#>    <int> <chr> <chr>  <dbl> <chr>       <chr>  <chr>      <chr>      <dbl>
-#>  1     4 scbi  nyssa~ 135   8da09d      1.541~ default    species  1.10e12
-#>  2    21 scbi  lirio~ 232.  34fe5a      1.025~ default    species  2.99e 6
-#>  3    29 scbi  acer ~ 326.  7c72ed      exp(4~ default    species  1.26e 8
-#>  4    38 scbi  fraxi~  42.8 0edaff      0.163~ default    species  1.11e 3
-#>  5    72 scbi  acer ~ 289.  7c72ed      exp(4~ default    species  9.38e 7
-#>  6    77 scbi  querc~ 636.  07dba7      1.564~ default    species  5.41e 7
-#>  7    79 scbi  tilia~ 475   3f99ba      1.441~ default    species  2.97e 7
-#>  8    79 scbi  tilia~ 475   76d19b      0.004~ default    species  1.97e 3
-#>  9    84 scbi  fraxi~ 170.  0edaff      0.163~ default    species  2.81e 4
-#> 10    89 scbi  fagus~  27.2 74186d      2.039~ default    species  9.97e 3
-#> # ... with 30,219 more rows
+You can use popular(tools to manipulate the nested dataframe of
+equations. For example:
+
+``` r
+filter(equations, eqn_type %in% c("species", "mixed_hardwood"))
+#> # A tibble: 2 x 2
+#>   eqn_type       data                
+#>   <chr>          <list>              
+#> 1 species        <tibble [8,930 x 8]>
+#> 2 mixed_hardwood <tibble [5,516 x 8]>
+# Same
+equations %>% slice(c(1, 3))
+#> # A tibble: 2 x 2
+#>   eqn_type       data                
+#>   <chr>          <list>              
+#> 1 species        <tibble [8,930 x 8]>
+#> 2 mixed_hardwood <tibble [5,516 x 8]>
+
+equations %>% 
+  slice(c(1, 3)) %>% 
+  unnest()
+#> # A tibble: 14,446 x 9
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source eqn_type1
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>      <chr>    
+#>  1 species      4 scbi  nyss~ 135   8da09d      1.54~ default    species  
+#>  2 species     21 scbi  liri~ 232.  34fe5a      1.02~ default    species  
+#>  3 species     29 scbi  acer~ 326.  7c72ed      exp(~ default    species  
+#>  4 species     38 scbi  frax~  42.8 0edaff      0.16~ default    species  
+#>  5 species     72 scbi  acer~ 289.  7c72ed      exp(~ default    species  
+#>  6 species     77 scbi  quer~ 636.  07dba7      1.56~ default    species  
+#>  7 species     79 scbi  tili~ 475   3f99ba      1.44~ default    species  
+#>  8 species     79 scbi  tili~ 475   76d19b      0.00~ default    species  
+#>  9 species     84 scbi  frax~ 170.  0edaff      0.16~ default    species  
+#> 10 species     89 scbi  fagu~  27.2 74186d      2.03~ default    species  
+#> # ... with 14,436 more rows
+```
+
+### Prioritize equations
+
+You can prioritize available equations by setting the order in which
+equations of different types overwrite each other. Here is a toy example
+to show how this works.
+
+  - Toy data.
+
+<!-- end list -->
+
+``` r
+toy_equations <- tibble::tribble(
+  ~eqn,       ~dbh,  ~eqn_type, ~rowid, ~where,
+  "dbh + 1",    10,  "species",      1, "rowid only in species",
+  "dbh + 1",    10,  "species",      3, "rowid in both: lhs overwrites rhs",
+
+  "dbh + 2",    10,  "genus",        2, "rowid only in genus",
+  "dbh + 2",    10,  "genus",        3, "rowid in both: lhs overwrites rhs",
+)
+toy_equations
+#> # A tibble: 4 x 5
+#>   eqn       dbh eqn_type rowid where                            
+#>   <chr>   <dbl> <chr>    <dbl> <chr>                            
+#> 1 dbh + 1    10 species      1 rowid only in species            
+#> 2 dbh + 1    10 species      3 rowid in both: lhs overwrites rhs
+#> 3 dbh + 2    10 genus        2 rowid only in genus              
+#> 4 dbh + 2    10 genus        3 rowid in both: lhs overwrites rhs
+
+toy_nested <- nest(toy_equations, -eqn_type)
+toy_nested
+#> # A tibble: 2 x 2
+#>   eqn_type data            
+#>   <chr>    <list>          
+#> 1 species  <tibble [2 x 4]>
+#> 2 genus    <tibble [2 x 4]>
+```
+
+  - Alternative results.
+
+<!-- end list -->
+
+``` r
+species_overwrites_genus <- c("species", "genus")
+pick_best_equations(toy_nested, order = species_overwrites_genus)
+#> # A tibble: 3 x 5
+#>   eqn_type eqn       dbh rowid where                            
+#>   <chr>    <chr>   <dbl> <dbl> <chr>                            
+#> 1 species  dbh + 1    10     3 rowid in both: lhs overwrites rhs
+#> 2 species  dbh + 1    10     1 rowid only in species            
+#> 3 genus    dbh + 2    10     2 rowid only in genus
+
+genus_overwrites_species <- c("genus", "species")
+pick_best_equations(toy_nested, order = genus_overwrites_species)
+#> # A tibble: 3 x 5
+#>   eqn_type eqn       dbh rowid where                            
+#>   <chr>    <chr>   <dbl> <dbl> <chr>                            
+#> 1 genus    dbh + 2    10     3 rowid in both: lhs overwrites rhs
+#> 2 genus    dbh + 2    10     2 rowid only in genus              
+#> 3 species  dbh + 1    10     1 rowid only in species
+```
+
+### Calculate biomass
+
+Calculate biomass by evaluating each allometric equations using its
+corresponding `dbh`.
+
+``` r
+equations %>% 
+  pick_best_equations() %>% 
+  evaluate_equations()
+#> # A tibble: 30,229 x 10
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source eqn_type1
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>      <chr>    
+#>  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default    family   
+#>  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default    family   
+#>  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default    family   
+#>  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default    family   
+#>  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default    family   
+#>  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default    family   
+#>  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default    family   
+#>  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default    family   
+#>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default    family   
+#> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default    family   
+#> # ... with 30,219 more rows, and 1 more variable: biomass <dbl>
 ```
 
 ### Improvements
@@ -124,7 +215,7 @@ Some other possible improvements:
   - Allow using any table with the required columns.
   - Simplify interfaces via generic functions that ‘know’ what to do
     with different (S3) classes of ForestGEO data – i.e. census and
-    scpecies tables; ViewFullTable and ViewTaxonomy talbles; or any two
+    species tables; ViewFullTable and ViewTaxonomy tables; or any two
     tables of unknown class.
 
 ### fgeo.biomass and allodb

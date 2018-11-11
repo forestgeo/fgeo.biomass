@@ -42,7 +42,7 @@ library(tidyverse)
 library(fgeo.biomass)
 ```
 
-Right now these are the key functions:
+### Basics
 
 ```{r}
 census <- allodb::scbi_tree1
@@ -52,12 +52,61 @@ dbh_species
 
 equations <- get_equations(dbh_species)
 equations
+```
 
-best <- pick_best_equations(equations)
-best
+### Manipulate equations
 
-biomass <- evaluate_equations(best)
-biomass
+You can use popular(tools to manipulate the nested dataframe of equations. For example:
+
+```{r}
+filter(equations, eqn_type %in% c("species", "mixed_hardwood"))
+# Same
+equations %>% slice(c(1, 3))
+
+equations %>% 
+  slice(c(1, 3)) %>% 
+  unnest()
+```
+
+### Prioritize equations
+
+You can prioritize available equations by setting the order in which equations of different types overwrite each other. Here is a toy example to show how this works.
+
+* Toy data.
+
+```{r}
+toy_equations <- tibble::tribble(
+  ~eqn,       ~dbh,  ~eqn_type, ~rowid, ~where,
+  "dbh + 1",    10,  "species",      1, "rowid only in species",
+  "dbh + 1",    10,  "species",      3, "rowid in both: lhs overwrites rhs",
+
+  "dbh + 2",    10,  "genus",        2, "rowid only in genus",
+  "dbh + 2",    10,  "genus",        3, "rowid in both: lhs overwrites rhs",
+)
+toy_equations
+
+toy_nested <- nest(toy_equations, -eqn_type)
+toy_nested
+```
+
+* Alternative results.
+
+```{r}
+species_overwrites_genus <- c("species", "genus")
+pick_best_equations(toy_nested, order = species_overwrites_genus)
+
+genus_overwrites_species <- c("genus", "species")
+pick_best_equations(toy_nested, order = genus_overwrites_species)
+```
+
+### Calculate biomass
+
+Calculate biomass by evaluating each allometric equations using its corresponding `dbh`.
+
+```{r}
+equations %>% 
+  pick_best_equations() %>% 
+  evaluate_equations()
 ```
 
 ### Improvements
@@ -77,7 +126,7 @@ Some other possible improvements:
 
 * Allow using ViewFullTable and ViewTaxonomy.
 * Allow using any table with the required columns.
-* Simplify interfaces via generic functions that 'know' what to do with different (S3) classes of ForestGEO data -- i.e. census and scpecies tables; ViewFullTable and ViewTaxonomy talbles; or any two tables of unknown class.
+* Simplify interfaces via generic functions that 'know' what to do with different (S3) classes of ForestGEO data -- i.e. census and species tables; ViewFullTable and ViewTaxonomy tables; or any two tables of unknown class.
 
 ### fgeo.biomass and allodb
 
