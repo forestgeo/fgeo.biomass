@@ -190,7 +190,40 @@ elements on the right.</p></td>
 <span class='fu'>reduce_complement</span>(<span class='no'>prio</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Adding `rowid` to "prio2" and "prio3"</span></div><div class='output co'>#&gt; # A tibble: 1 x 2
 #&gt;   rowid x    
 #&gt;   &lt;dbl&gt; &lt;chr&gt;
-#&gt; 1     1 prio1</div></pre>
+#&gt; 1     1 prio1</div><div class='input'>
+
+
+<span class='co'># Fun example</span>
+
+<span class='no'>piedra</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tribble</a></span>(
+  ~<span class='no'>rowid</span>, ~<span class='no'>player</span>,
+  <span class='fl'>1</span>, <span class='st'>"Ana"</span>,
+)
+
+<span class='no'>papel</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tribble</a></span>(
+  ~<span class='no'>rowid</span>, ~<span class='no'>player</span>,
+  <span class='fl'>1</span>, <span class='st'>"Maria"</span>,
+  <span class='fl'>2</span>, <span class='st'>"Maria; Jose"</span>,
+)
+
+<span class='no'>tijera</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tribble</a></span>(
+  ~<span class='no'>rowid</span>, ~<span class='no'>player</span>,
+  <span class='fl'>1</span>, <span class='st'>"Jose"</span>,
+  <span class='fl'>2</span>, <span class='st'>"Ana"</span>,
+  <span class='fl'>3</span>, <span class='st'>"Ana; Maria; Jose"</span>,
+)
+
+<span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(<span class='kw'>piedra</span> <span class='kw'>=</span> <span class='no'>piedra</span>, <span class='kw'>papel</span> <span class='kw'>=</span> <span class='no'>papel</span>, <span class='kw'>tijera</span> <span class='kw'>=</span> <span class='no'>tijera</span>)
+
+<span class='no'>rule</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"piedra"</span>, <span class='st'>"papel"</span>, <span class='st'>"tijera"</span>)
+
+<span class='co'># Best player</span>
+<span class='fu'>reduce_complement</span>(<span class='no'>result</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='no'>rule</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 2
+#&gt;   rowid player          
+#&gt;   &lt;dbl&gt; &lt;chr&gt;           
+#&gt; 1     1 Ana             
+#&gt; 2     2 Maria; Jose     
+#&gt; 3     3 Ana; Maria; Jose</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

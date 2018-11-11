@@ -40,6 +40,35 @@
 #'   prio3 = tibble(x = "prio3")
 #' )
 #' reduce_complement(prio)
+#'
+#'
+#'
+#' # Fun example
+#'
+#' piedra <- tribble(
+#'   ~rowid, ~player,
+#'   1, "Ana",
+#' )
+#'
+#' papel <- tribble(
+#'   ~rowid, ~player,
+#'   1, "Maria",
+#'   2, "Maria; Jose",
+#' )
+#'
+#' tijera <- tribble(
+#'   ~rowid, ~player,
+#'   1, "Jose",
+#'   2, "Ana",
+#'   3, "Ana; Maria; Jose",
+#' )
+#'
+#' result <- list(piedra = piedra, papel = papel, tijera = tijera)
+#'
+#' rule <- c("piedra", "papel", "tijera")
+#'
+#' # Best player
+#' reduce_complement(result, order = rule)
 reduce_complement <- function(.x, order = NULL) {
   order <- order %||% names(.x)
 
