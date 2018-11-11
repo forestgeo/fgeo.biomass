@@ -1,5 +1,8 @@
 #' Add allometric equations to a census dataset.
 #'
+#' This function adds columns to uniquely identify each row of a census dataset,
+#' and each equation from __allodb__ -- so you can look it up on the database.
+#'
 #' @param census A ForestGEO-like census dataframe.
 #' @param equations An equations dataframe with unique `rowid`s.
 #'

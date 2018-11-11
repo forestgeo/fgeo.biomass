@@ -28,6 +28,7 @@ get_equations(dbh_species)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
+  \code{\link{allo_lookup}},
   \code{\link{evaluate_equations}},
   \code{\link{pick_best_equations}}
 }

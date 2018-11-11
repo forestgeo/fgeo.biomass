@@ -276,7 +276,7 @@ equations to your census data with `dplyr::left_join()`.
 census_equations <- add_equations(census, danger)
 #> Joining, by = "rowid"
 census_equations
-#> # A tibble: 40,283 x 22
+#> # A tibble: 40,283 x 23
 #>    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID
 #>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>
 #>  1     1      1      1 10079 1       libe  0104     3.70  73       1
@@ -289,13 +289,44 @@ census_equations
 #>  8     8      8      8 12261 1       libe  0125    18    484.     17
 #>  9     9      9      9 12456 1       vipr  0130    18    598.     19
 #> 10    10     10     10 12551 1       astr  0132     5.60 628.     22
-#> # ... with 40,273 more rows, and 12 more variables: CensusID <int>,
+#> # ... with 40,273 more rows, and 13 more variables: CensusID <int>,
 #> #   dbh <dbl>, pom <chr>, hom <dbl>, ExactDate <chr>, DFstatus <chr>,
 #> #   codes <chr>, nostems <dbl>, date <dbl>, status <chr>, agb <dbl>,
-#> #   eqn <chr>
+#> #   eqn <chr>, equation_id <chr>
 ```
 
-Thus you can now calculate and summarize biomass in the context of your
+If you need more information about each equation, you can it lookup in
+**allodb**.
+
+``` r
+census_equations %>% 
+  allo_lookup(allodb::equations)
+#> Joining, by = "equation_id"
+#> # A tibble: 40,283 x 23
+#>    rowid equation_id ref_id equation_allome~ equation_form dependent_varia~
+#>    <int> <chr>       <chr>  <chr>            <chr>         <chr>           
+#>  1     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*ln(D~ Total abovegrou~
+#>  2     2 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*ln(D~ Total abovegrou~
+#>  3     3 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*ln(D~ Total abovegrou~
+#>  4     4 8da09d      jenki~ 1.5416*(dbh^2)^~ a*(DBH^2)^b   Stem and branch~
+#>  5     5 <NA>        <NA>   <NA>             <NA>          <NA>            
+#>  6     6 <NA>        <NA>   <NA>             <NA>          <NA>            
+#>  7     7 <NA>        <NA>   <NA>             <NA>          <NA>            
+#>  8     8 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*ln(D~ Total abovegrou~
+#>  9     9 <NA>        <NA>   <NA>             <NA>          <NA>            
+#> 10    10 ae65ed      jenki~ exp(-2.48+2.483~ exp(a+b*ln(D~ Total abovegrou~
+#> # ... with 40,273 more rows, and 17 more variables:
+#> #   independent_variable <chr>, allometry_specificity <chr>,
+#> #   geographic_area <chr>, dbh_min_cm <chr>, dbh_max_cm <chr>,
+#> #   sample_size <chr>, dbh_units_original <chr>,
+#> #   biomass_units_original <chr>, allometry_development_method <chr>,
+#> #   regression_model <chr>, other_equations_tested <chr>,
+#> #   log_biomass <chr>, bias_corrected <chr>, bias_correction_factor <chr>,
+#> #   notes_fitting_model <chr>, original_data_availability <chr>,
+#> #   warning <chr>
+```
+
+You can now calculate and summarize biomass in the context of your
 census data.
 
 ``` r

@@ -12,10 +12,12 @@ add_equations(census, equations)
 \item{equations}{An equations dataframe with unique \code{rowid}s.}
 }
 \value{
-A dataframe.
+A dataframe with all columns from \code{census} plus additional columns
+\code{rowid}, \code{eqn} \code{equation_id}.
 }
 \description{
-Add allometric equations to a census dataset.
+This function adds columns to uniquely identify each row of a census dataset,
+and each equation from \strong{allodb} -- so you can look it up on the database.
 }
 \examples{
 census <- allodb::scbi_tree1
@@ -30,7 +32,8 @@ single_best <- census \%>\%
 add_equations(census, single_best)
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{evaluate_equations}},
+Other functions to manipulate equations: \code{\link{allo_lookup}},
+  \code{\link{evaluate_equations}},
   \code{\link{get_equations}},
   \code{\link{pick_best_equations}}
 }

@@ -27,7 +27,7 @@ evaluate_equations(best)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{get_equations}},
+  \code{\link{allo_lookup}}, \code{\link{get_equations}},
   \code{\link{pick_best_equations}}
 }
 \concept{functions to manipulate equations}

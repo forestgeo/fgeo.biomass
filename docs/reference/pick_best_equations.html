@@ -121,8 +121,7 @@ equations of a higher-priority type.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>pick_best_equations</span>(<span class='no'>.data</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"species"</span>, <span class='st'>"genus"</span>, <span class='st'>"family"</span>,
-  <span class='st'>"mixed_hardwood"</span>, <span class='st'>"woody_species"</span>))</pre>
+    <pre class="usage"><span class='fu'>pick_best_equations</span>(<span class='no'>.data</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,7 +146,9 @@ elements on the right.</p></td>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='rowbind_inorder.html'>rowbind_inorder()</a></code>.</p>
-<p>Other functions to manipulate equations: <code><a href='evaluate_equations.html'>evaluate_equations</a></code>,
+<p>Other functions to manipulate equations: <code><a href='add_equations.html'>add_equations</a></code>,
+  <code><a href='allo_lookup.html'>allo_lookup</a></code>,
+  <code><a href='evaluate_equations.html'>evaluate_equations</a></code>,
   <code><a href='get_equations.html'>get_equations</a></code></p></div>
     
 
@@ -155,19 +156,19 @@ elements on the right.</p></td>
     <pre class="examples"><div class='input'><span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='census_species.html'>census_species</a></span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/allodb/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='get_equations.html'>get_equations</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>pick_best_equations</span>()</div><div class='output co'>#&gt; # A tibble: 30,229 x 9
-#&gt;    eqn_type rowid site  sp        dbh equation_id eqn      eqn_source eqn_type1
-#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;    
-#&gt;  1 family       1 scbi  linder~  27.9 f08fff      exp(-2.~ default    family   
-#&gt;  2 family       2 scbi  linder~  23.7 f08fff      exp(-2.~ default    family   
-#&gt;  3 family       3 scbi  linder~  22.2 f08fff      exp(-2.~ default    family   
-#&gt;  4 family       8 scbi  linder~  51.4 f08fff      exp(-2.~ default    family   
-#&gt;  5 family      13 scbi  linder~  15.4 f08fff      exp(-2.~ default    family   
-#&gt;  6 family      14 scbi  linder~  14.8 f08fff      exp(-2.~ default    family   
-#&gt;  7 family      15 scbi  linder~  15.5 f08fff      exp(-2.~ default    family   
-#&gt;  8 family      16 scbi  linder~  17.4 f08fff      exp(-2.~ default    family   
-#&gt;  9 family      17 scbi  linder~  68.2 f08fff      exp(-2.~ default    family   
-#&gt; 10 family      18 scbi  linder~  19.3 f08fff      exp(-2.~ default    family   
+  <span class='fu'>pick_best_equations</span>()</div><div class='output co'>#&gt; # A tibble: 30,229 x 8
+#&gt;    eqn_type rowid site  sp           dbh equation_id eqn             eqn_source
+#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;           &lt;chr&gt;     
+#&gt;  1 family       1 scbi  lindera b~  27.9 f08fff      exp(-2.2118 + ~ default   
+#&gt;  2 family       2 scbi  lindera b~  23.7 f08fff      exp(-2.2118 + ~ default   
+#&gt;  3 family       3 scbi  lindera b~  22.2 f08fff      exp(-2.2118 + ~ default   
+#&gt;  4 family       8 scbi  lindera b~  51.4 f08fff      exp(-2.2118 + ~ default   
+#&gt;  5 family      13 scbi  lindera b~  15.4 f08fff      exp(-2.2118 + ~ default   
+#&gt;  6 family      14 scbi  lindera b~  14.8 f08fff      exp(-2.2118 + ~ default   
+#&gt;  7 family      15 scbi  lindera b~  15.5 f08fff      exp(-2.2118 + ~ default   
+#&gt;  8 family      16 scbi  lindera b~  17.4 f08fff      exp(-2.2118 + ~ default   
+#&gt;  9 family      17 scbi  lindera b~  68.2 f08fff      exp(-2.2118 + ~ default   
+#&gt; 10 family      18 scbi  lindera b~  19.3 f08fff      exp(-2.2118 + ~ default   
 #&gt; # ... with 30,219 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

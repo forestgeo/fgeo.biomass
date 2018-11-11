@@ -139,7 +139,14 @@ census_equations <- add_equations(census, danger)
 census_equations
 ```
 
-Thus you can now calculate and summarize biomass in the context of your census data.
+If you need more information about each equation, you can it lookup in __allodb__.
+
+```{r}
+census_equations %>% 
+  allo_lookup(allodb::equations)
+```
+
+You can now calculate and summarize biomass in the context of your census data.
 
 ```{r}
 with_biomass <- census_equations %>% 
@@ -150,11 +157,6 @@ with_biomass %>%
   summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
   arrange(desc(total_biomass))
 ```
-
-
-
-
-
 
 ### Possible improvements
 
