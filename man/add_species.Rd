@@ -20,6 +20,8 @@ A dataframe.
 Add \code{species} to a ForestGEO-like dataframe of census data.
 }
 \examples{
-add_species(allodb::scbi_tree1, allodb::scbi_species, site = "scbi")
+census <- fgeo.biomass::scbi_tree1
+species <- fgeo.biomass::scbi_species
+add_species(census, species, site = "scbi")
 }
 \concept{constructors}

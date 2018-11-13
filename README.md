@@ -40,8 +40,8 @@ library(fgeo.biomass)
 ### Overview
 
 ``` r
-census <- allodb::scbi_tree1
-species <- allodb::scbi_species
+census <- fgeo.biomass::scbi_tree1
+species <- fgeo.biomass::scbi_species
 
 census_species <- census %>%
   add_species(species, "scbi")
@@ -89,8 +89,7 @@ census_species %>%
 ### Step by step
 
 ``` r
-census <- allodb::scbi_tree1
-species <- allodb::scbi_species
+census <- fgeo.biomass::scbi_tree1
 
 dbh_species <- census %>% 
   add_species(species, site = "scbi")

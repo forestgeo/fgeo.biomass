@@ -36,8 +36,8 @@ test_that("returns the expected data structure", {
   expect_named(out, nms)
 
   # With real data
-  eqn <- allodb::scbi_tree1 %>%
-    add_species(allodb::scbi_species, "scbi") %>%
+  eqn <- fgeo.biomass::scbi_tree1 %>%
+    add_species(fgeo.biomass::scbi_species, "scbi") %>%
     allo_find()
   best <- allo_order(eqn)
   nms <- c(

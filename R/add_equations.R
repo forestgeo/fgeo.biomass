@@ -13,8 +13,8 @@
 #' @export
 #'
 #' @examples
-#' census <- allodb::scbi_tree1
-#' species <- allodb::scbi_species
+#' census <- fgeo.biomass::scbi_tree1
+#' species <- fgeo.biomass::scbi_species
 #'
 #' single_best <- census %>%
 #'   add_species(species, site = "scbi") %>%

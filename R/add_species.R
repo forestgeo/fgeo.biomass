@@ -10,7 +10,9 @@
 #' @export
 #'
 #' @examples
-#' add_species(allodb::scbi_tree1, allodb::scbi_species, site = "scbi")
+#' census <- fgeo.biomass::scbi_tree1
+#' species <- fgeo.biomass::scbi_species
+#' add_species(census, species, site = "scbi")
 add_species <- function(census, species, site) {
   .census <- rlang::set_names(census, tolower)
   .species <- rlang::set_names(species, tolower)

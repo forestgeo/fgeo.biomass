@@ -20,8 +20,8 @@ This function adds columns to uniquely identify each row of a census dataset,
 and each equation from \strong{allodb} -- so you can look it up on the database.
 }
 \examples{
-census <- allodb::scbi_tree1
-species <- allodb::scbi_species
+census <- fgeo.biomass::scbi_tree1
+species <- fgeo.biomass::scbi_species
 
 single_best <- census \%>\%
   add_species(species, site = "scbi") \%>\%

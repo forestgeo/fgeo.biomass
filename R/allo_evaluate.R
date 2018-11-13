@@ -10,8 +10,8 @@
 #' @examples
 #' library(dplyr)
 #'
-#' best <- allodb::scbi_tree1 %>%
-#'   add_species(allodb::scbi_species, "scbi") %>%
+#' best <- fgeo.biomass::scbi_tree1 %>%
+#'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
 #'   allo_find() %>%
 #'   allo_order()
 #'
