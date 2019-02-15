@@ -1,3 +1,6 @@
-# fgeo.biomass 0.0.0.9001
+# fgeo.x (development version)
 
-* Added a `NEWS.md` file to track changes to the package.
+* Request R >= 3.1
+* Require recent release of fgeo.tool
+* Require recent dev version of allodb
+* Build and deploy website site on Travis CI
