@@ -38,7 +38,8 @@ For details on how to install packages from GitHub, see [this article](https://g
 ## Example
 
 ```{r, message=FALSE}
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(fgeo.biomass)
 ```
 

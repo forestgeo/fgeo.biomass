@@ -33,7 +33,8 @@ article](https://goo.gl/dQKEeg).
 ## Example
 
 ``` r
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(fgeo.biomass)
 ```
 
