@@ -44,6 +44,7 @@ Suggests:
     testthat
 Imports: 
     allodb,
+    fgeo.tool,
     formatR,
     dplyr,
     purrr,
@@ -51,11 +52,10 @@ Imports:
     stats,
     tibble,
     rlang,
-    fgeo.base,
     glue,
     magrittr,
     tidyr
+Additional_repositories: https://forestgeo.github.io/drat/
 Remotes: 
     forestgeo/allodb,
-    forestgeo/fgeo.base
 Roxygen: list(markdown = TRUE)

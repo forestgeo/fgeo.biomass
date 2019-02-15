@@ -23,7 +23,7 @@
 #' @examples
 #' default_eqn(allodb::master())
 default_eqn <- function(.data) {
-  fgeo.base::check_crucial_names(.data, allodb_eqn_crucial())
+  fgeo.tool::check_crucial_names(.data, allodb_eqn_crucial())
 
   good <- .data[!.data$equation_id %in% .bad_eqn_id , allodb_eqn_crucial()]
   out <- good %>%
