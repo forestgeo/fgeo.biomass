@@ -71,18 +71,18 @@ census_species %>%
   allo_order(species_overwrites_genus) %>% 
   allo_evaluate()
 #> # A tibble: 14,572 x 9
-#>    eqn_type rowid site  sp       dbh equation_id eqn    eqn_source biomass
-#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>  <chr>        <dbl>
-#>  1 species      4 scbi  nyssa~ 135   8da09d      1.541~ default    1.10e12
-#>  2 species     21 scbi  lirio~ 232.  34fe5a      1.025~ default    2.99e 6
-#>  3 species     29 scbi  acer ~ 326.  7c72ed      exp(4~ default    1.26e 8
-#>  4 species     38 scbi  fraxi~  42.8 0edaff      0.163~ default    1.11e 3
-#>  5 species     72 scbi  acer ~ 289.  7c72ed      exp(4~ default    9.38e 7
-#>  6 species     77 scbi  querc~ 636.  07dba7      1.564~ default    5.41e 7
-#>  7 species     79 scbi  tilia~ 475   3f99ba      1.441~ default    2.97e 7
-#>  8 species     79 scbi  tilia~ 475   76d19b      0.004~ default    1.97e 3
-#>  9 species     84 scbi  fraxi~ 170.  0edaff      0.163~ default    2.81e 4
-#> 10 species     89 scbi  fagus~  27.2 74186d      2.039~ default    9.97e 3
+#>    eqn_type rowid site  sp        dbh equation_id eqn    eqn_source biomass
+#>    <chr>    <int> <chr> <chr>   <dbl> <chr>       <chr>  <chr>        <dbl>
+#>  1 species      4 scbi  nyssa ~ 135   8da09d      1.541~ default    1.10e12
+#>  2 species     21 scbi  liriod~ 232.  34fe5a      1.025~ default    2.99e 6
+#>  3 species     29 scbi  acer r~ 326.  7c72ed      exp(4~ default    1.26e 8
+#>  4 species     38 scbi  fraxin~  42.8 0edaff      0.163~ default    1.11e 3
+#>  5 species     72 scbi  acer r~ 289.  7c72ed      exp(4~ default    9.38e 7
+#>  6 species     77 scbi  quercu~ 636.  07dba7      1.564~ default    5.41e 7
+#>  7 species     79 scbi  tilia ~ 475   3f99ba      1.441~ default    2.97e 7
+#>  8 species     79 scbi  tilia ~ 475   76d19b      0.004~ default    1.97e 3
+#>  9 species     84 scbi  fraxin~ 170.  0edaff      0.163~ default    2.81e 4
+#> 10 species     89 scbi  fagus ~  27.2 74186d      2.039~ default    9.97e 3
 #> # ... with 14,562 more rows
 ```
 
@@ -151,18 +151,18 @@ equations %>%
   slice(c(1, 3)) %>% 
   unnest()
 #> # A tibble: 14,446 x 8
-#>    eqn_type rowid site  sp           dbh equation_id eqn        eqn_source
-#>    <chr>    <int> <chr> <chr>      <dbl> <chr>       <chr>      <chr>     
-#>  1 species      4 scbi  nyssa syl~ 135   8da09d      1.5416 * ~ default   
-#>  2 species     21 scbi  liriodend~ 232.  34fe5a      1.0259 * ~ default   
-#>  3 species     29 scbi  acer rubr~ 326.  7c72ed      exp(4.589~ default   
-#>  4 species     38 scbi  fraxinus ~  42.8 0edaff      0.1634 * ~ default   
-#>  5 species     72 scbi  acer rubr~ 289.  7c72ed      exp(4.589~ default   
-#>  6 species     77 scbi  quercus a~ 636.  07dba7      1.5647 * ~ default   
-#>  7 species     79 scbi  tilia ame~ 475   3f99ba      1.4416 * ~ default   
-#>  8 species     79 scbi  tilia ame~ 475   76d19b      0.004884 ~ default   
-#>  9 species     84 scbi  fraxinus ~ 170.  0edaff      0.1634 * ~ default   
-#> 10 species     89 scbi  fagus gra~  27.2 74186d      2.0394 * ~ default   
+#>    eqn_type rowid site  sp           dbh equation_id eqn         eqn_source
+#>    <chr>    <int> <chr> <chr>      <dbl> <chr>       <chr>       <chr>     
+#>  1 species      4 scbi  nyssa syl~ 135   8da09d      1.5416 * (~ default   
+#>  2 species     21 scbi  liriodend~ 232.  34fe5a      1.0259 * (~ default   
+#>  3 species     29 scbi  acer rubr~ 326.  7c72ed      exp(4.5893~ default   
+#>  4 species     38 scbi  fraxinus ~  42.8 0edaff      0.1634 * (~ default   
+#>  5 species     72 scbi  acer rubr~ 289.  7c72ed      exp(4.5893~ default   
+#>  6 species     77 scbi  quercus a~ 636.  07dba7      1.5647 * (~ default   
+#>  7 species     79 scbi  tilia ame~ 475   3f99ba      1.4416 * (~ default   
+#>  8 species     79 scbi  tilia ame~ 475   76d19b      0.004884 *~ default   
+#>  9 species     84 scbi  fraxinus ~ 170.  0edaff      0.1634 * (~ default   
+#> 10 species     89 scbi  fagus gra~  27.2 74186d      2.0394 * (~ default   
 #> # ... with 14,436 more rows
 ```
 
@@ -242,18 +242,18 @@ best <- equations %>%
 
 best
 #> # A tibble: 30,229 x 8
-#>    eqn_type rowid site  sp         dbh equation_id eqn          eqn_source
-#>    <chr>    <int> <chr> <chr>    <dbl> <chr>       <chr>        <chr>     
-#>  1 family       1 scbi  lindera~  27.9 f08fff      exp(-2.2118~ default   
-#>  2 family       2 scbi  lindera~  23.7 f08fff      exp(-2.2118~ default   
-#>  3 family       3 scbi  lindera~  22.2 f08fff      exp(-2.2118~ default   
-#>  4 family       8 scbi  lindera~  51.4 f08fff      exp(-2.2118~ default   
-#>  5 family      13 scbi  lindera~  15.4 f08fff      exp(-2.2118~ default   
-#>  6 family      14 scbi  lindera~  14.8 f08fff      exp(-2.2118~ default   
-#>  7 family      15 scbi  lindera~  15.5 f08fff      exp(-2.2118~ default   
-#>  8 family      16 scbi  lindera~  17.4 f08fff      exp(-2.2118~ default   
-#>  9 family      17 scbi  lindera~  68.2 f08fff      exp(-2.2118~ default   
-#> 10 family      18 scbi  lindera~  19.3 f08fff      exp(-2.2118~ default   
+#>    eqn_type rowid site  sp         dbh equation_id eqn           eqn_source
+#>    <chr>    <int> <chr> <chr>    <dbl> <chr>       <chr>         <chr>     
+#>  1 family       1 scbi  lindera~  27.9 f08fff      exp(-2.2118 ~ default   
+#>  2 family       2 scbi  lindera~  23.7 f08fff      exp(-2.2118 ~ default   
+#>  3 family       3 scbi  lindera~  22.2 f08fff      exp(-2.2118 ~ default   
+#>  4 family       8 scbi  lindera~  51.4 f08fff      exp(-2.2118 ~ default   
+#>  5 family      13 scbi  lindera~  15.4 f08fff      exp(-2.2118 ~ default   
+#>  6 family      14 scbi  lindera~  14.8 f08fff      exp(-2.2118 ~ default   
+#>  7 family      15 scbi  lindera~  15.5 f08fff      exp(-2.2118 ~ default   
+#>  8 family      16 scbi  lindera~  17.4 f08fff      exp(-2.2118 ~ default   
+#>  9 family      17 scbi  lindera~  68.2 f08fff      exp(-2.2118 ~ default   
+#> 10 family      18 scbi  lindera~  19.3 f08fff      exp(-2.2118 ~ default   
 #> # ... with 30,219 more rows
 
 with_biomass <- best %>% 
@@ -261,18 +261,18 @@ with_biomass <- best %>%
 
 with_biomass
 #> # A tibble: 30,229 x 9
-#>    eqn_type rowid site  sp       dbh equation_id eqn    eqn_source biomass
-#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>  <chr>        <dbl>
-#>  1 family       1 scbi  linde~  27.9 f08fff      exp(-~ default      337. 
-#>  2 family       2 scbi  linde~  23.7 f08fff      exp(-~ default      228. 
-#>  3 family       3 scbi  linde~  22.2 f08fff      exp(-~ default      194. 
-#>  4 family       8 scbi  linde~  51.4 f08fff      exp(-~ default     1474. 
-#>  5 family      13 scbi  linde~  15.4 f08fff      exp(-~ default       80.4
-#>  6 family      14 scbi  linde~  14.8 f08fff      exp(-~ default       73.0
-#>  7 family      15 scbi  linde~  15.5 f08fff      exp(-~ default       81.7
-#>  8 family      16 scbi  linde~  17.4 f08fff      exp(-~ default      108. 
-#>  9 family      17 scbi  linde~  68.2 f08fff      exp(-~ default     2917. 
-#> 10 family      18 scbi  linde~  19.3 f08fff      exp(-~ default      139. 
+#>    eqn_type rowid site  sp       dbh equation_id eqn     eqn_source biomass
+#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>   <chr>        <dbl>
+#>  1 family       1 scbi  linde~  27.9 f08fff      exp(-2~ default      337. 
+#>  2 family       2 scbi  linde~  23.7 f08fff      exp(-2~ default      228. 
+#>  3 family       3 scbi  linde~  22.2 f08fff      exp(-2~ default      194. 
+#>  4 family       8 scbi  linde~  51.4 f08fff      exp(-2~ default     1474. 
+#>  5 family      13 scbi  linde~  15.4 f08fff      exp(-2~ default       80.4
+#>  6 family      14 scbi  linde~  14.8 f08fff      exp(-2~ default       73.0
+#>  7 family      15 scbi  linde~  15.5 f08fff      exp(-2~ default       81.7
+#>  8 family      16 scbi  linde~  17.4 f08fff      exp(-2~ default      108. 
+#>  9 family      17 scbi  linde~  68.2 f08fff      exp(-2~ default     2917. 
+#> 10 family      18 scbi  linde~  19.3 f08fff      exp(-2~ default      139. 
 #> # ... with 30,219 more rows
 ```
 
@@ -311,18 +311,18 @@ issue yet but helps you find them.
 best %>% 
   fixme_find_duplicated_rowid()
 #> # A tibble: 1,809 x 9
-#>    eqn_type rowid site  sp        dbh equation_id eqn     eqn_source     n
-#>    <chr>    <int> <chr> <chr>   <dbl> <chr>       <chr>   <chr>      <int>
-#>  1 genus      106 scbi  amelan~  13.8 c59e03      exp(7.~ default        3
-#>  2 genus      106 scbi  amelan~  13.8 96c0af      10^(2.~ default        3
-#>  3 genus      106 scbi  amelan~  13.8 529234      10^(2.~ default        3
-#>  4 genus      125 scbi  amelan~  36.1 c59e03      exp(7.~ default        3
-#>  5 genus      125 scbi  amelan~  36.1 96c0af      10^(2.~ default        3
-#>  6 genus      125 scbi  amelan~  36.1 529234      10^(2.~ default        3
-#>  7 genus      131 scbi  amelan~  79.1 c59e03      exp(7.~ default        3
-#>  8 genus      131 scbi  amelan~  79.1 96c0af      10^(2.~ default        3
-#>  9 genus      131 scbi  amelan~  79.1 529234      10^(2.~ default        3
-#> 10 genus      132 scbi  amelan~  24   c59e03      exp(7.~ default        3
+#>    eqn_type rowid site  sp        dbh equation_id eqn      eqn_source     n
+#>    <chr>    <int> <chr> <chr>   <dbl> <chr>       <chr>    <chr>      <int>
+#>  1 genus      106 scbi  amelan~  13.8 c59e03      exp(7.2~ default        3
+#>  2 genus      106 scbi  amelan~  13.8 96c0af      10^(2.5~ default        3
+#>  3 genus      106 scbi  amelan~  13.8 529234      10^(2.0~ default        3
+#>  4 genus      125 scbi  amelan~  36.1 c59e03      exp(7.2~ default        3
+#>  5 genus      125 scbi  amelan~  36.1 96c0af      10^(2.5~ default        3
+#>  6 genus      125 scbi  amelan~  36.1 529234      10^(2.0~ default        3
+#>  7 genus      131 scbi  amelan~  79.1 c59e03      exp(7.2~ default        3
+#>  8 genus      131 scbi  amelan~  79.1 96c0af      10^(2.5~ default        3
+#>  9 genus      131 scbi  amelan~  79.1 529234      10^(2.0~ default        3
+#> 10 genus      132 scbi  amelan~  24   c59e03      exp(7.2~ default        3
 #> # ... with 1,799 more rows
 ```
 
@@ -335,18 +335,18 @@ danger <- best %>%
 
 danger
 #> # A tibble: 29,203 x 8
-#>    eqn_type rowid site  sp         dbh equation_id eqn          eqn_source
-#>    <chr>    <int> <chr> <chr>    <dbl> <chr>       <chr>        <chr>     
-#>  1 family       1 scbi  lindera~  27.9 f08fff      exp(-2.2118~ default   
-#>  2 family       2 scbi  lindera~  23.7 f08fff      exp(-2.2118~ default   
-#>  3 family       3 scbi  lindera~  22.2 f08fff      exp(-2.2118~ default   
-#>  4 family       8 scbi  lindera~  51.4 f08fff      exp(-2.2118~ default   
-#>  5 family      13 scbi  lindera~  15.4 f08fff      exp(-2.2118~ default   
-#>  6 family      14 scbi  lindera~  14.8 f08fff      exp(-2.2118~ default   
-#>  7 family      15 scbi  lindera~  15.5 f08fff      exp(-2.2118~ default   
-#>  8 family      16 scbi  lindera~  17.4 f08fff      exp(-2.2118~ default   
-#>  9 family      17 scbi  lindera~  68.2 f08fff      exp(-2.2118~ default   
-#> 10 family      18 scbi  lindera~  19.3 f08fff      exp(-2.2118~ default   
+#>    eqn_type rowid site  sp         dbh equation_id eqn           eqn_source
+#>    <chr>    <int> <chr> <chr>    <dbl> <chr>       <chr>         <chr>     
+#>  1 family       1 scbi  lindera~  27.9 f08fff      exp(-2.2118 ~ default   
+#>  2 family       2 scbi  lindera~  23.7 f08fff      exp(-2.2118 ~ default   
+#>  3 family       3 scbi  lindera~  22.2 f08fff      exp(-2.2118 ~ default   
+#>  4 family       8 scbi  lindera~  51.4 f08fff      exp(-2.2118 ~ default   
+#>  5 family      13 scbi  lindera~  15.4 f08fff      exp(-2.2118 ~ default   
+#>  6 family      14 scbi  lindera~  14.8 f08fff      exp(-2.2118 ~ default   
+#>  7 family      15 scbi  lindera~  15.5 f08fff      exp(-2.2118 ~ default   
+#>  8 family      16 scbi  lindera~  17.4 f08fff      exp(-2.2118 ~ default   
+#>  9 family      17 scbi  lindera~  68.2 f08fff      exp(-2.2118 ~ default   
+#> 10 family      18 scbi  lindera~  19.3 f08fff      exp(-2.2118 ~ default   
 #> # ... with 29,193 more rows
 ```
 
@@ -361,18 +361,18 @@ danger %>%
 danger %>% 
   allo_evaluate()
 #> # A tibble: 29,203 x 9
-#>    eqn_type rowid site  sp       dbh equation_id eqn    eqn_source biomass
-#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>  <chr>        <dbl>
-#>  1 family       1 scbi  linde~  27.9 f08fff      exp(-~ default      337. 
-#>  2 family       2 scbi  linde~  23.7 f08fff      exp(-~ default      228. 
-#>  3 family       3 scbi  linde~  22.2 f08fff      exp(-~ default      194. 
-#>  4 family       8 scbi  linde~  51.4 f08fff      exp(-~ default     1474. 
-#>  5 family      13 scbi  linde~  15.4 f08fff      exp(-~ default       80.4
-#>  6 family      14 scbi  linde~  14.8 f08fff      exp(-~ default       73.0
-#>  7 family      15 scbi  linde~  15.5 f08fff      exp(-~ default       81.7
-#>  8 family      16 scbi  linde~  17.4 f08fff      exp(-~ default      108. 
-#>  9 family      17 scbi  linde~  68.2 f08fff      exp(-~ default     2917. 
-#> 10 family      18 scbi  linde~  19.3 f08fff      exp(-~ default      139. 
+#>    eqn_type rowid site  sp       dbh equation_id eqn     eqn_source biomass
+#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>   <chr>        <dbl>
+#>  1 family       1 scbi  linde~  27.9 f08fff      exp(-2~ default      337. 
+#>  2 family       2 scbi  linde~  23.7 f08fff      exp(-2~ default      228. 
+#>  3 family       3 scbi  linde~  22.2 f08fff      exp(-2~ default      194. 
+#>  4 family       8 scbi  linde~  51.4 f08fff      exp(-2~ default     1474. 
+#>  5 family      13 scbi  linde~  15.4 f08fff      exp(-2~ default       80.4
+#>  6 family      14 scbi  linde~  14.8 f08fff      exp(-2~ default       73.0
+#>  7 family      15 scbi  linde~  15.5 f08fff      exp(-2~ default       81.7
+#>  8 family      16 scbi  linde~  17.4 f08fff      exp(-2~ default      108. 
+#>  9 family      17 scbi  linde~  68.2 f08fff      exp(-2~ default     2917. 
+#> 10 family      18 scbi  linde~  19.3 f08fff      exp(-2~ default      139. 
 #> # ... with 29,193 more rows
 ```
 
@@ -474,18 +474,18 @@ Allometric equations come from the **allodb** package.
 # Internal
 fgeo.biomass:::.default_eqn
 #> # A tibble: 619 x 6
-#>    equation_id site     sp           eqn               eqn_source eqn_type
-#>  * <chr>       <chr>    <chr>        <chr>             <chr>      <chr>   
-#>  1 2060ea      lilly d~ acer rubrum  10^(1.1891 + 1.4~ default    species 
-#>  2 2060ea      tyson    acer rubrum  10^(1.1891 + 1.4~ default    species 
-#>  3 a4d879      lilly d~ acer saccha~ 10^(1.2315 + 1.6~ default    species 
-#>  4 a4d879      tyson    acer saccha~ 10^(1.2315 + 1.6~ default    species 
-#>  5 c59e03      lilly d~ amelanchier~ exp(7.217 + 1.51~ default    genus   
-#>  6 c59e03      scbi     amelanchier~ exp(7.217 + 1.51~ default    genus   
-#>  7 c59e03      serc     amelanchier~ exp(7.217 + 1.51~ default    genus   
-#>  8 c59e03      serc     amelanchier~ exp(7.217 + 1.51~ default    genus   
-#>  9 c59e03      tyson    amelanchier~ exp(7.217 + 1.51~ default    genus   
-#> 10 c59e03      umbc     amelanchier~ exp(7.217 + 1.51~ default    genus   
+#>    equation_id site     sp           eqn                eqn_source eqn_type
+#>  * <chr>       <chr>    <chr>        <chr>              <chr>      <chr>   
+#>  1 2060ea      lilly d~ acer rubrum  10^(1.1891 + 1.41~ default    species 
+#>  2 2060ea      tyson    acer rubrum  10^(1.1891 + 1.41~ default    species 
+#>  3 a4d879      lilly d~ acer saccha~ 10^(1.2315 + 1.63~ default    species 
+#>  4 a4d879      tyson    acer saccha~ 10^(1.2315 + 1.63~ default    species 
+#>  5 c59e03      lilly d~ amelanchier~ exp(7.217 + 1.514~ default    genus   
+#>  6 c59e03      scbi     amelanchier~ exp(7.217 + 1.514~ default    genus   
+#>  7 c59e03      serc     amelanchier~ exp(7.217 + 1.514~ default    genus   
+#>  8 c59e03      serc     amelanchier~ exp(7.217 + 1.514~ default    genus   
+#>  9 c59e03      tyson    amelanchier~ exp(7.217 + 1.514~ default    genus   
+#> 10 c59e03      umbc     amelanchier~ exp(7.217 + 1.514~ default    genus   
 #> # ... with 609 more rows
 ```
 
