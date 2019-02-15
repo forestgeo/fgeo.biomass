@@ -79,7 +79,7 @@ equations <- dbh_species %>%
 equations
 ```
 
-### General manipulatetion of equations
+### General manipulation of equations
 
 You can use general purpose tools to manipulate the nested dataframe of equations. For example:
 
@@ -222,7 +222,7 @@ Some other possible improvements:
 
 * Allow using ViewFullTable and ViewTaxonomy.
 * Allow using any table with the required columns.
-* Simplify interfaces via generic functions that 'know' what to do with different (S3) classes of ForestGEO data -- i.e. census and species tables; ViewFullTable and ViewTaxonomy tables; or any two tables of unknown class.
+* Simplify interfaces via generic functions that _know_ what to do with different (S3) classes of ForestGEO data -- i.e. census and species tables; ViewFullTable and ViewTaxonomy tables; or any two tables of unknown class.
 
 ### fgeo.biomass and allodb
 

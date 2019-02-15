@@ -124,7 +124,7 @@ equations
 #> 5 woody_species  <tibble [0 x 7]>
 ```
 
-### General manipulatetion of equations
+### General manipulation of equations
 
 You can use general purpose tools to manipulate the nested dataframe of
 equations. For example:
@@ -461,7 +461,7 @@ census_species %>%
 
   - Allow using any table with the required columns.
 
-  - Simplify interfaces via generic functions that ‘know’ what to do
+  - Simplify interfaces via generic functions that *know* what to do
     with different (S3) classes of ForestGEO data – i.e. census and
     species tables; ViewFullTable and ViewTaxonomy tables; or any two
     tables of unknown class.
