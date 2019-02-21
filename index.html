@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">fgeo.biomass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -344,184 +344,211 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; 10 fraxinus americana            2.80e 9</span></a>
 <a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; # … with 42 more rows</span></a></code></pre></div>
 </div>
+<div id="memoization" class="section level3">
+<h3 class="hasAnchor">
+<a href="#memoization" class="anchor"></a>Memoization</h3>
+<blockquote>
+<p>If a function is called multiple times with the same input, you can often speed things up by keeping a cache of known answers that it can retrieve. This is called memoisation <a href="http://en.wikipedia.org/wiki/Memoization" class="uri">http://en.wikipedia.org/wiki/Memoization</a>.</p>
+</blockquote>
+<p>– <a href="https://github.com/r-lib/memoise" class="uri">https://github.com/r-lib/memoise</a></p>
+<p>Because <code><a href="reference/allo_evaluate.html">allo_evaluate()</a></code> can be slow, its result is stored and reused after the first time you run it.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># Clear cache to show how it works</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">memoise<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/memoise/topics/forget">forget</a></span>(allo_evaluate)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co"># `allo_evaluate()` may be slow the first time you run it</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>(best))</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;   1.132   0.000   1.131</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9">memoise<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/memoise/topics/is.memoised">is.memoised</a></span>(allo_evaluate)</a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co"># Calls after the first one take almost no time</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>(best))</a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt;   0.032   0.004   0.033</span></a></code></pre></div>
+</div>
 <div id="known-issues" class="section level3">
 <h3 class="hasAnchor">
 <a href="#known-issues" class="anchor"></a>Known issues</h3>
 <p>Right now there may be multiple rows per <code>rowid</code>. This is because, for a single stem, there may be multiple equations to reflect the allometries of different parts of the stem. <strong>fgeo.biomass</strong> doesn’t deal with this issue yet but helps you find them.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">best <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/handle_multiple_rowid.html">fixme_find_duplicated_rowid</a></span>()</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1,809 x 9</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt;    eqn_type rowid site  sp        dbh equation_id eqn      eqn_source     n</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;      &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;  1 genus      106 scbi  amelan…  13.8 c59e03      exp(7.2… default        3</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;  2 genus      106 scbi  amelan…  13.8 96c0af      10^(2.5… default        3</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;  3 genus      106 scbi  amelan…  13.8 529234      10^(2.0… default        3</span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt;  4 genus      125 scbi  amelan…  36.1 c59e03      exp(7.2… default        3</span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt;  5 genus      125 scbi  amelan…  36.1 96c0af      10^(2.5… default        3</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt;  6 genus      125 scbi  amelan…  36.1 529234      10^(2.0… default        3</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt;  7 genus      131 scbi  amelan…  79.1 c59e03      exp(7.2… default        3</span></a>
-<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt;  8 genus      131 scbi  amelan…  79.1 96c0af      10^(2.5… default        3</span></a>
-<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt;  9 genus      131 scbi  amelan…  79.1 529234      10^(2.0… default        3</span></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; 10 genus      132 scbi  amelan…  24   c59e03      exp(7.2… default        3</span></a>
-<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; # … with 1,799 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">best <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/handle_multiple_rowid.html">fixme_find_duplicated_rowid</a></span>()</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1,809 x 9</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt;    eqn_type rowid site  sp        dbh equation_id eqn      eqn_source     n</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;      &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;  1 genus      106 scbi  amelan…  13.8 c59e03      exp(7.2… default        3</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;  2 genus      106 scbi  amelan…  13.8 96c0af      10^(2.5… default        3</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;  3 genus      106 scbi  amelan…  13.8 529234      10^(2.0… default        3</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt;  4 genus      125 scbi  amelan…  36.1 c59e03      exp(7.2… default        3</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt;  5 genus      125 scbi  amelan…  36.1 96c0af      10^(2.5… default        3</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt;  6 genus      125 scbi  amelan…  36.1 529234      10^(2.0… default        3</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt;  7 genus      131 scbi  amelan…  79.1 c59e03      exp(7.2… default        3</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt;  8 genus      131 scbi  amelan…  79.1 96c0af      10^(2.5… default        3</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt;  9 genus      131 scbi  amelan…  79.1 529234      10^(2.0… default        3</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; 10 genus      132 scbi  amelan…  24   c59e03      exp(7.2… default        3</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; # … with 1,799 more rows</span></a></code></pre></div>
 <p>Here you enter the danger zone. <strong>fgeo.biomass</strong> provides a quick and dirty way of getting a single equation per stem.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">danger &lt;-<span class="st"> </span>best <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/handle_multiple_rowid.html">fixme_pick_one_row_by_rowid</a></span>()</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">danger</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; # A tibble: 29,203 x 8</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;    eqn_type rowid site  sp         dbh equation_id eqn           eqn_source</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;     </span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;  1 family       1 scbi  lindera…  27.9 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt;  2 family       2 scbi  lindera…  23.7 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt;  3 family       3 scbi  lindera…  22.2 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt;  4 family       8 scbi  lindera…  51.4 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt;  5 family      13 scbi  lindera…  15.4 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt;  6 family      14 scbi  lindera…  14.8 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt;  7 family      15 scbi  lindera…  15.5 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt;  8 family      16 scbi  lindera…  17.4 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt;  9 family      17 scbi  lindera…  68.2 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; 10 family      18 scbi  lindera…  19.3 f08fff      exp(-2.2118 … default   </span></a>
-<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; # … with 29,193 more rows</span></a></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># No longer has duplicated rowid</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">danger <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/handle_multiple_rowid.html">fixme_find_duplicated_rowid</a></span>()</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt; # A tibble: 0 x 9</span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt; # … with 9 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt; #   dbh &lt;dbl&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, n &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8">danger <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>()</a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; # A tibble: 29,203 x 9</span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt;    eqn_type rowid site  sp       dbh equation_id eqn     eqn_source biomass</span></a>
-<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt;  1 family       1 scbi  linde…  27.9 f08fff      exp(-2… default      337. </span></a>
-<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#&gt;  2 family       2 scbi  linde…  23.7 f08fff      exp(-2… default      228. </span></a>
-<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#&gt;  3 family       3 scbi  linde…  22.2 f08fff      exp(-2… default      194. </span></a>
-<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt;  4 family       8 scbi  linde…  51.4 f08fff      exp(-2… default     1474. </span></a>
-<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#&gt;  5 family      13 scbi  linde…  15.4 f08fff      exp(-2… default       80.4</span></a>
-<a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#&gt;  6 family      14 scbi  linde…  14.8 f08fff      exp(-2… default       73.0</span></a>
-<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#&gt;  7 family      15 scbi  linde…  15.5 f08fff      exp(-2… default       81.7</span></a>
-<a class="sourceLine" id="cb13-20" data-line-number="20"><span class="co">#&gt;  8 family      16 scbi  linde…  17.4 f08fff      exp(-2… default      108. </span></a>
-<a class="sourceLine" id="cb13-21" data-line-number="21"><span class="co">#&gt;  9 family      17 scbi  linde…  68.2 f08fff      exp(-2… default     2917. </span></a>
-<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="co">#&gt; 10 family      18 scbi  linde…  19.3 f08fff      exp(-2… default      139. </span></a>
-<a class="sourceLine" id="cb13-23" data-line-number="23"><span class="co">#&gt; # … with 29,193 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">danger &lt;-<span class="st"> </span>best <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/handle_multiple_rowid.html">fixme_pick_one_row_by_rowid</a></span>()</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">danger</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt; # A tibble: 29,203 x 8</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;    eqn_type rowid site  sp         dbh equation_id eqn           eqn_source</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;     </span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;  1 family       1 scbi  lindera…  27.9 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt;  2 family       2 scbi  lindera…  23.7 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt;  3 family       3 scbi  lindera…  22.2 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt;  4 family       8 scbi  lindera…  51.4 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;  5 family      13 scbi  lindera…  15.4 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt;  6 family      14 scbi  lindera…  14.8 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#&gt;  7 family      15 scbi  lindera…  15.5 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#&gt;  8 family      16 scbi  lindera…  17.4 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt;  9 family      17 scbi  lindera…  68.2 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#&gt; 10 family      18 scbi  lindera…  19.3 f08fff      exp(-2.2118 … default   </span></a>
+<a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#&gt; # … with 29,193 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># No longer has duplicated rowid</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">danger <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/handle_multiple_rowid.html">fixme_find_duplicated_rowid</a></span>()</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; # A tibble: 0 x 9</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; # … with 9 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; #   dbh &lt;dbl&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, n &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8">danger <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>()</a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; # A tibble: 29,203 x 9</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;    eqn_type rowid site  sp       dbh equation_id eqn     eqn_source biomass</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;  1 family       1 scbi  linde…  27.9 f08fff      exp(-2… default      337. </span></a>
+<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt;  2 family       2 scbi  linde…  23.7 f08fff      exp(-2… default      228. </span></a>
+<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt;  3 family       3 scbi  linde…  22.2 f08fff      exp(-2… default      194. </span></a>
+<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt;  4 family       8 scbi  linde…  51.4 f08fff      exp(-2… default     1474. </span></a>
+<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#&gt;  5 family      13 scbi  linde…  15.4 f08fff      exp(-2… default       80.4</span></a>
+<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#&gt;  6 family      14 scbi  linde…  14.8 f08fff      exp(-2… default       73.0</span></a>
+<a class="sourceLine" id="cb14-19" data-line-number="19"><span class="co">#&gt;  7 family      15 scbi  linde…  15.5 f08fff      exp(-2… default       81.7</span></a>
+<a class="sourceLine" id="cb14-20" data-line-number="20"><span class="co">#&gt;  8 family      16 scbi  linde…  17.4 f08fff      exp(-2… default      108. </span></a>
+<a class="sourceLine" id="cb14-21" data-line-number="21"><span class="co">#&gt;  9 family      17 scbi  linde…  68.2 f08fff      exp(-2… default     2917. </span></a>
+<a class="sourceLine" id="cb14-22" data-line-number="22"><span class="co">#&gt; 10 family      18 scbi  linde…  19.3 f08fff      exp(-2… default      139. </span></a>
+<a class="sourceLine" id="cb14-23" data-line-number="23"><span class="co">#&gt; # … with 29,193 more rows</span></a></code></pre></div>
 </div>
 <div id="add-equations-for-each-row-of-your-census-dataset" class="section level3">
 <h3 class="hasAnchor">
 <a href="#add-equations-for-each-row-of-your-census-dataset" class="anchor"></a>Add equations for each row of your census dataset</h3>
 <p>The <code>rowid</code>s were generated from the row-names of your original census data. Now that you have a single row per <code>rowid</code>, you can add the equations to your census data.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">census_equations &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/add_equations.html">add_equations</a></span>(danger)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; Joining, by = "rowid"</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">census_equations</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; # A tibble: 40,283 x 23</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;  1     1      1      1 10079 1       libe  0104     3.70  73       1</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt;  2     2      2      2 10168 1       libe  0103    17.3   58.9     3</span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;  3     3      3      3 10567 1       libe  0110     9    197.      5</span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;  4     4      4      4 12165 1       nysy  0122    14.2  428.      7</span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;  5     5      5      5 12190 1       havi  0122     9.40 436.      9</span></a>
-<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt;  6     6      6      6 12192 1       havi  0122     1.30 434      13</span></a>
-<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt;  7     7      7      7 12212 1       unk   0123    17.8  447.     15</span></a>
-<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt;  8     8      8      8 12261 1       libe  0125    18    484.     17</span></a>
-<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#&gt;  9     9      9      9 12456 1       vipr  0130    18    598.     19</span></a>
-<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#&gt; 10    10     10     10 12551 1       astr  0132     5.60 628.     22</span></a>
-<a class="sourceLine" id="cb14-19" data-line-number="19"><span class="co">#&gt; # … with 40,273 more rows, and 13 more variables: CensusID &lt;int&gt;,</span></a>
-<a class="sourceLine" id="cb14-20" data-line-number="20"><span class="co">#&gt; #   dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb14-21" data-line-number="21"><span class="co">#&gt; #   codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb14-22" data-line-number="22"><span class="co">#&gt; #   eqn &lt;chr&gt;, equation_id &lt;chr&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">census_equations &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/add_equations.html">add_equations</a></span>(danger)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt; Joining, by = "rowid"</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">census_equations</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; # A tibble: 40,283 x 23</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID</span></a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;  1     1      1      1 10079 1       libe  0104     3.70  73       1</span></a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt;  2     2      2      2 10168 1       libe  0103    17.3   58.9     3</span></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt;  3     3      3      3 10567 1       libe  0110     9    197.      5</span></a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;  4     4      4      4 12165 1       nysy  0122    14.2  428.      7</span></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;  5     5      5      5 12190 1       havi  0122     9.40 436.      9</span></a>
+<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt;  6     6      6      6 12192 1       havi  0122     1.30 434      13</span></a>
+<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt;  7     7      7      7 12212 1       unk   0123    17.8  447.     15</span></a>
+<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt;  8     8      8      8 12261 1       libe  0125    18    484.     17</span></a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt;  9     9      9      9 12456 1       vipr  0130    18    598.     19</span></a>
+<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; 10    10     10     10 12551 1       astr  0132     5.60 628.     22</span></a>
+<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt; # … with 40,273 more rows, and 13 more variables: CensusID &lt;int&gt;,</span></a>
+<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; #   dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="co">#&gt; #   codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb15-22" data-line-number="22"><span class="co">#&gt; #   eqn &lt;chr&gt;, equation_id &lt;chr&gt;</span></a></code></pre></div>
 <p>If you need more information about each equation, you can look it up in <strong>allodb</strong>.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">census_equations <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_lookup.html">allo_lookup</a></span>(allodb<span class="op">::</span>equations)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt; Joining, by = "equation_id"</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; # A tibble: 40,283 x 23</span></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt;    rowid equation_id ref_id equation_allome… equation_form dependent_varia…</span></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;           </span></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt;  1     1 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt;  2     2 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;  3     3 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt;  4     4 8da09d      jenki… 1.5416*(dbh^2)^… a*(DBH^2)^b   Stem and branch…</span></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt;  5     5 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;  6     6 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;  7     7 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt;  8     8 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt;  9     9 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 10    10 ae65ed      jenki… exp(-2.48+2.483… exp(a+b*ln(D… Total abovegrou…</span></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; # … with 40,273 more rows, and 17 more variables:</span></a>
-<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; #   independent_variable &lt;chr&gt;, allometry_specificity &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt; #   geographic_area &lt;chr&gt;, dbh_min_cm &lt;chr&gt;, dbh_max_cm &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; #   sample_size &lt;chr&gt;, dbh_units_original &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="co">#&gt; #   biomass_units_original &lt;chr&gt;, allometry_development_method &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb15-22" data-line-number="22"><span class="co">#&gt; #   regression_model &lt;chr&gt;, other_equations_tested &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb15-23" data-line-number="23"><span class="co">#&gt; #   log_biomass &lt;chr&gt;, bias_corrected &lt;chr&gt;, bias_correction_factor &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb15-24" data-line-number="24"><span class="co">#&gt; #   notes_fitting_model &lt;chr&gt;, original_data_availability &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb15-25" data-line-number="25"><span class="co">#&gt; #   warning &lt;chr&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">census_equations <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_lookup.html">allo_lookup</a></span>(allodb<span class="op">::</span>equations)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt; Joining, by = "equation_id"</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; # A tibble: 40,283 x 23</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt;    rowid equation_id ref_id equation_allome… equation_form dependent_varia…</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;           </span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt;  1     1 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt;  2     2 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt;  3     3 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt;  4     4 8da09d      jenki… 1.5416*(dbh^2)^… a*(DBH^2)^b   Stem and branch…</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt;  5     5 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt;  6     6 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt;  7     7 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt;  8     8 f08fff      chojn… exp(-2.2118+2.4… exp(a+b*ln(D… Total abovegrou…</span></a>
+<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt;  9     9 &lt;NA&gt;        &lt;NA&gt;   &lt;NA&gt;             &lt;NA&gt;          &lt;NA&gt;            </span></a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; 10    10 ae65ed      jenki… exp(-2.48+2.483… exp(a+b*ln(D… Total abovegrou…</span></a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt; # … with 40,273 more rows, and 17 more variables:</span></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; #   independent_variable &lt;chr&gt;, allometry_specificity &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; #   geographic_area &lt;chr&gt;, dbh_min_cm &lt;chr&gt;, dbh_max_cm &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; #   sample_size &lt;chr&gt;, dbh_units_original &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="co">#&gt; #   biomass_units_original &lt;chr&gt;, allometry_development_method &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="co">#&gt; #   regression_model &lt;chr&gt;, other_equations_tested &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="co">#&gt; #   log_biomass &lt;chr&gt;, bias_corrected &lt;chr&gt;, bias_correction_factor &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="co">#&gt; #   notes_fitting_model &lt;chr&gt;, original_data_availability &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb16-25" data-line-number="25"><span class="co">#&gt; #   warning &lt;chr&gt;</span></a></code></pre></div>
 </div>
 <div id="possible-improvements" class="section level3">
 <h3 class="hasAnchor">
 <a href="#possible-improvements" class="anchor"></a>Possible improvements</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># Stays as is</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">census_species &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/add_species.html">add_species</a></span>(species)</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># New single interface to automatically calculates biomass</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="st">  </span><span class="kw">auto_biomass</span>()</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co"># New single interface to automatically add equations to a census dataframe</span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10">census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="st">  </span><span class="kw">auto_equations</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># Stays as is</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">census_species &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/add_species.html">add_species</a></span>(species)</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co"># New single interface to automatically calculates biomass</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="st">  </span><span class="kw">auto_biomass</span>()</a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co"># New single interface to automatically add equations to a census dataframe</span></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10">census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="st">  </span><span class="kw">auto_equations</span>()</a></code></pre></div>
 <ul>
-<li><p>New <code>allo_customize()</code> to insert custom equations. Some other possible improvements:</p></li>
+<li>New <code>allo_customize()</code> to insert custom equations.</li>
+</ul>
+<p>Some other possible improvements:</p>
+<ul>
 <li>Allow using ViewFullTable and ViewTaxonomy.</li>
 <li>Allow using any table with the required columns.</li>
-<li><p>Simplify interfaces via generic functions that <em>know</em> what to do with different (S3) classes of ForestGEO data – i.e. census and species tables; ViewFullTable and ViewTaxonomy tables; or any two tables of unknown class.</p></li>
+<li>Simplify interfaces via generic functions that <em>know</em> what to do with different (S3) classes of ForestGEO data – i.e. census and species tables; ViewFullTable and ViewTaxonomy tables; or any two tables of unknown class.</li>
 </ul>
 </div>
 <div id="fgeo-biomass-and-allodb" class="section level3">
 <h3 class="hasAnchor">
 <a href="#fgeo-biomass-and-allodb" class="anchor"></a>fgeo.biomass and allodb</h3>
 <p>Allometric equations come from the <strong>allodb</strong> package.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># Internal</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">fgeo.biomass<span class="op">:::</span>.default_eqn</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#&gt; # A tibble: 619 x 6</span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#&gt;    equation_id site     sp           eqn                eqn_source eqn_type</span></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#&gt;  * &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;              &lt;chr&gt;      &lt;chr&gt;   </span></a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">#&gt;  1 2060ea      lilly d… acer rubrum  10^(1.1891 + 1.41… default    species </span></a>
-<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt;  2 2060ea      tyson    acer rubrum  10^(1.1891 + 1.41… default    species </span></a>
-<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#&gt;  3 a4d879      lilly d… acer saccha… 10^(1.2315 + 1.63… default    species </span></a>
-<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">#&gt;  4 a4d879      tyson    acer saccha… 10^(1.2315 + 1.63… default    species </span></a>
-<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">#&gt;  5 c59e03      lilly d… amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
-<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">#&gt;  6 c59e03      scbi     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
-<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">#&gt;  7 c59e03      serc     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
-<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">#&gt;  8 c59e03      serc     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
-<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="co">#&gt;  9 c59e03      tyson    amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
-<a class="sourceLine" id="cb17-15" data-line-number="15"><span class="co">#&gt; 10 c59e03      umbc     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
-<a class="sourceLine" id="cb17-16" data-line-number="16"><span class="co">#&gt; # … with 609 more rows</span></a></code></pre></div>
-<p>For now we are excluding some equations.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># Internal</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">excluding &lt;-<span class="st"> </span>fgeo.biomass<span class="op">:::</span>.bad_eqn_id</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">allodb<span class="op">::</span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(equation_id <span class="op">%in%</span><span class="st"> </span>excluding) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(equation_id, equation_allometry)</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt; # A tibble: 25 x 2</span></a>
-<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt;    equation_id equation_allometry         </span></a>
-<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;                      </span></a>
-<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt;  1 76aa3c      38.111*(dba^2.9)           </span></a>
-<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt;  2 28dce6      51.996*(dba^2.77)          </span></a>
-<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt;  3 a1646f      37.637*(dba^2.779)         </span></a>
-<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt;  4 b61369      43.992*(dba^2.86)          </span></a>
-<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt;  5 5e2dea      29.615*(dba^3.243)         </span></a>
-<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt;  6 3cb95a      exp(2.025+3.527*log(dba))  </span></a>
-<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt;  7 c94845      51.68+0.02*BA              </span></a>
-<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt;  8 6b3b2a      exp(3.67+2.847*log(dba))   </span></a>
-<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt;  9 b95baf      exp(3.892+3.122*log(dba))  </span></a>
-<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt; 10 e8f868      exp(3.6123+2.9944*log(dba))</span></a>
-<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt; # … with 15 more rows</span></a></code></pre></div>
+<a class="sourceLine" id="cb18-2" data-line-number="2">fgeo.biomass<span class="op">:::</span>.default_eqn</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#&gt; # A tibble: 619 x 6</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#&gt;    equation_id site     sp           eqn                eqn_source eqn_type</span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">#&gt;  * &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;              &lt;chr&gt;      &lt;chr&gt;   </span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#&gt;  1 2060ea      lilly d… acer rubrum  10^(1.1891 + 1.41… default    species </span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt;  2 2060ea      tyson    acer rubrum  10^(1.1891 + 1.41… default    species </span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt;  3 a4d879      lilly d… acer saccha… 10^(1.2315 + 1.63… default    species </span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt;  4 a4d879      tyson    acer saccha… 10^(1.2315 + 1.63… default    species </span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt;  5 c59e03      lilly d… amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt;  6 c59e03      scbi     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt;  7 c59e03      serc     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt;  8 c59e03      serc     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt;  9 c59e03      tyson    amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; 10 c59e03      umbc     amelanchier… exp(7.217 + 1.514… default    genus   </span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; # … with 609 more rows</span></a></code></pre></div>
+<p>For now we are excluding some equations.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># Internal</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">excluding &lt;-<span class="st"> </span>fgeo.biomass<span class="op">:::</span>.bad_eqn_id</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">allodb<span class="op">::</span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(equation_id <span class="op">%in%</span><span class="st"> </span>excluding) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(equation_id, equation_allometry)</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="co">#&gt; # A tibble: 25 x 2</span></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="co">#&gt;    equation_id equation_allometry         </span></a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;                      </span></a>
+<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="co">#&gt;  1 76aa3c      38.111*(dba^2.9)           </span></a>
+<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="co">#&gt;  2 28dce6      51.996*(dba^2.77)          </span></a>
+<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="co">#&gt;  3 a1646f      37.637*(dba^2.779)         </span></a>
+<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="co">#&gt;  4 b61369      43.992*(dba^2.86)          </span></a>
+<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt;  5 5e2dea      29.615*(dba^3.243)         </span></a>
+<a class="sourceLine" id="cb19-15" data-line-number="15"><span class="co">#&gt;  6 3cb95a      exp(2.025+3.527*log(dba))  </span></a>
+<a class="sourceLine" id="cb19-16" data-line-number="16"><span class="co">#&gt;  7 c94845      51.68+0.02*BA              </span></a>
+<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt;  8 6b3b2a      exp(3.67+2.847*log(dba))   </span></a>
+<a class="sourceLine" id="cb19-18" data-line-number="18"><span class="co">#&gt;  9 b95baf      exp(3.892+3.122*log(dba))  </span></a>
+<a class="sourceLine" id="cb19-19" data-line-number="19"><span class="co">#&gt; 10 e8f868      exp(3.6123+2.9944*log(dba))</span></a>
+<a class="sourceLine" id="cb19-20" data-line-number="20"><span class="co">#&gt; # … with 15 more rows</span></a></code></pre></div>
 </div>
 </div>
 <div id="information" class="section level2">
