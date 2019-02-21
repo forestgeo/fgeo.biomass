@@ -1,4 +1,4 @@
-# fgeo.x (development version)
+# fgeo.biomass (development version)
 
 * `allo_evaluate()` is now memoised.
 
