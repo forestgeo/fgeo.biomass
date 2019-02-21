@@ -301,6 +301,36 @@ with_biomass %>%
 #> # ... with 42 more rows
 ```
 
+### Memoization
+
+> If a function is called multiple times with the same input, you can
+> often speed things up by keeping a cache of known answers that it can
+> retrieve. This is called memoisation
+> <http://en.wikipedia.org/wiki/Memoization>.
+
+– <https://github.com/r-lib/memoise>
+
+Because `allo_evaluate()` can be slow, its result is stored and reused
+after the first time you run it.
+
+``` r
+# Clear cache to show how it works
+memoise::forget(allo_evaluate)
+#> [1] TRUE
+
+# `allo_evaluate()` may be slow the first time you run it
+system.time(allo_evaluate(best))
+#>    user  system elapsed 
+#>    0.84    0.02    0.90
+memoise::is.memoised(allo_evaluate)
+#> [1] TRUE
+
+# Calls after the first one take almost no time
+system.time(allo_evaluate(best))
+#>    user  system elapsed 
+#>    0.00    0.01    0.02
+```
+
 ### Known issues
 
 Right now there may be multiple rows per `rowid`. This is because, for a
@@ -455,13 +485,12 @@ census_species %>%
   auto_equations()
 ```
 
-  - New `allo_customize()` to insert custom equations. Some other
-    possible improvements:
+  - New `allo_customize()` to insert custom equations.
+
+Some other possible improvements:
 
   - Allow using ViewFullTable and ViewTaxonomy.
-
   - Allow using any table with the required columns.
-
   - Simplify interfaces via generic functions that *know* what to do
     with different (S3) classes of ForestGEO data – i.e. census and
     species tables; ViewFullTable and ViewTaxonomy tables; or any two

@@ -157,6 +157,26 @@ with_biomass %>%
   arrange(desc(total_biomass))
 ```
 
+### Memoization
+
+> If a function is called multiple times with the same input, you can often speed things up by keeping a cache of known answers that it can retrieve. This is called memoisation http://en.wikipedia.org/wiki/Memoization.
+
+-- https://github.com/r-lib/memoise
+
+Because `allo_evaluate()` can be slow, its result is stored and reused after the first time you run it.
+
+```{r, cache=FALSE}
+# Clear cache to show how it works
+memoise::forget(allo_evaluate)
+
+# `allo_evaluate()` may be slow the first time you run it
+system.time(allo_evaluate(best))
+memoise::is.memoised(allo_evaluate)
+
+# Calls after the first one take almost no time
+system.time(allo_evaluate(best))
+```
+
 ### Known issues
 
 Right now there may be multiple rows per `rowid`. This is because, for a single stem, there may be multiple equations to reflect the allometries of different parts of the stem. __fgeo.biomass__ doesn't deal with this issue yet but helps you find them.
@@ -219,6 +239,7 @@ census_species %>%
 ```
 
 * New `allo_customize()` to insert custom equations.
+
 Some other possible improvements:
 
 * Allow using ViewFullTable and ViewTaxonomy.
