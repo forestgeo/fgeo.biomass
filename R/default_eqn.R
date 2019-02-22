@@ -51,6 +51,10 @@ default_eqn <- function(.data) {
 
 new_default_eqn <- function(x) {
   stopifnot(tibble::is.tibble(x))
+  if (inherits(x, "add_species")) {
+    return(x)
+  }
+
   structure(x, class = c("default_eqn", class(x)))
 }
 

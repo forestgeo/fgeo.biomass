@@ -33,6 +33,10 @@ add_species <- function(census, species, site) {
 
 new_add_species <- function(x) {
   stopifnot(tibble::is.tibble(x))
+  if (inherits(x, "add_species")) {
+    return(x)
+  }
+
   structure(x, class = c("add_species", class(x)))
 }
 
