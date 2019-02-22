@@ -67,6 +67,7 @@ allodb_eqn_crucial <- function() {
     "site",
     "species",
     "equation_allometry",
-    "allometry_specificity"
+    "allometry_specificity",
+    "dependent_variable_biomass_component"
   )
 }

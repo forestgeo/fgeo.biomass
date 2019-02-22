@@ -29,7 +29,6 @@ test_that("is sensitive to `order`", {
   expect_false(identical(species_genus, genus_species))
 })
 
-
 test_that("returns the expected data structure", {
   out <- allo_order(toy_nested)
   nms <- c("eqn_type", "eqn", "dbh", "rowid", "where")
@@ -48,7 +47,8 @@ test_that("returns the expected data structure", {
       "dbh",
       "equation_id",
       "eqn",
-      "eqn_source"
+      "eqn_source",
+      "anatomic_relevance"
     )
   expect_named(best, nms, ignore.order = TRUE)
 })
