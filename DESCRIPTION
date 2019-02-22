@@ -53,7 +53,8 @@ Imports:
     memoise
 Suggests: 
     covr (>= 3.2.1),
-    testthat (>= 2.0.1)
+    testthat (>= 2.0.1),
+    spelling
 Remotes: 
     forestgeo/allodb
 Additional_repositories: https://forestgeo.github.io/drat/
@@ -61,3 +62,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+Language: en-US

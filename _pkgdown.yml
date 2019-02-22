@@ -59,6 +59,6 @@ reference:
     contents:
       - has_concept("internal functions that flag issues to be fixed")
 
-  - title: Other internal objects to hidden or remove
+  - title: Other internal objects should be hidden or removed
     contents:
       - has_concept("internal objects that will be hidden or removed")
