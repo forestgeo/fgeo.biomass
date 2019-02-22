@@ -14,20 +14,35 @@ fixme_pick_one_row_by_rowid(.data)
 \item{.data}{A dataframe as those created with \code{\link[=allo_order]{allo_order()}}.}
 }
 \value{
-A dataframe with a single row by each value of \code{rowid}.
+\itemize{
+\item \code{fixme_find_duplicated_rowid()} returns a dataframe with the rows for
+which duplicated \code{rowid} values are found.
+\item \code{fixme_pick_one_row_by_rowid()} returns a dataframe with a single row per
+rowid value.
+}
 }
 \description{
 Handle multiple \code{rowid}s: find duplicates and pick a single row.
 }
 \examples{
-library(dplyr)
-
 best <- fgeo.biomass::scbi_tree1 \%>\%
   add_species(fgeo.biomass::scbi_species, "scbi") \%>\%
   allo_find() \%>\%
   allo_order()
 
-allo_evaluate(best)
+best \%>\%
+  fixme_find_duplicated_rowid()
+
+best \%>\%
+  fixme_pick_one_row_by_rowid()
+
+best \%>\%
+  fixme_pick_one_row_by_rowid()
+
+# Should return 0-rows
+best \%>\%
+  fixme_pick_one_row_by_rowid() \%>\%
+  fixme_find_duplicated_rowid()
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},

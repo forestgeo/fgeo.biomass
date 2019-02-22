@@ -31,7 +31,8 @@ default_eqn <- function(.data) {
       eqn_source = "default",
       eqn = format_equations(good$equation_allometry),
       allometry_specificity = gsub(" ", "_", .data$allometry_specificity),
-      equation_allometry = NULL
+      equation_allometry = NULL,
+      anatomic_relevance = .data$dependent_variable_biomass_component
     ) %>%
     dplyr::rename(
       sp = .data$species,
@@ -51,11 +52,22 @@ default_eqn <- function(.data) {
 
 new_default_eqn <- function(x) {
   stopifnot(tibble::is.tibble(x))
+  if (inherits(x, "default_eqn")) {
+    return(x)
+  }
+
   structure(x, class = c("default_eqn", class(x)))
 }
 
 bmss_default_vars <- function() {
-  c("equation_id", "site", "sp", "eqn", "eqn_source", "eqn_type")
+  c("equation_id",
+    "site",
+    "sp",
+    "eqn",
+    "eqn_source",
+    "eqn_type",
+    "anatomic_relevance"
+  )
 }
 
 format_equations <- function(eqn) {

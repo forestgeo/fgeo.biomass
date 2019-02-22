@@ -3,6 +3,31 @@
 #' @inherit allo_evaluate
 #' @family internal functions that flag issues to be fixed
 #' @name handle_multiple_rowid
+#'
+#' @return
+#'   * `fixme_find_duplicated_rowid()` returns a dataframe with the rows for
+#'   which duplicated `rowid` values are found.
+#'   * `fixme_pick_one_row_by_rowid()` returns a dataframe with a single row per
+#'   rowid value.
+#' @examples
+#' best <- fgeo.biomass::scbi_tree1 %>%
+#'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
+#'   allo_find() %>%
+#'   allo_order()
+#'
+#' best %>%
+#'   fixme_find_duplicated_rowid()
+#'
+#' best %>%
+#'   fixme_pick_one_row_by_rowid()
+#'
+#' best %>%
+#'   fixme_pick_one_row_by_rowid()
+#'
+#' # Should return 0-rows
+#' best %>%
+#'   fixme_pick_one_row_by_rowid() %>%
+#'   fixme_find_duplicated_rowid()
 NULL
 
 #' @rdname handle_multiple_rowid
