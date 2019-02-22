@@ -24,4 +24,7 @@ census <- fgeo.biomass::scbi_tree1
 species <- fgeo.biomass::scbi_species
 add_species(census, species, site = "scbi")
 }
+\seealso{
+Other constructors: \code{\link{allo_find}}
+}
 \concept{constructors}

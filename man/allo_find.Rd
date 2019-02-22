@@ -4,10 +4,12 @@
 \alias{allo_find}
 \title{Get default equations of each type.}
 \usage{
-allo_find(dbh_species)
+allo_find(dbh_species, custom_eqn = NULL)
 }
 \arguments{
 \item{dbh_species}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}
+
+\item{custom_eqn}{A dataframe of class "eqn".}
 }
 \value{
 A nested dataframe with each row containing the data of an equation
@@ -30,5 +32,8 @@ allo_find(dbh_species)
 Other functions to manipulate equations: \code{\link{add_equations}},
   \code{\link{allo_evaluate}}, \code{\link{allo_lookup}},
   \code{\link{allo_order}}
+
+Other constructors: \code{\link{add_species}}
 }
+\concept{constructors}
 \concept{functions to manipulate equations}

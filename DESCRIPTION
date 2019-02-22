@@ -30,8 +30,8 @@ Authors@R:
       person(given = "CTFS-ForestGEO",
              role = c("cph", "fnd"),
              email = "ForestGEO@si.edu"))
-Description: Calculate biomass with the best available allometries.
-    allodb package.
+Description: Calculate biomass with the best available
+    allometries.  allodb package.
 License: GPL-3
 URL: https://github.com/forestgeo/fgeo.biomass
 BugReports: https://github.com/forestgeo/fgeo.biomass/issues
@@ -44,22 +44,22 @@ Imports:
     formatR (>= 1.5),
     glue (>= 1.3.0),
     magrittr (>= 1.5),
+    memoise (>= 1.1.0),
     purrr (>= 0.3.0),
     readr (>= 1.3.1),
     rlang (>= 0.3.1),
     stats,
     tibble (>= 2.0.1),
-    tidyr (>= 0.8.2),
-    memoise
+    tidyr (>= 0.8.2)
 Suggests: 
     covr (>= 3.2.1),
-    testthat (>= 2.0.1),
-    spelling
+    spelling (>= 2.0),
+    testthat (>= 2.0.1)
 Remotes: 
     forestgeo/allodb
 Additional_repositories: https://forestgeo.github.io/drat/
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-Language: en-US

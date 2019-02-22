@@ -6,8 +6,8 @@
 \alias{fgeo.biomass-package}
 \title{fgeo.biomass: Calculate Biomass with the Best Available Allometries}
 \description{
-Calculate biomass with the best available allometries.
-    allodb package.
+Calculate biomass with the best available
+    allometries.  allodb package.
 }
 \seealso{
 Useful links:

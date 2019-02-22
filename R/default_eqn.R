@@ -47,16 +47,16 @@ default_eqn <- function(.data) {
     dplyr::filter(stats::complete.cases(.)) %>%
     unique()
 
-  new_default_eqn(dplyr::as_tibble(out))
+  new_eqn(dplyr::as_tibble(out))
 }
 
-new_default_eqn <- function(x) {
+new_eqn <- function(x) {
   stopifnot(tibble::is.tibble(x))
-  if (inherits(x, "default_eqn")) {
+  if (inherits(x, "eqn")) {
     return(x)
   }
 
-  structure(x, class = c("default_eqn", class(x)))
+  structure(x, class = c("eqn", class(x)))
 }
 
 bmss_default_vars <- function() {
