@@ -137,7 +137,14 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe with a single row by each value of <code>rowid</code>.</p>
+    
+<ul>
+<li><p><code>fixme_find_duplicated_rowid()</code> returns a dataframe with the rows for
+which duplicated <code>rowid</code> values are found.</p></li>
+<li><p><code>fixme_pick_one_row_by_rowid()</code> returns a dataframe with a single row per
+rowid value.</p></li>
+</ul>
+
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -147,27 +154,64 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)
-
-<span class='no'>best</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
+    <pre class="examples"><div class='input'><span class='no'>best</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='allo_order.html'>allo_order</a></span>()
 
-<span class='fu'><a href='allo_evaluate.html'>allo_evaluate</a></span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; # A tibble: 30,229 x 9
-#&gt;    eqn_type rowid site  sp         dbh equation_id eqn        eqn_source biomass
-#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;        &lt;dbl&gt;
-#&gt;  1 family       1 scbi  lindera…  27.9 f08fff      exp(-2.21… default      337. 
-#&gt;  2 family       2 scbi  lindera…  23.7 f08fff      exp(-2.21… default      228. 
-#&gt;  3 family       3 scbi  lindera…  22.2 f08fff      exp(-2.21… default      194. 
-#&gt;  4 family       8 scbi  lindera…  51.4 f08fff      exp(-2.21… default     1474. 
-#&gt;  5 family      13 scbi  lindera…  15.4 f08fff      exp(-2.21… default       80.4
-#&gt;  6 family      14 scbi  lindera…  14.8 f08fff      exp(-2.21… default       73.0
-#&gt;  7 family      15 scbi  lindera…  15.5 f08fff      exp(-2.21… default       81.7
-#&gt;  8 family      16 scbi  lindera…  17.4 f08fff      exp(-2.21… default      108. 
-#&gt;  9 family      17 scbi  lindera…  68.2 f08fff      exp(-2.21… default     2917. 
-#&gt; 10 family      18 scbi  lindera…  19.3 f08fff      exp(-2.21… default      139. 
-#&gt; # … with 30,219 more rows</div></pre>
+<span class='no'>best</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 1,809 x 10
+#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
+#&gt;  1 genus      106 scbi  amel…  13.8 c59e03      exp(… default   
+#&gt;  2 genus      106 scbi  amel…  13.8 96c0af      10^(… default   
+#&gt;  3 genus      106 scbi  amel…  13.8 529234      10^(… default   
+#&gt;  4 genus      125 scbi  amel…  36.1 c59e03      exp(… default   
+#&gt;  5 genus      125 scbi  amel…  36.1 96c0af      10^(… default   
+#&gt;  6 genus      125 scbi  amel…  36.1 529234      10^(… default   
+#&gt;  7 genus      131 scbi  amel…  79.1 c59e03      exp(… default   
+#&gt;  8 genus      131 scbi  amel…  79.1 96c0af      10^(… default   
+#&gt;  9 genus      131 scbi  amel…  79.1 529234      10^(… default   
+#&gt; 10 genus      132 scbi  amel…  24   c59e03      exp(… default   
+#&gt; # … with 1,799 more rows, and 2 more variables: anatomic_relevance &lt;chr&gt;,
+#&gt; #   n &lt;int&gt;</div><div class='input'>
+<span class='no'>best</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>fixme_pick_one_row_by_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 29,203 x 9
+#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
+#&gt;  1 family       1 scbi  lind…  27.9 f08fff      exp(… default   
+#&gt;  2 family       2 scbi  lind…  23.7 f08fff      exp(… default   
+#&gt;  3 family       3 scbi  lind…  22.2 f08fff      exp(… default   
+#&gt;  4 family       8 scbi  lind…  51.4 f08fff      exp(… default   
+#&gt;  5 family      13 scbi  lind…  15.4 f08fff      exp(… default   
+#&gt;  6 family      14 scbi  lind…  14.8 f08fff      exp(… default   
+#&gt;  7 family      15 scbi  lind…  15.5 f08fff      exp(… default   
+#&gt;  8 family      16 scbi  lind…  17.4 f08fff      exp(… default   
+#&gt;  9 family      17 scbi  lind…  68.2 f08fff      exp(… default   
+#&gt; 10 family      18 scbi  lind…  19.3 f08fff      exp(… default   
+#&gt; # … with 29,193 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
+<span class='no'>best</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>fixme_pick_one_row_by_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 29,203 x 9
+#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
+#&gt;  1 family       1 scbi  lind…  27.9 f08fff      exp(… default   
+#&gt;  2 family       2 scbi  lind…  23.7 f08fff      exp(… default   
+#&gt;  3 family       3 scbi  lind…  22.2 f08fff      exp(… default   
+#&gt;  4 family       8 scbi  lind…  51.4 f08fff      exp(… default   
+#&gt;  5 family      13 scbi  lind…  15.4 f08fff      exp(… default   
+#&gt;  6 family      14 scbi  lind…  14.8 f08fff      exp(… default   
+#&gt;  7 family      15 scbi  lind…  15.5 f08fff      exp(… default   
+#&gt;  8 family      16 scbi  lind…  17.4 f08fff      exp(… default   
+#&gt;  9 family      17 scbi  lind…  68.2 f08fff      exp(… default   
+#&gt; 10 family      18 scbi  lind…  19.3 f08fff      exp(… default   
+#&gt; # … with 29,193 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
+<span class='co'># Should return 0-rows</span>
+<span class='no'>best</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>fixme_pick_one_row_by_rowid</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 0 x 10
+#&gt; # … with 10 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,
+#&gt; #   dbh &lt;dbl&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;,
+#&gt; #   anatomic_relevance &lt;chr&gt;, n &lt;int&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
