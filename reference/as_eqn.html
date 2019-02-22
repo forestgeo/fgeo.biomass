@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get default equations of each type. — allo_find • fgeo.biomass</title>
+<title>Construct S3 objects of class "eqn". — as_eqn • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get default equations of each type. — allo_find" />
+<meta property="og:title" content="Construct S3 objects of class "eqn". — as_eqn" />
 
-<meta property="og:description" content="Get default equations of each type." />
+<meta property="og:description" content="Construct S3 objects of class &quot;eqn&quot;." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,61 +111,78 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get default equations of each type.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/allo_find.R'><code>R/allo_find.R</code></a></small>
-    <div class="hidden name"><code>allo_find.Rd</code></div>
+    <h1>Construct S3 objects of class "eqn".</h1>
+    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/as_eqn.R'><code>R/as_eqn.R</code></a></small>
+    <div class="hidden name"><code>as_eqn.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get default equations of each type.</p>
+    <p>Construct S3 objects of class "eqn".</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>allo_find</span>(<span class='no'>dbh_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>as_eqn</span>(<span class='no'>data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dbh_species</th>
-      <td><p>A dataframe as those created with <code><a href='add_species.html'>add_species()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>custom_eqn</th>
-      <td><p>A dataframe of class "eqn".</p></td>
+      <th>data</th>
+      <td><p>A dataframe with the columns shown in the example.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A nested dataframe with each row containing the data of an equation
-type.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other functions to manipulate equations: <code><a href='add_equations.html'>add_equations</a></code>,
-  <code><a href='allo_evaluate.html'>allo_evaluate</a></code>, <code><a href='allo_lookup.html'>allo_lookup</a></code>,
-  <code><a href='allo_order.html'>allo_order</a></code></p>
-<p>Other constructors: <code><a href='add_species.html'>add_species</a></code></p></div>
+    <p>A dataframe of subclass "eqn".</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>
+    <pre class="examples"><div class='input'><span class='co'># `as_eqn()` checks that the structure of your data isn't terriby wrong</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>as_eqn</span>(<span class='st'>"really bad data"</span>))</div><div class='output co'>#&gt; Error in validate_eqn(data) : is.data.frame(data) is not TRUE</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>as_eqn</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='fl'>1</span>)))</div><div class='output co'>#&gt; Error : Ensure your data set has these variables:
+#&gt; equation_id, site, sp, eqn, eqn_type, anatomic_relevance</div><div class='input'>
+<span class='no'>your_equations</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(
+  <span class='kw'>equation_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"000001"</span>),
+  <span class='kw'>site</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"scbi"</span>),
+  <span class='kw'>sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"paulownia tomentosa"</span>),
+  <span class='kw'>eqn</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"exp(-2.48 + 2.4835 * log(dbh))"</span>),
+  <span class='kw'>eqn_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"mixed_hardwood"</span>),
+  <span class='kw'>anatomic_relevance</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"total aboveground biomass"</span>)
+)
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'>as_eqn</span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div><div class='input'>
+<span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>
 <span class='no'>species</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>
 <span class='no'>dbh_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='add_species.html'>add_species</a></span>(
   <span class='no'>census</span>, <span class='no'>species</span>,
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
 )
 
-<span class='fu'>allo_find</span>(<span class='no'>dbh_species</span>)</div><div class='output co'>#&gt; # A tibble: 5 x 2
+<span class='co'># Default equations</span>
+<span class='fu'><a href='allo_find.html'>allo_find</a></span>(<span class='no'>dbh_species</span>)</div><div class='output co'>#&gt; # A tibble: 5 x 2
 #&gt;   eqn_type       data                 
 #&gt;   &lt;chr&gt;          &lt;list&gt;               
 #&gt; 1 species        &lt;tibble [8,930 × 8]&gt; 
 #&gt; 2 genus          &lt;tibble [5,642 × 8]&gt; 
 #&gt; 3 mixed_hardwood &lt;tibble [5,516 × 8]&gt; 
 #&gt; 4 family         &lt;tibble [10,141 × 8]&gt;
-#&gt; 5 woody_species  &lt;tibble [0 × 8]&gt;     </div></pre>
+#&gt; 5 woody_species  &lt;tibble [0 × 8]&gt;     </div><div class='input'>
+<span class='co'># Custom equations</span>
+<span class='fu'><a href='allo_find.html'>allo_find</a></span>(<span class='no'>dbh_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'>as_eqn</span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; # A tibble: 1 x 2
+#&gt;   eqn_type       data            
+#&gt;   &lt;chr&gt;          &lt;list&gt;          
+#&gt; 1 mixed_hardwood &lt;tibble [3 × 8]&gt;</div><div class='input'>
+<span class='no'>dbh_species</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'>as_eqn</span>(<span class='no'>your_equations</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='allo_order.html'>allo_order</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='allo_evaluate.html'>allo_evaluate</a></span>()</div><div class='output co'>#&gt; # A tibble: 3 x 10
+#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source anatomic_releva…
+#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;           
+#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom     total abovegrou…
+#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom     total abovegrou…
+#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom     total abovegrou…
+#&gt; # … with 1 more variable: biomass &lt;dbl&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -173,8 +190,6 @@ type.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
