@@ -4,10 +4,10 @@
 \alias{allo_evaluate}
 \title{Evaluate equations, giving a biomass result per row.}
 \usage{
-allo_evaluate(.data)
+allo_evaluate(data)
 }
 \arguments{
-\item{.data}{A dataframe as those created with \code{\link[=allo_order]{allo_order()}}.}
+\item{data}{A dataframe as those created with \code{\link[=allo_order]{allo_order()}}.}
 }
 \value{
 A dataframe with a single row by each value of \code{rowid}.

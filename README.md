@@ -71,20 +71,21 @@ census_species %>%
   allo_find() %>%
   allo_order(species_overwrites_genus) %>% 
   allo_evaluate()
-#> # A tibble: 14,572 x 9
-#>    eqn_type rowid site  sp        dbh equation_id eqn    eqn_source biomass
-#>    <chr>    <int> <chr> <chr>   <dbl> <chr>       <chr>  <chr>        <dbl>
-#>  1 species      4 scbi  nyssa ~ 135   8da09d      1.541~ default    1.10e12
-#>  2 species     21 scbi  liriod~ 232.  34fe5a      1.025~ default    2.99e 6
-#>  3 species     29 scbi  acer r~ 326.  7c72ed      exp(4~ default    1.26e 8
-#>  4 species     38 scbi  fraxin~  42.8 0edaff      0.163~ default    1.11e 3
-#>  5 species     72 scbi  acer r~ 289.  7c72ed      exp(4~ default    9.38e 7
-#>  6 species     77 scbi  quercu~ 636.  07dba7      1.564~ default    5.41e 7
-#>  7 species     79 scbi  tilia ~ 475   3f99ba      1.441~ default    2.97e 7
-#>  8 species     79 scbi  tilia ~ 475   76d19b      0.004~ default    1.97e 3
-#>  9 species     84 scbi  fraxin~ 170.  0edaff      0.163~ default    2.81e 4
-#> 10 species     89 scbi  fagus ~  27.2 74186d      2.039~ default    9.97e 3
-#> # ... with 14,562 more rows
+#> # A tibble: 14,572 x 10
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#>  1 species      4 scbi  nyss~ 135   8da09d      1.54~ default   
+#>  2 species     21 scbi  liri~ 232.  34fe5a      1.02~ default   
+#>  3 species     29 scbi  acer~ 326.  7c72ed      exp(~ default   
+#>  4 species     38 scbi  frax~  42.8 0edaff      0.16~ default   
+#>  5 species     72 scbi  acer~ 289.  7c72ed      exp(~ default   
+#>  6 species     77 scbi  quer~ 636.  07dba7      1.56~ default   
+#>  7 species     79 scbi  tili~ 475   3f99ba      1.44~ default   
+#>  8 species     79 scbi  tili~ 475   76d19b      0.00~ default   
+#>  9 species     84 scbi  frax~ 170.  0edaff      0.16~ default   
+#> 10 species     89 scbi  fagu~  27.2 74186d      2.03~ default   
+#> # ... with 14,562 more rows, and 2 more variables:
+#> #   anatomic_relevance <chr>, biomass <dbl>
 ```
 
 ### Step by step
@@ -118,11 +119,11 @@ equations
 #> # A tibble: 5 x 2
 #>   eqn_type       data                 
 #>   <chr>          <list>               
-#> 1 species        <tibble [8,930 x 7]> 
-#> 2 genus          <tibble [5,642 x 7]> 
-#> 3 mixed_hardwood <tibble [5,516 x 7]> 
-#> 4 family         <tibble [10,141 x 7]>
-#> 5 woody_species  <tibble [0 x 7]>
+#> 1 species        <tibble [8,930 x 8]> 
+#> 2 genus          <tibble [5,642 x 8]> 
+#> 3 mixed_hardwood <tibble [5,516 x 8]> 
+#> 4 family         <tibble [10,141 x 8]>
+#> 5 woody_species  <tibble [0 x 8]>
 ```
 
 ### General manipulation of equations
@@ -136,8 +137,8 @@ equations %>%
 #> # A tibble: 2 x 2
 #>   eqn_type       data                
 #>   <chr>          <list>              
-#> 1 species        <tibble [8,930 x 7]>
-#> 2 mixed_hardwood <tibble [5,516 x 7]>
+#> 1 species        <tibble [8,930 x 8]>
+#> 2 mixed_hardwood <tibble [5,516 x 8]>
 
 # Same
 equations %>% 
@@ -145,26 +146,26 @@ equations %>%
 #> # A tibble: 2 x 2
 #>   eqn_type       data                
 #>   <chr>          <list>              
-#> 1 species        <tibble [8,930 x 7]>
-#> 2 mixed_hardwood <tibble [5,516 x 7]>
+#> 1 species        <tibble [8,930 x 8]>
+#> 2 mixed_hardwood <tibble [5,516 x 8]>
 
 equations %>% 
   slice(c(1, 3)) %>% 
   unnest()
-#> # A tibble: 14,446 x 8
-#>    eqn_type rowid site  sp           dbh equation_id eqn         eqn_source
-#>    <chr>    <int> <chr> <chr>      <dbl> <chr>       <chr>       <chr>     
-#>  1 species      4 scbi  nyssa syl~ 135   8da09d      1.5416 * (~ default   
-#>  2 species     21 scbi  liriodend~ 232.  34fe5a      1.0259 * (~ default   
-#>  3 species     29 scbi  acer rubr~ 326.  7c72ed      exp(4.5893~ default   
-#>  4 species     38 scbi  fraxinus ~  42.8 0edaff      0.1634 * (~ default   
-#>  5 species     72 scbi  acer rubr~ 289.  7c72ed      exp(4.5893~ default   
-#>  6 species     77 scbi  quercus a~ 636.  07dba7      1.5647 * (~ default   
-#>  7 species     79 scbi  tilia ame~ 475   3f99ba      1.4416 * (~ default   
-#>  8 species     79 scbi  tilia ame~ 475   76d19b      0.004884 *~ default   
-#>  9 species     84 scbi  fraxinus ~ 170.  0edaff      0.1634 * (~ default   
-#> 10 species     89 scbi  fagus gra~  27.2 74186d      2.0394 * (~ default   
-#> # ... with 14,436 more rows
+#> # A tibble: 14,446 x 9
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#>  1 species      4 scbi  nyss~ 135   8da09d      1.54~ default   
+#>  2 species     21 scbi  liri~ 232.  34fe5a      1.02~ default   
+#>  3 species     29 scbi  acer~ 326.  7c72ed      exp(~ default   
+#>  4 species     38 scbi  frax~  42.8 0edaff      0.16~ default   
+#>  5 species     72 scbi  acer~ 289.  7c72ed      exp(~ default   
+#>  6 species     77 scbi  quer~ 636.  07dba7      1.56~ default   
+#>  7 species     79 scbi  tili~ 475   3f99ba      1.44~ default   
+#>  8 species     79 scbi  tili~ 475   76d19b      0.00~ default   
+#>  9 species     84 scbi  frax~ 170.  0edaff      0.16~ default   
+#> 10 species     89 scbi  fagu~  27.2 74186d      2.03~ default   
+#> # ... with 14,436 more rows, and 1 more variable: anatomic_relevance <chr>
 ```
 
 ### Prioritize equations
@@ -232,9 +233,64 @@ allo_order(toy_nested, order = genus_overwrites_species)
 #> 3 species  dbh + 1    10     1 rowid only in species
 ```
 
+### Provide custom equations
+
+You may have your own equations. Use `as_eqn()` to ensure your data has
+the correct structure.
+
+``` r
+# Checks that the structure of your data isn't terriby wrong
+# BAD
+as_eqn("really bad data")
+#> Error in validate_eqn(data): is.data.frame(data) is not TRUE
+as_eqn(data.frame(1))
+#> Error: Ensure your data set has these variables:
+#> equation_id, site, sp, eqn, eqn_type, anatomic_relevance
+
+# GOOD
+your_equations <- tibble::tibble(
+  equation_id = c("000001"),
+  site = c("scbi"),
+  sp = c("paulownia tomentosa"),
+  eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
+  eqn_type = c("mixed_hardwood"),
+  anatomic_relevance = c("total aboveground biomass")
+)
+
+class(as_eqn(your_equations))
+#> [1] "eqn"        "tbl_df"     "tbl"        "data.frame"
+```
+
+You can now use the argument `custom_eqn` to pass your custom equations
+to `allo_find()`.
+
+``` r
+allo_find(census_species, custom_eqn = as_eqn(your_equations))
+#> # A tibble: 1 x 2
+#>   eqn_type       data            
+#>   <chr>          <list>          
+#> 1 mixed_hardwood <tibble [3 x 8]>
+```
+
+This is what the entire workflow looks like:
+
+``` r
+dbh_species %>%
+  allo_find(custom_eqn = as_eqn(your_equations)) %>%
+  allo_order() %>%
+  allo_evaluate()
+#> # A tibble: 3 x 10
+#>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#> 1 mixed_h~  9645 scbi  paul~  462. 000001      exp(~ custom    
+#> 2 mixed_h~ 10838 scbi  paul~  363. 000001      exp(~ custom    
+#> 3 mixed_h~ 10842 scbi  paul~  531. 000001      exp(~ custom    
+#> # ... with 2 more variables: anatomic_relevance <chr>, biomass <dbl>
+```
+
 ### Calculate biomass
 
-Calculate biomass by evaluating each allometric equations using its
+Calculate biomass by evaluating each allometric equation using its
 corresponding `dbh`.
 
 ``` r
@@ -242,42 +298,43 @@ best <- equations %>%
   allo_order()
 
 best
-#> # A tibble: 30,229 x 8
-#>    eqn_type rowid site  sp         dbh equation_id eqn           eqn_source
-#>    <chr>    <int> <chr> <chr>    <dbl> <chr>       <chr>         <chr>     
-#>  1 family       1 scbi  lindera~  27.9 f08fff      exp(-2.2118 ~ default   
-#>  2 family       2 scbi  lindera~  23.7 f08fff      exp(-2.2118 ~ default   
-#>  3 family       3 scbi  lindera~  22.2 f08fff      exp(-2.2118 ~ default   
-#>  4 family       8 scbi  lindera~  51.4 f08fff      exp(-2.2118 ~ default   
-#>  5 family      13 scbi  lindera~  15.4 f08fff      exp(-2.2118 ~ default   
-#>  6 family      14 scbi  lindera~  14.8 f08fff      exp(-2.2118 ~ default   
-#>  7 family      15 scbi  lindera~  15.5 f08fff      exp(-2.2118 ~ default   
-#>  8 family      16 scbi  lindera~  17.4 f08fff      exp(-2.2118 ~ default   
-#>  9 family      17 scbi  lindera~  68.2 f08fff      exp(-2.2118 ~ default   
-#> 10 family      18 scbi  lindera~  19.3 f08fff      exp(-2.2118 ~ default   
-#> # ... with 30,219 more rows
+#> # A tibble: 30,229 x 9
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#>  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default   
+#>  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default   
+#>  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default   
+#>  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default   
+#>  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default   
+#>  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default   
+#>  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default   
+#>  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default   
+#>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default   
+#> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default   
+#> # ... with 30,219 more rows, and 1 more variable: anatomic_relevance <chr>
 
 with_biomass <- best %>% 
   allo_evaluate()
 
 with_biomass
-#> # A tibble: 30,229 x 9
-#>    eqn_type rowid site  sp       dbh equation_id eqn     eqn_source biomass
-#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>   <chr>        <dbl>
-#>  1 family       1 scbi  linde~  27.9 f08fff      exp(-2~ default      337. 
-#>  2 family       2 scbi  linde~  23.7 f08fff      exp(-2~ default      228. 
-#>  3 family       3 scbi  linde~  22.2 f08fff      exp(-2~ default      194. 
-#>  4 family       8 scbi  linde~  51.4 f08fff      exp(-2~ default     1474. 
-#>  5 family      13 scbi  linde~  15.4 f08fff      exp(-2~ default       80.4
-#>  6 family      14 scbi  linde~  14.8 f08fff      exp(-2~ default       73.0
-#>  7 family      15 scbi  linde~  15.5 f08fff      exp(-2~ default       81.7
-#>  8 family      16 scbi  linde~  17.4 f08fff      exp(-2~ default      108. 
-#>  9 family      17 scbi  linde~  68.2 f08fff      exp(-2~ default     2917. 
-#> 10 family      18 scbi  linde~  19.3 f08fff      exp(-2~ default      139. 
-#> # ... with 30,219 more rows
+#> # A tibble: 30,229 x 10
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#>  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default   
+#>  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default   
+#>  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default   
+#>  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default   
+#>  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default   
+#>  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default   
+#>  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default   
+#>  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default   
+#>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default   
+#> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default   
+#> # ... with 30,219 more rows, and 2 more variables:
+#> #   anatomic_relevance <chr>, biomass <dbl>
 ```
 
-Summarize your results as you would normally do with general purpose
+Summarize the results as you would normally do with general purpose
 tools.
 
 ``` r
@@ -321,101 +378,113 @@ memoise::forget(allo_evaluate)
 # `allo_evaluate()` may be slow the first time you run it
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    0.84    0.02    0.90
+#>    1.03    0.01    1.08
 memoise::is.memoised(allo_evaluate)
 #> [1] TRUE
 
 # Calls after the first one take almost no time
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    0.00    0.01    0.02
+#>    0.05    0.00    0.04
 ```
 
 ### Known issues
 
 Right now there may be multiple rows per `rowid`. This is because, for a
 single stem, there may be multiple equations to reflect the allometries
-of different parts of the stem. **fgeo.biomass** doesn’t deal with this
-issue yet but helps you find them.
+of different parts of the stem. **fgeo.biomass** doesn’t handle this
+issue yet; it only helps you to find and remove the problematic
+equations.
 
 ``` r
 best %>% 
   fixme_find_duplicated_rowid()
-#> # A tibble: 1,809 x 9
-#>    eqn_type rowid site  sp        dbh equation_id eqn      eqn_source     n
-#>    <chr>    <int> <chr> <chr>   <dbl> <chr>       <chr>    <chr>      <int>
-#>  1 genus      106 scbi  amelan~  13.8 c59e03      exp(7.2~ default        3
-#>  2 genus      106 scbi  amelan~  13.8 96c0af      10^(2.5~ default        3
-#>  3 genus      106 scbi  amelan~  13.8 529234      10^(2.0~ default        3
-#>  4 genus      125 scbi  amelan~  36.1 c59e03      exp(7.2~ default        3
-#>  5 genus      125 scbi  amelan~  36.1 96c0af      10^(2.5~ default        3
-#>  6 genus      125 scbi  amelan~  36.1 529234      10^(2.0~ default        3
-#>  7 genus      131 scbi  amelan~  79.1 c59e03      exp(7.2~ default        3
-#>  8 genus      131 scbi  amelan~  79.1 96c0af      10^(2.5~ default        3
-#>  9 genus      131 scbi  amelan~  79.1 529234      10^(2.0~ default        3
-#> 10 genus      132 scbi  amelan~  24   c59e03      exp(7.2~ default        3
-#> # ... with 1,799 more rows
+#> # A tibble: 1,809 x 10
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#>  1 genus      106 scbi  amel~  13.8 c59e03      exp(~ default   
+#>  2 genus      106 scbi  amel~  13.8 96c0af      10^(~ default   
+#>  3 genus      106 scbi  amel~  13.8 529234      10^(~ default   
+#>  4 genus      125 scbi  amel~  36.1 c59e03      exp(~ default   
+#>  5 genus      125 scbi  amel~  36.1 96c0af      10^(~ default   
+#>  6 genus      125 scbi  amel~  36.1 529234      10^(~ default   
+#>  7 genus      131 scbi  amel~  79.1 c59e03      exp(~ default   
+#>  8 genus      131 scbi  amel~  79.1 96c0af      10^(~ default   
+#>  9 genus      131 scbi  amel~  79.1 529234      10^(~ default   
+#> 10 genus      132 scbi  amel~  24   c59e03      exp(~ default   
+#> # ... with 1,799 more rows, and 2 more variables:
+#> #   anatomic_relevance <chr>, n <int>
 ```
 
 Here you enter the danger zone. **fgeo.biomass** provides a quick and
-dirty way of getting a single equation per stem.
+dirty way of getting a single equation per stem:
+`fixme_drop_duplicated_rowid()` drops all rows where `rowid` appears
+more than once in the dataset.
 
 ``` r
-danger <- best %>% 
-  fixme_pick_one_row_by_rowid()
+incomplete <- best %>% 
+  fixme_drop_duplicated_rowid()
+#> Warning: Dropping 783 rows with duplicated `rowid` values.
 
-danger
-#> # A tibble: 29,203 x 8
-#>    eqn_type rowid site  sp         dbh equation_id eqn           eqn_source
-#>    <chr>    <int> <chr> <chr>    <dbl> <chr>       <chr>         <chr>     
-#>  1 family       1 scbi  lindera~  27.9 f08fff      exp(-2.2118 ~ default   
-#>  2 family       2 scbi  lindera~  23.7 f08fff      exp(-2.2118 ~ default   
-#>  3 family       3 scbi  lindera~  22.2 f08fff      exp(-2.2118 ~ default   
-#>  4 family       8 scbi  lindera~  51.4 f08fff      exp(-2.2118 ~ default   
-#>  5 family      13 scbi  lindera~  15.4 f08fff      exp(-2.2118 ~ default   
-#>  6 family      14 scbi  lindera~  14.8 f08fff      exp(-2.2118 ~ default   
-#>  7 family      15 scbi  lindera~  15.5 f08fff      exp(-2.2118 ~ default   
-#>  8 family      16 scbi  lindera~  17.4 f08fff      exp(-2.2118 ~ default   
-#>  9 family      17 scbi  lindera~  68.2 f08fff      exp(-2.2118 ~ default   
-#> 10 family      18 scbi  lindera~  19.3 f08fff      exp(-2.2118 ~ default   
-#> # ... with 29,193 more rows
+incomplete
+#> # A tibble: 28,420 x 9
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#>  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default   
+#>  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default   
+#>  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default   
+#>  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default   
+#>  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default   
+#>  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default   
+#>  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default   
+#>  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default   
+#>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default   
+#> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default   
+#> # ... with 28,410 more rows, and 1 more variable: anatomic_relevance <chr>
 ```
+
+Dropping useful equations is extreme but conservative. We hope to soon
+provide an easy way to sum biomass across multiple parts of a tree.
+Until then you will have to do it yourself.
 
 ``` r
 # No longer has duplicated rowid
-danger %>% 
+incomplete %>% 
   fixme_find_duplicated_rowid()
-#> # A tibble: 0 x 9
-#> # ... with 9 variables: eqn_type <chr>, rowid <int>, site <chr>, sp <chr>,
-#> #   dbh <dbl>, equation_id <chr>, eqn <chr>, eqn_source <chr>, n <int>
+#> # A tibble: 0 x 10
+#> # ... with 10 variables: eqn_type <chr>, rowid <int>, site <chr>,
+#> #   sp <chr>, dbh <dbl>, equation_id <chr>, eqn <chr>, eqn_source <chr>,
+#> #   anatomic_relevance <chr>, n <int>
 
-danger %>% 
+incomplete %>% 
   allo_evaluate()
-#> # A tibble: 29,203 x 9
-#>    eqn_type rowid site  sp       dbh equation_id eqn     eqn_source biomass
-#>    <chr>    <int> <chr> <chr>  <dbl> <chr>       <chr>   <chr>        <dbl>
-#>  1 family       1 scbi  linde~  27.9 f08fff      exp(-2~ default      337. 
-#>  2 family       2 scbi  linde~  23.7 f08fff      exp(-2~ default      228. 
-#>  3 family       3 scbi  linde~  22.2 f08fff      exp(-2~ default      194. 
-#>  4 family       8 scbi  linde~  51.4 f08fff      exp(-2~ default     1474. 
-#>  5 family      13 scbi  linde~  15.4 f08fff      exp(-2~ default       80.4
-#>  6 family      14 scbi  linde~  14.8 f08fff      exp(-2~ default       73.0
-#>  7 family      15 scbi  linde~  15.5 f08fff      exp(-2~ default       81.7
-#>  8 family      16 scbi  linde~  17.4 f08fff      exp(-2~ default      108. 
-#>  9 family      17 scbi  linde~  68.2 f08fff      exp(-2~ default     2917. 
-#> 10 family      18 scbi  linde~  19.3 f08fff      exp(-2~ default      139. 
-#> # ... with 29,193 more rows
+#> # A tibble: 28,420 x 10
+#>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#>  1 family       1 scbi  lind~  27.9 f08fff      exp(~ default   
+#>  2 family       2 scbi  lind~  23.7 f08fff      exp(~ default   
+#>  3 family       3 scbi  lind~  22.2 f08fff      exp(~ default   
+#>  4 family       8 scbi  lind~  51.4 f08fff      exp(~ default   
+#>  5 family      13 scbi  lind~  15.4 f08fff      exp(~ default   
+#>  6 family      14 scbi  lind~  14.8 f08fff      exp(~ default   
+#>  7 family      15 scbi  lind~  15.5 f08fff      exp(~ default   
+#>  8 family      16 scbi  lind~  17.4 f08fff      exp(~ default   
+#>  9 family      17 scbi  lind~  68.2 f08fff      exp(~ default   
+#> 10 family      18 scbi  lind~  19.3 f08fff      exp(~ default   
+#> # ... with 28,410 more rows, and 2 more variables:
+#> #   anatomic_relevance <chr>, biomass <dbl>
 ```
 
 ### Add equations for each row of your census dataset
 
 The `rowid`s were generated from the row-names of your original census
 data. Now that you have a single row per `rowid`, you can add the
-equations to your census data.
+equations to your census data. The two datasets will be joint by
+matching values of `rowid`.
 
 ``` r
 census_equations <- census %>% 
-  add_equations(danger)
+  add_equations(incomplete)
 #> Joining, by = "rowid"
 
 census_equations
@@ -438,8 +507,8 @@ census_equations
 #> #   eqn <chr>, equation_id <chr>
 ```
 
-If you need more information about each equation, you can look it up in
-**allodb**.
+If you need more information about each equation, `allo_lookup()` helps
+you to look it up in **allodb**.
 
 ``` r
 census_equations %>% 
@@ -469,32 +538,52 @@ census_equations %>%
 #> #   warning <chr>
 ```
 
-### Possible improvements
+### Planned enhancements
+
+This section shows pseudo-code: Code that doesn’t actually run but shows
+what it would look like if it did work.
+
+  - Add `site` during construction, e.g. `as_species(data, site =
+    "scbi")` and drop the `site` argument to `add_species()`.
+
+<!-- end list -->
 
 ``` r
-# Stays as is
 census_species <- census %>% 
   add_species(species)
+```
 
-# New single interface to automatically calculates biomass
+  - New single interface to automatically calculates biomass.
+
+<!-- end list -->
+
+``` r
 census_species %>% 
   auto_biomass()
+```
 
-# New single interface to automatically add equations to a census dataframe
+  - New single interface to automatically add equations to a census
+    dataframe.
+
+<!-- end list -->
+
+``` r
 census_species %>% 
   auto_equations()
 ```
 
-  - New `allo_customize()` to insert custom equations.
+  - Helper to replace specific equations.
 
-Some other possible improvements:
+<!-- end list -->
 
-  - Allow using ViewFullTable and ViewTaxonomy.
-  - Allow using any table with the required columns.
-  - Simplify interfaces via generic functions that *know* what to do
-    with different (S3) classes of ForestGEO data – i.e. census and
-    species tables; ViewFullTable and ViewTaxonomy tables; or any two
-    tables of unknown class.
+``` r
+census_species %>% 
+  allo_find() %>% 
+  allo_replace(
+    eqn_id = c("abcd", "efgh"),
+    eqn = c("2.0394 * (dbh^2.5715)", "2.0394 * (dbh^2.5715)")
+  )
+```
 
 ### fgeo.biomass and allodb
 
@@ -503,20 +592,20 @@ Allometric equations come from the **allodb** package.
 ``` r
 # Internal
 fgeo.biomass:::.default_eqn
-#> # A tibble: 619 x 6
-#>    equation_id site     sp           eqn                eqn_source eqn_type
-#>  * <chr>       <chr>    <chr>        <chr>              <chr>      <chr>   
-#>  1 2060ea      lilly d~ acer rubrum  10^(1.1891 + 1.41~ default    species 
-#>  2 2060ea      tyson    acer rubrum  10^(1.1891 + 1.41~ default    species 
-#>  3 a4d879      lilly d~ acer saccha~ 10^(1.2315 + 1.63~ default    species 
-#>  4 a4d879      tyson    acer saccha~ 10^(1.2315 + 1.63~ default    species 
-#>  5 c59e03      lilly d~ amelanchier~ exp(7.217 + 1.514~ default    genus   
-#>  6 c59e03      scbi     amelanchier~ exp(7.217 + 1.514~ default    genus   
-#>  7 c59e03      serc     amelanchier~ exp(7.217 + 1.514~ default    genus   
-#>  8 c59e03      serc     amelanchier~ exp(7.217 + 1.514~ default    genus   
-#>  9 c59e03      tyson    amelanchier~ exp(7.217 + 1.514~ default    genus   
-#> 10 c59e03      umbc     amelanchier~ exp(7.217 + 1.514~ default    genus   
-#> # ... with 609 more rows
+#> # A tibble: 620 x 7
+#>    equation_id site   sp      eqn      eqn_source eqn_type anatomic_releva~
+#>  * <chr>       <chr>  <chr>   <chr>    <chr>      <chr>    <chr>           
+#>  1 2060ea      lilly~ acer r~ 10^(1.1~ default    species  total abovegrou~
+#>  2 2060ea      tyson  acer r~ 10^(1.1~ default    species  total abovegrou~
+#>  3 a4d879      lilly~ acer s~ 10^(1.2~ default    species  total abovegrou~
+#>  4 a4d879      tyson  acer s~ 10^(1.2~ default    species  total abovegrou~
+#>  5 c59e03      lilly~ amelan~ exp(7.2~ default    genus    stem biomass (w~
+#>  6 c59e03      scbi   amelan~ exp(7.2~ default    genus    stem biomass (w~
+#>  7 c59e03      serc   amelan~ exp(7.2~ default    genus    stem biomass (w~
+#>  8 c59e03      serc   amelan~ exp(7.2~ default    genus    stem biomass (w~
+#>  9 c59e03      tyson  amelan~ exp(7.2~ default    genus    stem biomass (w~
+#> 10 c59e03      umbc   amelan~ exp(7.2~ default    genus    stem biomass (w~
+#> # ... with 610 more rows
 ```
 
 For now we are excluding some equations.
@@ -528,7 +617,7 @@ excluding <- fgeo.biomass:::.bad_eqn_id
 allodb::equations %>% 
   filter(equation_id %in% excluding) %>% 
   select(equation_id, equation_allometry)
-#> # A tibble: 25 x 2
+#> # A tibble: 24 x 2
 #>    equation_id equation_allometry         
 #>    <chr>       <chr>                      
 #>  1 76aa3c      38.111*(dba^2.9)           
@@ -541,7 +630,7 @@ allodb::equations %>%
 #>  8 6b3b2a      exp(3.67+2.847*log(dba))   
 #>  9 b95baf      exp(3.892+3.122*log(dba))  
 #> 10 e8f868      exp(3.6123+2.9944*log(dba))
-#> # ... with 15 more rows
+#> # ... with 14 more rows
 ```
 
 ## Information

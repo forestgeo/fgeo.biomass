@@ -4,10 +4,10 @@
 \alias{allo_order}
 \title{Find the best equations given a priority order.}
 \usage{
-allo_order(.data, order = NULL)
+allo_order(data, order = NULL)
 }
 \arguments{
-\item{.data}{List of dataframes. Each should have a \code{rowid} column giving the
+\item{data}{List of dataframes. Each should have a \code{rowid} column giving the
 index of each row. Otherwise, \code{rowid} will be added with a warning.}
 
 \item{order}{String giving the name or index of the list elements in the

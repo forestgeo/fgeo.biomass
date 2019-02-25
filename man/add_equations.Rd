@@ -27,7 +27,7 @@ single_best <- census \%>\%
   add_species(species, site = "scbi") \%>\%
   allo_find() \%>\%
   allo_order() \%>\%
-  fixme_pick_one_row_by_rowid()
+  fixme_drop_duplicated_rowid()
 
 add_equations(census, single_best)
 }

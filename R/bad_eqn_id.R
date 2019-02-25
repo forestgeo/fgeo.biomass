@@ -1,6 +1,6 @@
 #' Find equations that can't be evaluated.
 #'
-#' @param .data An __allodb__ equations-table (e.g. allodb::master()).
+#' @param data An __allodb__ equations-table (e.g. allodb::master()).
 #' @family internal objects that will be hidden or removed
 #'
 #' @return A character vector.
@@ -8,22 +8,22 @@
 #'
 #' @examples
 #' bad_eqn_id(allodb::master())
-bad_eqn_id <- function(.data) {
+bad_eqn_id <- function(data) {
   funs <- c(eval_eqn, format_eqn)
   funs %>%
-    purrr::map(~bad_eqn(.data, .x)) %>%
+    purrr::map(~bad_eqn(data, .x)) %>%
     unlist() %>%
     unique()
 }
 
-bad_eqn <- function(.data, .f) {
-  ok <- purrr::quietly(purrr::map_lgl)(some_error(.data, .f), is.null)$result
-  unique(.data[!ok, ][["equation_id"]])
+bad_eqn <- function(data, .f) {
+  ok <- purrr::quietly(purrr::map_lgl)(some_error(data, .f), is.null)$result
+  unique(data[!ok, ][["equation_id"]])
 }
 
-some_error <- function(.data, .f) {
+some_error <- function(data, .f) {
   suppressWarnings({
-    .data %>%
+    data %>%
       dplyr::pull("equation_allometry") %>%
       purrr::map(purrr::safely(.f)) %>%
       purrr::transpose() %>%

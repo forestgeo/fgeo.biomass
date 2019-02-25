@@ -4,10 +4,10 @@
 \alias{default_eqn}
 \title{Restructure equations from \strong{allodb}.}
 \usage{
-default_eqn(.data)
+default_eqn(data)
 }
 \arguments{
-\item{.data}{\code{\link[allodb:master]{allodb::master()}} or similar.}
+\item{data}{\code{\link[allodb:master]{allodb::master()}} or similar.}
 }
 \value{
 A dataframe.
