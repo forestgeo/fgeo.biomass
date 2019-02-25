@@ -132,6 +132,44 @@ genus_overwrites_species <- c("genus", "species")
 allo_order(toy_nested, order = genus_overwrites_species)
 ```
 
+### Provide custom equations
+
+You may have your own equations. Use `as_eqn()` to ensure your data has the correct structure.
+
+```{r, error=TRUE}
+# Checks that the structure of your data isn't terriby wrong
+# BAD
+as_eqn("really bad data")
+as_eqn(data.frame(1))
+
+# GOOD
+your_equations <- tibble::tibble(
+  equation_id = c("000001"),
+  site = c("scbi"),
+  sp = c("paulownia tomentosa"),
+  eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
+  eqn_type = c("mixed_hardwood"),
+  anatomic_relevance = c("total aboveground biomass")
+)
+
+class(as_eqn(your_equations))
+```
+
+You can now use the argument `custom_eqn` to pass your custom equations to `allo_find()`.
+
+```{r}
+allo_find(census_species, custom_eqn = as_eqn(your_equations))
+```
+
+This is what the entire workflow looks like:
+
+```{r}
+dbh_species %>%
+  allo_find(custom_eqn = as_eqn(your_equations)) %>%
+  allo_order() %>%
+  allo_evaluate()
+```
+
 ### Calculate biomass
 
 Calculate biomass by evaluating each allometric equation using its corresponding `dbh`.
@@ -195,7 +233,7 @@ incomplete <- best %>%
 incomplete
 ```
 
-Dropping useful equations is extreme but conservative. We hope to soon provide an easy way to some biomass at the sub-tree level. Until then you will have to do it yourself.
+Dropping useful equations is extreme but conservative. We hope to soon provide an easy way to sum biomass across multiple parts of a tree. Until then you will have to do it yourself.
 
 ```{r}
 # No longer has duplicated rowid
@@ -208,7 +246,7 @@ incomplete %>%
 
 ### Add equations for each row of your census dataset
 
-The `rowid`s were generated from the row-names of your original census data. Now that you have a single row per `rowid`, you can add the equations to your census data.
+The `rowid`s were generated from the row-names of your original census data. Now that you have a single row per `rowid`, you can add the equations to your census data. The two datasets will be joint by matching values of `rowid`.
 
 ```{r}
 census_equations <- census %>% 
@@ -217,7 +255,7 @@ census_equations <- census %>%
 census_equations
 ```
 
-If you need more information about each equation, you can look it up in __allodb__.
+If you need more information about each equation, `allo_lookup()` helps you to look it up in __allodb__.
 
 ```{r}
 census_equations %>% 
@@ -227,7 +265,8 @@ census_equations %>%
 ### Possible improvements
 
 ```R
-# Stays as is
+# Add `site` during construction, e.g. `as_species(data, site = "scbi")` and 
+# drop the `site` argument to `add_species()`
 census_species <- census %>% 
   add_species(species)
 

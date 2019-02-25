@@ -233,6 +233,61 @@ allo_order(toy_nested, order = genus_overwrites_species)
 #> 3 species  dbh + 1    10     1 rowid only in species
 ```
 
+### Provide custom equations
+
+You may have your own equations. Use `as_eqn()` to ensure your data has
+the correct structure.
+
+``` r
+# Checks that the structure of your data isn't terriby wrong
+# BAD
+as_eqn("really bad data")
+#> Error in validate_eqn(data): is.data.frame(data) is not TRUE
+as_eqn(data.frame(1))
+#> Error: Ensure your data set has these variables:
+#> equation_id, site, sp, eqn, eqn_type, anatomic_relevance
+
+# GOOD
+your_equations <- tibble::tibble(
+  equation_id = c("000001"),
+  site = c("scbi"),
+  sp = c("paulownia tomentosa"),
+  eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
+  eqn_type = c("mixed_hardwood"),
+  anatomic_relevance = c("total aboveground biomass")
+)
+
+class(as_eqn(your_equations))
+#> [1] "eqn"        "tbl_df"     "tbl"        "data.frame"
+```
+
+You can now use the argument `custom_eqn` to pass your custom equations
+to `allo_find()`.
+
+``` r
+allo_find(census_species, custom_eqn = as_eqn(your_equations))
+#> # A tibble: 1 x 2
+#>   eqn_type       data            
+#>   <chr>          <list>          
+#> 1 mixed_hardwood <tibble [3 x 8]>
+```
+
+This is what the entire workflow looks like:
+
+``` r
+dbh_species %>%
+  allo_find(custom_eqn = as_eqn(your_equations)) %>%
+  allo_order() %>%
+  allo_evaluate()
+#> # A tibble: 3 x 10
+#>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#> 1 mixed_h~  9645 scbi  paul~  462. 000001      exp(~ custom    
+#> 2 mixed_h~ 10838 scbi  paul~  363. 000001      exp(~ custom    
+#> 3 mixed_h~ 10842 scbi  paul~  531. 000001      exp(~ custom    
+#> # ... with 2 more variables: anatomic_relevance <chr>, biomass <dbl>
+```
+
 ### Calculate biomass
 
 Calculate biomass by evaluating each allometric equation using its
@@ -323,14 +378,14 @@ memoise::forget(allo_evaluate)
 # `allo_evaluate()` may be slow the first time you run it
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    1.97    0.00    2.28
+#>    1.20    0.00    1.25
 memoise::is.memoised(allo_evaluate)
 #> [1] TRUE
 
 # Calls after the first one take almost no time
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    0.08    0.01    0.16
+#>    0.05    0.00    0.05
 ```
 
 ### Known issues
@@ -388,9 +443,9 @@ incomplete
 #> # ... with 28,410 more rows, and 1 more variable: anatomic_relevance <chr>
 ```
 
-Dropping useful equations is extreme but conservative. We how to soon
-provide an easy way to some biomass at the sub-tree level. Until then
-you will have to do it yourself.
+Dropping useful equations is extreme but conservative. We hope to soon
+provide an easy way to sum biomass across multiple parts of a tree.
+Until then you will have to do it yourself.
 
 ``` r
 # No longer has duplicated rowid
@@ -424,7 +479,8 @@ incomplete %>%
 
 The `rowid`s were generated from the row-names of your original census
 data. Now that you have a single row per `rowid`, you can add the
-equations to your census data.
+equations to your census data. The two datasets will be joint by
+matching values of `rowid`.
 
 ``` r
 census_equations <- census %>% 
@@ -451,8 +507,8 @@ census_equations
 #> #   eqn <chr>, equation_id <chr>
 ```
 
-If you need more information about each equation, you can look it up in
-**allodb**.
+If you need more information about each equation, `allo_lookup()` helps
+you to look it up in **allodb**.
 
 ``` r
 census_equations %>% 
@@ -485,7 +541,8 @@ census_equations %>%
 ### Possible improvements
 
 ``` r
-# Stays as is
+# Add `site` during construction, e.g. `as_species(data, site = "scbi")` and 
+# drop the `site` argument to `add_species()`
 census_species <- census %>% 
   add_species(species)
 
