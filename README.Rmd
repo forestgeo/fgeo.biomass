@@ -195,7 +195,7 @@ incomplete <- best %>%
 incomplete
 ```
 
-Dropping useful equations is extreme but conservative. We how to soon provide an easy way to some biomass at the sub-tree level. Until then you will have to do it yourself.
+Dropping useful equations is extreme but conservative. We hope to soon provide an easy way to some biomass at the sub-tree level. Until then you will have to do it yourself.
 
 ```{r}
 # No longer has duplicated rowid

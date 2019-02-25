@@ -4,12 +4,12 @@
 \alias{complement}
 \title{Complement a dataframe with rows from another dataframe.}
 \usage{
-complement(.data, complement)
+complement(data, complement)
 }
 \arguments{
-\item{.data}{Dataframes which rows to always keep.}
+\item{data}{Dataframes which rows to always keep.}
 
-\item{complement}{Dataframe which rows will be used to complement \code{.data}.}
+\item{complement}{Dataframe which rows will be used to complement \code{data}.}
 }
 \value{
 A dataframe.
@@ -18,9 +18,9 @@ A dataframe.
 Complement a dataframe with rows from another, identically structured
 dataframe. This is the result of reducing multiple joins:
 \itemize{
-\item \code{dplyr::semi_join(.data, complement)}.
-\item \code{dplyr::anti_join(.data, complement)}.
-\item \code{dplyr::anti_join(complement, .data)}.
+\item \code{dplyr::semi_join(data, complement)}.
+\item \code{dplyr::anti_join(data, complement)}.
+\item \code{dplyr::anti_join(complement, data)}.
 Each dataframe must have a \code{rowid}
 }
 }

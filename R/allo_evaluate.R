@@ -1,13 +1,13 @@
-allo_evaluate_impl <- function(.data) {
+allo_evaluate_impl <- function(data) {
   .biomass <- purrr::map2_dbl(
-    .data$eqn, .data$dbh,
+    data$eqn, data$dbh,
     ~eval(parse(text = .x), envir = list(dbh = .y))
   )
-  dplyr::mutate(.data, biomass = .biomass)
+  dplyr::mutate(data, biomass = .biomass)
 }
 #' Evaluate equations, giving a biomass result per row.
 #'
-#' @param .data A dataframe as those created with [allo_order()].
+#' @param data A dataframe as those created with [allo_order()].
 #'
 #' @family functions to manipulate equations
 #'

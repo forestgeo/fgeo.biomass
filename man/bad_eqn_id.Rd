@@ -4,10 +4,10 @@
 \alias{bad_eqn_id}
 \title{Find equations that can't be evaluated.}
 \usage{
-bad_eqn_id(.data)
+bad_eqn_id(data)
 }
 \arguments{
-\item{.data}{An \strong{allodb} equations-table (e.g. allodb::master()).}
+\item{data}{An \strong{allodb} equations-table (e.g. allodb::master()).}
 }
 \value{
 A character vector.

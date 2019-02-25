@@ -4,10 +4,10 @@
 \alias{allo_lookup}
 \title{Look up in \strong{allodb} information about each \code{equation_id}.}
 \usage{
-allo_lookup(.data, allodb = allodb::equations)
+allo_lookup(data, allodb = allodb::equations)
 }
 \arguments{
-\item{.data}{A dataframe with columns \code{rowid} and \code{equation_id}}
+\item{data}{A dataframe with columns \code{rowid} and \code{equation_id}}
 
 \item{allodb}{A table from allodb.}
 }
@@ -25,7 +25,7 @@ single_best <- census \%>\%
   add_species(species, site = "scbi") \%>\%
   allo_find() \%>\%
   allo_order() \%>\%
-  fixme_pick_one_row_by_rowid()
+  fixme_drop_duplicated_rowid()
 
 ids <- add_equations(census, single_best)
 allo_lookup(ids)

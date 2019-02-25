@@ -13,7 +13,7 @@
 #' * It replaces spaces (" ") with underscore ("_") in values of
 #' allometry_specificity for easier manipulation.
 #'
-#' @param .data [allodb::master()] or similar.
+#' @param data [allodb::master()] or similar.
 #'
 #' @family internal objects that will be hidden or removed
 #'
@@ -22,10 +22,10 @@
 #'
 #' @examples
 #' default_eqn(allodb::master())
-default_eqn <- function(.data) {
-  fgeo.tool::check_crucial_names(.data, allodb_eqn_crucial())
+default_eqn <- function(data) {
+  fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
 
-  good <- .data[!.data$equation_id %in% .bad_eqn_id , allodb_eqn_crucial()]
+  good <- data[!data$equation_id %in% .bad_eqn_id , allodb_eqn_crucial()]
   out <- good %>%
     dplyr::mutate(
       eqn_source = "default",

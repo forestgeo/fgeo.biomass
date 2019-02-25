@@ -323,14 +323,14 @@ memoise::forget(allo_evaluate)
 # `allo_evaluate()` may be slow the first time you run it
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    0.97    0.02    0.98
+#>    1.97    0.00    2.28
 memoise::is.memoised(allo_evaluate)
 #> [1] TRUE
 
 # Calls after the first one take almost no time
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    0.04    0.00    0.05
+#>    0.08    0.01    0.16
 ```
 
 ### Known issues
