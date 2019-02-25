@@ -122,13 +122,13 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>allo_lookup</span>(<span class='no'>.data</span>, <span class='kw'>allodb</span> <span class='kw'>=</span> <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>)</pre>
+    <pre class="usage"><span class='fu'>allo_lookup</span>(<span class='no'>data</span>, <span class='kw'>allodb</span> <span class='kw'>=</span> <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.data</th>
+      <th>data</th>
       <td><p>A dataframe with columns <code>rowid</code> and <code>equation_id</code></p></td>
     </tr>
     <tr>
@@ -156,8 +156,7 @@
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='no'>species</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='allo_order.html'>allo_order</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='handle_multiple_rowid.html'>fixme_pick_one_row_by_rowid</a></span>()
-
+  <span class='fu'><a href='handle_multiple_rowid.html'>fixme_drop_duplicated_rowid</a></span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='input'>
 <span class='no'>ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='add_equations.html'>add_equations</a></span>(<span class='no'>census</span>, <span class='no'>single_best</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = "rowid"</span></div><div class='input'><span class='fu'>allo_lookup</span>(<span class='no'>ids</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = "equation_id"</span></div><div class='output co'>#&gt; # A tibble: 40,283 x 23
 #&gt;    rowid equation_id ref_id equation_allome… equation_form dependent_varia…
 #&gt;    &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;           

@@ -122,15 +122,15 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>fixme_find_duplicated_rowid</span>(<span class='no'>.data</span>)
+    <pre class="usage"><span class='fu'>fixme_find_duplicated_rowid</span>(<span class='no'>data</span>)
 
-<span class='fu'>fixme_pick_one_row_by_rowid</span>(<span class='no'>.data</span>)</pre>
+<span class='fu'>fixme_drop_duplicated_rowid</span>(<span class='no'>data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.data</th>
+      <th>data</th>
       <td><p>A dataframe as those created with <code><a href='allo_order.html'>allo_order()</a></code>.</p></td>
     </tr>
     </table>
@@ -141,7 +141,7 @@
 <ul>
 <li><p><code>fixme_find_duplicated_rowid()</code> returns a dataframe with the rows for
 which duplicated <code>rowid</code> values are found.</p></li>
-<li><p><code>fixme_pick_one_row_by_rowid()</code> returns a dataframe with a single row per
+<li><p><code>fixme_drop_duplicated_rowid()</code> returns a dataframe with a single row per
 rowid value.</p></li>
 </ul>
 
@@ -176,7 +176,7 @@ rowid value.</p></li>
 #&gt; # … with 1,799 more rows, and 2 more variables: anatomic_relevance &lt;chr&gt;,
 #&gt; #   n &lt;int&gt;</div><div class='input'>
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_pick_one_row_by_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 29,203 x 9
+  <span class='fu'>fixme_drop_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 28,420 x 9
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
 #&gt;  1 family       1 scbi  lind…  27.9 f08fff      exp(… default   
@@ -189,9 +189,9 @@ rowid value.</p></li>
 #&gt;  8 family      16 scbi  lind…  17.4 f08fff      exp(… default   
 #&gt;  9 family      17 scbi  lind…  68.2 f08fff      exp(… default   
 #&gt; 10 family      18 scbi  lind…  19.3 f08fff      exp(… default   
-#&gt; # … with 29,193 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
+#&gt; # … with 28,410 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_pick_one_row_by_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 29,203 x 9
+  <span class='fu'>fixme_drop_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 28,420 x 9
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
 #&gt;  1 family       1 scbi  lind…  27.9 f08fff      exp(… default   
@@ -204,11 +204,11 @@ rowid value.</p></li>
 #&gt;  8 family      16 scbi  lind…  17.4 f08fff      exp(… default   
 #&gt;  9 family      17 scbi  lind…  68.2 f08fff      exp(… default   
 #&gt; 10 family      18 scbi  lind…  19.3 f08fff      exp(… default   
-#&gt; # … with 29,193 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
+#&gt; # … with 28,410 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
 <span class='co'># Should return 0-rows</span>
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_pick_one_row_by_rowid</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 0 x 10
+  <span class='fu'>fixme_drop_duplicated_rowid</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 0 x 10
 #&gt; # … with 10 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,
 #&gt; #   dbh &lt;dbl&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;,
 #&gt; #   anatomic_relevance &lt;chr&gt;, n &lt;int&gt;</div></pre>

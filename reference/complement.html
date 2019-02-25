@@ -34,9 +34,9 @@
 
 <meta property="og:description" content="Complement a dataframe with rows from another, identically structured
 dataframe. This is the result of reducing multiple joins:
-dplyr::semi_join(.data, complement).
-dplyr::anti_join(.data, complement).
-dplyr::anti_join(complement, .data).
+dplyr::semi_join(data, complement).
+dplyr::anti_join(data, complement).
+dplyr::anti_join(complement, data).
 Each dataframe must have a rowid
 " />
 <meta name="twitter:card" content="summary" />
@@ -126,26 +126,26 @@ Each dataframe must have a rowid
     
     <p>Complement a dataframe with rows from another, identically structured
 dataframe. This is the result of reducing multiple joins:</p><ul>
-<li><p><code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::semi_join(.data, complement)</a></code>.</p></li>
-<li><p><code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::anti_join(.data, complement)</a></code>.</p></li>
-<li><p><code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::anti_join(complement, .data)</a></code>.
+<li><p><code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::semi_join(data, complement)</a></code>.</p></li>
+<li><p><code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::anti_join(data, complement)</a></code>.</p></li>
+<li><p><code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::anti_join(complement, data)</a></code>.
 Each dataframe must have a <code>rowid</code></p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>complement</span>(<span class='no'>.data</span>, <span class='no'>complement</span>)</pre>
+    <pre class="usage"><span class='fu'>complement</span>(<span class='no'>data</span>, <span class='no'>complement</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.data</th>
+      <th>data</th>
       <td><p>Dataframes which rows to always keep.</p></td>
     </tr>
     <tr>
       <th>complement</th>
-      <td><p>Dataframe which rows will be used to complement <code>.data</code>.</p></td>
+      <td><p>Dataframe which rows will be used to complement <code>data</code>.</p></td>
     </tr>
     </table>
     
