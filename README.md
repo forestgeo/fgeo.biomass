@@ -378,14 +378,14 @@ memoise::forget(allo_evaluate)
 # `allo_evaluate()` may be slow the first time you run it
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    1.20    0.00    1.25
+#>    1.03    0.01    1.08
 memoise::is.memoised(allo_evaluate)
 #> [1] TRUE
 
 # Calls after the first one take almost no time
 system.time(allo_evaluate(best))
 #>    user  system elapsed 
-#>    0.05    0.00    0.05
+#>    0.05    0.00    0.04
 ```
 
 ### Known issues
@@ -538,33 +538,52 @@ census_equations %>%
 #> #   warning <chr>
 ```
 
-### Possible improvements
+### Planned enhancements
+
+This section shows pseudo-code: Code that doesn’t actually run but shows
+what it would look like if it did work.
+
+  - Add `site` during construction, e.g. `as_species(data, site =
+    "scbi")` and drop the `site` argument to `add_species()`.
+
+<!-- end list -->
 
 ``` r
-# Add `site` during construction, e.g. `as_species(data, site = "scbi")` and 
-# drop the `site` argument to `add_species()`
 census_species <- census %>% 
   add_species(species)
+```
 
-# New single interface to automatically calculates biomass
+  - New single interface to automatically calculates biomass.
+
+<!-- end list -->
+
+``` r
 census_species %>% 
   auto_biomass()
+```
 
-# New single interface to automatically add equations to a census dataframe
+  - New single interface to automatically add equations to a census
+    dataframe.
+
+<!-- end list -->
+
+``` r
 census_species %>% 
   auto_equations()
 ```
 
-  - New `allo_customize()` to insert custom equations.
+  - Helper to replace specific equations.
 
-Some other possible improvements:
+<!-- end list -->
 
-  - Allow using ViewFullTable and ViewTaxonomy.
-  - Allow using any table with the required columns.
-  - Simplify interfaces via generic functions that *know* what to do
-    with different (S3) classes of ForestGEO data – i.e. census and
-    species tables; ViewFullTable and ViewTaxonomy tables; or any two
-    tables of unknown class.
+``` r
+census_species %>% 
+  allo_find() %>% 
+  allo_replace(
+    eqn_id = c("abcd", "efgh"),
+    eqn = c("2.0394 * (dbh^2.5715)", "2.0394 * (dbh^2.5715)")
+  )
+```
 
 ### fgeo.biomass and allodb
 
