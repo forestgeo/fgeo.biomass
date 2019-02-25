@@ -134,7 +134,7 @@ allo_order(toy_nested, order = genus_overwrites_species)
 
 ### Calculate biomass
 
-Calculate biomass by evaluating each allometric equations using its corresponding `dbh`.
+Calculate biomass by evaluating each allometric equation using its corresponding `dbh`.
 
 ```{r}
 best <- equations %>% 
@@ -148,7 +148,7 @@ with_biomass <- best %>%
 with_biomass
 ```
 
-Summarize your results as you would normally do with general purpose tools.
+Summarize the results as you would normally do with general purpose tools.
 
 ```{r}
 with_biomass %>% 
@@ -179,28 +179,30 @@ system.time(allo_evaluate(best))
 
 ### Known issues
 
-Right now there may be multiple rows per `rowid`. This is because, for a single stem, there may be multiple equations to reflect the allometries of different parts of the stem. __fgeo.biomass__ doesn't deal with this issue yet but helps you find them.
+Right now there may be multiple rows per `rowid`. This is because, for a single stem, there may be multiple equations to reflect the allometries of different parts of the stem. __fgeo.biomass__ doesn't handle this issue yet; it only helps you to find and remove the problematic equations.
 
 ```{r}
 best %>% 
   fixme_find_duplicated_rowid()
 ```
 
-Here you enter the danger zone. __fgeo.biomass__ provides a quick and dirty way of getting a single equation per stem.
+Here you enter the danger zone. __fgeo.biomass__ provides a quick and dirty way of getting a single equation per stem: `fixme_drop_duplicated_rowid()` drops all rows where `rowid` appears more than once in the dataset.
 
 ```{r}
-danger <- best %>% 
-  fixme_pick_one_row_by_rowid()
+incomplete <- best %>% 
+  fixme_drop_duplicated_rowid()
 
-danger
+incomplete
 ```
+
+Dropping useful equations is extreme but conservative. We how to soon provide an easy way to some biomass at the sub-tree level. Until then you will have to do it yourself.
 
 ```{r}
 # No longer has duplicated rowid
-danger %>% 
+incomplete %>% 
   fixme_find_duplicated_rowid()
 
-danger %>% 
+incomplete %>% 
   allo_evaluate()
 ```
 
@@ -210,7 +212,7 @@ The `rowid`s were generated from the row-names of your original census data. Now
 
 ```{r}
 census_equations <- census %>% 
-  add_equations(danger)
+  add_equations(incomplete)
 
 census_equations
 ```

@@ -41,12 +41,23 @@ fixme_find_duplicated_rowid <- function(.data) {
     dplyr::filter(.data$n > 1)
 }
 
-
-#' @rdname handle_multiple_rowid
-#' @export
 fixme_pick_one_row_by_rowid <- function(.data) {
   .data %>%
     dplyr::group_by(.data$rowid) %>%
     dplyr::filter(dplyr::row_number() == 1L) %>%
     dplyr::ungroup()
 }
+
+#' @rdname handle_multiple_rowid
+#' @export
+fixme_drop_duplicated_rowid <- function(data) {
+  dup_rowid <- data %>%
+    fixme_find_duplicated_rowid() %>%
+    dplyr::pull(rowid) %>%
+    unique()
+  n <- length(dup_rowid)
+  warn(glue("Dropping {n} rows with duplicated `rowid` values."))
+
+  data %>% dplyr::filter(!.data$rowid %in% dup_rowid)
+}
+

@@ -3,12 +3,12 @@
 \name{handle_multiple_rowid}
 \alias{handle_multiple_rowid}
 \alias{fixme_find_duplicated_rowid}
-\alias{fixme_pick_one_row_by_rowid}
+\alias{fixme_drop_duplicated_rowid}
 \title{Handle multiple \code{rowid}s: find duplicates and pick a single row.}
 \usage{
 fixme_find_duplicated_rowid(.data)
 
-fixme_pick_one_row_by_rowid(.data)
+fixme_drop_duplicated_rowid(data)
 }
 \arguments{
 \item{.data}{A dataframe as those created with \code{\link[=allo_order]{allo_order()}}.}
