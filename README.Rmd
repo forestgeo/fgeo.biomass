@@ -172,7 +172,7 @@ dbh_species %>%
 
 ### Calculate biomass
 
-Calculate biomass by evaluating each allometric equation using its corresponding `dbh`.
+Calculate biomass of a stem by evaluating each allometric equation based on  its corresponding `dbh`.
 
 ```{r}
 best <- equations %>% 
