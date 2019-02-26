@@ -97,41 +97,6 @@ equations %>%
   unnest()
 ```
 
-### Prioritize equations
-
-You can prioritize available equations by setting the order in which equations of different types overwrite each other. Here is a toy example to show how this works.
-
-* Toy data.
-
-```{r}
-toy_equations <- tibble::tribble(
-  ~eqn,       ~dbh,  ~eqn_type, ~rowid, ~where,
-  "dbh + 1",    10,  "species",      1, "rowid only in species",
-  "dbh + 1",    10,  "species",      3, "rowid in both: lhs overwrites rhs",
-
-  "dbh + 2",    10,  "genus",        2, "rowid only in genus",
-  "dbh + 2",    10,  "genus",        3, "rowid in both: lhs overwrites rhs",
-)
-toy_equations
-
-toy_nested <- toy_equations %>% 
-  nest(-eqn_type)
-
-toy_nested
-```
-
-* Alternative results (compare first rows). 
-
-```{r}
-species_overwrites_genus <- c("species", "genus")
-
-allo_order(toy_nested, order = species_overwrites_genus)
-
-genus_overwrites_species <- c("genus", "species")
-
-allo_order(toy_nested, order = genus_overwrites_species)
-```
-
 ### Provide custom equations
 
 You may have your own equations. Use `as_eqn()` to ensure your data has the correct structure.
