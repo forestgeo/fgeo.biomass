@@ -330,7 +330,7 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <div id="calculate-biomass-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#calculate-biomass-1" class="anchor"></a>Calculate biomass</h3>
-<p>Calculate biomass by evaluating each allometric equation using its corresponding <code>dbh</code>.</p>
+<p>Calculate biomass of a stem by evaluating each allometric equation based on its corresponding <code>dbh</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">best &lt;-<span class="st"> </span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_order.html">allo_order</a></span>()</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"></a>
@@ -404,14 +404,14 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co"># `allo_evaluate()` may be slow the first time you run it</span></a>
 <a class="sourceLine" id="cb14-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>(best))</a>
 <a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   1.176   0.000   1.178</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   1.152   0.000   1.151</span></a>
 <a class="sourceLine" id="cb14-9" data-line-number="9">memoise<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/memoise/topics/is.memoised">is.memoised</a></span>(allo_evaluate)</a>
 <a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; [1] TRUE</span></a>
 <a class="sourceLine" id="cb14-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co"># Calls after the first one take almost no time</span></a>
 <a class="sourceLine" id="cb14-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>(best))</a>
 <a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt;   0.040   0.000   0.043</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt;   0.040   0.000   0.041</span></a></code></pre></div>
 </div>
 <div id="known-issues" class="section level3">
 <h3 class="hasAnchor">
