@@ -348,7 +348,7 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co"># `allo_evaluate()` may be slow the first time you run it</span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>(best))</a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;   1.176   0.004   1.179</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;   1.152   0.000   1.153</span></a>
 <a class="sourceLine" id="cb12-9" data-line-number="9">memoise<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/memoise/topics/is.memoised">is.memoised</a></span>(allo_evaluate)</a>
 <a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; [1] TRUE</span></a>
 <a class="sourceLine" id="cb12-11" data-line-number="11"></a>
