@@ -348,14 +348,14 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co"># `allo_evaluate()` may be slow the first time you run it</span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>(best))</a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;   1.156   0.000   1.158</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;   1.176   0.000   1.174</span></a>
 <a class="sourceLine" id="cb12-9" data-line-number="9">memoise<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/memoise/topics/is.memoised">is.memoised</a></span>(allo_evaluate)</a>
 <a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; [1] TRUE</span></a>
 <a class="sourceLine" id="cb12-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co"># Calls after the first one take almost no time</span></a>
 <a class="sourceLine" id="cb12-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>(best))</a>
 <a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt;   0.040   0.000   0.042</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt;   0.044   0.000   0.042</span></a></code></pre></div>
 </div>
 <div id="known-issues" class="section level3">
 <h3 class="hasAnchor">
