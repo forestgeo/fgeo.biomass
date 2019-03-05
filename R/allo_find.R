@@ -54,7 +54,8 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
     tidyr::nest() %>%
     dplyr::mutate(
       data = purrr::map(.data$data, ~get_this_eqn(.x, dbh_species))
-    )
+    ) %>%
+    tidyr::unnest()
 }
 
 abort_if_not_eqn <- function(custom_eqn) {

@@ -4,8 +4,7 @@ census <- fgeo.biomass::scbi_tree1
 
 single_best <- census %>%
   add_species(fgeo.biomass::scbi_species, site = "scbi") %>%
-  allo_find() %>%
-  allo_order()
+  allo_find()
 single_best <- suppressWarnings(fixme_drop_duplicated_rowid(single_best))
 
 test_that("handles census with existing `rowid`", {

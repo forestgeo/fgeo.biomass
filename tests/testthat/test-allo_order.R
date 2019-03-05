@@ -38,7 +38,7 @@ test_that("returns the expected data structure", {
   eqn <- fgeo.biomass::scbi_tree1 %>%
     add_species(fgeo.biomass::scbi_species, "scbi") %>%
     allo_find()
-  best <- allo_order(eqn)
+  best <- allo_order(tidyr::nest(eqn))
   nms <- c(
       "eqn_type",
       "rowid",

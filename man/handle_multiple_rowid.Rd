@@ -46,7 +46,6 @@ best \%>\%
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_find}}, \code{\link{allo_lookup}},
-  \code{\link{allo_order}}
+  \code{\link{allo_find}}, \code{\link{allo_lookup}}
 }
 \concept{internal functions that flag issues to be fixed}

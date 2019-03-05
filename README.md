@@ -122,7 +122,6 @@ but `fgeo.biomass::add_species()` is more specialized.
 ``` r
 census_species <- census %>%
   add_species(species, "scbi")
-#> Storing Latin species names into `sp`.
 
 census_species %>% 
   select(matches(sp_or_latin))
@@ -153,21 +152,6 @@ equations <- census_species %>%
   allo_find()
 
 equations
-#> # A tibble: 5 x 2
-#>   eqn_type       data                 
-#>   <chr>          <list>               
-#> 1 species        <tibble [8,930 x 8]> 
-#> 2 genus          <tibble [5,642 x 8]> 
-#> 3 mixed_hardwood <tibble [5,516 x 8]> 
-#> 4 family         <tibble [10,141 x 8]>
-#> 5 woody_species  <tibble [0 x 8]>
-```
-
-The output is a nested tibble (dataframe), which we can unnest it with
-`tidyr::unnest()`.
-
-``` r
-unnest(equations)
 #> # A tibble: 30,229 x 9
 #>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
@@ -194,7 +178,7 @@ nrow(census_species)
 #> [1] 40283
 
 # Less rows. We lack equations for some all of the species censused in SCBI
-nrow(unnest(equations))
+nrow(equations)
 #> [1] 30229
 ```
 
@@ -203,56 +187,35 @@ you to look it up in **allodb**.
 
 ``` r
 equations %>% 
-  unnest() %>% 
-  allo_lookup(allodb::master()) %>% 
-  glimpse()
+  allo_lookup(allodb::master())
 #> Joining, by = "equation_id"
-#> Observations: 1,127,698
-#> Variables: 44
-#> $ rowid                                <int> 4, 21, 29, 29, 29, 29, 38...
-#> $ equation_id                          <chr> "8da09d", "34fe5a", "7c72...
-#> $ ref_id                               <chr> "jenkins_2004_cdod", "jen...
-#> $ equation_allometry                   <chr> "1.5416*(dbh^2)^2.7818", ...
-#> $ equation_form                        <chr> "a*(DBH^2)^b", "a*(DBH^b)...
-#> $ dependent_variable_biomass_component <chr> "Stem and branches (live)...
-#> $ independent_variable                 <chr> "DBH", "DBH", "DBH", "DBH...
-#> $ allometry_specificity                <chr> "Species", "Species", "Sp...
-#> $ geographic_area                      <chr> "North Carolina, USA", "W...
-#> $ dbh_min_cm                           <chr> "14.48", "5.08", "1", "1"...
-#> $ dbh_max_cm                           <chr> "25.4", "50.8", "55", "55...
-#> $ sample_size                          <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ dbh_units_original                   <chr> "in", "in", "cm", "cm", "...
-#> $ biomass_units_original               <chr> "lb", "lb", "g", "g", "g"...
-#> $ allometry_development_method         <chr> "harvest", "harvest", "ha...
-#> $ regression_model                     <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ other_equations_tested               <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ log_biomass                          <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ bias_corrected                       <chr> "1", "0", "0", "0", "0", ...
-#> $ bias_correction_factor               <chr> "included in model", NA, ...
-#> $ notes_fitting_model                  <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ original_data_availability           <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ warning                              <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ site                                 <chr> "SCBI", "SCBI", "SCBI", "...
-#> $ family                               <chr> "Nyssaceae", "Magnoliacea...
-#> $ species                              <chr> "Nyssa sylvatica", "Lirio...
-#> $ species_code                         <chr> "nysy", "litu", "acru", "...
-#> $ life_form                            <chr> "Tree", "Tree", "Tree", "...
-#> $ equation_group                       <chr> "E", "E", "E", "E", "E", ...
-#> $ equation_taxa                        <chr> "Nyssa sylvatica", "Lirio...
-#> $ notes_on_species                     <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ wsg_id                               <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ wsg_specificity                      <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ id                                   <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ Site                                 <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ lat                                  <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ long                                 <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ UTM_Zone                             <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ UTM_X                                <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ UTM_Y                                <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ intertropical                        <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ size.ha                              <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ E                                    <chr> NA, NA, NA, NA, NA, NA, N...
-#> $ wsg.site.name                        <chr> NA, NA, NA, NA, NA, NA, N...
+#> # A tibble: 1,127,698 x 44
+#>    rowid equation_id ref_id equation_allome~ equation_form dependent_varia~
+#>    <int> <chr>       <chr>  <chr>            <chr>         <chr>           
+#>  1     4 8da09d      jenki~ 1.5416*(dbh^2)^~ a*(DBH^2)^b   Stem and branch~
+#>  2    21 34fe5a      jenki~ 1.0259*(dbh^2.7~ a*(DBH^b)     Stem and branch~
+#>  3    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
+#>  4    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
+#>  5    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
+#>  6    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
+#>  7    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
+#>  8    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
+#>  9    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
+#> 10    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
+#> # ... with 1,127,688 more rows, and 38 more variables:
+#> #   independent_variable <chr>, allometry_specificity <chr>,
+#> #   geographic_area <chr>, dbh_min_cm <chr>, dbh_max_cm <chr>,
+#> #   sample_size <chr>, dbh_units_original <chr>,
+#> #   biomass_units_original <chr>, allometry_development_method <chr>,
+#> #   regression_model <chr>, other_equations_tested <chr>,
+#> #   log_biomass <chr>, bias_corrected <chr>, bias_correction_factor <chr>,
+#> #   notes_fitting_model <chr>, original_data_availability <chr>,
+#> #   warning <chr>, site <chr>, family <chr>, species <chr>,
+#> #   species_code <chr>, life_form <chr>, equation_group <chr>,
+#> #   equation_taxa <chr>, notes_on_species <chr>, wsg_id <chr>,
+#> #   wsg_specificity <chr>, id <chr>, Site <chr>, lat <chr>, long <chr>,
+#> #   UTM_Zone <chr>, UTM_X <chr>, UTM_Y <chr>, intertropical <chr>,
+#> #   size.ha <chr>, E <chr>, wsg.site.name <chr>
 ```
 
 ### Calculating biomass
@@ -265,7 +228,6 @@ storing the result in the the new `biomass` column.
 
 ``` r
 with_biomass <- equations %>% 
-  unnest() %>% 
   allo_evaluate()
 
 with_biomass %>% 
@@ -345,10 +307,13 @@ We can now use the argument `custom_eqn` to pass our custom equations to
 
 ``` r
 allo_find(census_species, custom_eqn = as_eqn(custom_equations))
-#> # A tibble: 1 x 2
-#>   eqn_type       data            
-#>   <chr>          <list>          
-#> 1 mixed_hardwood <tibble [3 x 8]>
+#> # A tibble: 3 x 9
+#>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
+#>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
+#> 1 mixed_h~  9645 scbi  paul~  462. 000001      exp(~ custom    
+#> 2 mixed_h~ 10838 scbi  paul~  363. 000001      exp(~ custom    
+#> 3 mixed_h~ 10842 scbi  paul~  531. 000001      exp(~ custom    
+#> # ... with 1 more variable: anatomic_relevance <chr>
 ```
 
 This is what the entire workflow looks like:
@@ -356,7 +321,6 @@ This is what the entire workflow looks like:
 ``` r
 census_species %>%
   allo_find(custom_eqn = as_eqn(custom_equations)) %>%
-  unnest() %>%
   allo_evaluate()
 #> # A tibble: 3 x 10
 #>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source

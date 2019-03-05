@@ -88,28 +88,20 @@ equations <- census_species %>%
 equations
 ```
 
-The output is a nested tibble (dataframe), which we can unnest it with `tidyr::unnest()`.
-
-```{r}
-unnest(equations)
-```
-
 We may not have allometric equations form all species. Although the code will eventually fall back to more general equations, for now we just drop the rows that don't match the available species for the specified site.
 
 ```{r}
 nrow(census_species)
 
 # Less rows. We lack equations for some all of the species censused in SCBI
-nrow(unnest(equations))
+nrow(equations)
 ```
 
 If you need more information about each equation, `allo_lookup()` helps you to look it up in __allodb__.
 
 ```{r}
 equations %>% 
-  unnest() %>% 
-  allo_lookup(allodb::master()) %>% 
-  glimpse()
+  allo_lookup(allodb::master())
 ```
 
 ### Calculating biomass
@@ -118,7 +110,6 @@ For the rows for which an equation was found in __allodb__, we can now calculate
 
 ```{r}
 with_biomass <- equations %>% 
-  unnest() %>% 
   allo_evaluate()
 
 with_biomass %>% 
@@ -168,7 +159,6 @@ This is what the entire workflow looks like:
 ```{r}
 census_species %>%
   allo_find(custom_eqn = as_eqn(custom_equations)) %>%
-  unnest() %>%
   allo_evaluate()
 ```
 
