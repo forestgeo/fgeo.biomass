@@ -126,6 +126,7 @@ but `fgeo.biomass::add_species()` is more specialized.
 ``` r
 census_species <- census %>%
   add_species(species, "scbi")
+#> `sp` now stores Latin species names
 
 census_species %>% 
   select(matches(sp_or_latin))
@@ -154,6 +155,10 @@ allometric-equations for as many rows as possible with `allo_find()`.
 ``` r
 equations <- census_species %>% 
   allo_find()
+#> Joining, by = c("sp", "site")
+#> Warning:   The input and output datasets have different number of rows:
+#>   * Input: 40283.
+#>   * Output: 30229.
 
 equations
 #> # A tibble: 30,229 x 9
@@ -313,6 +318,10 @@ We can now use the argument `custom_eqn` to pass our custom equations to
 
 ``` r
 allo_find(census_species, custom_eqn = as_eqn(custom_equations))
+#> Joining, by = c("sp", "site")
+#> Warning:   The input and output datasets have different number of rows:
+#>   * Input: 40283.
+#>   * Output: 3.
 #> # A tibble: 3 x 9
 #>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
@@ -328,6 +337,10 @@ This is what the entire workflow looks like:
 census_species %>%
   allo_find(custom_eqn = as_eqn(custom_equations)) %>%
   allo_evaluate()
+#> Joining, by = c("sp", "site")
+#> Warning:   The input and output datasets have different number of rows:
+#>   * Input: 40283.
+#>   * Output: 3.
 #> Warning:   `biomass` values may be invalid.
 #>   This is work in progress and we still don't handle units correctly.
 #> # A tibble: 3 x 10

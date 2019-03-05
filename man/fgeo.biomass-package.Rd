@@ -24,7 +24,7 @@ Authors:
 \itemize{
   \item Gabriel Arellano \email{gabriel.arellano.torres@gmail.com} [reviewer]
   \item Stuart Davies \email{daviess@si.edu} [reviewer]
-  \item Erika Gonzalez \email{GonzalezEB@si.edu} [reviewer]
+  \item Erika Gonzalez \email{GonzalezEB@si.edu} (0000-0001-8305-6672) [reviewer]
   \item Sean McMahon \email{mcmahons@si.edu} [reviewer]
   \item Kristina Teixeira \email{TeixeiraK@si.edu} [reviewer]
 }
