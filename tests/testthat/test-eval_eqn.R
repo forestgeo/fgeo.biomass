@@ -5,7 +5,7 @@ library(dplyr)
 
 test_that("bad equations haven't changed", {
   expect_known_output(
-    .bad_eqn_id, "ref-bad_eqn_id",
+    failing_eqn_id, "failing_eqn_id",
     print = TRUE, overwrite = FALSE
   )
 })

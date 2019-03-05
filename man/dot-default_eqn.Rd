@@ -7,7 +7,8 @@
 Output of \code{\link[=default_eqn]{default_eqn()}} -- stored for speed.
 }
 \seealso{
-Other internal objects that will be hidden or removed: \code{\link{.bad_eqn_id}},
-  \code{\link{bad_eqn_id}}, \code{\link{default_eqn}}
+Other internal objects that will be hidden or removed: \code{\link{default_eqn}},
+  \code{\link{failing_eqn_id}},
+  \code{\link{pull_failing_eqn}}
 }
 \concept{internal objects that will be hidden or removed}

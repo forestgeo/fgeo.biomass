@@ -55,7 +55,8 @@ allo_find(custom_eqn = as_eqn(your_equations)) \%>\%
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_evaluate}}, \code{\link{allo_lookup}}
+  \code{\link{allo_evaluate}}, \code{\link{allo_lookup}},
+  \code{\link{allo_order}}
 
 Other constructors: \code{\link{add_species}}
 }

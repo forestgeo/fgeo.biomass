@@ -25,7 +25,7 @@
 default_eqn <- function(data) {
   fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
 
-  good <- data[!data$equation_id %in% .bad_eqn_id , allodb_eqn_crucial()]
+  good <- data[!data$equation_id %in% failing_eqn_id , allodb_eqn_crucial()]
   out <- good %>%
     dplyr::mutate(
       eqn_source = "default",

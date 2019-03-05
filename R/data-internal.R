@@ -1,9 +1,9 @@
 #' Character vector giving `equation_id` of equations that can't be evaluated.
 #'
-#' Output of [bad_eqn_id()] -- stored for speed.
+#' Output of [failing_eqn_id()] -- stored for speed.
 #'
 #' @family internal objects that will be hidden or removed
-#' @name .bad_eqn_id
+#' @name failing_eqn_id
 NULL
 
 #' Dataframe of default equations, restructured from __allodb__.

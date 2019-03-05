@@ -32,6 +32,7 @@ allo_lookup(ids)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_evaluate}}, \code{\link{allo_find}}
+  \code{\link{allo_evaluate}}, \code{\link{allo_find}},
+  \code{\link{allo_order}}
 }
 \concept{functions to manipulate equations}

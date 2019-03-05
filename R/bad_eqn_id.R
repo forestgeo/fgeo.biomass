@@ -7,16 +7,16 @@
 #' @export
 #'
 #' @examples
-#' bad_eqn_id(allodb::master())
-bad_eqn_id <- function(data) {
+#' pull_failing_eqn(allodb::master())
+pull_failing_eqn <- function(data) {
   funs <- c(eval_eqn, format_eqn)
   funs %>%
-    purrr::map(~bad_eqn(data, .x)) %>%
+    purrr::map(~failing_eqn(data, .x)) %>%
     unlist() %>%
     unique()
 }
 
-bad_eqn <- function(data, .f) {
+failing_eqn <- function(data, .f) {
   ok <- purrr::quietly(purrr::map_lgl)(some_error(data, .f), is.null)$result
   unique(data[!ok, ][["equation_id"]])
 }
