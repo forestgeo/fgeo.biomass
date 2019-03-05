@@ -154,8 +154,7 @@
 #&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
 <span class='no'>best</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()
-
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='input'>
 <span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning:   `biomass` values may be invalid.</span>
 #&gt; <span class='warning'>  This is work in progress and we still don't handle units correctly.</span></div><div class='output co'>#&gt; # A tibble: 30,229 x 10
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source

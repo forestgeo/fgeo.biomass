@@ -168,23 +168,24 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <p>We can then add species’ Latin names to the census data by joining the <em>census</em> and <em>species</em> tables. We may do that with <code><a href="https://dplyr.tidyverse.org/reference/join.html">dplyr::left_join()</a></code> but <code><a href="reference/add_species.html">fgeo.biomass::add_species()</a></code> is more specialized.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">census_species &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/add_species.html">add_species</a></span>(species, <span class="st">"scbi"</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(sp_or_latin))</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; # A tibble: 40,283 x 1</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;    sp                  </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  * &lt;chr&gt;               </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  1 lindera benzoin     </span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  2 lindera benzoin     </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  3 lindera benzoin     </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  4 nyssa sylvatica     </span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  5 hamamelis virginiana</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;  6 hamamelis virginiana</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  7 unidentified unk    </span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;  8 lindera benzoin     </span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt;  9 viburnum prunifolium</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; 10 asimina triloba     </span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; # … with 40,273 more rows</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; `sp` now stores Latin species names</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(sp_or_latin))</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; # A tibble: 40,283 x 1</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;    sp                  </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  * &lt;chr&gt;               </span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  1 lindera benzoin     </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  2 lindera benzoin     </span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  3 lindera benzoin     </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  4 nyssa sylvatica     </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;  5 hamamelis virginiana</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  6 hamamelis virginiana</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;  7 unidentified unk    </span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt;  8 lindera benzoin     </span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt;  9 viburnum prunifolium</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; 10 asimina triloba     </span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; # … with 40,273 more rows</span></a></code></pre></div>
 <div id="finding-the-best-available-allometric-equations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#finding-the-best-available-allometric-equations" class="anchor"></a>Finding the best available allometric-equations</h3>
