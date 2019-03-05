@@ -1,4 +1,8 @@
 allo_evaluate_impl <- function(data) {
+  warn(glue("
+    `biomass` values may be invalid.
+    This is work in progress and we still don't handle units correctly.
+  "))
   .biomass <- purrr::map2_dbl(
     data$eqn, data$dbh,
     ~eval(parse(text = .x), envir = list(dbh = .y))

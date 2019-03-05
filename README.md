@@ -233,6 +233,8 @@ storing the result in the the new `biomass` column.
 ``` r
 with_biomass <- equations %>% 
   allo_evaluate()
+#> Warning:   `biomass` values may be invalid.
+#>   This is work in progress and we still don't handle units correctly.
 
 with_biomass %>% 
   select(eqn, dbh, biomass)
@@ -326,6 +328,8 @@ This is what the entire workflow looks like:
 census_species %>%
   allo_find(custom_eqn = as_eqn(custom_equations)) %>%
   allo_evaluate()
+#> Warning:   `biomass` values may be invalid.
+#>   This is work in progress and we still don't handle units correctly.
 #> # A tibble: 3 x 10
 #>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
