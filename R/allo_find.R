@@ -45,13 +45,18 @@
 allo_find <- function(dbh_species, custom_eqn = NULL) {
   eqn <- custom_eqn %||% default_eqn(allodb::master())
 
-  eqn %>%
+  eqn_ <- eqn %>%
     abort_if_not_eqn() %>%
     dplyr::filter(!is.na(.data$eqn_type)) %>%
+    # FIXME: Do we need to group at all?
     dplyr::group_by(.data$eqn_type) %>%
-    tidyr::nest() %>%
+    tidyr::nest()
+
+  join_vars <- c("sp", "site")
+  inform(glue("Joining, by = {rlang::expr_text(join_vars)}"))
+  eqn_ %>%
     dplyr::mutate(
-      data = purrr::map(.data$data, ~get_this_eqn(.x, dbh_species))
+      data = purrr::map(.data$data, ~get_this_eqn(.x, dbh_species, join_vars))
     ) %>%
     tidyr::unnest()
 }
@@ -68,8 +73,8 @@ abort_if_not_eqn <- function(custom_eqn) {
   invisible(custom_eqn)
 }
 
-get_this_eqn <- function(.type, dbh_species) {
-  dplyr::inner_join(dbh_species, .type, by = c("sp", "site")) %>%
+get_this_eqn <- function(.type, dbh_species, join_vars) {
+  dplyr::inner_join(dbh_species, .type, by = join_vars) %>%
     dplyr::filter(!is.na(.data$dbh), !is.na(.data$eqn))
 }
 
