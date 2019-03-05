@@ -41,7 +41,6 @@ best \%>\%
   fixme_find_duplicated_rowid()
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_find}}, \code{\link{allo_lookup}}
+Other internal functions that flag issues to be fixed: \code{\link{fixme_pull_failing_eqn}}
 }
 \concept{internal functions that flag issues to be fixed}

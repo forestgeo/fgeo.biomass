@@ -1,14 +1,14 @@
-#' Find equations that can't be evaluated.
+#' Find failing equations, that can't be evaluated.
 #'
 #' @param data An __allodb__ equations-table (e.g. allodb::master()).
-#' @family internal objects that will be hidden or removed
+#' @family internal functions that flag issues to be fixed
 #'
 #' @return A character vector.
 #' @export
 #'
 #' @examples
-#' pull_failing_eqn(allodb::master())
-pull_failing_eqn <- function(data) {
+#' fixme_pull_failing_eqn(allodb::master())
+fixme_pull_failing_eqn <- function(data) {
   funs <- c(eval_eqn, format_eqn)
   funs %>%
     purrr::map(~failing_eqn(data, .x)) %>%

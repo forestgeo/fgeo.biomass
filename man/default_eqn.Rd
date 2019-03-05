@@ -33,7 +33,6 @@ default_eqn(allodb::master())
 }
 \seealso{
 Other internal objects that will be hidden or removed: \code{\link{.default_eqn}},
-  \code{\link{failing_eqn_id}},
-  \code{\link{pull_failing_eqn}}
+  \code{\link{failing_eqn_id}}
 }
 \concept{internal objects that will be hidden or removed}
