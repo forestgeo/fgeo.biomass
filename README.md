@@ -148,9 +148,13 @@ census_species %>%
 
 ### Finding the best available allometric-equations
 
-We have just added the Latin name of each species to the census data
-into the `sp` column. Now we can try to find the best available
-allometric-equations for as many rows as possible with `allo_find()`.
+Before we added the Latin name of each species to the census data into
+the `sp` column. Now we want to find the best available
+allometric-equations for as many rows as possible with `allo_find()`. We
+may not have allometric equations form all species. Although the code
+will eventually fall back to more general equations, for now we just
+drop the rows that don’t match the available species for the specified
+site.
 
 ``` r
 equations <- census_species %>% 
@@ -175,20 +179,6 @@ equations
 #>  9 species     84 scbi  frax~ 170.  0edaff      0.16~ default   
 #> 10 species     89 scbi  fagu~  27.2 74186d      2.03~ default   
 #> # ... with 30,219 more rows, and 1 more variable: anatomic_relevance <chr>
-```
-
-We may not have allometric equations form all species. Although the code
-will eventually fall back to more general equations, for now we just
-drop the rows that don’t match the available species for the specified
-site.
-
-``` r
-nrow(census_species)
-#> [1] 40283
-
-# Less rows. We lack equations for some all of the species censused in SCBI
-nrow(equations)
-#> [1] 30229
 ```
 
 If you need more information about each equation, `allo_lookup()` helps
