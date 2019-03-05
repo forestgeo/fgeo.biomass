@@ -7,7 +7,7 @@ allo_evaluate_impl <- function(data) {
 }
 #' Evaluate equations, giving a biomass result per row.
 #'
-#' @param data A dataframe as those created with [allo_order()].
+#' @param data A dataframe as those created with [allo_find()].
 #'
 #' @family functions to manipulate equations
 #'
@@ -19,8 +19,7 @@ allo_evaluate_impl <- function(data) {
 #'
 #' best <- fgeo.biomass::scbi_tree1 %>%
 #'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
-#'   allo_find() %>%
-#'   allo_order()
+#'   allo_find()
 #'
 #' allo_evaluate(best)
 allo_evaluate <- memoise::memoise(allo_evaluate_impl)

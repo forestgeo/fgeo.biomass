@@ -1,3 +1,4 @@
+^\.buildignore$
 ^fgeo\.biomass\.Rproj$
 ^tmp\.R$
 ^tmp\.sh$

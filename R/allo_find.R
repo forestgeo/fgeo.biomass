@@ -40,9 +40,7 @@
 #' allo_find(census_species, custom_eqn = as_eqn(your_equations))
 #'
 #' census_species %>%
-#' allo_find(custom_eqn = as_eqn(your_equations)) %>%
-#'   allo_order() %>%
-#'   allo_evaluate()
+#' allo_find(custom_eqn = as_eqn(your_equations))
 #' @family constructors
 allo_find <- function(dbh_species, custom_eqn = NULL) {
   eqn <- custom_eqn %||% .default_eqn

@@ -26,14 +26,12 @@ species <- fgeo.biomass::scbi_species
 single_best <- census \%>\%
   add_species(species, site = "scbi") \%>\%
   allo_find() \%>\%
-  allo_order() \%>\%
   fixme_drop_duplicated_rowid()
 
 add_equations(census, single_best)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{allo_evaluate}},
-  \code{\link{allo_find}}, \code{\link{allo_lookup}},
-  \code{\link{allo_order}}
+  \code{\link{allo_find}}, \code{\link{allo_lookup}}
 }
 \concept{functions to manipulate equations}

@@ -21,18 +21,16 @@ Look up in \strong{allodb} information about each \code{equation_id}.
 census <- fgeo.biomass::scbi_tree1
 species <- fgeo.biomass::scbi_species
 
-single_best <- census \%>\%
+best <- census \%>\%
   add_species(species, site = "scbi") \%>\%
   allo_find() \%>\%
-  allo_order() \%>\%
   fixme_drop_duplicated_rowid()
 
-ids <- add_equations(census, single_best)
+ids <- add_equations(census, best)
 allo_lookup(ids)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_evaluate}}, \code{\link{allo_find}},
-  \code{\link{allo_order}}
+  \code{\link{allo_evaluate}}, \code{\link{allo_find}}
 }
 \concept{functions to manipulate equations}

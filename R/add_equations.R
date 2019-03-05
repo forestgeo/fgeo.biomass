@@ -19,7 +19,6 @@
 #' single_best <- census %>%
 #'   add_species(species, site = "scbi") %>%
 #'   allo_find() %>%
-#'   allo_order() %>%
 #'   fixme_drop_duplicated_rowid()
 #'
 #' add_equations(census, single_best)

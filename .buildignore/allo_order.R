@@ -21,6 +21,7 @@
 #' fgeo.biomass::scbi_tree1 %>%
 #'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
 #'   allo_find() %>%
+#'   tidyr::nest() %>%
 #'   allo_order()
 allo_order <- function(data, order = NULL) {
   check_allo_order(data)

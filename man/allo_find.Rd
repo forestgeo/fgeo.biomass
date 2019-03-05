@@ -49,14 +49,11 @@ class(as_eqn(your_equations))
 allo_find(census_species, custom_eqn = as_eqn(your_equations))
 
 census_species \%>\%
-allo_find(custom_eqn = as_eqn(your_equations)) \%>\%
-  allo_order() \%>\%
-  allo_evaluate()
+allo_find(custom_eqn = as_eqn(your_equations))
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_evaluate}}, \code{\link{allo_lookup}},
-  \code{\link{allo_order}}
+  \code{\link{allo_evaluate}}, \code{\link{allo_lookup}}
 
 Other constructors: \code{\link{add_species}}
 }

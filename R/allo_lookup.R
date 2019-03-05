@@ -12,13 +12,12 @@
 #' census <- fgeo.biomass::scbi_tree1
 #' species <- fgeo.biomass::scbi_species
 #'
-#' single_best <- census %>%
+#' best <- census %>%
 #'   add_species(species, site = "scbi") %>%
 #'   allo_find() %>%
-#'   allo_order() %>%
 #'   fixme_drop_duplicated_rowid()
 #'
-#' ids <- add_equations(census, single_best)
+#' ids <- add_equations(census, best)
 #' allo_lookup(ids)
 allo_lookup <- function(data, allodb = allodb::equations) {
   check_crucial_names(data, c("rowid", "equation_id"))

@@ -20,24 +20,6 @@
 #' )
 #'
 #' class(as_eqn(your_equations))
-#'
-#' census <- fgeo.biomass::scbi_tree1
-#' species <- fgeo.biomass::scbi_species
-#' dbh_species <- add_species(
-#'   census, species,
-#'   site = "scbi"
-#' )
-#'
-#' # Default equations
-#' allo_find(dbh_species)
-#'
-#' # Custom equations
-#' allo_find(dbh_species, custom_eqn = as_eqn(your_equations))
-#'
-#' dbh_species %>%
-#'   allo_find(custom_eqn = as_eqn(your_equations)) %>%
-#'   allo_order() %>%
-#'   allo_evaluate()
 as_eqn <- function(data) {
   out <- modify_eqn(validate_eqn(data))
   new_eqn(out)

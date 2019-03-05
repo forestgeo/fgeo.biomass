@@ -12,14 +12,10 @@
 #' @examples
 #' best <- fgeo.biomass::scbi_tree1 %>%
 #'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
-#'   allo_find() %>%
-#'   allo_order()
+#'   allo_find()
 #'
 #' best %>%
 #'   fixme_find_duplicated_rowid()
-#'
-#' best %>%
-#'   fixme_drop_duplicated_rowid()
 #'
 #' best %>%
 #'   fixme_drop_duplicated_rowid()

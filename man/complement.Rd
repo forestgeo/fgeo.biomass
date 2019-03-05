@@ -52,7 +52,5 @@ traffic_light \%>\% complement(more_colors)
 }
 \seealso{
 \code{\link[dplyr:join]{dplyr::join()}}, \code{\link[tibble:rowid_to_column]{tibble::rowid_to_column()}}.
-
-Other helpers: \code{\link{reduce_complement}}
 }
 \concept{helpers}
