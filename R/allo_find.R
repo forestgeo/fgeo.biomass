@@ -12,18 +12,18 @@
 #' @examples
 #' census <- fgeo.biomass::scbi_tree1
 #' species <- fgeo.biomass::scbi_species
-#' dbh_species <- add_species(
+#' census_species <- add_species(
 #'   census, species,
 #'   site = "scbi"
 #' )
 #'
-#' allo_find(dbh_species)
+#' allo_find(census_species)
 #'
 #' # PROVIDE CUSTOM EQUAITONS ----------------------------------------------
 #' # Checks that the structure of your data isn't terriby wrong
 #' # BAD
-#' as_eqn("really bad data")
-#' as_eqn(data.frame(1))
+#' try(as_eqn("really bad data"))
+#' try(as_eqn(data.frame(1)))
 #'
 #' # GOOD
 #' your_equations <- tibble::tibble(
@@ -39,7 +39,7 @@
 #'
 #' allo_find(census_species, custom_eqn = as_eqn(your_equations))
 #'
-#' dbh_species %>%
+#' census_species %>%
 #' allo_find(custom_eqn = as_eqn(your_equations)) %>%
 #'   allo_order() %>%
 #'   allo_evaluate()
