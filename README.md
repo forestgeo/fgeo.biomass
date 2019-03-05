@@ -20,7 +20,9 @@ available allometric-equations from the
 This package is not ready for research. We are now building a [Minimum
 Viable Product](https://en.wikipedia.org/wiki/Minimum_viable_product),
 with just enough features to collect feedback from alpha users and
-redirect our effort. The resulting biomass is still meaningless.
+redirect our effort. The resulting biomass is still meaningless. For a
+working product see the
+[BIOMASS](https://CRAN.R-project.org/package=BIOMASS) package.
 
 ## Installation
 
@@ -47,6 +49,7 @@ Institute](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation
 
 ``` r
 census <- fgeo.biomass::scbi_tree1
+
 census
 #> # A tibble: 40,283 x 20
 #>    treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
@@ -97,6 +100,7 @@ The species’ Latin names are recorded in *species* tables.
 
 ``` r
 species <- fgeo.biomass::scbi_species
+
 species %>% 
   select(matches(sp_or_latin), everything())
 #> # A tibble: 73 x 10
@@ -353,103 +357,31 @@ Issues that result in data loss:
   - We exclude equations from shrubs
     (<https://github.com/forestgeo/allodb/issues/41>).
 
-### Enhancements
-
-This section shows pseudo-code: Code that doesn’t actually run but shows
-what it would look like if it did work.
-
-  - Add `site` during construction, e.g. `as_species(data, site =
-    "scbi")` and drop the `site` argument to `add_species()`.
-
-<!-- end list -->
-
-``` r
-census_species <- census %>% 
-  add_species(species)
-```
-
-  - New single interface to automatically calculates biomass.
-
-<!-- end list -->
-
-``` r
-census_species %>% 
-  auto_biomass()
-```
-
-  - New single interface to automatically add equations to a census
-    dataframe.
-
-<!-- end list -->
-
-``` r
-census_species %>% 
-  auto_equations()
-```
-
-  - Helper to replace specific equations.
-
-<!-- end list -->
-
-``` r
-census_species %>% 
-  allo_find() %>% 
-  allo_replace(
-    eqn_id = c("abcd", "efgh"),
-    eqn = c("2.0394 * (dbh^2.5715)", "2.0394 * (dbh^2.5715)")
-  )
-```
-
-### fgeo.biomass and allodb
-
-Allometric equations come from the **allodb** package.
-
-``` r
-# Internal
-fgeo.biomass:::.default_eqn
-#> # A tibble: 620 x 7
-#>    equation_id site   sp      eqn      eqn_source eqn_type anatomic_releva~
-#>  * <chr>       <chr>  <chr>   <chr>    <chr>      <chr>    <chr>           
-#>  1 2060ea      lilly~ acer r~ 10^(1.1~ default    species  total abovegrou~
-#>  2 2060ea      tyson  acer r~ 10^(1.1~ default    species  total abovegrou~
-#>  3 a4d879      lilly~ acer s~ 10^(1.2~ default    species  total abovegrou~
-#>  4 a4d879      tyson  acer s~ 10^(1.2~ default    species  total abovegrou~
-#>  5 c59e03      lilly~ amelan~ exp(7.2~ default    genus    stem biomass (w~
-#>  6 c59e03      scbi   amelan~ exp(7.2~ default    genus    stem biomass (w~
-#>  7 c59e03      serc   amelan~ exp(7.2~ default    genus    stem biomass (w~
-#>  8 c59e03      serc   amelan~ exp(7.2~ default    genus    stem biomass (w~
-#>  9 c59e03      tyson  amelan~ exp(7.2~ default    genus    stem biomass (w~
-#> 10 c59e03      umbc   amelan~ exp(7.2~ default    genus    stem biomass (w~
-#> # ... with 610 more rows
-```
-
-For now we are excluding some equations.
-
-``` r
-# Internal
-excluding <- fgeo.biomass:::.bad_eqn_id
-
-allodb::equations %>% 
-  filter(equation_id %in% excluding) %>% 
-  select(equation_id, equation_allometry)
-#> # A tibble: 24 x 2
-#>    equation_id equation_allometry         
-#>    <chr>       <chr>                      
-#>  1 76aa3c      38.111*(dba^2.9)           
-#>  2 28dce6      51.996*(dba^2.77)          
-#>  3 a1646f      37.637*(dba^2.779)         
-#>  4 b61369      43.992*(dba^2.86)          
-#>  5 5e2dea      29.615*(dba^3.243)         
-#>  6 3cb95a      exp(2.025+3.527*log(dba))  
-#>  7 c94845      51.68+0.02*BA              
-#>  8 6b3b2a      exp(3.67+2.847*log(dba))   
-#>  9 b95baf      exp(3.892+3.122*log(dba))  
-#> 10 e8f868      exp(3.6123+2.9944*log(dba))
-#> # ... with 14 more rows
-```
-
-## Information
+## General information
 
   - [Getting help](SUPPORT.md).
   - [Contributing](CONTRIBUTING.md).
   - [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Related project
+
+  - [BIOMASS](https://CRAN.R-project.org/package=BIOMASS)
+
+<!-- end list -->
+
+    A BibTeX entry for LaTeX users is
+    
+      @Article{,
+        title = {BIOMASS : an {R} package for estimating above-ground biomass and its uncertainty in tropical forests},
+        volume = {8},
+        issn = {2041210X},
+        url = {http://doi.wiley.com/10.1111/2041-210X.12753},
+        doi = {10.1111/2041-210X.12753},
+        language = {en},
+        number = {9},
+        urldate = {2018-12-13},
+        journal = {Methods in Ecology and Evolution},
+        author = {Maxime Rejou-Mechain and Ariane Tanguy and Camille Piponiot and Jerome Chave and Bruno Herault},
+        editor = {Sarah Goslee},
+        year = {2017},
+      }

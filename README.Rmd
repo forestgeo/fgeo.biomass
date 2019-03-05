@@ -22,7 +22,7 @@ The goal of __fgeo.biomass__ is to calculate biomass using best available allome
 
 ## Warning
 
-This package is not ready for research. We are now building a [Minimum Viable Product](https://en.wikipedia.org/wiki/Minimum_viable_product), with just enough features to collect feedback from alpha users and redirect our effort. The resulting biomass is still meaningless.
+This package is not ready for research. We are now building a [Minimum Viable Product](https://en.wikipedia.org/wiki/Minimum_viable_product), with just enough features to collect feedback from alpha users and redirect our effort. The resulting biomass is still meaningless. For a working product see the [BIOMASS](https://CRAN.R-project.org/package=BIOMASS) package.
 
 ## Installation
 
@@ -46,6 +46,7 @@ As an example, we will use census and species datasets from the ForestGEO plot a
 
 ```{r}
 census <- fgeo.biomass::scbi_tree1
+
 census
 ```
 
@@ -63,6 +64,7 @@ The species' Latin names are recorded in _species_ tables.
 
 ```{r}
 species <- fgeo.biomass::scbi_species
+
 species %>% 
   select(matches(sp_or_latin), everything())
 ```
@@ -176,65 +178,31 @@ Issues that result in data loss:
 
 * We exclude equations from shrubs (https://github.com/forestgeo/allodb/issues/41).
 
-### Enhancements
-
-This section shows pseudo-code: Code that doesn't actually run but shows what it would look like if it did work.
-
-* Add `site` during construction, e.g. `as_species(data, site = "scbi")` and drop the `site` argument to `add_species()`.
-
-```R
-census_species <- census %>% 
-  add_species(species)
-```
-
-* New single interface to automatically calculates biomass.
-
-```R
-census_species %>% 
-  auto_biomass()
-```
-
-* New single interface to automatically add equations to a census dataframe.
-
-```R
-census_species %>% 
-  auto_equations()
-```
-
-* Helper to replace specific equations.
-
-```R
-census_species %>% 
-  allo_find() %>% 
-  allo_replace(
-    eqn_id = c("abcd", "efgh"),
-    eqn = c("2.0394 * (dbh^2.5715)", "2.0394 * (dbh^2.5715)")
-  )
-```
-
-### fgeo.biomass and allodb
-
-Allometric equations come from the __allodb__ package.
-
-```{r}
-# Internal
-fgeo.biomass:::.default_eqn
-```
-
-For now we are excluding some equations.
-
-```{r}
-# Internal
-excluding <- fgeo.biomass:::.bad_eqn_id
-
-allodb::equations %>% 
-  filter(equation_id %in% excluding) %>% 
-  select(equation_id, equation_allometry)
-```
-
-## Information
+## General information
 
 * [Getting help](SUPPORT.md).
 * [Contributing](CONTRIBUTING.md).
 * [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
 
+## Related project
+
+* [BIOMASS](https://CRAN.R-project.org/package=BIOMASS)
+
+```
+A BibTeX entry for LaTeX users is
+
+  @Article{,
+    title = {BIOMASS : an {R} package for estimating above-ground biomass and its uncertainty in tropical forests},
+    volume = {8},
+    issn = {2041210X},
+    url = {http://doi.wiley.com/10.1111/2041-210X.12753},
+    doi = {10.1111/2041-210X.12753},
+    language = {en},
+    number = {9},
+    urldate = {2018-12-13},
+    journal = {Methods in Ecology and Evolution},
+    author = {Maxime Rejou-Mechain and Ariane Tanguy and Camille Piponiot and Jerome Chave and Bruno Herault},
+    editor = {Sarah Goslee},
+    year = {2017},
+  }
+```
