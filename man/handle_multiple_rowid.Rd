@@ -41,6 +41,6 @@ best \%>\%
   fixme_find_duplicated_rowid()
 }
 \seealso{
-Other internal functions that flag issues to be fixed: \code{\link{fixme_pull_failing_eqn}}
+Other internal functions that flag issues to be fixed: \code{\link{failing_eqn_id}}
 }
 \concept{internal functions that flag issues to be fixed}

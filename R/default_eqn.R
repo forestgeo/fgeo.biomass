@@ -25,7 +25,8 @@
 default_eqn <- function(data) {
   fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
 
-  good <- data[!data$equation_id %in% failing_eqn_id , allodb_eqn_crucial()]
+  good <- exclude_failing_equations(data)
+
   out <- good %>%
     dplyr::mutate(
       eqn_source = "default",
@@ -48,6 +49,11 @@ default_eqn <- function(data) {
     unique()
 
   new_eqn(dplyr::as_tibble(out))
+}
+
+exclude_failing_equations <- function(data) {
+  exclude_failing_eqn_id <- !data$equation_id %in% fgeo.biomass::failing_eqn_id
+  data[exclude_failing_eqn_id, allodb_eqn_crucial(), drop = FALSE]
 }
 
 new_eqn <- function(x) {

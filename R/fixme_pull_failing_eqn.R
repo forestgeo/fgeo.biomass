@@ -1,13 +1,21 @@
-#' Find failing equations, that can't be evaluated.
+#' Failing equations, that can't be evaluated.
 #'
 #' @param data An __allodb__ equations-table (e.g. allodb::master()).
 #' @family internal functions that flag issues to be fixed
 #'
 #' @return A character vector.
-#' @export
 #'
 #' @examples
 #' fixme_pull_failing_eqn(allodb::master())
+#'
+#' # We store the result for speed
+#' failing_eqn_id
+#'
+#' @name failing_eqn_id
+NULL
+
+#' @rdname failing_eqn_id
+#' @export
 fixme_pull_failing_eqn <- function(data) {
   funs <- c(eval_eqn, format_eqn)
   funs %>%

@@ -43,7 +43,7 @@
 #' allo_find(custom_eqn = as_eqn(your_equations))
 #' @family constructors
 allo_find <- function(dbh_species, custom_eqn = NULL) {
-  eqn <- custom_eqn %||% .default_eqn
+  eqn <- custom_eqn %||% default_eqn(allodb::master())
 
   eqn %>%
     abort_if_not_eqn() %>%
