@@ -150,20 +150,20 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">species &lt;-<span class="st"> </span>fgeo.biomass<span class="op">::</span>scbi_species</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">species <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(sp_or_latin), <span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">everything</a></span>())</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; # A tibble: 73 x 10</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;    sp    Latin Genus Species Family SpeciesID Authority IDLevel syn   subsp</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  1 acne  Acer… Acer  negundo Sapin…         1 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  2 acpl  Acer… Acer  platan… Sapin…         2 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  3 acru  Acer… Acer  rubrum  Sapin…         3 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  4 acsp  Acer… Acer  sp      Sapin…         4 ""        Multip… NA    NA   </span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  5 aial  Aila… Aila… altiss… Simar…         5 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  6 amar  Amel… Amel… arborea Rosac…         6 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  7 astr  Asim… Asim… triloba Annon…         7 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  8 beth  Berb… Berb… thunbe… Berbe…         8 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;  9 caca  Carp… Carp… caroli… Betul…         9 ""        species NA    NA   </span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; 10 caco  Cary… Carya cordif… Jugla…        10 ""        species NA    NA   </span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(sp_or_latin))</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; # A tibble: 73 x 2</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;    sp    Latin               </span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;               </span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  1 acne  Acer negundo        </span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  2 acpl  Acer platanoides    </span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  3 acru  Acer rubrum         </span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  4 acsp  Acer sp             </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  5 aial  Ailanthus altissima </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  6 amar  Amelanchier arborea </span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  7 astr  Asimina triloba     </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  8 beth  Berberis thunbergii </span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;  9 caca  Carpinus caroliniana</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; 10 caco  Carya cordiformis   </span></a>
 <a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; # … with 63 more rows</span></a></code></pre></div>
 <p>We can then add species’ Latin names to the census data by joining the <em>census</em> and <em>species</em> tables. We may do that with <code><a href="https://dplyr.tidyverse.org/reference/join.html">dplyr::left_join()</a></code> but <code><a href="reference/add_species.html">fgeo.biomass::add_species()</a></code> is more specialized.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">census_species &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span></a>
