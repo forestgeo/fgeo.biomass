@@ -25,13 +25,7 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/as_eqn.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/complement.html</loc>
-  </url>
-  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/default_eqn.html</loc>
-  </url>
-  <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/dot-default_eqn.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/failing_eqn_id.html</loc>
@@ -44,9 +38,6 @@
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/pull_failing_eqn.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/scbi.html</loc>

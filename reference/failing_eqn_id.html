@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Character vector giving <code>equation_id</code> of equations that can't be evaluated. — failing_eqn_id • fgeo.biomass</title>
+<title>Failing equations, that can't be evaluated. — failing_eqn_id • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Character vector giving <code>equation_id</code> of equations that can't be evaluated. — failing_eqn_id" />
+<meta property="og:title" content="Failing equations, that can't be evaluated. — failing_eqn_id" />
 
-<meta property="og:description" content="Output of failing_eqn_id() -- stored for speed." />
+<meta property="og:description" content="Failing equations, that can't be evaluated." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,31 +111,58 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Character vector giving <code>equation_id</code> of equations that can't be evaluated.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/data-internal.R'><code>R/data-internal.R</code></a></small>
+    <h1>Failing equations, that can't be evaluated.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/fixme_pull_failing_eqn.R'><code>R/fixme_pull_failing_eqn.R</code></a></small>
     <div class="hidden name"><code>failing_eqn_id.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Output of <code>failing_eqn_id()</code> -- stored for speed.</p>
+    <p>Failing equations, that can't be evaluated.</p>
     
     </div>
 
-        
+    <pre class="usage"><span class='fu'>fixme_pull_failing_eqn</span>(<span class='no'>data</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>An <strong>allodb</strong> equations-table (e.g. allodb::master()).</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A character vector.</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other internal objects that will be hidden or removed: <code><a href='dot-default_eqn.html'>.default_eqn</a></code>,
-  <code><a href='default_eqn.html'>default_eqn</a></code>, <code><a href='pull_failing_eqn.html'>pull_failing_eqn</a></code></p></div>
+    <div class='dont-index'><p>Other internal functions that flag issues to be fixed: <code><a href='handle_multiple_rowid.html'>handle_multiple_rowid</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>fixme_pull_failing_eqn</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>master</a></span>())</div><div class='output co'>#&gt;  [1] "76aa3c" "28dce6" "a1646f" "b61369" "5e2dea" "3cb95a" "c94845" "6b3b2a"
+#&gt;  [9] "b95baf" "e8f868" "b9b3b0" "e7bf91" "12104c" "014bb7" "604854" "a1cfac"
+#&gt; [17] "969226" "b30744" "998abf" "aeebe9" "2a6b9b" "7901c0" "a3a86f" "1f17bb"</div><div class='input'>
+<span class='co'># We store the result for speed</span>
+<span class='no'>failing_eqn_id</span></div><div class='output co'>#&gt;  [1] "76aa3c" "28dce6" "a1646f" "b61369" "5e2dea" "3cb95a" "c94845" "6b3b2a"
+#&gt;  [9] "b95baf" "e8f868" "b9b3b0" "e7bf91" "12104c" "014bb7" "604854" "a1cfac"
+#&gt; [17] "969226" "b30744" "998abf" "aeebe9" "2a6b9b" "7901c0" "a3a86f" "1f17bb"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
