@@ -160,6 +160,7 @@ elements on the right.</p></td>
     <pre class="examples"><div class='input'><span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>nest</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'>allo_order</span>()</div><div class='output co'>#&gt; # A tibble: 30,229 x 9
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     

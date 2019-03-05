@@ -151,38 +151,7 @@
   <span class='kw'>anatomic_relevance</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"total aboveground biomass"</span>)
 )
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'>as_eqn</span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div><div class='input'>
-<span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>
-<span class='no'>species</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>
-<span class='no'>dbh_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='add_species.html'>add_species</a></span>(
-  <span class='no'>census</span>, <span class='no'>species</span>,
-  <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
-)
-
-<span class='co'># Default equations</span>
-<span class='fu'><a href='allo_find.html'>allo_find</a></span>(<span class='no'>dbh_species</span>)</div><div class='output co'>#&gt; # A tibble: 5 x 2
-#&gt;   eqn_type       data                 
-#&gt;   &lt;chr&gt;          &lt;list&gt;               
-#&gt; 1 species        &lt;tibble [8,930 × 8]&gt; 
-#&gt; 2 genus          &lt;tibble [5,642 × 8]&gt; 
-#&gt; 3 mixed_hardwood &lt;tibble [5,516 × 8]&gt; 
-#&gt; 4 family         &lt;tibble [10,141 × 8]&gt;
-#&gt; 5 woody_species  &lt;tibble [0 × 8]&gt;     </div><div class='input'>
-<span class='co'># Custom equations</span>
-<span class='fu'><a href='allo_find.html'>allo_find</a></span>(<span class='no'>dbh_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'>as_eqn</span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; # A tibble: 1 x 2
-#&gt;   eqn_type       data            
-#&gt;   &lt;chr&gt;          &lt;list&gt;          
-#&gt; 1 mixed_hardwood &lt;tibble [3 × 8]&gt;</div><div class='input'>
-<span class='no'>dbh_species</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'>as_eqn</span>(<span class='no'>your_equations</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_order.html'>allo_order</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_evaluate.html'>allo_evaluate</a></span>()</div><div class='output co'>#&gt; # A tibble: 3 x 10
-#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source anatomic_releva…
-#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;           
-#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom     total abovegrou…
-#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom     total abovegrou…
-#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom     total abovegrou…
-#&gt; # … with 1 more variable: biomass &lt;dbl&gt;</div></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'>as_eqn</span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

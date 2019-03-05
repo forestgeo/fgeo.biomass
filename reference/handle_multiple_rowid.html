@@ -131,7 +131,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A dataframe as those created with <code><a href='allo_order.html'>allo_order()</a></code>.</p></td>
+      <td><p>A dataframe as those created with <code><a href='allo_find.html'>allo_find()</a></code>.</p></td>
     </tr>
     </table>
     
@@ -156,8 +156,7 @@ rowid value.</p></li>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>best</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_order.html'>allo_order</a></span>()
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()
 
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 1,809 x 10
@@ -179,31 +178,16 @@ rowid value.</p></li>
   <span class='fu'>fixme_drop_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 28,420 x 9
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
-#&gt;  1 family       1 scbi  lind…  27.9 f08fff      exp(… default   
-#&gt;  2 family       2 scbi  lind…  23.7 f08fff      exp(… default   
-#&gt;  3 family       3 scbi  lind…  22.2 f08fff      exp(… default   
-#&gt;  4 family       8 scbi  lind…  51.4 f08fff      exp(… default   
-#&gt;  5 family      13 scbi  lind…  15.4 f08fff      exp(… default   
-#&gt;  6 family      14 scbi  lind…  14.8 f08fff      exp(… default   
-#&gt;  7 family      15 scbi  lind…  15.5 f08fff      exp(… default   
-#&gt;  8 family      16 scbi  lind…  17.4 f08fff      exp(… default   
-#&gt;  9 family      17 scbi  lind…  68.2 f08fff      exp(… default   
-#&gt; 10 family      18 scbi  lind…  19.3 f08fff      exp(… default   
-#&gt; # … with 28,410 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
-<span class='no'>best</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_drop_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 28,420 x 9
-#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
-#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
-#&gt;  1 family       1 scbi  lind…  27.9 f08fff      exp(… default   
-#&gt;  2 family       2 scbi  lind…  23.7 f08fff      exp(… default   
-#&gt;  3 family       3 scbi  lind…  22.2 f08fff      exp(… default   
-#&gt;  4 family       8 scbi  lind…  51.4 f08fff      exp(… default   
-#&gt;  5 family      13 scbi  lind…  15.4 f08fff      exp(… default   
-#&gt;  6 family      14 scbi  lind…  14.8 f08fff      exp(… default   
-#&gt;  7 family      15 scbi  lind…  15.5 f08fff      exp(… default   
-#&gt;  8 family      16 scbi  lind…  17.4 f08fff      exp(… default   
-#&gt;  9 family      17 scbi  lind…  68.2 f08fff      exp(… default   
-#&gt; 10 family      18 scbi  lind…  19.3 f08fff      exp(… default   
+#&gt;  1 species      4 scbi  nyss… 135   8da09d      1.54… default   
+#&gt;  2 species     21 scbi  liri… 232.  34fe5a      1.02… default   
+#&gt;  3 species     29 scbi  acer… 326.  7c72ed      exp(… default   
+#&gt;  4 species     38 scbi  frax…  42.8 0edaff      0.16… default   
+#&gt;  5 species     72 scbi  acer… 289.  7c72ed      exp(… default   
+#&gt;  6 species     77 scbi  quer… 636.  07dba7      1.56… default   
+#&gt;  7 species     84 scbi  frax… 170.  0edaff      0.16… default   
+#&gt;  8 species     89 scbi  fagu…  27.2 74186d      2.03… default   
+#&gt;  9 species     95 scbi  quer… 520.  839012      2.46… default   
+#&gt; 10 species     98 scbi  acer… 134.  7c72ed      exp(… default   
 #&gt; # … with 28,410 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
 <span class='co'># Should return 0-rows</span>
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>

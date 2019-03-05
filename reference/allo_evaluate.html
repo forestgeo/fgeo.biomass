@@ -129,7 +129,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A dataframe as those created with <code><a href='allo_order.html'>allo_order()</a></code>.</p></td>
+      <td><p>A dataframe as those created with <code><a href='allo_find.html'>allo_find()</a></code>.</p></td>
     </tr>
     </table>
     
@@ -155,22 +155,21 @@
 #&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
 <span class='no'>best</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_order.html'>allo_order</a></span>()
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()
 
 <span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; # A tibble: 30,229 x 10
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
-#&gt;  1 family       1 scbi  lind…  27.9 f08fff      exp(… default   
-#&gt;  2 family       2 scbi  lind…  23.7 f08fff      exp(… default   
-#&gt;  3 family       3 scbi  lind…  22.2 f08fff      exp(… default   
-#&gt;  4 family       8 scbi  lind…  51.4 f08fff      exp(… default   
-#&gt;  5 family      13 scbi  lind…  15.4 f08fff      exp(… default   
-#&gt;  6 family      14 scbi  lind…  14.8 f08fff      exp(… default   
-#&gt;  7 family      15 scbi  lind…  15.5 f08fff      exp(… default   
-#&gt;  8 family      16 scbi  lind…  17.4 f08fff      exp(… default   
-#&gt;  9 family      17 scbi  lind…  68.2 f08fff      exp(… default   
-#&gt; 10 family      18 scbi  lind…  19.3 f08fff      exp(… default   
+#&gt;  1 species      4 scbi  nyss… 135   8da09d      1.54… default   
+#&gt;  2 species     21 scbi  liri… 232.  34fe5a      1.02… default   
+#&gt;  3 species     29 scbi  acer… 326.  7c72ed      exp(… default   
+#&gt;  4 species     38 scbi  frax…  42.8 0edaff      0.16… default   
+#&gt;  5 species     72 scbi  acer… 289.  7c72ed      exp(… default   
+#&gt;  6 species     77 scbi  quer… 636.  07dba7      1.56… default   
+#&gt;  7 species     79 scbi  tili… 475   3f99ba      1.44… default   
+#&gt;  8 species     79 scbi  tili… 475   76d19b      0.00… default   
+#&gt;  9 species     84 scbi  frax… 170.  0edaff      0.16… default   
+#&gt; 10 species     89 scbi  fagu…  27.2 74186d      2.03… default   
 #&gt; # … with 30,219 more rows, and 2 more variables: anatomic_relevance &lt;chr&gt;,
 #&gt; #   biomass &lt;dbl&gt;</div></pre>
   </div>
