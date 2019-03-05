@@ -157,7 +157,9 @@ and each equation from <strong>allodb</strong> -- so you can look it up on the d
 <span class='no'>single_best</span> <span class='kw'>&lt;-</span> <span class='no'>census</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='no'>species</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='handle_multiple_rowid.html'>fixme_drop_duplicated_rowid</a></span>()</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='input'>
+  <span class='fu'><a href='handle_multiple_rowid.html'>fixme_drop_duplicated_rowid</a></span>()</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   The input and output datasets have different number of rows:</span>
+#&gt; <span class='warning'>  * Input: 40283.</span>
+#&gt; <span class='warning'>  * Output: 30229.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 783 rows with duplicated `rowid` values.</span></div><div class='input'>
 <span class='fu'>add_equations</span>(<span class='no'>census</span>, <span class='no'>single_best</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = "rowid"</span></div><div class='output co'>#&gt; # A tibble: 40,283 x 23
 #&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
 #&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;

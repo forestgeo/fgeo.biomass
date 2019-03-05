@@ -193,22 +193,25 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">equations &lt;-<span class="st"> </span>census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_find.html">allo_find</a></span>()</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Joining, by = c("sp", "site")</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">equations</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; # A tibble: 30,229 x 9</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;  1 species      4 scbi  nyss… 135   8da09d      1.54… default   </span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;  2 species     21 scbi  liri… 232.  34fe5a      1.02… default   </span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;  3 species     29 scbi  acer… 326.  7c72ed      exp(… default   </span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;  4 species     38 scbi  frax…  42.8 0edaff      0.16… default   </span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;  5 species     72 scbi  acer… 289.  7c72ed      exp(… default   </span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;  6 species     77 scbi  quer… 636.  07dba7      1.56… default   </span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;  7 species     79 scbi  tili… 475   3f99ba      1.44… default   </span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;  8 species     79 scbi  tili… 475   76d19b      0.00… default   </span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;  9 species     84 scbi  frax… 170.  0edaff      0.16… default   </span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; 10 species     89 scbi  fagu…  27.2 74186d      2.03… default   </span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; # … with 30,219 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; Warning:   The input and output datasets have different number of rows:</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   * Input: 40283.</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   * Output: 30229.</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">equations</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; # A tibble: 30,229 x 9</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;  1 species      4 scbi  nyss… 135   8da09d      1.54… default   </span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;  2 species     21 scbi  liri… 232.  34fe5a      1.02… default   </span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;  3 species     29 scbi  acer… 326.  7c72ed      exp(… default   </span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;  4 species     38 scbi  frax…  42.8 0edaff      0.16… default   </span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;  5 species     72 scbi  acer… 289.  7c72ed      exp(… default   </span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;  6 species     77 scbi  quer… 636.  07dba7      1.56… default   </span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;  7 species     79 scbi  tili… 475   3f99ba      1.44… default   </span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;  8 species     79 scbi  tili… 475   76d19b      0.00… default   </span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt;  9 species     84 scbi  frax… 170.  0edaff      0.16… default   </span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; 10 species     89 scbi  fagu…  27.2 74186d      2.03… default   </span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; # … with 30,219 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</span></a></code></pre></div>
 <p>We may not have allometric equations form all species. Although the code will eventually fall back to more general equations, for now we just drop the rows that don’t match the available species for the specified site.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(census_species)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; [1] 40283</span></a>
@@ -320,27 +323,33 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <p>We can now use the argument <code>custom_eqn</code> to pass our custom equations to <code><a href="reference/allo_find.html">allo_find()</a></code>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="reference/allo_find.html">allo_find</a></span>(census_species, <span class="dt">custom_eqn =</span> <span class="kw"><a href="reference/as_eqn.html">as_eqn</a></span>(custom_equations))</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt; Joining, by = c("sp", "site")</span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; # A tibble: 3 x 9</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; # … with 1 more variable: anatomic_relevance &lt;chr&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; Warning:   The input and output datasets have different number of rows:</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt;   * Input: 40283.</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;   * Output: 3.</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt; # A tibble: 3 x 9</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt; # … with 1 more variable: anatomic_relevance &lt;chr&gt;</span></a></code></pre></div>
 <p>This is what the entire workflow looks like:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">census_species <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_find.html">allo_find</a></span>(<span class="dt">custom_eqn =</span> <span class="kw"><a href="reference/as_eqn.html">as_eqn</a></span>(custom_equations)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>()</a>
 <a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Joining, by = c("sp", "site")</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; Warning:   `biomass` values may be invalid.</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;   This is work in progress and we still don't handle units correctly.</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; # A tibble: 3 x 10</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; # … with 2 more variables: anatomic_relevance &lt;chr&gt;, biomass &lt;dbl&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; Warning:   The input and output datasets have different number of rows:</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;   * Input: 40283.</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;   * Output: 3.</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; Warning:   `biomass` values may be invalid.</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;   This is work in progress and we still don't handle units correctly.</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; # A tibble: 3 x 10</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt; # … with 2 more variables: anatomic_relevance &lt;chr&gt;, biomass &lt;dbl&gt;</span></a></code></pre></div>
 </div>
 <div id="issues" class="section level3">
 <h3 class="hasAnchor">
