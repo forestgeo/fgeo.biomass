@@ -25,7 +25,7 @@ Authors@R:
              role = c("aut", "rev"),
              email = "mcmahons@si.edu"),
       person(given = "Kristina",
-             family = "Teixeira",
+             family = "Anderson-Teixeira",
              role = c("aut", "rev"),
              email = "TeixeiraK@si.edu"),
       person(given = "CTFS-ForestGEO",
