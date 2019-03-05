@@ -381,13 +381,13 @@ Issues that result in invalid biomass:
 
 Issues that result in data loss:
 
-  - The output excludes equations that apply to only part of a tree –
+  - The output excludes equations that apply to only part of a tree
     instead of the whole tree
-    (e.g. <https://github.com/forestgeo/allodb/issues/63>,
+    (<https://github.com/forestgeo/allodb/issues/63>,
     <https://github.com/forestgeo/fgeo.biomass/issues/9>).
 
-  - We exclude equations from shrubs:
-    <https://github.com/forestgeo/allodb/issues/41>
+  - We exclude equations from shrubs
+    (<https://github.com/forestgeo/allodb/issues/41>).
 
 ### Enhancements
 
