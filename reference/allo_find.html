@@ -156,7 +156,7 @@ type.</p>
   <span class='no'>census</span>, <span class='no'>species</span>,
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
 )</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; # A tibble: 30,229 x 9
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; # A tibble: 30,229 x 9
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
 #&gt;  1 species      4 scbi  nyss… 135   8da09d      1.54… default   
@@ -186,14 +186,14 @@ type.</p>
 )
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; # A tibble: 3 x 9
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; # A tibble: 3 x 9
 #&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source anatomic_releva…
 #&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;           
 #&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom     total abovegrou…
 #&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom     total abovegrou…
 #&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom     total abovegrou…</div><div class='input'>
 <span class='no'>census_species</span> <span class='kw'>%&gt;%</span>
-<span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; # A tibble: 3 x 9
+<span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; # A tibble: 3 x 9
 #&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source anatomic_releva…
 #&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;           
 #&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom     total abovegrou…
