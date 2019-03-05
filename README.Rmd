@@ -66,7 +66,7 @@ The species' Latin names are recorded in _species_ tables.
 species <- fgeo.biomass::scbi_species
 
 species %>% 
-  select(matches(sp_or_latin), everything())
+  select(matches(sp_or_latin))
 ```
 
 We can then add species' Latin names to the census data by joining the _census_ and _species_ tables. We may do that with `dplyr::left_join()` but `fgeo.biomass::add_species()` is more specialized.

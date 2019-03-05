@@ -102,20 +102,20 @@ The species’ Latin names are recorded in *species* tables.
 species <- fgeo.biomass::scbi_species
 
 species %>% 
-  select(matches(sp_or_latin), everything())
-#> # A tibble: 73 x 10
-#>    sp    Latin Genus Species Family SpeciesID Authority IDLevel syn   subsp
-#>    <chr> <chr> <chr> <chr>   <chr>      <int> <chr>     <chr>   <lgl> <lgl>
-#>  1 acne  Acer~ Acer  negundo Sapin~         1 ""        species NA    NA   
-#>  2 acpl  Acer~ Acer  platan~ Sapin~         2 ""        species NA    NA   
-#>  3 acru  Acer~ Acer  rubrum  Sapin~         3 ""        species NA    NA   
-#>  4 acsp  Acer~ Acer  sp      Sapin~         4 ""        Multip~ NA    NA   
-#>  5 aial  Aila~ Aila~ altiss~ Simar~         5 ""        species NA    NA   
-#>  6 amar  Amel~ Amel~ arborea Rosac~         6 ""        species NA    NA   
-#>  7 astr  Asim~ Asim~ triloba Annon~         7 ""        species NA    NA   
-#>  8 beth  Berb~ Berb~ thunbe~ Berbe~         8 ""        species NA    NA   
-#>  9 caca  Carp~ Carp~ caroli~ Betul~         9 ""        species NA    NA   
-#> 10 caco  Cary~ Carya cordif~ Jugla~        10 ""        species NA    NA   
+  select(matches(sp_or_latin))
+#> # A tibble: 73 x 2
+#>    sp    Latin               
+#>    <chr> <chr>               
+#>  1 acne  Acer negundo        
+#>  2 acpl  Acer platanoides    
+#>  3 acru  Acer rubrum         
+#>  4 acsp  Acer sp             
+#>  5 aial  Ailanthus altissima 
+#>  6 amar  Amelanchier arborea 
+#>  7 astr  Asimina triloba     
+#>  8 beth  Berberis thunbergii 
+#>  9 caca  Carpinus caroliniana
+#> 10 caco  Carya cordiformis   
 #> # ... with 63 more rows
 ```
 
