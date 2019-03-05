@@ -54,11 +54,23 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
 
   join_vars <- c("sp", "site")
   inform(glue("Joining, by = {rlang::expr_text(join_vars)}"))
-  eqn_ %>%
+  out <- eqn_ %>%
     dplyr::mutate(
       data = purrr::map(.data$data, ~get_this_eqn(.x, dbh_species, join_vars))
     ) %>%
     tidyr::unnest()
+
+  n_in <- nrow(dbh_species)
+  n_out <- nrow(out)
+  if (!identical(n_in, n_out)) {
+    warn(glue("
+      The input and output datasets have different number of rows:
+      * Input: {n_in}.
+      * Output: {n_out}.
+    "))
+  }
+
+  out
 }
 
 abort_if_not_eqn <- function(custom_eqn) {
