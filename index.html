@@ -252,23 +252,25 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <p>For the rows for which an equation was found in <strong>allodb</strong>, we can now calculate biomass. <code><a href="reference/allo_evaluate.html">allo_evaluate()</a></code> evaluates each allometric equation by replacing the literal string “dbh” with the corresponding value for each row in the <code>dbh</code> column, then doing the actual computation and storing the result in the the new <code>biomass</code> column.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">with_biomass &lt;-<span class="st"> </span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>()</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(eqn, dbh, biomass)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; # A tibble: 30,229 x 3</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;    eqn                             dbh biomass</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;    &lt;chr&gt;                         &lt;dbl&gt;   &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  1 1.5416 * (dbh^2)^2.7818       135   1.10e12</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  2 1.0259 * (dbh^2.7324)         232.  2.99e 6</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  3 exp(4.5893 + 2.43 * log(dbh)) 326.  1.26e 8</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  4 0.1634 * (dbh^2.348)           42.8 1.11e 3</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  5 exp(4.5893 + 2.43 * log(dbh)) 289.  9.38e 7</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;  6 1.5647 * (dbh^2.6887)         636.  5.41e 7</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt;  7 1.4416 * (dbh^2.7324)         475   2.97e 7</span></a>
-<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;  8 0.004884 * (dbh^2.094)        475   1.97e 3</span></a>
-<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt;  9 0.1634 * (dbh^2.348)          170.  2.81e 4</span></a>
-<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; 10 2.0394 * (dbh^2.5715)          27.2 9.97e 3</span></a>
-<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; # … with 30,219 more rows</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; Warning:   `biomass` values may be invalid.</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;   This is work in progress and we still don't handle units correctly.</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(eqn, dbh, biomass)</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; # A tibble: 30,229 x 3</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;    eqn                             dbh biomass</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;    &lt;chr&gt;                         &lt;dbl&gt;   &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  1 1.5416 * (dbh^2)^2.7818       135   1.10e12</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  2 1.0259 * (dbh^2.7324)         232.  2.99e 6</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  3 exp(4.5893 + 2.43 * log(dbh)) 326.  1.26e 8</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;  4 0.1634 * (dbh^2.348)           42.8 1.11e 3</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt;  5 exp(4.5893 + 2.43 * log(dbh)) 289.  9.38e 7</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;  6 1.5647 * (dbh^2.6887)         636.  5.41e 7</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt;  7 1.4416 * (dbh^2.7324)         475   2.97e 7</span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt;  8 0.004884 * (dbh^2.094)        475   1.97e 3</span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt;  9 0.1634 * (dbh^2.348)          170.  2.81e 4</span></a>
+<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="co">#&gt; 10 2.0394 * (dbh^2.5715)          27.2 9.97e 3</span></a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="co">#&gt; # … with 30,219 more rows</span></a></code></pre></div>
 <p>Commonly we would further summarize the result. For that you can use the <strong>dplyr</strong> package or any general purpose tool. For example, this summary gives the total biomass for each species in descending order.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(sp) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -326,13 +328,15 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">census_species <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_find.html">allo_find</a></span>(<span class="dt">custom_eqn =</span> <span class="kw"><a href="reference/as_eqn.html">as_eqn</a></span>(custom_equations)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>()</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; # A tibble: 3 x 10</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom    </span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; # … with 2 more variables: anatomic_relevance &lt;chr&gt;, biomass &lt;dbl&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Warning:   `biomass` values may be invalid.</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;   This is work in progress and we still don't handle units correctly.</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; # A tibble: 3 x 10</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom    </span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt; # … with 2 more variables: anatomic_relevance &lt;chr&gt;, biomass &lt;dbl&gt;</span></a></code></pre></div>
 </div>
 <div id="issues" class="section level3">
 <h3 class="hasAnchor">
