@@ -3,13 +3,6 @@ context("eval_eqn.R")
 library(purrr)
 library(dplyr)
 
-test_that("bad equations haven't changed", {
-  expect_known_output(
-    failing_eqn_id, "failing_eqn_id",
-    print = TRUE, overwrite = FALSE
-  )
-})
-
 test_that("FIXME: Problems in equations (#54)", {
   error_msg <- some_error(allodb::master(), eval_eqn) %>%
     discard(is.null) %>%

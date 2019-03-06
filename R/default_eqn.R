@@ -66,8 +66,10 @@ default_eqn <- function(data) {
 #' @examples
 #' fixme_exclude_failing_equations(allodb::master())
 fixme_exclude_failing_equations <- function(data) {
-  exclude_failing_eqn_id <- !data$equation_id %in% fgeo.biomass::failing_eqn_id
+  exclude_failing_eqn_id <-
+    !data$equation_id %in% fixme_pull_failing_eqn(allodb::master())
   out <- data[exclude_failing_eqn_id, allodb_eqn_crucial(), drop = FALSE]
+
   warn_dropping_failing_equations(data, out)
   out
 }
@@ -77,7 +79,7 @@ warn_dropping_failing_equations <- function(data, out) {
   warn(
     glue(
       "Dropping {n_drop} equations that can't be evaluated.
-      Identify failing equations with `fgeo.biomass::failing_eqn_id`"
+      Identify failing equations with `fixme_pull_failing_eqn(allodb::master())`"
     )
   )
 }
