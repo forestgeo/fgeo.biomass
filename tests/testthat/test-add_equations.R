@@ -2,9 +2,8 @@ context("add_equations")
 
 census <- fgeo.biomass::scbi_tree1
 
-single_best <- census %>%
-  add_species(fgeo.biomass::scbi_species, site = "scbi") %>%
-  allo_find()
+single_best <- add_species(census, fgeo.biomass::scbi_species, site = "scbi")
+single_best <- suppressWarnings(allo_find(single_best))
 single_best <- suppressWarnings(fixme_drop_duplicated_rowid(single_best))
 
 test_that("handles census with existing `rowid`", {

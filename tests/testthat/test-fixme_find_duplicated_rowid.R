@@ -6,9 +6,9 @@ test_that("errs with informative message", {
 })
 
 test_that("fixme_drop_duplicated_rowid has no rowis found by fixme_find_*", {
-  best <- fgeo.biomass::scbi_tree1 %>%
-    add_species(fgeo.biomass::scbi_species, "scbi") %>%
-    allo_find()
+  cns_sp <- fgeo.biomass::scbi_tree1 %>%
+    add_species(fgeo.biomass::scbi_species, "scbi")
+  best <- suppressWarnings(allo_find(cns_sp))
 
   pruned <- expect_warning(
     fixme_drop_duplicated_rowid(best),
