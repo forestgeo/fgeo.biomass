@@ -228,6 +228,7 @@ storing the result in the the new `biomass` column.
 ``` r
 with_biomass <- equations %>% 
   allo_evaluate()
+#> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
 #> Warning:   `biomass` values may be invalid.
 #>   This is work in progress and we still don't handle units correctly.
 
@@ -331,6 +332,7 @@ census_species %>%
 #> Warning:   The input and output datasets have different number of rows:
 #>   * Input: 40283.
 #>   * Output: 3.
+#> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
 #> Warning:   `biomass` values may be invalid.
 #>   This is work in progress and we still don't handle units correctly.
 #> # A tibble: 3 x 10
