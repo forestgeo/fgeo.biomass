@@ -1,5 +1,27 @@
 context("allo_find")
 
+test_that("allo_find errs if custom_eqn is not created with as_eqn", {
+  census <- fgeo.biomass::scbi_tree1
+  species <- fgeo.biomass::scbi_species
+  census_species <- add_species(
+    census, species,
+    site = "scbi"
+  )
+  your_equations <- tibble::tibble(
+    equation_id = c("000001"),
+    site = c("scbi"),
+    sp = c("paulownia tomentosa"),
+    eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
+    eqn_type = c("mixed_hardwood"),
+    anatomic_relevance = c("total aboveground biomass")
+  )
+
+  expect_error(
+    allo_find(custom_eqn = your_equations),
+    "must be of class 'eqn'"
+  )
+})
+
 test_that("allo_find informs joining vars and warns dangers", {
   census <- fgeo.biomass::scbi_tree1
   species <- fgeo.biomass::scbi_species
