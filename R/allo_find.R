@@ -47,13 +47,16 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
 
   abort_if_not_eqn(eqn)
 
-  eqn_ <- purrr::modify_at(eqn, c("dbh_unit", "bms_unit"), fixme_units)
-
-  warn_if_dropping_invalid_units(eqn_)
-  eqn_ <- dplyr::filter(eqn_, !"FIXME" %in% .data$dbh_unit)
-  eqn_ <- dplyr::filter(eqn_, !"FIXME" %in% .data$bms_unit)
-
   eqn_ <- eqn %>%
+    purrr::modify_at(c("dbh_unit", "bms_unit"), fixme_units) %>%
+
+    warn_if_dropping_invalid_units() %>%
+    dplyr::filter(!"FIXME" %in% .data$dbh_unit) %>%
+    dplyr::filter(!"FIXME" %in% .data$bms_unit) %>%
+
+    # FIXME: Warn that these rows are being dropped
+    # FIXME: Should instead be replaced with more general equations
+    # (https://github.com/forestgeo/allodb/issues/72)
     dplyr::filter(!is.na(.data$eqn_type)) %>%
     # FIXME: Do we need to group at all?
     dplyr::group_by(.data$eqn_type) %>%
@@ -61,14 +64,14 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
 
   join_vars <- c("sp", "site")
   inform(glue("Joining, by = {rlang::expr_text(join_vars)}"))
-  out <- eqn_ %>%
+  result <- eqn_ %>%
     dplyr::mutate(
       data = purrr::map(.data$data, ~ get_this_eqn(.x, dbh_species, join_vars))
     ) %>%
     tidyr::unnest()
 
   n_in <- nrow(dbh_species)
-  n_out <- nrow(out)
+  n_out <- nrow(result)
   if (!identical(n_in, n_out)) {
     warn(glue("
       The input and output datasets have different number of rows:
@@ -77,7 +80,24 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
     "))
   }
 
-  out
+  safe_convert_units <- purrr::safely(
+    measurements::conv_unit, otherwise = NA_real_
+  )
+  dbh_converted <- result %>%
+    dplyr::transmute(x = .data$dbh, from = "cm", to = .data$dbh_unit) %>%
+    purrr::pmap(safe_convert_units) %>%
+    purrr::transpose() %>%
+    purrr::simplify_all() %>%
+    purrr::pluck("result")
+
+  result$dbh <- dbh_converted
+
+  warn(
+    glue(
+      "Dropping {sum(is.na(dbh_converted))} rows where units can't be converted"
+    )
+  )
+  dplyr::filter(result, !is.na(.data$dbh))
 }
 
 warn_if_dropping_invalid_units <- function(x) {
