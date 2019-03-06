@@ -24,6 +24,7 @@ failing_eqn_id
 
 }
 \seealso{
-Other internal functions that flag issues to be fixed: \code{\link{handle_multiple_rowid}}
+Other internal functions that flag issues to be fixed: \code{\link{fixme_exclude_failing_equations}},
+  \code{\link{handle_multiple_rowid}}
 }
 \concept{internal functions that flag issues to be fixed}

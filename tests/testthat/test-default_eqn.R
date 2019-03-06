@@ -1,7 +1,11 @@
 context("default_eqn")
 
-test_that("outputs the expected data structure", {
-  out <- default_eqn(allodb::master())
+test_that("default_eqn warns that drops failing equations", {
+  out <- expect_warning(
+    default_eqn(allodb::master()),
+    "Dropping.*equations"
+  )
+
   nms <- c("equation_id",
       "site",
       "sp",
@@ -12,3 +16,4 @@ test_that("outputs the expected data structure", {
     )
   expect_named(out, nms)
 })
+

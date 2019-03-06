@@ -159,6 +159,8 @@ site.
 ``` r
 equations <- census_species %>% 
   allo_find()
+#> Warning: Dropping 58 equations that can't be evaluated.
+#> Identify failing equations with `fgeo.biomass::failing_eqn_id`
 #> Joining, by = c("sp", "site")
 #> Warning:   The input and output datasets have different number of rows:
 #>   * Input: 40283.
@@ -229,8 +231,8 @@ storing the result in the the new `biomass` column.
 with_biomass <- equations %>% 
   allo_evaluate()
 #> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
-#> Warning:   `biomass` values may be invalid.
-#>   This is work in progress and we still don't handle units correctly.
+#> Warning: `biomass` values may be invalid.
+#> This is work in progress and we still don't handle units correctly.
 
 with_biomass %>% 
   select(eqn, dbh, biomass)
@@ -333,8 +335,8 @@ census_species %>%
 #>   * Input: 40283.
 #>   * Output: 3.
 #> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
-#> Warning:   `biomass` values may be invalid.
-#>   This is work in progress and we still don't handle units correctly.
+#> Warning: `biomass` values may be invalid.
+#> This is work in progress and we still don't handle units correctly.
 #> # A tibble: 3 x 10
 #>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     

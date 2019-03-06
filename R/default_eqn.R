@@ -25,7 +25,7 @@
 default_eqn <- function(data) {
   fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
 
-  good <- exclude_failing_equations(data)
+  good <- fixme_exclude_failing_equations(data)
 
   out <- good %>%
     dplyr::mutate(
@@ -51,9 +51,35 @@ default_eqn <- function(data) {
   new_eqn(dplyr::as_tibble(out))
 }
 
-exclude_failing_equations <- function(data) {
+
+#' Exclude equations that can't be evaluated.
+#'
+#' This function tries to evaluate __allodb__ equations and excludes the ones
+#' that err.
+#'
+#' @param data An equations dataframe, e.g. `allodb::master()`.
+#'
+#' @return A dataframe with all equations that can be successfully evaluated.
+#' @export
+#' @family internal functions that flag issues to be fixed
+#'
+#' @examples
+#' fixme_exclude_failing_equations(allodb::master())
+fixme_exclude_failing_equations <- function(data) {
   exclude_failing_eqn_id <- !data$equation_id %in% fgeo.biomass::failing_eqn_id
-  data[exclude_failing_eqn_id, allodb_eqn_crucial(), drop = FALSE]
+  out <- data[exclude_failing_eqn_id, allodb_eqn_crucial(), drop = FALSE]
+  warn_dropping_failing_equations(data, out)
+  out
+}
+
+warn_dropping_failing_equations <- function(data, out) {
+  n_drop <- nrow(data) - nrow(out)
+  warn(
+    glue(
+      "Dropping {n_drop} equations that can't be evaluated.
+      Identify failing equations with `fgeo.biomass::failing_eqn_id`"
+    )
+  )
 }
 
 new_eqn <- function(x) {
