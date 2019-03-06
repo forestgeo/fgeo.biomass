@@ -89,15 +89,3 @@ get_this_eqn <- function(.type, dbh_species, join_vars) {
   dplyr::inner_join(dbh_species, .type, by = join_vars) %>%
     dplyr::filter(!is.na(.data$dbh), !is.na(.data$eqn))
 }
-
-add_eqn_type <- function(type_data) {
-  types <- type_data$eqn_type
-  dplyr::mutate(
-    type_data,
-    data = purrr::map2(
-      .data$data, types,
-      ~ tibble::add_column(.x, eqn_type = .y)
-    )
-  )
-}
-
