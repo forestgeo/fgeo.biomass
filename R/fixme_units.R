@@ -20,6 +20,10 @@
 #'   fixme_units(allodb::equations$dbh_units_original)
 #' )
 #'
+#' unique(
+#'   fixme_units(allodb::equations$biomass_units_original)
+#' )
+#'
 #' # All valid unites
 #' valid_units()
 fixme_units <- function(x) {
@@ -35,10 +39,15 @@ valid_units <- function() {
 fixme_units_one <- function(x) {
   dplyr::case_when(
     is_valid_unit(x) ~ identity(x),
+
+    identical(x, "gm")   ~ "g",
     identical(x, "in")   ~ "inch",
     identical(x, "in^2") ~ "inch2",
     identical(x, "cm^2") ~ "cm2",
-    TRUE ~ "FIXME: Unknown unit"
+    identical(x, "lb") ~ "lbs",
+    identical(x, "t") ~ "metric_ton",
+
+    TRUE ~ "FIXME"
   )
 }
 

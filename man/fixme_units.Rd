@@ -40,6 +40,10 @@ unique(
   fixme_units(allodb::equations$dbh_units_original)
 )
 
+unique(
+  fixme_units(allodb::equations$biomass_units_original)
+)
+
 # All valid unites
 valid_units()
 }

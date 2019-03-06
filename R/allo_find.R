@@ -45,8 +45,15 @@
 allo_find <- function(dbh_species, custom_eqn = NULL) {
   eqn <- custom_eqn %||% default_eqn(allodb::master())
 
+  abort_if_not_eqn(eqn)
+
+  eqn_ <- purrr::modify_at(eqn, c("dbh_unit", "bms_unit"), fixme_units)
+
+  warn_if_dropping_invalid_units(eqn_)
+  eqn_ <- dplyr::filter(eqn_, !"FIXME" %in% .data$dbh_unit)
+  eqn_ <- dplyr::filter(eqn_, !"FIXME" %in% .data$bms_unit)
+
   eqn_ <- eqn %>%
-    abort_if_not_eqn() %>%
     dplyr::filter(!is.na(.data$eqn_type)) %>%
     # FIXME: Do we need to group at all?
     dplyr::group_by(.data$eqn_type) %>%
@@ -56,7 +63,7 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   inform(glue("Joining, by = {rlang::expr_text(join_vars)}"))
   out <- eqn_ %>%
     dplyr::mutate(
-      data = purrr::map(.data$data, ~get_this_eqn(.x, dbh_species, join_vars))
+      data = purrr::map(.data$data, ~ get_this_eqn(.x, dbh_species, join_vars))
     ) %>%
     tidyr::unnest()
 
@@ -71,6 +78,15 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   }
 
   out
+}
+
+warn_if_dropping_invalid_units <- function(x) {
+  invalid_dbh <- sum(x$dbh_unit %in% "FIXME")
+  invalid_bms <- sum(x$bms_unit %in% "FIXME")
+  if (invalid_dbh) warn("Dropping {invalid_dbh} rows with invalid dbh units")
+  if (invalid_bms) warn("Dropping {invalid_bms} rows with invalid dbh units")
+
+  invisible(x)
 }
 
 abort_if_not_eqn <- function(custom_eqn) {
