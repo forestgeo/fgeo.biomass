@@ -12,7 +12,9 @@ test_that("default_eqn warns that drops failing equations", {
       "eqn",
       "eqn_source",
       "eqn_type",
-      "anatomic_relevance"
+      "anatomic_relevance",
+       "dbh_unit",
+       "bms_unit"
     )
   expect_named(out, nms)
 })

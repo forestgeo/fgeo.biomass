@@ -25,19 +25,22 @@
 default_eqn <- function(data) {
   fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
 
-  good <- fixme_exclude_failing_equations(data)
+  crucial_cols <- data[ , allodb_eqn_crucial(), drop = TRUE]
+  passing <- fixme_exclude_failing_equations(crucial_cols)
 
-  out <- good %>%
+  out <- passing %>%
     dplyr::mutate(
       eqn_source = "default",
-      eqn = format_equations(good$equation_allometry),
+      eqn = format_equations(passing$equation_allometry),
       allometry_specificity = gsub(" ", "_", .data$allometry_specificity),
       equation_allometry = NULL,
       anatomic_relevance = .data$dependent_variable_biomass_component
     ) %>%
     dplyr::rename(
       sp = .data$species,
-      eqn_type = .data$allometry_specificity
+      eqn_type = .data$allometry_specificity,
+      dbh_unit = .data$dbh_units_original,
+      bms_unit = .data$biomass_units_original
     ) %>%
     # Recover missing values represented as the literal "NA"
     purrr::modify_if(is.character, readr::parse_character) %>%
@@ -68,7 +71,7 @@ default_eqn <- function(data) {
 fixme_exclude_failing_equations <- function(data) {
   exclude_failing_eqn_id <-
     !data$equation_id %in% fixme_pull_failing_eqn(allodb::master())
-  out <- data[exclude_failing_eqn_id, allodb_eqn_crucial(), drop = FALSE]
+  out <- data[exclude_failing_eqn_id, , drop = FALSE]
 
   warn_dropping_failing_equations(data, out)
   out
@@ -100,7 +103,9 @@ bmss_default_vars <- function() {
     "eqn",
     "eqn_source",
     "eqn_type",
-    "anatomic_relevance"
+    "anatomic_relevance",
+    "dbh_unit",
+    "bms_unit"
   )
 }
 
