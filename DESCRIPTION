@@ -51,7 +51,8 @@ Imports:
     rlang (>= 0.3.1),
     stats,
     tibble (>= 2.0.1),
-    tidyr (>= 0.8.2)
+    tidyr (>= 0.8.2),
+    measurements
 Suggests: 
     covr (>= 3.2.1),
     spelling (>= 2.0),

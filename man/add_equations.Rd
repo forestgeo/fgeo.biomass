@@ -32,6 +32,7 @@ add_equations(census, single_best)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{allo_evaluate}},
-  \code{\link{allo_find}}, \code{\link{allo_lookup}}
+  \code{\link{allo_find}}, \code{\link{allo_lookup}},
+  \code{\link{fixme_units}}
 }
 \concept{functions to manipulate equations}
