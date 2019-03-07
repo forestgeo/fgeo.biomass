@@ -51,27 +51,10 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   result <- join_dbh_species_with_eqn(dbh_species, eqn)
   warn_if_dropped_rows_not_matched_with_equations(dbh_species, result)
 
-  safe_convert_units <- purrr::safely(
-    measurements::conv_unit, otherwise = NA_real_
-  )
-  dbh_converted <- result %>%
-    dplyr::transmute(x = .data$dbh, from = "cm", to = .data$dbh_unit) %>%
-    purrr::pmap(safe_convert_units) %>%
-    purrr::transpose() %>%
-    purrr::simplify_all() %>%
-    purrr::pluck("result")
 
-  result$dbh <- dbh_converted
 
-  if (sum(dbh_converted) > 0) {
-    warn(
-      glue(
-        "Dropping {sum(is.na(dbh_converted))} rows where units can't be converted"
-      )
-    )
-  }
 
-  dplyr::filter(result, !is.na(.data$dbh))
+  convert_input_units(result)
 }
 
 abort_if_not_eqn <- function(custom_eqn) {
@@ -135,4 +118,26 @@ warn_if_dropped_rows_not_matched_with_equations <- function(input, output) {
   }
 
   invisible(input)
+}
+
+convert_input_units <- function(data) {
+  safe_convert_units <- purrr::safely(
+    measurements::conv_unit, otherwise = NA_real_
+  )
+  data$dbh <- data %>%
+    dplyr::transmute(x = .data$dbh, from = "cm", to = .data$dbh_unit) %>%
+    purrr::pmap(safe_convert_units) %>%
+    purrr::transpose() %>%
+    purrr::simplify_all() %>%
+    purrr::pluck("result")
+
+  if (sum(is.na(data$dbh)) > 0) {
+    warn(
+      glue(
+        "Dropping {sum(is.na(data$dbh))} rows where units can't be converted"
+      )
+    )
+  }
+
+  data[!is.na(data$dbh), , drop = FALSE]
 }

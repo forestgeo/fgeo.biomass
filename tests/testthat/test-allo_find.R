@@ -40,3 +40,28 @@ test_that("allo_find informs joining vars and warns dangers", {
   expect_equal(out, tidyr::unnest(out))
 })
 
+test_that("allo_find warns if `dbh_units` can't be converted", {
+  census <- fgeo.biomass::scbi_tree1[1:30, ]
+  species <- fgeo.biomass::scbi_species
+  census_species <- add_species(
+    census, species,
+    site = "scbi"
+  )
+
+  your_equations <- tibble::tibble(
+    equation_id = c("000001"),
+    site = c("scbi"),
+    sp = c("lindera benzoin"),
+    # Watning: Fake!
+    eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
+    eqn_type = c("mixed_hardwood"),
+    anatomic_relevance = c("total aboveground biomass"),
+    dbh_unit = "BAD",
+    bms_unit = "g"
+  )
+
+  expect_warning(
+    allo_find(census_species, custom_eqn = as_eqn(your_equations)),
+    "units can't be converted"
+  )
+})
