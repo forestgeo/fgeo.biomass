@@ -19,3 +19,11 @@ test_that("default_eqn warns that drops failing equations", {
   expect_named(out, nms)
 })
 
+test_that("default_eqn has no unknown unit", {
+  has_fixme <- suppressWarnings(default_eqn(allodb::master())) %>%
+    dplyr::select(dplyr::matches("unit")) %>%
+    purrr::map_lgl(~ "FIXME" %in% .x) %>%
+    any()
+
+  expect_false(has_fixme)
+})

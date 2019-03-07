@@ -1,6 +1,10 @@
+# Extract slowest code and memoise it
 default_eqn_impl <- function(data) {
-  passing <- pick_useful_cols_rows(data)
-  out <- modify_default_eqn(passing)
+  out <- data %>%
+    pick_useful_cols_rows() %>%
+    purrr::modify_at(c("dbh_unit", "bms_unit"), fixme_units) %>%
+    modify_default_eqn()
+
   new_eqn(dplyr::as_tibble(out))
 }
 default_eqn_memoised <- memoise::memoise(default_eqn_impl)

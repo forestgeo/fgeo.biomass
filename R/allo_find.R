@@ -51,12 +51,6 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   abort_if_not_eqn(eqn)
 
   eqn_ <- eqn %>%
-  #   purrr::modify_at(c("dbh_unit", "bms_unit"), fixme_units) %>%
-
-    warn_if_dropping_invalid_units() %>%
-    dplyr::filter(!"FIXME" %in% .data$dbh_unit) %>%
-    dplyr::filter(!"FIXME" %in% .data$bms_unit) %>%
-
     # FIXME: Warn that these rows are being dropped
     # FIXME: Should instead be replaced with more general equations
     # (https://github.com/forestgeo/allodb/issues/72)
@@ -104,15 +98,6 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   }
 
   dplyr::filter(result, !is.na(.data$dbh))
-}
-
-warn_if_dropping_invalid_units <- function(x) {
-  invalid_dbh <- sum(x$dbh_unit %in% "FIXME")
-  invalid_bms <- sum(x$bms_unit %in% "FIXME")
-  if (invalid_dbh) warn("Dropping {invalid_dbh} rows with invalid dbh units")
-  if (invalid_bms) warn("Dropping {invalid_bms} rows with invalid dbh units")
-
-  invisible(x)
 }
 
 abort_if_not_eqn <- function(custom_eqn) {
