@@ -30,3 +30,4 @@ convert_units(c(1, 10), from = "cm", to = c("m", "bad"))
 # Errs
 try(measurements::conv_unit(c(1, 10), from = "cm", to = c("m", "bad")))
 }
+\concept{helpers}

@@ -1,5 +1,19 @@
 context("allo_find")
 
+test_that("allo_find informs that it converts `dbh` as in `dbh_unit`", {
+  census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
+  species <- fgeo.biomass::scbi_species
+  census_species <- add_species(
+    census, species,
+    site = "scbi"
+  )
+
+  expect_message(
+    suppressWarnings(allo_find(census_species)),
+    "Converting `dbh` based on `dbh_unit`"
+  )
+})
+
 test_that("allo_find errs if custom_eqn is not created with as_eqn", {
   census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
   species <- fgeo.biomass::scbi_species

@@ -51,6 +51,7 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   result <- join_dbh_species_with_eqn(dbh_species, eqn)
   warn_if_dropped_rows_not_matched_with_equations(dbh_species, result)
 
+  inform("Converting `dbh` based on `dbh_unit`.")
   result$dbh <- convert_units(
     result$dbh, from = "cm", to = result$dbh_unit
   )
@@ -64,17 +65,6 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   }
   result[!is.na(result$dbh), , drop = FALSE]
 }
-
-
-
-
-
-
-
-
-
-
-
 
 abort_if_not_eqn <- function(custom_eqn) {
   if (!inherits(custom_eqn, "eqn")) {
