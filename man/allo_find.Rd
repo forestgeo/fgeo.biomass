@@ -19,7 +19,7 @@ type.
 Get default equations of each type.
 }
 \examples{
-census <- fgeo.biomass::scbi_tree1
+census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
 species <- fgeo.biomass::scbi_species
 census_species <- add_species(
   census, species,
@@ -38,10 +38,13 @@ try(as_eqn(data.frame(1)))
 your_equations <- tibble::tibble(
   equation_id = c("000001"),
   site = c("scbi"),
-  sp = c("paulownia tomentosa"),
+  sp = c("tilia americana"),
+  # Watning: Fake!
   eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
   eqn_type = c("mixed_hardwood"),
-  anatomic_relevance = c("total aboveground biomass")
+  anatomic_relevance = c("total aboveground biomass"),
+ dbh_unit = "cm",
+ bms_unit = "g"
 )
 
 class(as_eqn(your_equations))

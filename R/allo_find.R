@@ -29,10 +29,13 @@
 #' your_equations <- tibble::tibble(
 #'   equation_id = c("000001"),
 #'   site = c("scbi"),
-#'   sp = c("paulownia tomentosa"),
+#'   sp = c("tilia americana"),
+#'   # Watning: Fake!
 #'   eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
 #'   eqn_type = c("mixed_hardwood"),
-#'   anatomic_relevance = c("total aboveground biomass")
+#'   anatomic_relevance = c("total aboveground biomass"),
+#'  dbh_unit = "cm",
+#'  bms_unit = "g"
 #' )
 #'
 #' class(as_eqn(your_equations))
@@ -48,7 +51,7 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   abort_if_not_eqn(eqn)
 
   eqn_ <- eqn %>%
-    purrr::modify_at(c("dbh_unit", "bms_unit"), fixme_units) %>%
+  #   purrr::modify_at(c("dbh_unit", "bms_unit"), fixme_units) %>%
 
     warn_if_dropping_invalid_units() %>%
     dplyr::filter(!"FIXME" %in% .data$dbh_unit) %>%

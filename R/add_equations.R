@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' census <- fgeo.biomass::scbi_tree1
+#' census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
 #' species <- fgeo.biomass::scbi_species
 #'
 #' single_best <- census %>%
