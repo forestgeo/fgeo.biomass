@@ -47,35 +47,9 @@
 #' @family constructors
 allo_find <- function(dbh_species, custom_eqn = NULL) {
   eqn <- custom_eqn %||% default_equations
-
   abort_if_not_eqn(eqn)
-
-  eqn_ <- eqn %>%
-    # FIXME: Warn that these rows are being dropped
-    # FIXME: Should instead be replaced with more general equations
-    # (https://github.com/forestgeo/allodb/issues/72)
-    dplyr::filter(!is.na(.data$eqn_type)) %>%
-    # FIXME: Do we need to group at all?
-    dplyr::group_by(.data$eqn_type) %>%
-    tidyr::nest()
-
-  join_vars <- c("sp", "site")
-  inform(glue("Joining, by = {rlang::expr_text(join_vars)}"))
-  result <- eqn_ %>%
-    dplyr::mutate(
-      data = purrr::map(.data$data, ~ get_this_eqn(.x, dbh_species, join_vars))
-    ) %>%
-    tidyr::unnest()
-
-  n_in <- nrow(dbh_species)
-  n_out <- nrow(result)
-  if (!identical(n_in, n_out)) {
-    warn(glue("
-      The input and output datasets have different number of rows:
-      * Input: {n_in}.
-      * Output: {n_out}.
-      "))
-  }
+  result <- join_dbh_species_with_eqn(dbh_species, eqn)
+  warn_if_dropped_rows_not_matched_with_equations(dbh_species, result)
 
   safe_convert_units <- purrr::safely(
     measurements::conv_unit, otherwise = NA_real_
@@ -112,7 +86,53 @@ abort_if_not_eqn <- function(custom_eqn) {
   invisible(custom_eqn)
 }
 
+#' Split equations by eqn_type and inner-join each group with user's data,
+#' matching by site and species and dropping NA's, i.e. missmatched.
+#'
+#' FIXME: eqn_type should only have three values, e.g.:
+#' 1. specific
+#' 2. generic
+#' 3. custom
+#' See allodb issue 42
+#'
+#' This approach seem too complicates. This entire logic may be dramatically
+#' simplified once allodb incorporates the generic equations.
+#' @noRd
+join_dbh_species_with_eqn <- function(dbh_species, eqn) {
+  n_eqn_type <- sum(is.na(eqn$eqn_type))
+  if (!identical(n_eqn_type, 0L)) {
+    warn(
+      glue("Dropping {n_eqn_type} rows with missing values of `eqn_type`.")
+    )
+  }
+  eqn_ <- dplyr::filter(eqn, !is.na(.data$eqn_type))
+
+  join_vars <- c("sp", "site")
+  inform(glue("Joining, by = {rlang::expr_text(join_vars)}"))
+  eqn_ %>%
+    dplyr::group_by(.data$eqn_type) %>%
+    tidyr::nest() %>%
+    dplyr::mutate(
+      data = purrr::map(.data$data, ~ get_this_eqn(.x, dbh_species, join_vars))
+    ) %>%
+    tidyr::unnest()
+}
+
 get_this_eqn <- function(.type, dbh_species, join_vars) {
   dplyr::inner_join(dbh_species, .type, by = join_vars) %>%
     dplyr::filter(!is.na(.data$dbh), !is.na(.data$eqn))
+}
+
+warn_if_dropped_rows_not_matched_with_equations <- function(input, output) {
+  n_in <- nrow(input)
+  n_out <- nrow(output)
+  if (!identical(n_in, n_out)) {
+    warn(glue("
+      The input and output datasets have different number of rows:
+      * Input: {n_in}.
+      * Output: {n_out}.
+      "))
+  }
+
+  invisible(input)
 }
