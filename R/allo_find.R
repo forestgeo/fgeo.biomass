@@ -46,8 +46,9 @@
 #' allo_find(custom_eqn = as_eqn(your_equations))
 #' @family constructors
 allo_find <- function(dbh_species, custom_eqn = NULL) {
-  eqn <- custom_eqn %||% default_equations
+  eqn <- custom_eqn %||% fgeo.biomass::default_equations
   abort_if_not_eqn(eqn)
+
   result <- join_dbh_species_with_eqn(dbh_species, eqn)
   warn_if_dropped_rows_not_matched_with_equations(dbh_species, result)
 
