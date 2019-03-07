@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial • fgeo.biomass</title>
+<title>Exclude equations that can't be evaluated. — fixme_exclude_failing_equations • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Crucial columns form <strong>allodb</strong> equations-table. — allodb_eqn_crucial" />
+<meta property="og:title" content="Exclude equations that can't be evaluated. — fixme_exclude_failing_equations" />
 
-<meta property="og:description" content="Crucial columns form allodb equations-table." />
+<meta property="og:description" content="This function tries to evaluate allodb equations and excludes the ones
+that err." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,39 +112,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Crucial columns form <strong>allodb</strong> equations-table.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/add_species.R'><code>R/add_species.R</code></a></small>
-    <div class="hidden name"><code>allodb_eqn_crucial.Rd</code></div>
+    <h1>Exclude equations that can't be evaluated.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/default_equations.R'><code>R/default_equations.R</code></a></small>
+    <div class="hidden name"><code>fixme_exclude_failing_equations.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Crucial columns form <strong>allodb</strong> equations-table.</p>
+    <p>This function tries to evaluate <strong>allodb</strong> equations and excludes the ones
+that err.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>allodb_eqn_crucial</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>fixme_exclude_failing_equations</span>(<span class='no'>data</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>An equations dataframe, e.g. <code><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>allodb::master()</a></code>.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string.</p>
+    <p>A dataframe with all equations that can be successfully evaluated.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other internal functions that flag issues to be fixed: <code><a href='fixme_pull_failing_eqn.html'>fixme_pull_failing_eqn</a></code>,
+  <code><a href='handle_multiple_rowid.html'>handle_multiple_rowid</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>allodb_eqn_crucial</span>()</div><div class='output co'>#&gt; [1] "equation_id"                         
-#&gt; [2] "site"                                
-#&gt; [3] "species"                             
-#&gt; [4] "equation_allometry"                  
-#&gt; [5] "allometry_specificity"               
-#&gt; [6] "dependent_variable_biomass_component"
-#&gt; [7] "dbh_units_original"                  
-#&gt; [8] "biomass_units_original"              </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>fixme_exclude_failing_equations</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>master</a></span>())</div><div class='output co'>#&gt; # A tibble: 689 x 43
+#&gt;    ref_id equation_allome… equation_id equation_form dependent_varia…
+#&gt;    &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;           
+#&gt;  1 jenki… 10^(1.1891+1.41… 2060ea      10^(a+b*(log… Total abovegrou…
+#&gt;  2 jenki… 10^(1.1891+1.41… 2060ea      10^(a+b*(log… Total abovegrou…
+#&gt;  3 jenki… 10^(1.2315+1.63… a4d879      10^(a+b*(log… Total abovegrou…
+#&gt;  4 jenki… 10^(1.2315+1.63… a4d879      10^(a+b*(log… Total abovegrou…
+#&gt;  5 jenki… exp(7.217+1.514… c59e03      exp(a+b*log(… Stem biomass (w…
+#&gt;  6 jenki… exp(7.217+1.514… c59e03      exp(a+b*log(… Stem biomass (w…
+#&gt;  7 jenki… exp(7.217+1.514… c59e03      exp(a+b*log(… Stem biomass (w…
+#&gt;  8 jenki… exp(7.217+1.514… c59e03      exp(a+b*log(… Stem biomass (w…
+#&gt;  9 jenki… exp(7.217+1.514… c59e03      exp(a+b*log(… Stem biomass (w…
+#&gt; 10 jenki… exp(7.217+1.514… c59e03      exp(a+b*log(… Stem biomass (w…
+#&gt; # … with 679 more rows, and 38 more variables: independent_variable &lt;chr&gt;,
+#&gt; #   allometry_specificity &lt;chr&gt;, geographic_area &lt;chr&gt;, dbh_min_cm &lt;chr&gt;,
+#&gt; #   dbh_max_cm &lt;chr&gt;, sample_size &lt;chr&gt;, dbh_units_original &lt;chr&gt;,
+#&gt; #   biomass_units_original &lt;chr&gt;, allometry_development_method &lt;chr&gt;,
+#&gt; #   regression_model &lt;chr&gt;, other_equations_tested &lt;chr&gt;, log_biomass &lt;chr&gt;,
+#&gt; #   bias_corrected &lt;chr&gt;, bias_correction_factor &lt;chr&gt;,
+#&gt; #   notes_fitting_model &lt;chr&gt;, original_data_availability &lt;chr&gt;, warning &lt;chr&gt;,
+#&gt; #   site &lt;chr&gt;, family &lt;chr&gt;, species &lt;chr&gt;, species_code &lt;chr&gt;,
+#&gt; #   life_form &lt;chr&gt;, equation_group &lt;chr&gt;, equation_taxa &lt;chr&gt;,
+#&gt; #   notes_on_species &lt;chr&gt;, wsg_id &lt;chr&gt;, wsg_specificity &lt;chr&gt;, id &lt;chr&gt;,
+#&gt; #   Site &lt;chr&gt;, lat &lt;chr&gt;, long &lt;chr&gt;, UTM_Zone &lt;chr&gt;, UTM_X &lt;chr&gt;,
+#&gt; #   UTM_Y &lt;chr&gt;, intertropical &lt;chr&gt;, size.ha &lt;chr&gt;, E &lt;chr&gt;,
+#&gt; #   wsg.site.name &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

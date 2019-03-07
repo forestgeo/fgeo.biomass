@@ -145,66 +145,67 @@ type.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other functions to manipulate equations: <code><a href='add_equations.html'>add_equations</a></code>,
-  <code><a href='allo_evaluate.html'>allo_evaluate</a></code>, <code><a href='allo_lookup.html'>allo_lookup</a></code></p>
+  <code><a href='allo_evaluate.html'>allo_evaluate</a></code>, <code><a href='allo_lookup.html'>allo_lookup</a></code>,
+  <code><a href='fixme_units.html'>fixme_units</a></code></p>
 <p>Other constructors: <code><a href='add_species.html'>add_species</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>
+    <pre class="examples"><div class='input'><span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample.html'>sample_n</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>, <span class='fl'>30</span>)
 <span class='no'>species</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>
 <span class='no'>census_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='add_species.html'>add_species</a></span>(
   <span class='no'>census</span>, <span class='no'>species</span>,
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
 )</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   The input and output datasets have different number of rows:</span>
-#&gt; <span class='warning'>  * Input: 40283.</span>
-#&gt; <span class='warning'>  * Output: 30229.</span></div><div class='output co'>#&gt; # A tibble: 30,229 x 9
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The input and output datasets have different number of rows:</span>
+#&gt; <span class='warning'>* Input: 30.</span>
+#&gt; <span class='warning'>* Output: 24.</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 24 x 11
 #&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
-#&gt;  1 species      4 scbi  nyss… 135   8da09d      1.54… default   
-#&gt;  2 species     21 scbi  liri… 232.  34fe5a      1.02… default   
-#&gt;  3 species     29 scbi  acer… 326.  7c72ed      exp(… default   
-#&gt;  4 species     38 scbi  frax…  42.8 0edaff      0.16… default   
-#&gt;  5 species     72 scbi  acer… 289.  7c72ed      exp(… default   
-#&gt;  6 species     77 scbi  quer… 636.  07dba7      1.56… default   
-#&gt;  7 species     79 scbi  tili… 475   3f99ba      1.44… default   
-#&gt;  8 species     79 scbi  tili… 475   76d19b      0.00… default   
-#&gt;  9 species     84 scbi  frax… 170.  0edaff      0.16… default   
-#&gt; 10 species     89 scbi  fagu…  27.2 74186d      2.03… default   
-#&gt; # … with 30,219 more rows, and 1 more variable: anatomic_relevance &lt;chr&gt;</div><div class='input'>
+#&gt;  1 species      5 scbi  nyss…  54.7 8da09d      1.54… default   
+#&gt;  2 species      7 scbi  corn…  16.7 f3e023      3.08… default   
+#&gt;  3 species     10 scbi  quer…  31.1 07dba7      1.56… default   
+#&gt;  4 species     11 scbi  robi… 102.  333c34      4.13… default   
+#&gt;  5 species     11 scbi  robi… 102.  e9d686      1.04… default   
+#&gt;  6 species     14 scbi  liri…  76.6 34fe5a      1.02… default   
+#&gt;  7 species     20 scbi  frax…  24.1 973c05      2.36… default   
+#&gt;  8 species     21 scbi  quer… 122.  07dba7      1.56… default   
+#&gt;  9 genus        9 scbi  cary… 127.  9c4cc9      10^(… default   
+#&gt; 10 genus       12 scbi  cary…  60.8 9c4cc9      10^(… default   
+#&gt; # … with 14 more rows, and 3 more variables: anatomic_relevance &lt;chr&gt;,
+#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;</div><div class='input'>
 <span class='co'># PROVIDE CUSTOM EQUAITONS ----------------------------------------------</span>
 <span class='co'># Checks that the structure of your data isn't terriby wrong</span>
 <span class='co'># BAD</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='st'>"really bad data"</span>))</div><div class='output co'>#&gt; Error in validate_eqn(data) : is.data.frame(data) is not TRUE</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='fl'>1</span>)))</div><div class='output co'>#&gt; Error : Ensure your data set has these variables:
-#&gt; equation_id, site, sp, eqn, eqn_type, anatomic_relevance</div><div class='input'>
+#&gt; equation_id, site, sp, eqn, eqn_type, anatomic_relevance, dbh_unit, bms_unit</div><div class='input'>
 <span class='co'># GOOD</span>
 <span class='no'>your_equations</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(
   <span class='kw'>equation_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"000001"</span>),
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"scbi"</span>),
-  <span class='kw'>sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"paulownia tomentosa"</span>),
+  <span class='kw'>sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"tilia americana"</span>),
+  <span class='co'># Watning: Fake!</span>
   <span class='kw'>eqn</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"exp(-2.48 + 2.4835 * log(dbh))"</span>),
   <span class='kw'>eqn_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"mixed_hardwood"</span>),
-  <span class='kw'>anatomic_relevance</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"total aboveground biomass"</span>)
+  <span class='kw'>anatomic_relevance</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"total aboveground biomass"</span>),
+ <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"cm"</span>,
+ <span class='kw'>bms_unit</span> <span class='kw'>=</span> <span class='st'>"g"</span>
 )
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   The input and output datasets have different number of rows:</span>
-#&gt; <span class='warning'>  * Input: 40283.</span>
-#&gt; <span class='warning'>  * Output: 3.</span></div><div class='output co'>#&gt; # A tibble: 3 x 9
-#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source anatomic_releva…
-#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;           
-#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom     total abovegrou…
-#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom     total abovegrou…
-#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom     total abovegrou…</div><div class='input'>
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The input and output datasets have different number of rows:</span>
+#&gt; <span class='warning'>* Input: 30.</span>
+#&gt; <span class='warning'>* Output: 0.</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; # A tibble: 0 x 10
+#&gt; # … with 10 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,
+#&gt; #   equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, anatomic_relevance &lt;chr&gt;,
+#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;</div><div class='input'>
 <span class='no'>census_species</span> <span class='kw'>%&gt;%</span>
-<span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   The input and output datasets have different number of rows:</span>
-#&gt; <span class='warning'>  * Input: 40283.</span>
-#&gt; <span class='warning'>  * Output: 3.</span></div><div class='output co'>#&gt; # A tibble: 3 x 9
-#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source anatomic_releva…
-#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;           
-#&gt; 1 mixed_h…  9645 scbi  paul…  462. 000001      exp(… custom     total abovegrou…
-#&gt; 2 mixed_h… 10838 scbi  paul…  363. 000001      exp(… custom     total abovegrou…
-#&gt; 3 mixed_h… 10842 scbi  paul…  531. 000001      exp(… custom     total abovegrou…</div></pre>
+<span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The input and output datasets have different number of rows:</span>
+#&gt; <span class='warning'>* Input: 30.</span>
+#&gt; <span class='warning'>* Output: 0.</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; # A tibble: 0 x 10
+#&gt; # … with 10 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,
+#&gt; #   equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, anatomic_relevance &lt;chr&gt;,
+#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
