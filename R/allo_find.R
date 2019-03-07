@@ -46,7 +46,7 @@
 #' allo_find(custom_eqn = as_eqn(your_equations))
 #' @family constructors
 allo_find <- function(dbh_species, custom_eqn = NULL) {
-  eqn <- custom_eqn %||% default_eqn(allodb::master())
+  eqn <- custom_eqn %||% default_equations
 
   abort_if_not_eqn(eqn)
 
@@ -74,7 +74,7 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
       The input and output datasets have different number of rows:
       * Input: {n_in}.
       * Output: {n_out}.
-    "))
+      "))
   }
 
   safe_convert_units <- purrr::safely(

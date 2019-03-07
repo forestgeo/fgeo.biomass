@@ -1,4 +1,6 @@
-# Extract slowest code and memoise it
+#' For speed, save store the result of `default_eqn(allodb::master())`.
+"default_equations"
+
 default_eqn_impl <- function(data) {
   out <- data %>%
     pick_useful_cols_rows() %>%
@@ -7,7 +9,6 @@ default_eqn_impl <- function(data) {
 
   new_eqn(dplyr::as_tibble(out))
 }
-default_eqn_memoised <- memoise::memoise(default_eqn_impl)
 
 pick_useful_cols_rows <- function(data) {
   crucial_cols <- data[ , allodb_eqn_crucial(), drop = TRUE]
@@ -69,7 +70,7 @@ default_eqn <- function(data) {
   passing <- pick_useful_cols_rows(data)
   warn_dropping_failing_equations(data, passing)
 
-  default_eqn_memoised(passing)
+  default_eqn_impl(passing)
 }
 
 
@@ -101,7 +102,7 @@ warn_dropping_failing_equations <- function(data, out) {
       "Dropping {n_drop} equations that can't be evaluated.
       Identify failing equations with `fixme_pull_failing_eqn(allodb::master())`"
     )
-  )
+    )
 
   invisible(data)
 }

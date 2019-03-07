@@ -1,11 +1,6 @@
-context("default_eqn")
+context("default_equations")
 
 test_that("default_eqn warns that drops failing equations", {
-  out <- expect_warning(
-    default_eqn(allodb::master()),
-    "Dropping.*equations"
-  )
-
   nms <- c("equation_id",
       "site",
       "sp",
@@ -16,11 +11,11 @@ test_that("default_eqn warns that drops failing equations", {
        "dbh_unit",
        "bms_unit"
     )
-  expect_named(out, nms)
+  expect_named(default_equations, nms)
 })
 
 test_that("default_eqn has no unknown unit", {
-  has_fixme <- suppressWarnings(default_eqn(allodb::master())) %>%
+  has_fixme <- default_equations %>%
     dplyr::select(dplyr::matches("unit")) %>%
     purrr::map_lgl(~ "FIXME" %in% .x) %>%
     any()
