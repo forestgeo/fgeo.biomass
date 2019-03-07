@@ -159,28 +159,28 @@ site.
 ``` r
 equations <- census_species %>% 
   allo_find()
-#> Warning: Dropping 58 equations that can't be evaluated.
-#> Identify failing equations with `fgeo.biomass::failing_eqn_id`
 #> Joining, by = c("sp", "site")
-#> Warning:   The input and output datasets have different number of rows:
-#>   * Input: 40283.
-#>   * Output: 30229.
+#> Warning: The input and output datasets have different number of rows:
+#> * Input: 40283.
+#> * Output: 30229.
+#> Converting `dbh` based on `dbh_unit`.
 
 equations
-#> # A tibble: 30,229 x 9
+#> # A tibble: 30,229 x 11
 #>    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #>    <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
-#>  1 species      4 scbi  nyss~ 135   8da09d      1.54~ default   
-#>  2 species     21 scbi  liri~ 232.  34fe5a      1.02~ default   
+#>  1 species      4 scbi  nyss~  53.1 8da09d      1.54~ default   
+#>  2 species     21 scbi  liri~  91.4 34fe5a      1.02~ default   
 #>  3 species     29 scbi  acer~ 326.  7c72ed      exp(~ default   
 #>  4 species     38 scbi  frax~  42.8 0edaff      0.16~ default   
 #>  5 species     72 scbi  acer~ 289.  7c72ed      exp(~ default   
-#>  6 species     77 scbi  quer~ 636.  07dba7      1.56~ default   
-#>  7 species     79 scbi  tili~ 475   3f99ba      1.44~ default   
+#>  6 species     77 scbi  quer~ 251.  07dba7      1.56~ default   
+#>  7 species     79 scbi  tili~ 187.  3f99ba      1.44~ default   
 #>  8 species     79 scbi  tili~ 475   76d19b      0.00~ default   
 #>  9 species     84 scbi  frax~ 170.  0edaff      0.16~ default   
-#> 10 species     89 scbi  fagu~  27.2 74186d      2.03~ default   
-#> # ... with 30,219 more rows, and 1 more variable: anatomic_relevance <chr>
+#> 10 species     89 scbi  fagu~  10.7 74186d      2.03~ default   
+#> # ... with 30,219 more rows, and 3 more variables:
+#> #   anatomic_relevance <chr>, dbh_unit <chr>, bms_unit <chr>
 ```
 
 If you need more information about each equation, `allo_lookup()` helps
@@ -193,16 +193,16 @@ equations %>%
 #> # A tibble: 1,127,698 x 44
 #>    rowid equation_id ref_id equation_allome~ equation_form dependent_varia~
 #>    <int> <chr>       <chr>  <chr>            <chr>         <chr>           
-#>  1     4 8da09d      jenki~ 1.5416*(dbh^2)^~ a*(DBH^2)^b   Stem and branch~
-#>  2    21 34fe5a      jenki~ 1.0259*(dbh^2.7~ a*(DBH^b)     Stem and branch~
-#>  3    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
-#>  4    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
-#>  5    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
-#>  6    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*ln(D~ Total abovegrou~
-#>  7    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
-#>  8    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
-#>  9    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
-#> 10    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(DBH^b)     Total abovegrou~
+#>  1     4 8da09d      jenki~ 1.5416*(dbh^2)^~ a*(dbh^2)^b   Stem and branch~
+#>  2    21 34fe5a      jenki~ 1.0259*(dbh^2.7~ a*(dbh^b)     Stem and branch~
+#>  3    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*log(~ Total abovegrou~
+#>  4    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*log(~ Total abovegrou~
+#>  5    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*log(~ Total abovegrou~
+#>  6    29 7c72ed      jenki~ exp(4.5893+2.43~ exp(a+b*log(~ Total abovegrou~
+#>  7    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(dbh^b)     Total abovegrou~
+#>  8    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(dbh^b)     Total abovegrou~
+#>  9    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(dbh^b)     Total abovegrou~
+#> 10    38 0edaff      ter-m~ 0.1634*(dbh^2.3~ a*(dbh^b)     Total abovegrou~
 #> # ... with 1,127,688 more rows, and 38 more variables:
 #> #   independent_variable <chr>, allometry_specificity <chr>,
 #> #   geographic_area <chr>, dbh_min_cm <chr>, dbh_max_cm <chr>,
@@ -231,24 +231,23 @@ storing the result in the the new `biomass` column.
 with_biomass <- equations %>% 
   allo_evaluate()
 #> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
-#> Warning: `biomass` values may be invalid.
-#> This is work in progress and we still don't handle units correctly.
+#> `biomass` values are given in [g].
 
 with_biomass %>% 
   select(eqn, dbh, biomass)
 #> # A tibble: 30,229 x 3
 #>    eqn                             dbh biomass
 #>    <chr>                         <dbl>   <dbl>
-#>  1 1.5416 * (dbh^2)^2.7818       135   1.10e12
-#>  2 1.0259 * (dbh^2.7324)         232.  2.99e 6
+#>  1 1.5416 * (dbh^2)^2.7818        53.1 2.78e12
+#>  2 1.0259 * (dbh^2.7324)          91.4 1.06e 8
 #>  3 exp(4.5893 + 2.43 * log(dbh)) 326.  1.26e 8
-#>  4 0.1634 * (dbh^2.348)           42.8 1.11e 3
+#>  4 0.1634 * (dbh^2.348)           42.8 1.11e 6
 #>  5 exp(4.5893 + 2.43 * log(dbh)) 289.  9.38e 7
-#>  6 1.5647 * (dbh^2.6887)         636.  5.41e 7
-#>  7 1.4416 * (dbh^2.7324)         475   2.97e 7
-#>  8 0.004884 * (dbh^2.094)        475   1.97e 3
-#>  9 0.1634 * (dbh^2.348)          170.  2.81e 4
-#> 10 2.0394 * (dbh^2.5715)          27.2 9.97e 3
+#>  6 1.5647 * (dbh^2.6887)         251.  2.00e 9
+#>  7 1.4416 * (dbh^2.7324)         187.  1.05e 9
+#>  8 0.004884 * (dbh^2.094)        475   1.97e 6
+#>  9 0.1634 * (dbh^2.348)          170.  2.81e 7
+#> 10 2.0394 * (dbh^2.5715)          10.7 4.11e 5
 #> # ... with 30,219 more rows
 ```
 
@@ -264,16 +263,16 @@ with_biomass %>%
 #> # A tibble: 52 x 2
 #>    sp                      total_biomass
 #>    <chr>                           <dbl>
-#>  1 platanus occidentalis         2.24e17
-#>  2 nyssa sylvatica               5.07e16
-#>  3 liriodendron tulipifera       4.63e10
-#>  4 acer rubrum                   1.31e10
-#>  5 quercus alba                  1.26e10
-#>  6 quercus falcata               9.21e 9
-#>  7 quercus velutina              7.47e 9
-#>  8 sassafras albidum             6.37e 9
-#>  9 quercus rubra                 4.64e 9
-#> 10 fraxinus americana            2.80e 9
+#>  1 platanus occidentalis         5.77e17
+#>  2 nyssa sylvatica               1.29e17
+#>  3 liriodendron tulipifera       1.64e12
+#>  4 quercus alba                  4.66e11
+#>  5 quercus velutina              3.68e11
+#>  6 quercus rubra                 2.13e11
+#>  7 carya glabra                  1.93e11
+#>  8 quercus falcata               1.82e11
+#>  9 fraxinus americana            1.26e11
+#> 10 carya tomentosa               1.21e11
 #> # ... with 42 more rows
 ```
 
@@ -290,7 +289,7 @@ as_eqn("really bad data")
 #> Error in validate_eqn(data): is.data.frame(data) is not TRUE
 as_eqn(data.frame(1))
 #> Error: Ensure your data set has these variables:
-#> equation_id, site, sp, eqn, eqn_type, anatomic_relevance
+#> equation_id, site, sp, eqn, eqn_type, anatomic_relevance, dbh_unit, bms_unit
 
 # GOOD
 custom_equations <- tibble::tibble(
@@ -299,7 +298,9 @@ custom_equations <- tibble::tibble(
   sp = c("paulownia tomentosa"),
   eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
   eqn_type = c("mixed_hardwood"),
-  anatomic_relevance = c("total aboveground biomass")
+  anatomic_relevance = c("total aboveground biomass"),
+  dbh_unit = "cm",
+  bms_unit = "g"
 )
 
 class(as_eqn(custom_equations))
@@ -312,16 +313,18 @@ We can now use the argument `custom_eqn` to pass our custom equations to
 ``` r
 allo_find(census_species, custom_eqn = as_eqn(custom_equations))
 #> Joining, by = c("sp", "site")
-#> Warning:   The input and output datasets have different number of rows:
-#>   * Input: 40283.
-#>   * Output: 3.
-#> # A tibble: 3 x 9
+#> Warning: The input and output datasets have different number of rows:
+#> * Input: 40283.
+#> * Output: 3.
+#> Converting `dbh` based on `dbh_unit`.
+#> # A tibble: 3 x 11
 #>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
 #> 1 mixed_h~  9645 scbi  paul~  462. 000001      exp(~ custom    
 #> 2 mixed_h~ 10838 scbi  paul~  363. 000001      exp(~ custom    
 #> 3 mixed_h~ 10842 scbi  paul~  531. 000001      exp(~ custom    
-#> # ... with 1 more variable: anatomic_relevance <chr>
+#> # ... with 3 more variables: anatomic_relevance <chr>, dbh_unit <chr>,
+#> #   bms_unit <chr>
 ```
 
 This is what the entire workflow looks like:
@@ -331,19 +334,20 @@ census_species %>%
   allo_find(custom_eqn = as_eqn(custom_equations)) %>%
   allo_evaluate()
 #> Joining, by = c("sp", "site")
-#> Warning:   The input and output datasets have different number of rows:
-#>   * Input: 40283.
-#>   * Output: 3.
+#> Warning: The input and output datasets have different number of rows:
+#> * Input: 40283.
+#> * Output: 3.
+#> Converting `dbh` based on `dbh_unit`.
 #> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
-#> Warning: `biomass` values may be invalid.
-#> This is work in progress and we still don't handle units correctly.
-#> # A tibble: 3 x 10
+#> `biomass` values are given in [g].
+#> # A tibble: 3 x 12
 #>   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
 #>   <chr>    <int> <chr> <chr> <dbl> <chr>       <chr> <chr>     
 #> 1 mixed_h~  9645 scbi  paul~  462. 000001      exp(~ custom    
 #> 2 mixed_h~ 10838 scbi  paul~  363. 000001      exp(~ custom    
 #> 3 mixed_h~ 10842 scbi  paul~  531. 000001      exp(~ custom    
-#> # ... with 2 more variables: anatomic_relevance <chr>, biomass <dbl>
+#> # ... with 4 more variables: anatomic_relevance <chr>, dbh_unit <chr>,
+#> #   bms_unit <chr>, biomass <dbl>
 ```
 
 ### Issues
