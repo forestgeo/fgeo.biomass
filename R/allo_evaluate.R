@@ -3,7 +3,13 @@ allo_evaluate_impl <- function(data) {
     data$eqn, data$dbh,
     ~eval(parse(text = .x), envir = list(dbh = .y))
   )
-  dplyr::mutate(data, biomass = .biomass)
+  result <- dplyr::mutate(data, biomass = .biomass)
+
+  result$biomass <- convert_units(
+    result$biomass, from = result$bms_unit, to = "g"
+  )
+
+  result
 }
 allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 
@@ -26,7 +32,7 @@ allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 #' allo_evaluate(best)
 allo_evaluate <- function(data) {
   inform_expected_units()
-  warn_invalid_biomass()
+  inform("`biomass` values are given in [g].")
   allo_evaluate_memoised(data)
 }
 
@@ -35,15 +41,6 @@ inform_expected_units <- function() {
     glue(
       "Assuming `dbh` units in [cm] \\
       (to convert units see `?measurements::conv_unit()`)."
-    )
-  )
-}
-
-warn_invalid_biomass <- function() {
-  warn(
-    glue(
-      "`biomass` values may be invalid.
-      This is work in progress and we still don't handle units correctly."
     )
   )
 }
