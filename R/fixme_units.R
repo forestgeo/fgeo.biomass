@@ -40,7 +40,6 @@ fixme_units_one <- function(x) {
   dplyr::case_when(
     is_valid_unit(x) ~ identity(x),
 
-    identical(x, "gm")   ~ "g",
     identical(x, "in")   ~ "inch",
     identical(x, "in^2") ~ "inch2",
     identical(x, "cm^2") ~ "cm2",

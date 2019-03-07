@@ -1,7 +1,7 @@
 context("allo_find")
 
 test_that("allo_find errs if custom_eqn is not created with as_eqn", {
-  census <- fgeo.biomass::scbi_tree1
+  census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
   species <- fgeo.biomass::scbi_species
   census_species <- add_species(
     census, species,
@@ -23,7 +23,7 @@ test_that("allo_find errs if custom_eqn is not created with as_eqn", {
 })
 
 test_that("allo_find informs joining vars and warns dangers", {
-  census <- fgeo.biomass::scbi_tree1
+  census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
   species <- fgeo.biomass::scbi_species
   census_species <- add_species(
     census, species,

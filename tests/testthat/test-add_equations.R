@@ -1,6 +1,6 @@
 context("add_equations")
 
-census <- fgeo.biomass::scbi_tree1
+census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
 
 single_best <- add_species(census, fgeo.biomass::scbi_species, site = "scbi")
 single_best <- suppressWarnings(allo_find(single_best))

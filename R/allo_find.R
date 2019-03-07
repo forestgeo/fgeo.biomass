@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' census <- fgeo.biomass::scbi_tree1
+#' census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
 #' species <- fgeo.biomass::scbi_species
 #' census_species <- add_species(
 #'   census, species,
@@ -92,11 +92,14 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
 
   result$dbh <- dbh_converted
 
-  warn(
-    glue(
-      "Dropping {sum(is.na(dbh_converted))} rows where units can't be converted"
+  if (sum(dbh_converted) > 0) {
+    warn(
+      glue(
+        "Dropping {sum(is.na(dbh_converted))} rows where units can't be converted"
+      )
     )
-  )
+  }
+
   dplyr::filter(result, !is.na(.data$dbh))
 }
 
