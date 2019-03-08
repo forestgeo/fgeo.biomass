@@ -29,7 +29,32 @@ add_species <- function(census, species, site) {
   }
 
   out <- all[c("rowid", "site", "sp", "dbh")]
+  warn_sp_missmatch(census, species)
+  warn_missing_sp(out$sp)
   new_add_species(dplyr::as_tibble(out))
+}
+
+warn_sp_missmatch <- function(census, species) {
+  missing_codes <- sort(setdiff(unique(census$sp), unique(species$sp)))
+  if (length(missing_codes) > 0) {
+    warn(
+      glue(
+        "Can't find matching species names for these codes:
+        {paste0(missing_codes, collapse = ', ')}"
+      )
+    )
+  }
+
+  invisible(census)
+}
+
+warn_missing_sp <- function(x) {
+  n_na <- is.na(x)
+  if (any(n_na)) {
+    warn(glue("`sp` has {sum(n_na)} missing values"))
+  }
+
+  invisible(x)
 }
 
 new_add_species <- function(x) {

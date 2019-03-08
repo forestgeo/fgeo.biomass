@@ -10,6 +10,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+set.seed(1)
 ```
 
 The goal of this article is to calculate biomass using code from the [fgeo.biomass](https://forestgeo.github.io/fgeo.biomass/) package, and allometric equations from the [allodb](https://forestgeo.github.io/allodb/) package. Here I focus not on the tools but on the results. While the examples at the [home page of the fgeo.biomass package](https://forestgeo.github.io/fgeo.biomass/) show as many features as possible, this article shows a limited set of features and aims to get meaningful results. By doing so I hope to expose potential problems that I could then formally test for as I build more features.
@@ -29,7 +30,9 @@ library(tidyverse)
 The data comes from the [ForestGEO plot at the Smithsonian Conservation Biology Institute (SCBI)](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute), and is conveniently included in fgeo.biomass.
 
 ```{r}
-census <- fgeo.biomass::scbi_tree1
+census <- fgeo.biomass::scbi_tree1 %>% 
+  # Less data for speed
+  sample_n(1000)
 census
 
 species <- fgeo.biomass::scbi_species
@@ -74,7 +77,7 @@ census_species <- census2 %>%
 census_species
 ```
 
-The number of rows of `census2` (`r nrow(census2)`) and `census_species` (`r nrow(census_species)`) should be the same.
+The result has the same number of rows as the census data.
 
 ```{r}
 identical(
@@ -82,3 +85,13 @@ identical(
   nrow(census_species)
 )
 ```
+
+If any species code in the census dataset can't be matched with a corresponding species name in the species dataset, `add_species()` rises a warning and informs which codes can't be matched and how many missing values the resulting `sp` column has.
+
+```{r}
+# Degrade the species tablel to force missmatches
+species2 <- sample_frac(species, 0.5)
+census2 %>% 
+  add_species(species2, site = "scbi")
+```
+
