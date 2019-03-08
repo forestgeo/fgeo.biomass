@@ -14,9 +14,13 @@ test_that("add_species preserves census-rows and warns missing `sp`", {
   species_na <- species
   species_na[species_na$sp == spp[[1]], "sp"] <- NA
 
+  expect_warning(
+    add_species(census, species_na, "scbi"),
+    "Can't find.*codes"
+  )
   out <- expect_warning(
     add_species(census, species_na, "scbi"),
-    "has.*missing values"
+    "*has.*missing values"
   )
   expect_true(any(is.na(out$sp)))
 

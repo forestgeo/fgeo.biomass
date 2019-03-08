@@ -30,9 +30,8 @@ library(tidyverse)
 The data comes from the [ForestGEO plot at the Smithsonian Conservation Biology Institute (SCBI)](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute), and is conveniently included in fgeo.biomass.
 
 ```{r}
-census <- fgeo.biomass::scbi_tree1 %>% 
-  # Less data for speed
-  sample_n(1000)
+# Subset the census data for speed
+census <- fgeo.biomass::scbi_tree1 %>% sample_n(1000)
 census
 
 species <- fgeo.biomass::scbi_species
@@ -42,8 +41,7 @@ species
 To avoid surprises, I first quickly visualize the number of missing values.
 
 ```{r, cache=TRUE}
-species %>% 
-  naniar::vis_miss()
+naniar::vis_miss(species)
 ```
 
 In `species`, the columns with missing variables play no role in biomass. So I don't worry about them.
@@ -51,29 +49,20 @@ In `species`, the columns with missing variables play no role in biomass. So I d
 I do the same with the `census` data.
 
 ```{r, cache=TRUE}
-census %>% 
-  naniar::vis_miss()
+naniar::vis_miss(census)
 ```
 
 There are missing values in `dbh`, which is key to calculating biomass. I won't be able to calculate biomass for those rows, and they make it difficult to keep track of how many rows of useful data I have. I now drop missing `dbh` values explicitly, and continue with a cleaner `census2` dataset.
 
 ```{r, cache=TRUE}
-census2 <- census %>% 
-  filter(!is.na(dbh))
-
-census2 %>% 
-  nrow()
-
-census2 %>% 
-  naniar::vis_miss()
+census2 <- census %>% filter(!is.na(dbh))
+naniar::vis_miss(census2)
 ```
 
 I can now join the census and species data, to get `dbh` and species' Latin names in the same table. The argument `site` reminds me that I need to ensure that both datasets come from the same site.
 
 ```{r}
-census_species <- census2 %>% 
-  add_species(species, site = "scbi")
-
+census_species <- census2 %>% add_species(species, site = "scbi")
 census_species
 ```
 
@@ -89,9 +78,10 @@ identical(
 If any species code in the census dataset can't be matched with a corresponding species name in the species dataset, `add_species()` rises a warning and informs which codes can't be matched and how many missing values the resulting `sp` column has.
 
 ```{r}
-# Degrade the species tablel to force missmatches
-species2 <- sample_frac(species, 0.5)
-census2 %>% 
-  add_species(species2, site = "scbi")
+# Degrade the species table to force missmatches
+species2 <- species %>% sample_frac(0.5)
+
+census2_species2 <- census2 %>% add_species(species2, site = "scbi")
+census2_species2 %>% filter(is.na(sp))
 ```
 
