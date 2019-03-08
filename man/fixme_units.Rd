@@ -2,17 +2,9 @@
 % Please edit documentation in R/fixme_units.R
 \name{fixme_units}
 \alias{fixme_units}
-\alias{valid_units}
-\title{Try to convert units to conform with \code{measurements::conv_unit_options}.
-\itemize{
-\item \code{valid_units()} is an evocative alias of \code{measurements::conv_unit_options}.
-\item \code{fixme_units()} leaves valid units untouched, fix invalid known units, and
-flags invalid unknown units.
-}}
+\title{Try to convert units to conform with \code{measurements::conv_unit_options}.}
 \usage{
 fixme_units(x)
-
-valid_units()
 }
 \arguments{
 \item{x}{A character vector of units.}
@@ -21,12 +13,8 @@ valid_units()
 A character vector.
 }
 \description{
-Try to convert units to conform with \code{measurements::conv_unit_options}.
-\itemize{
-\item \code{valid_units()} is an evocative alias of \code{measurements::conv_unit_options}.
-\item \code{fixme_units()} leaves valid units untouched, fix invalid known units, and
+\code{fixme_units()} leaves valid units untouched, fix invalid known units, and
 flags invalid unknown units.
-}
 }
 \examples{
 x <- c("mm", "cm", "m", "in", "in^2", "cm^2", "BAD")
@@ -43,13 +31,12 @@ unique(
 unique(
   fixme_units(allodb::equations$biomass_units_original)
 )
-
-# All valid unites
-valid_units()
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_evaluate}}, \code{\link{allo_find}},
-  \code{\link{allo_lookup}}
+\code{\link[=valid_units]{valid_units()}}.
+
+Other internal functions that flag issues to be fixed: \code{\link{fixme_exclude_failing_equations}},
+  \code{\link{fixme_pull_failing_eqn}},
+  \code{\link{handle_multiple_rowid}}
 }
-\concept{functions to manipulate equations}
+\concept{internal functions that flag issues to be fixed}

@@ -20,6 +20,7 @@ fixme_pull_failing_eqn(allodb::master())
 }
 \seealso{
 Other internal functions that flag issues to be fixed: \code{\link{fixme_exclude_failing_equations}},
+  \code{\link{fixme_units}},
   \code{\link{handle_multiple_rowid}}
 }
 \concept{internal functions that flag issues to be fixed}

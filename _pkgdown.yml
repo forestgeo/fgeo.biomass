@@ -48,20 +48,13 @@ reference:
 
   - title: Main functions
     contents:
-      - has_concept("constructors")
-      - has_concept("functions to manipulate equations")
+      - matches("add_")
+      - matches("allo_")
 
-  - title: Helpers
+  - title: Helpers (may eventually be hidden)
     contents:
       - has_concept("helpers")
-      - -matches("fixme_")
-      - -matches("allo_")
-      - -matches("add_")
 
   - title: Internal functions that flag issues to be fixed
     contents:
       - has_concept("internal functions that flag issues to be fixed")
-
-  - title: Other internal objects should be hidden or removed
-    contents:
-      - has_concept("internal objects that will be hidden or removed")

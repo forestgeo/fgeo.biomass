@@ -1,12 +1,13 @@
 #' Try to convert units to conform with `measurements::conv_unit_options`.
-#' * `valid_units()` is an evocative alias of `measurements::conv_unit_options`.
-#' * `fixme_units()` leaves valid units untouched, fix invalid known units, and
+#'
+#' `fixme_units()` leaves valid units untouched, fix invalid known units, and
 #'   flags invalid unknown units.
 #' @param x A character vector of units.
 #'
 #' @return A character vector.
 #' @export
-#' @family functions to manipulate equations
+#' @family internal functions that flag issues to be fixed
+#' @seealso [valid_units()].
 #'
 #' @examples
 #' x <- c("mm", "cm", "m", "in", "in^2", "cm^2", "BAD")
@@ -23,15 +24,23 @@
 #' unique(
 #'   fixme_units(allodb::equations$biomass_units_original)
 #' )
-#'
-#' # All valid unites
-#' valid_units()
 fixme_units <- function(x) {
   purrr::map_chr(x, ~ fixme_units_one(.x))
 }
 
-#' @rdname fixme_units
+#' Valid units as per `measurements::conv_unit_options`.
+#'
+#' This simply wraps `measurements::conv_unit_options` to provide a more
+#' evocative name, closer to the problem domain. You may use this function to
+#' know how to name units in a way that ensures that units conversion will be
+#' converted correctly.
+#'
+#' @return A list
 #' @export
+#' @family helpers
+#'
+#' @examples
+#' valid_units()
 valid_units <- function() {
   measurements::conv_unit_options
 }

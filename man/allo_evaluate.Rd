@@ -26,7 +26,6 @@ allo_evaluate(best)
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_find}}, \code{\link{allo_lookup}},
-  \code{\link{fixme_units}}
+  \code{\link{allo_find}}, \code{\link{allo_lookup}}
 }
 \concept{functions to manipulate equations}
