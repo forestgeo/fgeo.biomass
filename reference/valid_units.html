@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Try to convert units to conform with <code>measurements::conv_unit_options</code>. — fixme_units • fgeo.biomass</title>
+<title>Valid units as per <code>measurements::conv_unit_options</code>. — valid_units • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,12 @@
 
 
 
-<meta property="og:title" content="Try to convert units to conform with <code>measurements::conv_unit_options</code>. — fixme_units" />
+<meta property="og:title" content="Valid units as per <code>measurements::conv_unit_options</code>. — valid_units" />
 
-<meta property="og:description" content="fixme_units() leaves valid units untouched, fix invalid known units, and
-flags invalid unknown units." />
+<meta property="og:description" content="This simply wraps measurements::conv_unit_options to provide a more
+evocative name, closer to the problem domain. You may use this function to
+know how to name units in a way that ensures that units conversion will be
+converted correctly." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,58 +114,103 @@ flags invalid unknown units." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Try to convert units to conform with <code>measurements::conv_unit_options</code>.</h1>
+    <h1>Valid units as per <code>measurements::conv_unit_options</code>.</h1>
     <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/fixme_units.R'><code>R/fixme_units.R</code></a></small>
-    <div class="hidden name"><code>fixme_units.Rd</code></div>
+    <div class="hidden name"><code>valid_units.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>fixme_units()</code> leaves valid units untouched, fix invalid known units, and
-flags invalid unknown units.</p>
+    <p>This simply wraps <code><a href='https://www.rdocumentation.org/packages/measurements/topics/conv_unit_options'>measurements::conv_unit_options</a></code> to provide a more
+evocative name, closer to the problem domain. You may use this function to
+know how to name units in a way that ensures that units conversion will be
+converted correctly.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fixme_units</span>(<span class='no'>x</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>A character vector of units.</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='fu'>valid_units</span>()</pre>
+        
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A character vector.</p>
+    <p>A list</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='valid_units.html'>valid_units()</a></code>.</p>
-<p>Other internal functions that flag issues to be fixed: <code><a href='fixme_exclude_failing_equations.html'>fixme_exclude_failing_equations</a></code>,
-  <code><a href='fixme_pull_failing_eqn.html'>fixme_pull_failing_eqn</a></code>,
-  <code><a href='handle_multiple_rowid.html'>handle_multiple_rowid</a></code></p></div>
+    <div class='dont-index'><p>Other helpers: <code><a href='convert_units.html'>convert_units</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"mm"</span>, <span class='st'>"cm"</span>, <span class='st'>"m"</span>, <span class='st'>"in"</span>, <span class='st'>"in^2"</span>, <span class='st'>"cm^2"</span>, <span class='st'>"BAD"</span>)
-<span class='fu'>fixme_units</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] "mm"    "cm"    "m"     "inch"  "inch2" "cm2"   "FIXME"</div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(
-  <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>$<span class='no'>dbh_units_original</span>
-)</div><div class='output co'>#&gt; [1] "cm"   "inch" "mm"  </div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(
-  <span class='fu'>fixme_units</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>$<span class='no'>dbh_units_original</span>)
-)</div><div class='output co'>#&gt; [1] "cm"   "inch" "mm"  </div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(
-  <span class='fu'>fixme_units</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>$<span class='no'>biomass_units_original</span>)
-)</div><div class='output co'>#&gt; [1] "g"          "kg"         "lbs"        "Mg"         "metric_ton"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>valid_units</span>()</div><div class='output co'>#&gt; $acceleration
+#&gt;  [1] "mm_per_sec2"   "cm_per_sec2"   "m_per_sec2"    "km_per_sec2"  
+#&gt;  [5] "grav"          "inch_per_sec2" "ft_per_sec2"   "mi_per_sec2"  
+#&gt;  [9] "kph_per_sec"   "mph_per_sec"  
+#&gt; 
+#&gt; $angle
+#&gt; [1] "degree" "radian" "grad"   "arcmin" "arcsec" "turn"  
+#&gt; 
+#&gt; $area
+#&gt;  [1] "nm2"      "um2"      "mm2"      "cm2"      "m2"       "hectare" 
+#&gt;  [7] "km2"      "inch2"    "ft2"      "yd2"      "acre"     "mi2"     
+#&gt; [13] "naut_mi2"
+#&gt; 
+#&gt; $coordinate
+#&gt; [1] "dec_deg"     "deg_dec_min" "deg_min_sec"
+#&gt; 
+#&gt; $count
+#&gt; [1] "fmol" "pmol" "nmol" "umol" "mmol" "mol" 
+#&gt; 
+#&gt; $duration
+#&gt;  [1] "nsec" "usec" "msec" "sec"  "min"  "hr"   "day"  "wk"   "mon"  "yr"  
+#&gt; [11] "dec"  "cen"  "mil"  "Ma"  
+#&gt; 
+#&gt; $energy
+#&gt; [1] "J"    "kJ"   "erg"  "cal"  "Cal"  "Wsec" "kWh"  "MWh"  "BTU" 
+#&gt; 
+#&gt; $flow
+#&gt;  [1] "ml_per_sec"  "ml_per_min"  "ml_per_hr"   "l_per_sec"   "l_per_min"  
+#&gt;  [6] "l_per_hr"    "m3_per_sec"  "m3_per_min"  "m3_per_hr"   "Sv"         
+#&gt; [11] "gal_per_sec" "gal_per_min" "gal_per_hr"  "ft3_per_sec" "ft3_per_min"
+#&gt; [16] "ft3_per_hr" 
+#&gt; 
+#&gt; $length
+#&gt;  [1] "angstrom" "nm"       "um"       "mm"       "cm"       "dm"      
+#&gt;  [7] "m"        "km"       "inch"     "ft"       "yd"       "fathom"  
+#&gt; [13] "mi"       "naut_mi"  "au"       "light_yr" "parsec"   "point"   
+#&gt; 
+#&gt; $mass
+#&gt;  [1] "Da"         "fg"         "pg"         "ng"         "ug"        
+#&gt;  [6] "mg"         "g"          "kg"         "Mg"         "Gg"        
+#&gt; [11] "Tg"         "Pg"         "carat"      "metric_ton" "oz"        
+#&gt; [16] "lbs"        "short_ton"  "long_ton"   "stone"     
+#&gt; 
+#&gt; $power
+#&gt;  [1] "uW"          "mW"          "W"           "kW"          "MW"         
+#&gt;  [6] "GW"          "erg_per_sec" "cal_per_sec" "cal_per_hr"  "Cal_per_sec"
+#&gt; [11] "Cal_per_hr"  "BTU_per_sec" "BTU_per_hr"  "hp"         
+#&gt; 
+#&gt; $pressure
+#&gt;  [1] "uatm"  "atm"   "Pa"    "hPa"   "kPa"   "torr"  "mmHg"  "inHg"  "cmH2O"
+#&gt; [10] "inH2O" "mbar"  "bar"   "dbar"  "psi"  
+#&gt; 
+#&gt; $speed
+#&gt;  [1] "mm_per_sec"   "cm_per_sec"   "m_per_sec"    "km_per_sec"   "inch_per_sec"
+#&gt;  [6] "ft_per_sec"   "kph"          "km_per_hr"    "mph"          "mi_per_hr"   
+#&gt; [11] "km_per_day"   "mi_per_day"   "knot"         "mach"         "light"       
+#&gt; 
+#&gt; $temperature
+#&gt; [1] "C" "F" "K" "R"
+#&gt; 
+#&gt; $volume
+#&gt;  [1] "ul"        "ml"        "dl"        "l"         "cm3"       "dm3"      
+#&gt;  [7] "m3"        "km3"       "us_tsp"    "us_tbsp"   "us_oz"     "us_cup"   
+#&gt; [13] "us_pint"   "us_quart"  "us_gal"    "inch3"     "ft3"       "mi3"      
+#&gt; [19] "imp_tsp"   "imp_tbsp"  "imp_oz"    "imp_cup"   "imp_pint"  "imp_quart"
+#&gt; [25] "imp_gal"  
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
 

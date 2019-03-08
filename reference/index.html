@@ -129,21 +129,15 @@
       <tr>
         
         <td>
-          <p><code><a href="add_species.html">add_species()</a></code> </p>
-        </td>
-        <td><p>Add <code>species</code> to a ForestGEO-like dataframe of census data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="allo_find.html">allo_find()</a></code> </p>
-        </td>
-        <td><p>Get default equations of each type.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="add_equations.html">add_equations()</a></code> </p>
         </td>
         <td><p>Add allometric equations to a census dataset.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_species.html">add_species()</a></code> </p>
+        </td>
+        <td><p>Add <code>species</code> to a ForestGEO-like dataframe of census data.</p></td>
       </tr><tr>
         
         <td>
@@ -153,25 +147,20 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="allo_lookup.html">allo_lookup()</a></code> </p>
+          <p><code><a href="allo_find.html">allo_find()</a></code> </p>
         </td>
-        <td><p>Look up in <strong>allodb</strong> information about each <code>equation_id</code>.</p></td>
+        <td><p>Get default equations of each type.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="fixme_units.html">fixme_units()</a></code> <code><a href="fixme_units.html">valid_units()</a></code> </p>
+          <p><code><a href="allo_lookup.html">allo_lookup()</a></code> </p>
         </td>
-        <td><p>Try to convert units to conform with <code>measurements::conv_unit_options</code>.
-<ul>
-<li><p><code>valid_units()</code> is an evocative alias of <code>measurements::conv_unit_options</code>.</p></li>
-<li><p><code>fixme_units()</code> leaves valid units untouched, fix invalid known units, and
-flags invalid unknown units.</p></li>
-</ul></p></td>
+        <td><p>Look up in <strong>allodb</strong> information about each <code>equation_id</code>.</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-helpers" class="hasAnchor"><a href="#section-helpers" class="anchor"></a>Helpers</h2>
+          <h2 id="section-helpers-may-eventually-be-hidden-" class="hasAnchor"><a href="#section-helpers-may-eventually-be-hidden-" class="anchor"></a>Helpers (may eventually be hidden)</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -181,6 +170,12 @@ flags invalid unknown units.</p></li>
           <p><code><a href="convert_units.html">convert_units()</a></code> </p>
         </td>
         <td><p>A safe version of <code>measurements::conv_unit()</code>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="valid_units.html">valid_units()</a></code> </p>
+        </td>
+        <td><p>Valid units as per <code>measurements::conv_unit_options</code>.</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -204,23 +199,15 @@ flags invalid unknown units.</p></li>
       </tr><tr>
         
         <td>
+          <p><code><a href="fixme_units.html">fixme_units()</a></code> </p>
+        </td>
+        <td><p>Try to convert units to conform with <code>measurements::conv_unit_options</code>.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="handle_multiple_rowid.html">fixme_find_duplicated_rowid()</a></code> <code><a href="handle_multiple_rowid.html">fixme_drop_duplicated_rowid()</a></code> </p>
         </td>
         <td><p>Handle multiple <code>rowid</code>s: find duplicates and pick a single row.</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-other-internal-objects-should-be-hidden-or-removed" class="hasAnchor"><a href="#section-other-internal-objects-should-be-hidden-or-removed" class="anchor"></a>Other internal objects should be hidden or removed</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="default_eqn.html">default_eqn()</a></code> </p>
-        </td>
-        <td><p>Restructure equations from <strong>allodb</strong>.</p></td>
       </tr>
     </tbody>
     </table>
@@ -230,9 +217,8 @@ flags invalid unknown units.</p></li>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#section-main-functions">Main functions</a></li>
-      <li><a href="#section-helpers">Helpers</a></li>
+      <li><a href="#section-helpers-may-eventually-be-hidden-">Helpers (may eventually be hidden)</a></li>
       <li><a href="#section-internal-functions-that-flag-issues-to-be-fixed">Internal functions that flag issues to be fixed</a></li>
-      <li><a href="#section-other-internal-objects-should-be-hidden-or-removed">Other internal objects should be hidden or removed</a></li>
     </ul>
   </div>
 </div>
