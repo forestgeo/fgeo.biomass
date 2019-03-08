@@ -14,7 +14,7 @@ add_species(census, species, site)
 \item{site}{The name of the site. One of \code{allodb::sites_info$site}.}
 }
 \value{
-A dataframe.
+A dataframe with as many rows as the census dataset.
 }
 \description{
 Add \code{species} to a ForestGEO-like dataframe of census data.

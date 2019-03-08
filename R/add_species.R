@@ -6,7 +6,7 @@
 #'
 #' @family constructors
 #'
-#' @return A dataframe.
+#' @return A dataframe with as many rows as the census dataset.
 #' @export
 #'
 #' @examples

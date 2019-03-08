@@ -56,7 +56,8 @@ Imports:
 Suggests: 
     covr (>= 3.2.1),
     spelling (>= 2.0),
-    testthat (>= 2.0.1)
+    testthat (>= 2.0.1),
+    rmarkdown
 Remotes: 
     forestgeo/allodb
 Additional_repositories: https://forestgeo.github.io/drat/

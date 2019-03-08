@@ -1,3 +1,4 @@
+^vignettes/scbi\.Rmd$
 ^\.buildignore$
 ^fgeo\.biomass\.Rproj$
 ^tmp\.R$
