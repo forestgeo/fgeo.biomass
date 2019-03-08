@@ -85,3 +85,16 @@ census2_species2 <- census2 %>% add_species(species2, site = "scbi")
 census2_species2 %>% filter(is.na(sp))
 ```
 
+But my has not that problem. My next step is then to find default equations in the allodb package. 
+
+
+For this I will use `allo_find2()` -- an experimental function.
+
+```{r}
+nrow(census_species)
+allo_find2(census_species)
+```
+
+The first message informs me that the `census_species` dataset is matched with equations by species (`sp`) and site. That makes sense the same species may have different equations for different sites. In other words, equations are "species and site"L specific.
+
+Here I lost some rows because not all the species in the census data had a matching equation in allodb.

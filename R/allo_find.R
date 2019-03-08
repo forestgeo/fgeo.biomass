@@ -1,5 +1,8 @@
 #' Get default equations of each type.
 #'
+#' `allo_find2()` is an experimental function -- a simple wrapper around
+#' [dplyr::nest_join()].
+#'
 #' @param dbh_species A dataframe as those created with [add_species()].
 #' @param custom_eqn A dataframe of class "eqn".
 #'
@@ -67,6 +70,15 @@ allo_find <- function(dbh_species, custom_eqn = NULL) {
   result[!is.na(result$dbh), , drop = FALSE]
 }
 
+#' @rdname allo_find
+#' @export
+allo_find2 <- function(dbh_species, custom_eqn = NULL) {
+  eqn <- custom_eqn %||% fgeo.biomass::default_equations
+  abort_if_not_eqn(eqn)
+  nest_join(dbh_species, eqn)
+}
+
+
 abort_if_not_eqn <- function(custom_eqn) {
   if (!inherits(custom_eqn, "eqn")) {
     abort(
@@ -92,6 +104,8 @@ abort_if_not_eqn <- function(custom_eqn) {
 #' simplified once allodb incorporates the generic equations.
 #' @noRd
 join_dbh_species_with_eqn <- function(dbh_species, eqn) {
+  # FIXME: This chunk may be removed as eqn_type seems useless, at least for now
+  # or it should have no missing values
   n_eqn_type <- sum(is.na(eqn$eqn_type))
   if (!identical(n_eqn_type, 0L)) {
     warn(
