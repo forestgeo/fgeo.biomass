@@ -85,16 +85,35 @@ census2_species2 <- census2 %>% add_species(species2, site = "scbi")
 census2_species2 %>% filter(is.na(sp))
 ```
 
-But my has not that problem. My next step is then to find default equations in the allodb package. 
-
-
-For this I will use `allo_find2()` -- an experimental function.
+But my has not that problem. My next step is then to find default equations in the allodb package. I can to this with `dplyr::left_join()`.
 
 ```{r}
-nrow(census_species)
-allo_find2(census_species)
+with_equations <- left_join(census_species, default_equations)
+with_equations
 ```
 
-The first message informs me that the `census_species` dataset is matched with equations by species (`sp`) and site. That makes sense the same species may have different equations for different sites. In other words, equations are "species and site"L specific.
+I notice that some of the censused species have no match in allodb.
 
-Here I lost some rows because not all the species in the census data had a matching equation in allodb.
+```{r}
+with_equations %>% filter(is.na(equation_id))
+```
+
+I also notice that, for some trees match multiple equations. This is expected as some equations apply not to a whole tree but to part of a tree. The biomass of such trees will be the sum of the biomass of each component (more on this later).
+
+```{r}
+with_equations %>% 
+  add_count(rowid) %>%
+  filter(n > 1) %>% 
+  select(rowid, sp, dbh, equation_id, anatomic_relevance, n)
+```
+
+But I suspect a mistake: I don't think two rows in a same rowid should be at the "whole tree" level.
+
+```{r}
+with_equations %>% 
+  add_count(rowid) %>%
+  filter(n > 1) %>% 
+  select(rowid, sp, dbh, equation_id, anatomic_relevance, n) %>% 
+  filter(grepl("whole tree", anatomic_relevance))
+```
+
