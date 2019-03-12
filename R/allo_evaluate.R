@@ -1,4 +1,4 @@
-allo_evaluate_impl <- function(data) {
+allo_evaluate_impl <- function(data, to) {
   .biomass <- purrr::map2_dbl(
     data$eqn, data$dbh,
     ~eval(parse(text = .x), envir = list(dbh = .y))
@@ -6,7 +6,7 @@ allo_evaluate_impl <- function(data) {
   result <- dplyr::mutate(data, biomass = .biomass)
 
   result$biomass <- convert_units(
-    result$biomass, from = result$bms_unit, to = "g"
+    result$biomass, from = result$bms_unit, to = to
   )
 
   result
@@ -30,10 +30,12 @@ allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 #'   allo_find()
 #'
 #' allo_evaluate(best)
-allo_evaluate <- function(data) {
+allo_evaluate <- function(data, output_units = "kg") {
   inform_expected_units()
-  inform("`biomass` values are given in [g].")
-  allo_evaluate_memoised(data)
+
+
+  inform(glue("`biomass` values are given in [{output_units}]."))
+  allo_evaluate_memoised(data, output_units)
 }
 
 inform_expected_units <- function() {

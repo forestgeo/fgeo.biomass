@@ -1,6 +1,8 @@
 context("allo_evaluate")
 
-test_that("allo_evaluate informs returned value is in [g]", {
+set.seed(1)
+
+test_that("allo_evaluate informs returned value is in [kg]", {
   cns_sp <- fgeo.biomass::scbi_tree1 %>%
     dplyr::sample_n(30) %>%
     add_species(fgeo.biomass::scbi_species, "scbi")
@@ -8,7 +10,14 @@ test_that("allo_evaluate informs returned value is in [g]", {
 
   expect_message(
     allo_evaluate(eqn),
-    "`biomass`.*[g]"
+    "`biomass`.*kg"
+  )
+
+  expect_false(
+    identical(
+      allo_evaluate_impl(eqn, "g"),
+      allo_evaluate_impl(eqn, "kg")
+    )
   )
 })
 
