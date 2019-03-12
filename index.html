@@ -253,23 +253,23 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">with_biomass &lt;-<span class="st"> </span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>()</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; `biomass` values are given in [g].</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; `biomass` values are given in [kg].</span></a>
 <a class="sourceLine" id="cb9-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb9-6" data-line-number="6">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb9-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(eqn, dbh, biomass)</a>
 <a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; # A tibble: 30,229 x 3</span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt;    eqn                             dbh biomass</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;    &lt;chr&gt;                         &lt;dbl&gt;   &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  1 1.5416 * (dbh^2)^2.7818        53.1 2.78e12</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  2 1.0259 * (dbh^2.7324)          91.4 1.06e 8</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  3 exp(4.5893 + 2.43 * log(dbh)) 326.  1.26e 8</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  4 0.1634 * (dbh^2.348)           42.8 1.11e 6</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  5 exp(4.5893 + 2.43 * log(dbh)) 289.  9.38e 7</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  6 1.5647 * (dbh^2.6887)         251.  2.00e 9</span></a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;  7 1.4416 * (dbh^2.7324)         187.  1.05e 9</span></a>
-<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt;  8 0.004884 * (dbh^2.094)        475   1.97e 6</span></a>
-<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt;  9 0.1634 * (dbh^2.348)          170.  2.81e 7</span></a>
-<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; 10 2.0394 * (dbh^2.5715)          10.7 4.11e 5</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt;    eqn                             dbh     biomass</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;    &lt;chr&gt;                         &lt;dbl&gt;       &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  1 1.5416 * (dbh^2)^2.7818        53.1 2783745874.</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  2 1.0259 * (dbh^2.7324)          91.4     106190.</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  3 exp(4.5893 + 2.43 * log(dbh)) 326.      126240.</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  4 0.1634 * (dbh^2.348)           42.8       1106.</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  5 exp(4.5893 + 2.43 * log(dbh)) 289.       93834.</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  6 1.5647 * (dbh^2.6887)         251.     2000752.</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;  7 1.4416 * (dbh^2.7324)         187.     1054728.</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt;  8 0.004884 * (dbh^2.094)        475         1967.</span></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt;  9 0.1634 * (dbh^2.348)          170.       28128.</span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; 10 2.0394 * (dbh^2.5715)          10.7        411.</span></a>
 <a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; # … with 30,219 more rows</span></a></code></pre></div>
 <p>Commonly we would further summarize the result. For that you can use the <strong>dplyr</strong> package or any general purpose tool. For example, this summary gives the total biomass for each species in descending order.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -279,16 +279,16 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; # A tibble: 52 x 2</span></a>
 <a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;    sp                      total_biomass</span></a>
 <a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;    &lt;chr&gt;                           &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  1 platanus occidentalis         5.77e17</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  2 nyssa sylvatica               1.29e17</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  3 liriodendron tulipifera       1.64e12</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  4 quercus alba                  4.66e11</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  5 quercus velutina              3.68e11</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  6 quercus rubra                 2.13e11</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;  7 carya glabra                  1.93e11</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt;  8 quercus falcata               1.82e11</span></a>
-<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;  9 fraxinus americana            1.26e11</span></a>
-<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; 10 carya tomentosa               1.21e11</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  1 platanus occidentalis         5.77e14</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  2 nyssa sylvatica               1.29e14</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  3 liriodendron tulipifera       1.64e 9</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  4 quercus alba                  4.66e 8</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  5 quercus velutina              3.68e 8</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  6 quercus rubra                 2.13e 8</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;  7 carya glabra                  1.93e 8</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt;  8 quercus falcata               1.82e 8</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;  9 fraxinus americana            1.26e 8</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; 10 carya tomentosa               1.21e 8</span></a>
 <a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; # … with 42 more rows</span></a></code></pre></div>
 </div>
 <div id="providing-custom-equations" class="section level3">
@@ -342,7 +342,7 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt; * Output: 3.</span></a>
 <a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; Converting `dbh` based on `dbh_unit`.</span></a>
 <a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; `biomass` values are given in [g].</span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; `biomass` values are given in [kg].</span></a>
 <a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt; # A tibble: 3 x 12</span></a>
 <a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;   eqn_type rowid site  sp      dbh equation_id eqn   eqn_source</span></a>
 <a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     </span></a>
