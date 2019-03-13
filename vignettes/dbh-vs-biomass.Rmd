@@ -1,5 +1,7 @@
 ---
 title: "Plot dbh vs. biomass by species"
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -7,6 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+set.seed(1)
 ```
 
 ### Setup
@@ -29,7 +32,11 @@ library(fgeo.biomass)
 Example: plot for SCBI. We want a plot like this except by species -- mapping each species to a color.
 
 ```{r, cache=TRUE}
-p <- fgeo.biomass::scbi_tree1 %>% 
+census <- fgeo.biomass::scbi_tree1
+some_species <- sample(unique(census$sp), 8)
+
+p <- census %>% 
+  filter(sp %in% some_species) %>% 
   ggplot(aes(dbh, agb, color = sp)) + 
     geom_point(size = 0.5) +
     labs(title = "SCBI allometries")
@@ -37,8 +44,7 @@ p <- fgeo.biomass::scbi_tree1 %>%
 p
 ```
 
-
-```{r, fig.height=14, cache=TRUE}
+```{r, cache=TRUE}
 p +
   guides(color = "none") +
   facet_wrap("sp", ncol = 6)
@@ -48,83 +54,105 @@ p +
 
 Here I plot `dbh` vs `biomass` by species, for the species we can get a meaningful biomass right now. Some species will be left out because fgeo.biomass can't handle them until I we support some additional issues. I still don't wrap the code in an elegant function. I prefer to expose the internals to make the process more transparent during review.
 
-I prefer to now wait and instead plot `dbh` vs. `biomass` as early as possible hoping that this will estimulate your review. Your continuous feedback is crucial in accelerating the development process.
-
 ### Data
 
-The data comes from SCBI. ForestGEO datasets store `dbh` in [mm] but fgeo.biomass expecte [cm] (Why?). So we first convert [mm] to [cm].
+Drop rows with missing `dbh` values as we can't calculate biomass for them.
 
 ```{r}
-census <- fgeo.biomass::scbi_tree1 %>%  
-  mutate(dbh = measurements::conv_unit(dbh, from = "mm", to = "cm"))
+census <- fgeo.biomass::scbi_tree1 %>% 
+  filter(!is.na(dbh)) %>% 
+  # Sample a few rows for speed
+  sample_n(1000)
 ```
 
-* Match data with equations from allodb and calculate biomass. Notice that we currently drop rows corresponding to species with no match in allodb for "SCBI". Soon we'll [fall back to more generic equations when species-level equations are not available](https://github.com/forestgeo/allodb/issues/72).
+This is unexpected: Some dead trees have non-missing `dbh` values. I do nothing about it and continue.
+
+```{r}
+census %>% 
+  filter(status == "D") %>% 
+  select(dbh, matches("status"))
+```
+
+Find allometric equations in allodb and calculate biomass.
 
 ```{r}
 species <- fgeo.biomass::scbi_species
+census_species <- census %>% 
+  add_species(species, site = "SCBI")
 
-with_equaitons <- census %>% 
-  add_species(species, site = "SCBI") %>% 
-  allo_find() %>% 
-  allo_evaluate()
+with_equations <- allo_find(census_species)
+biomass <- allo_evaluate(with_equations)
+biomass
 ```
 
-
-
-
-
-
-
+Let's visualize the results. First, lets plot `dbh` vs. `agb`. `agb` comes with the data; it is not what we calculated and it's maybe invalid, but it is can help have a vague idea of what to expect.
 
 ```{r}
-with_equaitons_cm %>% 
-  add_count(rowid) %>% 
-  filter(n > 1) %>% 
-  select(n, anatomic_relevance, equation_id, eqn, dbh, biomass)
+census_biomass <- left_join(census_species, biomass)
+
+census_biomass %>% 
+  ggplot(aes(dbh, agb)) + 
+  geom_point()
 ```
 
-
-
-
-
-
-
-
-
-
-In this section I pick the subset of SCBI data I can get meaninful biomass for with the code we have already implemented.
-
-
-
-First exclude data from species for which allodb lacks equaitons (soon we'll [fall back to more generic equations when species-level equations are not available](https://github.com/forestgeo/allodb/issues/72)).
-
-```{r}
-# Find species for which allodb has equations
-available_species_equations <- allodb::master() %>% 
-  filter(site == "SCBI") %>% 
-  pull(species) %>% 
-  unique() %>% 
-  tolower()
-
-# Exclusively pick census data for which allodb has equations (drop the rest)
-census1 <- census %>%
-  filter(sp %in% available_species_equations)
-
-# Compare
-nrow(census)
-nrow(census1)
-
-census1
-```
-
-For now, [fgeo.biomass does not support allometric equations that are not at the level of an entire tree](https://github.com/forestgeo/allodb/issues/63).
+Now let's plot `dbh` vs. `biomass`.
 
 ```{r, cache=TRUE}
-with_equations <- census1 %>% 
-  allo_find()
+eqn_biomass <- with_equations %>% right_join(biomass)
+
+eqn_biomass %>% 
+  right_join(biomass) %>% 
+  ggplot(aes(dbh, biomass)) + 
+  geom_point()
 ```
 
+Some values appear to be surprisingly high. 
 
+```{r}
+eqn_biomass %>% 
+  right_join(biomass) %>% 
+  ggplot(aes(sp, biomass)) +
+  geom_boxplot() +
+  coord_flip()
+```
 
-Also, fgeo.biomass does no support equations that apply to different dbh ranges.
+They seem to all come from the _Nyssa Sylvatica_. Is it's allometric equation correct?
+
+```{r}
+eqn_biomass %>% 
+  select(sp, equation_id, eqn, dbh, biomass) %>% 
+  arrange(desc(biomass))
+```
+
+To see more detail on the lower `biomass` values, let's remove that species and plot again.
+
+```{r, cache=TRUE}
+eqn_biomass %>% 
+  filter(sp != "nyssa sylvatica") %>% 
+  ggplot(aes(dbh, biomass, color = sp)) +
+  geom_point()
+```
+
+This is more informative.
+
+---
+
+Some `biomass` values are missing. 
+
+```{r}
+failed <- census_species %>% 
+  right_join(biomass) %>% 
+  filter(is.na(biomass)) %>% 
+  select(rowid, site, matches("status"), dbh, sp, biomass)
+
+failed
+```
+
+Is this because the corresponding species couldn't be found in allodb? 
+
+```{r}
+failed_species <- unique(failed$sp)
+all(failed_species %in% tolower(species$Latin))
+```
+
+No. Information for these species is available. I need to investigate what's going on.
