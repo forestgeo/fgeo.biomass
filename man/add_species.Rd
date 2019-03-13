@@ -20,9 +20,13 @@ A dataframe with as many rows as the census dataset.
 Add \code{species} to a ForestGEO-like dataframe of census data.
 }
 \examples{
+library(dplyr)
+
 census <- fgeo.biomass::scbi_tree1
 species <- fgeo.biomass::scbi_species
-add_species(census, species, site = "scbi")
+census \%>\%
+  add_species(species, site = "scbi") \%>\%
+  dplyr::select(rowid, site, sp)
 }
 \seealso{
 Other constructors: \code{\link{allo_find}}

@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+### Setup
+
+```{r}
 library(tidyverse)
 library(fgeo.biomass)
 ```
@@ -17,26 +19,85 @@ library(fgeo.biomass)
 ### [Issue](https://github.com/forestgeo/allodb/issues/73)
 
 > We'll want to make the following plot:
+
 > * x-axis: DBH (cm)
 > * y-axis: biomass (kg)
 > * one colored line or series of points for each species at a site.
 
-> [Example] for SCBI, with the modification that I'd like a separate color for each species + legend.
-
 ![](https://i.imgur.com/9yHG00Z.png)
 
+Example: plot for SCBI. We want a plot like this except by species -- mapping each species to a color.
+
+```{r, cache=TRUE}
+p <- fgeo.biomass::scbi_tree1 %>% 
+  ggplot(aes(dbh, agb, color = sp)) + 
+    geom_point(size = 0.5) +
+    labs(title = "SCBI allometries")
+
+p
+```
+
+
+```{r, fig.height=14, cache=TRUE}
+p +
+  guides(color = "none") +
+  facet_wrap("sp", ncol = 6)
+```
 
 ### Introduction
 
-Here I make this plot for the species we can get a meaningful biomass right now. Some species will be left out because fgeo.biomass can't handle them until I we support some additional issues.
+Here I plot `dbh` vs `biomass` by species, for the species we can get a meaningful biomass right now. Some species will be left out because fgeo.biomass can't handle them until I we support some additional issues. I still don't wrap the code in an elegant function. I prefer to expose the internals to make the process more transparent during review.
 
 I prefer to now wait and instead plot `dbh` vs. `biomass` as early as possible hoping that this will estimulate your review. Your continuous feedback is crucial in accelerating the development process.
 
 ### Data
 
-I'll pick a subset of data from SCBI that I can use to get meaningful biomass even with the limited features that fgeo.biomass supports right now.
+The data comes from SCBI. ForestGEO datasets store `dbh` in [mm] but fgeo.biomass expecte [cm] (Why?). So we first convert [mm] to [cm].
 
-fgeo.biomass still has no way to [fall back to more generic equations when species-level equations are not available](https://github.com/forestgeo/allodb/issues/72).
+```{r}
+census <- fgeo.biomass::scbi_tree1 %>%  
+  mutate(dbh = measurements::conv_unit(dbh, from = "mm", to = "cm"))
+```
+
+* Match data with equations from allodb and calculate biomass. Notice that we currently drop rows corresponding to species with no match in allodb for "SCBI". Soon we'll [fall back to more generic equations when species-level equations are not available](https://github.com/forestgeo/allodb/issues/72).
+
+```{r}
+species <- fgeo.biomass::scbi_species
+
+with_equaitons <- census %>% 
+  add_species(species, site = "SCBI") %>% 
+  allo_find() %>% 
+  allo_evaluate()
+```
+
+
+
+
+
+
+
+
+```{r}
+with_equaitons_cm %>% 
+  add_count(rowid) %>% 
+  filter(n > 1) %>% 
+  select(n, anatomic_relevance, equation_id, eqn, dbh, biomass)
+```
+
+
+
+
+
+
+
+
+
+
+In this section I pick the subset of SCBI data I can get meaninful biomass for with the code we have already implemented.
+
+
+
+First exclude data from species for which allodb lacks equaitons (soon we'll [fall back to more generic equations when species-level equations are not available](https://github.com/forestgeo/allodb/issues/72)).
 
 ```{r}
 # Find species for which allodb has equations
@@ -46,13 +107,13 @@ available_species_equations <- allodb::master() %>%
   unique() %>% 
   tolower()
 
-# Add species to census data
-census <- fgeo.biomass::scbi_tree1 %>% 
-  add_species(fgeo.biomass::scbi_species, site = "SCBI")
-
-# Pick census data for which allodb has equations
+# Exclusively pick census data for which allodb has equations (drop the rest)
 census1 <- census %>%
   filter(sp %in% available_species_equations)
+
+# Compare
+nrow(census)
+nrow(census1)
 
 census1
 ```

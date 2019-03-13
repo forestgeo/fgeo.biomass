@@ -36,7 +36,9 @@ test_that("outputs the expected data structure", {
   },
     NA
   )
-  expect_named(out, c("rowid", "site", "sp", "dbh"))
+
+  expect_true(length(fgeo.biomass::scbi_tree1) < length(out))
+  expect_true(all(c("rowid", "site", "sp", "dbh") %in% names(out)))
 })
 
 test_that("add_species informs when addint latin species names into `sp`", {
@@ -46,7 +48,7 @@ test_that("add_species informs when addint latin species names into `sp`", {
       fgeo.biomass::scbi_species,
       site = "scbi"
     ),
-    "`sp` now stores Latin species names"
+    "`sp`.*now stores Latin species names"
   )
 
 })

@@ -10,9 +10,13 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' census <- fgeo.biomass::scbi_tree1
 #' species <- fgeo.biomass::scbi_species
-#' add_species(census, species, site = "scbi")
+#' census %>%
+#'   add_species(species, site = "scbi") %>%
+#'   dplyr::select(rowid, site, sp)
 add_species <- function(census, species, site) {
   .census <- rlang::set_names(census, tolower)
   .species <- rlang::set_names(species, tolower)
@@ -20,15 +24,16 @@ add_species <- function(census, species, site) {
   check_bms_cns(.census, .species, .site)
 
   all <- dplyr::left_join(.census, .species, by = "sp")
-  inform("`sp` now stores Latin species names")
-  all$sp <- tolower(all$latin)
-  all$site <- .site
 
-  if (!rlang::has_name(all, "rowid")) {
-    all <- tibble::rowid_to_column(all)
+  inform("Adding `site`.")
+  inform("Overwriting `sp`; it now stores Latin species names.")
+  out <- mutate(census, site = .site, sp = tolower(all$latin))
+  if (rlang::has_name(out, "rowid")) {
+    abort("`census` must not contain a column named `rowid`. Please remove it.")
   }
+  inform(glue("Adding `rowid`."))
+  out <- tibble::rowid_to_column(out)
 
-  out <- all[c("rowid", "site", "sp", "dbh")]
   warn_sp_missmatch(census, species)
   warn_missing_sp(out$sp)
   new_add_species(dplyr::as_tibble(out))
