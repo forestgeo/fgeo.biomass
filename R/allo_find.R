@@ -16,6 +16,7 @@ allo_find_impl <- function(dbh_species, dbh_unit = "mm", custom_eqn = NULL) {
 #' Find allometric equations in allodb or in a custom equations-table.
 #'
 #' @param dbh_species A dataframe as those created with [add_species()].
+#' @param dbh_unit Character string giving the unit of the expected input dbh.
 #' @param custom_eqn A dataframe of class "eqn".
 #'
 #' @family functions to manipulate equations

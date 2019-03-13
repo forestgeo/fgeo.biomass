@@ -4,10 +4,12 @@
 \alias{allo_find}
 \title{Find allometric equations in allodb or in a custom equations-table.}
 \usage{
-allo_find(dbh_species, custom_eqn = NULL)
+allo_find(dbh_species, dbh_unit = "mm", custom_eqn = NULL)
 }
 \arguments{
 \item{dbh_species}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}
+
+\item{dbh_unit}{Character string giving the unit of the expected input dbh.}
 
 \item{custom_eqn}{A dataframe of class "eqn".}
 }
@@ -27,6 +29,8 @@ census_species <- add_species(
 )
 
 allo_find(census_species)
+
+allo_find(census_species, dbh_unit = "cm")
 
 # PROVIDE CUSTOM EQUAITONS ----------------------------------------------
 # Checks that the structure of your data isn't terriby wrong

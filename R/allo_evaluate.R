@@ -20,7 +20,7 @@ allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 #' Evaluate equations, giving a biomass result per row.
 #'
 #' @param data A dataframe as those created with [allo_find()].
-#'
+#' @param output_units Character string giving the output unit e.g. "kg".
 #' @family functions to manipulate equations
 #'
 #' @return A dataframe with a single row by each value of `rowid`.
@@ -46,8 +46,8 @@ allo_evaluate <- function(data, output_units = "kg") {
     (see https://github.com/forestgeo/fgeo.biomass/issues/9).
   ")
 
-  by_rowid <- group_by(out, rowid)
-  summarize(by_rowid, biomass = sum(biomass))
+  by_rowid <- group_by(out, .data$rowid)
+  summarize(by_rowid, biomass = sum(.data$biomass))
 }
 
 inform_expected_units <- function() {

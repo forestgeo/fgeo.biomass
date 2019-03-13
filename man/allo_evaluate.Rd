@@ -8,6 +8,8 @@ allo_evaluate(data, output_units = "kg")
 }
 \arguments{
 \item{data}{A dataframe as those created with \code{\link[=allo_find]{allo_find()}}.}
+
+\item{output_units}{Character string giving the output unit e.g. "kg".}
 }
 \value{
 A dataframe with a single row by each value of \code{rowid}.
