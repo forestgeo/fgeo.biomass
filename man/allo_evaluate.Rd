@@ -4,7 +4,7 @@
 \alias{allo_evaluate}
 \title{Evaluate equations, giving a biomass result per row.}
 \usage{
-allo_evaluate(data)
+allo_evaluate(data, output_units = "kg")
 }
 \arguments{
 \item{data}{A dataframe as those created with \code{\link[=allo_find]{allo_find()}}.}
