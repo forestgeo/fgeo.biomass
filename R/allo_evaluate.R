@@ -1,4 +1,8 @@
 allo_evaluate_impl <- function(data, to) {
+  if (is.list(data$eqn)) {
+    data <- tidyr::unnest(data)
+  }
+
   .biomass <- purrr::map2_dbl(
     data$eqn, data$dbh,
     ~eval(parse(text = .x), envir = list(dbh = .y))
@@ -32,7 +36,6 @@ allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 #' allo_evaluate(best)
 allo_evaluate <- function(data, output_units = "kg") {
   inform_expected_units()
-
 
   inform(glue("`biomass` values are given in [{output_units}]."))
    out <- allo_evaluate_memoised(data, output_units)

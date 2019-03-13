@@ -5,7 +5,7 @@ test_that("errs with informative message", {
   expect_error(fixme_find_duplicated_rowid(renamed_eqn), "Ensure your data")
 })
 
-test_that("fixme_drop_duplicated_rowid has no rowis found by fixme_find_*", {
+test_that("fixme_drop_duplicated_rowid has no rows found by fixme_find_*", {
   census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30) %>%
     add_species(fgeo.biomass::scbi_species, "scbi")
   eqn <- suppressWarnings(allo_find(census))

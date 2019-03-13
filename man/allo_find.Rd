@@ -2,12 +2,9 @@
 % Please edit documentation in R/allo_find.R
 \name{allo_find}
 \alias{allo_find}
-\alias{allo_find2}
-\title{Get default equations of each type.}
+\title{Find allometric equations in allodb or in a custom equations-table.}
 \usage{
 allo_find(dbh_species, custom_eqn = NULL)
-
-allo_find2(dbh_species, custom_eqn = NULL)
 }
 \arguments{
 \item{dbh_species}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}
@@ -19,8 +16,7 @@ A nested dataframe with each row containing the data of an equation
 type.
 }
 \description{
-\code{allo_find2()} is an experimental function -- a simple wrapper around
-\code{\link[dplyr:nest_join]{dplyr::nest_join()}}.
+Find allometric equations in allodb or in a custom equations-table.
 }
 \examples{
 census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)

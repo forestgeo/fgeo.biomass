@@ -19,6 +19,7 @@
 #' single_best <- census %>%
 #'   add_species(species, site = "scbi") %>%
 #'   allo_find() %>%
+#'   tidyr::unnest() %>%
 #'   fixme_drop_duplicated_rowid()
 #'
 #' add_equations(census, single_best)

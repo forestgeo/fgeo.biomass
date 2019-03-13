@@ -1,7 +1,19 @@
-#' Get default equations of each type.
-#'
-#' `allo_find2()` is an experimental function -- a simple wrapper around
-#' [dplyr::nest_join()].
+allo_find_impl <- function(dbh_species, dbh_unit = "mm", custom_eqn = NULL) {
+  inform(glue("Assuming `dbh` data in [{dbh_unit}]."))
+
+  eqn <- custom_eqn %||% fgeo.biomass::default_equations
+  abort_if_not_eqn(eqn)
+  result <- dplyr::left_join(dbh_species, eqn)
+
+  inform("Converting `dbh` based on `dbh_unit`.")
+  result$dbh <- convert_units(
+    result$dbh, from = dbh_unit, to = result$dbh_unit
+  )
+
+  result
+}
+
+#' Find allometric equations in allodb or in a custom equations-table.
 #'
 #' @param dbh_species A dataframe as those created with [add_species()].
 #' @param custom_eqn A dataframe of class "eqn".
@@ -21,6 +33,8 @@
 #' )
 #'
 #' allo_find(census_species)
+#'
+#' allo_find(census_species, dbh_unit = "cm")
 #'
 #' # PROVIDE CUSTOM EQUAITONS ----------------------------------------------
 #' # Checks that the structure of your data isn't terriby wrong
@@ -48,36 +62,7 @@
 #' census_species %>%
 #' allo_find(custom_eqn = as_eqn(your_equations))
 #' @family constructors
-allo_find <- function(dbh_species, custom_eqn = NULL) {
-  eqn <- custom_eqn %||% fgeo.biomass::default_equations
-  abort_if_not_eqn(eqn)
-
-  result <- join_dbh_species_with_eqn(dbh_species, eqn)
-  warn_if_dropped_rows_not_matched_with_equations(dbh_species, result)
-
-  inform("Converting `dbh` based on `dbh_unit`.")
-  result$dbh <- convert_units(
-    result$dbh, from = "cm", to = result$dbh_unit
-  )
-
-  if (sum(is.na(result$dbh)) > 0) {
-    warn(
-      glue(
-        "Dropping {sum(is.na(result$dbh))} rows where units can't be converted"
-      )
-    )
-  }
-  result[!is.na(result$dbh), , drop = FALSE]
-}
-
-#' @rdname allo_find
-#' @export
-allo_find2 <- function(dbh_species, custom_eqn = NULL) {
-  eqn <- custom_eqn %||% fgeo.biomass::default_equations
-  abort_if_not_eqn(eqn)
-  nest_join(dbh_species, eqn)
-}
-
+allo_find <- memoise::memoise(allo_find_impl)
 
 abort_if_not_eqn <- function(custom_eqn) {
   if (!inherits(custom_eqn, "eqn")) {
@@ -90,57 +75,3 @@ abort_if_not_eqn <- function(custom_eqn) {
 
   invisible(custom_eqn)
 }
-
-#' Split equations by eqn_type and inner-join each group with user's data,
-#' matching by site and species and dropping NA's, i.e. missmatched.
-#'
-#' FIXME: eqn_type should only have three values, e.g.:
-#' 1. specific
-#' 2. generic
-#' 3. custom
-#' See allodb issue 42
-#'
-#' This approach seem too complicates. This entire logic may be dramatically
-#' simplified once allodb incorporates the generic equations.
-#' @noRd
-join_dbh_species_with_eqn <- function(dbh_species, eqn) {
-  # FIXME: This chunk may be removed as eqn_type seems useless, at least for now
-  # or it should have no missing values
-  n_eqn_type <- sum(is.na(eqn$eqn_type))
-  if (!identical(n_eqn_type, 0L)) {
-    warn(
-      glue("Dropping {n_eqn_type} rows with missing values of `eqn_type`.")
-    )
-  }
-  eqn_ <- dplyr::filter(eqn, !is.na(.data$eqn_type))
-
-  join_vars <- c("sp", "site")
-  inform(glue("Joining, by = {rlang::expr_text(join_vars)}"))
-  eqn_ %>%
-    dplyr::group_by(.data$eqn_type) %>%
-    tidyr::nest() %>%
-    dplyr::mutate(
-      data = purrr::map(.data$data, ~ get_this_eqn(.x, dbh_species, join_vars))
-    ) %>%
-    tidyr::unnest()
-}
-
-get_this_eqn <- function(.type, dbh_species, join_vars) {
-  dplyr::inner_join(dbh_species, .type, by = join_vars) %>%
-    dplyr::filter(!is.na(.data$dbh), !is.na(.data$eqn))
-}
-
-warn_if_dropped_rows_not_matched_with_equations <- function(input, output) {
-  n_in <- nrow(input)
-  n_out <- nrow(output)
-  if (!identical(n_in, n_out)) {
-    warn(glue("
-      The input and output datasets have different number of rows:
-      * Input: {n_in}.
-      * Output: {n_out}.\n
-      "))
-  }
-
-  invisible(input)
-}
-

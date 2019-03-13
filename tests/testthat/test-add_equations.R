@@ -3,7 +3,8 @@ context("add_equations")
 census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
 
 single_best <- add_species(census, fgeo.biomass::scbi_species, site = "scbi")
-single_best <- suppressWarnings(allo_find(single_best))
+single_best <- suppressWarnings(allo_find(single_best)) %>%
+  tidyr::unnest()
 single_best <- suppressWarnings(fixme_drop_duplicated_rowid(single_best))
 
 test_that("handles census with existing `rowid`", {
