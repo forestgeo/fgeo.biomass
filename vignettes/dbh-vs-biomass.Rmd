@@ -12,57 +12,20 @@ knitr::opts_chunk$set(
 set.seed(1)
 ```
 
-### Setup
+The goal is to plot dbh (x) versus biomass (y) by species -- mapping each species to a color ([issue](https://github.com/forestgeo/allodb/issues/73)).
 
 ```{r}
 library(tidyverse)
 library(fgeo.biomass)
 ```
 
-### [Issue](https://github.com/forestgeo/allodb/issues/73)
-
-> We'll want to make the following plot:
-
-> * x-axis: DBH (cm)
-> * y-axis: biomass (kg)
-> * one colored line or series of points for each species at a site.
-
-![](https://i.imgur.com/9yHG00Z.png)
-
-Example: plot for SCBI. We want a plot like this except by species -- mapping each species to a color.
-
-```{r, cache=TRUE}
-census <- fgeo.biomass::scbi_tree1
-some_species <- sample(unique(census$sp), 8)
-
-p <- census %>% 
-  filter(sp %in% some_species) %>% 
-  ggplot(aes(dbh, agb, color = sp)) + 
-    geom_point(size = 0.5) +
-    labs(title = "SCBI allometries")
-
-p
-```
-
-```{r, cache=TRUE}
-p +
-  guides(color = "none") +
-  facet_wrap("sp", ncol = 6)
-```
-
-### Introduction
-
-Here I plot `dbh` vs `biomass` by species, for the species we can get a meaningful biomass right now. Some species will be left out because fgeo.biomass can't handle them until I we support some additional issues. I still don't wrap the code in an elegant function. I prefer to expose the internals to make the process more transparent during review.
-
-### Data
-
-Drop rows with missing `dbh` values as we can't calculate biomass for them.
+Let's first drop rows with missing `dbh` values as we can't calculate biomass for them.
 
 ```{r}
 census <- fgeo.biomass::scbi_tree1 %>% 
   filter(!is.na(dbh)) %>% 
   # Sample a few rows for speed
-  sample_n(1000)
+  sample_n(5000)
 ```
 
 This is unexpected: Some dead trees have non-missing `dbh` values. I do nothing about it and continue.
@@ -73,7 +36,7 @@ census %>%
   select(dbh, matches("status"))
 ```
 
-Find allometric equations in allodb and calculate biomass.
+Let's find allometric equations in allodb and calculate biomass.
 
 ```{r}
 species <- fgeo.biomass::scbi_species
@@ -81,6 +44,7 @@ census_species <- census %>%
   add_species(species, site = "SCBI")
 
 with_equations <- allo_find(census_species)
+
 biomass <- allo_evaluate(with_equations)
 biomass
 ```
@@ -88,9 +52,9 @@ biomass
 Let's visualize the results. First, lets plot `dbh` vs. `agb`. `agb` comes with the data; it is not what we calculated and it's maybe invalid, but it is can help have a vague idea of what to expect.
 
 ```{r}
-census_biomass <- left_join(census_species, biomass)
+eqn_biomass <- with_equations %>% right_join(biomass)
 
-census_biomass %>% 
+eqn_biomass %>% 
   ggplot(aes(dbh, agb)) + 
   geom_point()
 ```
@@ -98,8 +62,6 @@ census_biomass %>%
 Now let's plot `dbh` vs. `biomass`.
 
 ```{r, cache=TRUE}
-eqn_biomass <- with_equations %>% right_join(biomass)
-
 eqn_biomass %>% 
   right_join(biomass) %>% 
   ggplot(aes(dbh, biomass)) + 
