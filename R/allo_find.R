@@ -137,7 +137,7 @@ warn_if_dropped_rows_not_matched_with_equations <- function(input, output) {
     warn(glue("
       The input and output datasets have different number of rows:
       * Input: {n_in}.
-      * Output: {n_out}.
+      * Output: {n_out}.\n
       "))
   }
 
