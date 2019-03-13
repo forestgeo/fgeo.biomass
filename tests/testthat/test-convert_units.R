@@ -1,5 +1,7 @@
 context("convert_units")
 
+library(dplyr)
+
 test_that("convert_units converts `dbh`", {
   data <- tibble::tribble(
     ~dbh, ~dbh_unit,
@@ -20,3 +22,17 @@ test_that("convert_units converts `biomass`", {
   expect_equal(out, c(1000, NA))
 })
 
+test_that("convert_unit can convert all units in allodb::equations", {
+  dfm <- allodb::equations %>%
+    select(matches("unit")) %>%
+    unique() %>%
+    mutate(dbh = 1, biomass = 1)
+
+  expect_false(
+    any(is.na(convert_units(dfm$dbh, "cm", to = dfm$dbh_units_original)))
+  )
+
+  expect_false(
+    any(is.na(convert_units(dfm$dbh, dfm$biomass_units_original, to = "kg")))
+  )
+})
