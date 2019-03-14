@@ -155,7 +155,9 @@ census_equations_biomass %>%
   filter(!sp %in% odd_species) %>% 
   ggplot(aes(dbh, biomass)) +
   geom_point() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ylab("biomass [kg]") +
+  xlab("dbh [mm]")
 #> Warning: Removed 303 rows containing missing values (geom_point).
 ```
 
@@ -165,15 +167,18 @@ This makes more sense.
 
 Let’s use the `agb` values that come with the data as a reference. `agb`
 appears to be not in \[kg\] but in \[Ton\], so we need to adjust
-accordingly.
+accordingly. Let’s also use a red line to differenciate species which
+biomass is almost always under 5000 \[kg\].
 
 ``` r
 census_equations_biomass %>% 
   filter(!sp %in% odd_species) %>% 
   ggplot(aes(x = dbh)) +
+  geom_hline(yintercept = 5000, color = "red") +
   geom_point(aes(y = agb * 1e3), color = "grey") +
   geom_point(aes(y = biomass), size = 0.3) +
-  ylab(" agb [Ton] in grey and biomass [kg] in black")
+  ylab("agb [Ton] in grey and biomass [kg] in black") +
+  xlab("dbh [mm]")
 #> Warning: Removed 303 rows containing missing values (geom_point).
 
 #> Warning: Removed 303 rows containing missing values (geom_point).
@@ -192,6 +197,7 @@ Here is a similar comparison, this time by species.
 census_equations_biomass %>% 
   filter(!sp %in% odd_species) %>% 
   ggplot(aes(x = dbh)) +
+  geom_hline(yintercept = 5000, color = "red") +
   geom_point(aes(y = agb * 1e3), color = "grey") +
   geom_point(aes(y = biomass), size = 0.3) +
   facet_wrap("sp", ncol = 4)
