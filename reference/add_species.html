@@ -143,7 +143,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe.</p>
+    <p>A dataframe with as many rows as the census dataset.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -151,21 +151,31 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
+<span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>
 <span class='no'>species</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>
-<span class='fu'>add_species</span>(<span class='no'>census</span>, <span class='no'>species</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>)</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='output co'>#&gt; # A tibble: 40,283 x 4
-#&gt;    rowid site  sp                     dbh
-#&gt;  * &lt;int&gt; &lt;chr&gt; &lt;chr&gt;                &lt;dbl&gt;
-#&gt;  1     1 scbi  lindera benzoin       27.9
-#&gt;  2     2 scbi  lindera benzoin       23.7
-#&gt;  3     3 scbi  lindera benzoin       22.2
-#&gt;  4     4 scbi  nyssa sylvatica      135  
-#&gt;  5     5 scbi  hamamelis virginiana  87  
-#&gt;  6     6 scbi  hamamelis virginiana  22.5
-#&gt;  7     7 scbi  unidentified unk      42.6
-#&gt;  8     8 scbi  lindera benzoin       51.4
-#&gt;  9     9 scbi  viburnum prunifolium  38.3
-#&gt; 10    10 scbi  asimina triloba       14.5
+<span class='no'>census</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>add_species</span>(<span class='no'>species</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>rowid</span>, <span class='no'>site</span>, <span class='no'>sp</span>)</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; # A tibble: 40,283 x 3
+#&gt;    rowid site  sp                  
+#&gt;  * &lt;int&gt; &lt;chr&gt; &lt;chr&gt;               
+#&gt;  1     1 scbi  lindera benzoin     
+#&gt;  2     2 scbi  lindera benzoin     
+#&gt;  3     3 scbi  lindera benzoin     
+#&gt;  4     4 scbi  nyssa sylvatica     
+#&gt;  5     5 scbi  hamamelis virginiana
+#&gt;  6     6 scbi  hamamelis virginiana
+#&gt;  7     7 scbi  unidentified unk    
+#&gt;  8     8 scbi  lindera benzoin     
+#&gt;  9     9 scbi  viburnum prunifolium
+#&gt; 10    10 scbi  asimina triloba     
 #&gt; # … with 40,273 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

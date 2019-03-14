@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get default equations of each type. — allo_find • fgeo.biomass</title>
+<title>Find allometric equations in allodb or in a custom equations-table. — allo_find • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get default equations of each type. — allo_find" />
+<meta property="og:title" content="Find allometric equations in allodb or in a custom equations-table. — allo_find" />
 
-<meta property="og:description" content="Get default equations of each type." />
+<meta property="og:description" content="Find allometric equations in allodb or in a custom equations-table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,18 +111,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get default equations of each type.</h1>
+    <h1>Find allometric equations in allodb or in a custom equations-table.</h1>
     <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/allo_find.R'><code>R/allo_find.R</code></a></small>
     <div class="hidden name"><code>allo_find.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get default equations of each type.</p>
+    <p>Find allometric equations in allodb or in a custom equations-table.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>allo_find</span>(<span class='no'>dbh_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>allo_find</span>(<span class='no'>dbh_species</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"mm"</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,6 +130,10 @@
     <tr>
       <th>dbh_species</th>
       <td><p>A dataframe as those created with <code><a href='add_species.html'>add_species()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>dbh_unit</th>
+      <td><p>Character string giving the unit of the expected input dbh.</p></td>
     </tr>
     <tr>
       <th>custom_eqn</th>
@@ -155,24 +159,43 @@ type.</p>
 <span class='no'>census_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='add_species.html'>add_species</a></span>(
   <span class='no'>census</span>, <span class='no'>species</span>,
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
-)</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The input and output datasets have different number of rows:</span>
-#&gt; <span class='warning'>* Input: 30.</span>
-#&gt; <span class='warning'>* Output: 24.</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 24 x 11
-#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
-#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
-#&gt;  1 species      5 scbi  nyss…  54.7 8da09d      1.54… default   
-#&gt;  2 species      7 scbi  corn…  16.7 f3e023      3.08… default   
-#&gt;  3 species     10 scbi  quer…  31.1 07dba7      1.56… default   
-#&gt;  4 species     11 scbi  robi… 102.  333c34      4.13… default   
-#&gt;  5 species     11 scbi  robi… 102.  e9d686      1.04… default   
-#&gt;  6 species     14 scbi  liri…  76.6 34fe5a      1.02… default   
-#&gt;  7 species     20 scbi  frax…  24.1 973c05      2.36… default   
-#&gt;  8 species     21 scbi  quer… 122.  07dba7      1.56… default   
-#&gt;  9 genus        9 scbi  cary… 127.  9c4cc9      10^(… default   
-#&gt; 10 genus       12 scbi  cary…  60.8 9c4cc9      10^(… default   
-#&gt; # … with 14 more rows, and 3 more variables: anatomic_relevance &lt;chr&gt;,
-#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;</div><div class='input'>
+)</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='input'>
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 31 x 29
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
+#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
+#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
+#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
+#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
+#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
+#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
+#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
+#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
+#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
+#&gt; # … with 21 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
+#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
+#&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
+#&gt; #   bms_unit &lt;chr&gt;</div><div class='input'>
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"cm"</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [cm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 31 x 29
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
+#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
+#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
+#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
+#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
+#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
+#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
+#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
+#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
+#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
+#&gt; # … with 21 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
+#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
+#&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
+#&gt; #   bms_unit &lt;chr&gt;</div><div class='input'>
 <span class='co'># PROVIDE CUSTOM EQUAITONS ----------------------------------------------</span>
 <span class='co'># Checks that the structure of your data isn't terriby wrong</span>
 <span class='co'># BAD</span>
@@ -192,19 +215,43 @@ type.</p>
 )
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The input and output datasets have different number of rows:</span>
-#&gt; <span class='warning'>* Input: 30.</span>
-#&gt; <span class='warning'>* Output: 0.</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; # A tibble: 0 x 10
-#&gt; # … with 10 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,
-#&gt; #   equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, anatomic_relevance &lt;chr&gt;,
-#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;</div><div class='input'>
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 30 x 29
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
+#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
+#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
+#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
+#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
+#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
+#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
+#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
+#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
+#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
+#&gt; # … with 20 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
+#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
+#&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
+#&gt; #   bms_unit &lt;chr&gt;</div><div class='input'>
 <span class='no'>census_species</span> <span class='kw'>%&gt;%</span>
-<span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The input and output datasets have different number of rows:</span>
-#&gt; <span class='warning'>* Input: 30.</span>
-#&gt; <span class='warning'>* Output: 0.</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'dbh'.</span></div><div class='output co'>#&gt; # A tibble: 0 x 10
-#&gt; # … with 10 variables: eqn_type &lt;chr&gt;, rowid &lt;int&gt;, site &lt;chr&gt;, sp &lt;chr&gt;,
-#&gt; #   equation_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, anatomic_relevance &lt;chr&gt;,
-#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;</div></pre>
+<span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; # A tibble: 30 x 29
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
+#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
+#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
+#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
+#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
+#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
+#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
+#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
+#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
+#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
+#&gt; # … with 20 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
+#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
+#&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
+#&gt; #   bms_unit &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

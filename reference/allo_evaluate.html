@@ -122,7 +122,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>allo_evaluate</span>(<span class='no'>data</span>)</pre>
+    <pre class="usage"><span class='fu'>allo_evaluate</span>(<span class='no'>data</span>, <span class='kw'>output_units</span> <span class='kw'>=</span> <span class='st'>"kg"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,6 +130,10 @@
     <tr>
       <th>data</th>
       <td><p>A dataframe as those created with <code><a href='allo_find.html'>allo_find()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>output_units</th>
+      <td><p>Character string giving the output unit e.g. "kg".</p></td>
     </tr>
     </table>
     
@@ -144,34 +148,29 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)
+
 <span class='no'>best</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>`sp` now stores Latin species names</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The input and output datasets have different number of rows:</span>
-#&gt; <span class='warning'>* Input: 40283.</span>
-#&gt; <span class='warning'>* Output: 30229.</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='input'>
-<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).</span></div><div class='output co'>#&gt; <span class='message'>`biomass` values are given in [kg].</span></div><div class='output co'>#&gt; # A tibble: 30,229 x 12
-#&gt;    eqn_type rowid site  sp      dbh equation_id eqn   eqn_source
-#&gt;    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     
-#&gt;  1 species      4 scbi  nyss…  53.1 8da09d      1.54… default   
-#&gt;  2 species     21 scbi  liri…  91.4 34fe5a      1.02… default   
-#&gt;  3 species     29 scbi  acer… 326.  7c72ed      exp(… default   
-#&gt;  4 species     38 scbi  frax…  42.8 0edaff      0.16… default   
-#&gt;  5 species     72 scbi  acer… 289.  7c72ed      exp(… default   
-#&gt;  6 species     77 scbi  quer… 251.  07dba7      1.56… default   
-#&gt;  7 species     79 scbi  tili… 187.  3f99ba      1.44… default   
-#&gt;  8 species     79 scbi  tili… 475   76d19b      0.00… default   
-#&gt;  9 species     84 scbi  frax… 170.  0edaff      0.16… default   
-#&gt; 10 species     89 scbi  fagu…  10.7 74186d      2.03… default   
-#&gt; # … with 30,219 more rows, and 4 more variables: anatomic_relevance &lt;chr&gt;,
-#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;, biomass &lt;dbl&gt;</div></pre>
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='input'>
+<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).</span></div><div class='output co'>#&gt; <span class='message'>`biomass` values are given in [kg].</span></div><div class='output co'>#&gt; <span class='warning'>Warning: </span>
+#&gt; <span class='warning'>    `biomass` may be invalid.</span>
+#&gt; <span class='warning'>    We still don't suppor the ability to select dbh-specific equations</span>
+#&gt; <span class='warning'>    (see https://github.com/forestgeo/fgeo.biomass/issues/9).</span>
+#&gt; <span class='warning'>  </span></div><div class='output co'>#&gt; # A tibble: 40,283 x 2
+#&gt;    rowid  biomass
+#&gt;    &lt;int&gt;    &lt;dbl&gt;
+#&gt;  1     1    1.30 
+#&gt;  2     2    0.879
+#&gt;  3     3    0.750
+#&gt;  4     4 7604.   
+#&gt;  5     5   NA    
+#&gt;  6     6   NA    
+#&gt;  7     7   NA    
+#&gt;  8     8    5.69 
+#&gt;  9     9   NA    
+#&gt; 10    10    0.211
+#&gt; # … with 40,273 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
