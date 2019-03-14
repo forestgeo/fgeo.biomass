@@ -7,11 +7,6 @@ default_eqn_impl <- function(data) {
   new_eqn(dplyr::as_tibble(out))
 }
 
-#' `default_equations` stores the result of `default_eqn(allodb::master())`.
-#' This is for speed.
-#'
-"default_equations"
-
 #' Restructure equations from __allodb__.
 #'
 #' This function restructures an equations-table from __allodb__ with columns as
