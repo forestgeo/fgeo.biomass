@@ -3,12 +3,14 @@
 \docType{data}
 \name{default_equations}
 \alias{default_equations}
-\title{For speed, save store the result of \code{default_eqn(allodb::master())}.}
+\title{\code{default_equations} stores the result of \code{default_eqn(allodb::master())}.
+This is for speed.}
 \format{An object of class \code{eqn} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 614 rows and 9 columns.}
 \usage{
 default_equations
 }
 \description{
-For speed, save store the result of \code{default_eqn(allodb::master())}.
+\code{default_equations} stores the result of \code{default_eqn(allodb::master())}.
+This is for speed.
 }
 \keyword{datasets}

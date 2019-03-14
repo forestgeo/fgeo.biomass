@@ -4,12 +4,12 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages ----------------------------------------- tidyverse 1.2.1 --
+#> -- Attaching packages -------------------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.0       v purrr   0.3.1  
 #> v tibble  2.0.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
-#> -- Conflicts -------------------------------------------- tidyverse_conflicts() --
+#> -- Conflicts ----------------------------------------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -209,3 +209,100 @@ census_equations_biomass %>%
 ```
 
 ![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+### Why some `biomass` values are missing?
+
+Missing `biomass` is entirely explained by missing `dbh`.
+
+``` r
+failed <- census_equations_biomass %>%
+  filter(is.na(biomass)) %>%
+  select(rowid, site, matches("status"), dbh, sp, biomass)
+
+any(!is.na(failed$dbh))
+#> [1] FALSE
+
+naniar::vis_miss(failed)
+```
+
+![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+But when where those missing `dbh` values enter the data?
+
+``` r
+odd_rowids <- unique(failed$rowid)
+
+# add_species() outputs non-missing dbh values
+census %>% 
+  add_species(species, site = "SCBI") %>% 
+  filter(rowid %in% odd_rowids) %>% 
+  select(rowid, dbh, sp)
+#> Adding `site`.
+#> Overwriting `sp`; it now stores Latin species names.
+#> Adding `rowid`.
+#> # A tibble: 303 x 3
+#>    rowid   dbh sp                  
+#>    <int> <dbl> <chr>               
+#>  1    25  11   hamamelis virginiana
+#>  2    27  42   hamamelis virginiana
+#>  3    35  94   juniperus virginiana
+#>  4    91 246.  unidentified unk    
+#>  5   115  27.4 crataegus sp        
+#>  6   129  36.7 hamamelis virginiana
+#>  7   197  40   hamamelis virginiana
+#>  8   199  53.5 hamamelis virginiana
+#>  9   204  28.5 hamamelis virginiana
+#> 10   222  89.6 ulmus sp            
+#> # ... with 293 more rows
+```
+
+`allo_find()` outputs missing dbh values. This doesn’t seem right. Even
+if there is no matching equation in allodb, `dbh` should be the same as
+it is in the census data.
+
+``` r
+census %>% 
+  add_species(species, site = "SCBI") %>% 
+  allo_find() %>% 
+  filter(rowid %in% odd_rowids) %>% 
+  select(rowid, dbh, sp, matches("eqn"))
+#> Adding `site`.
+#> Overwriting `sp`; it now stores Latin species names.
+#> Adding `rowid`.
+#> # A tibble: 303 x 6
+#>    rowid   dbh sp                   eqn   eqn_source eqn_type
+#>    <int> <dbl> <chr>                <chr> <chr>      <chr>   
+#>  1    25    NA hamamelis virginiana <NA>  <NA>       <NA>    
+#>  2    27    NA hamamelis virginiana <NA>  <NA>       <NA>    
+#>  3    35    NA juniperus virginiana <NA>  <NA>       <NA>    
+#>  4    91    NA unidentified unk     <NA>  <NA>       <NA>    
+#>  5   115    NA crataegus sp         <NA>  <NA>       <NA>    
+#>  6   129    NA hamamelis virginiana <NA>  <NA>       <NA>    
+#>  7   197    NA hamamelis virginiana <NA>  <NA>       <NA>    
+#>  8   199    NA hamamelis virginiana <NA>  <NA>       <NA>    
+#>  9   204    NA hamamelis virginiana <NA>  <NA>       <NA>    
+#> 10   222    NA ulmus sp             <NA>  <NA>       <NA>    
+#> # ... with 293 more rows
+```
+
+Does allodb have matching equaitons?
+
+``` r
+failed_species <- unique(failed$sp)
+allodb::master() %>% 
+  filter(site == "SCBI") %>% 
+  filter(tolower(species) %in% failed_species) %>% 
+  select(species, equation_id, equation_allometry) %>% 
+  print(n = Inf)
+#> # A tibble: 6 x 3
+#>   species              equation_id equation_allometry
+#>   <chr>                <chr>       <chr>             
+#> 1 Hamamelis virginiana 76aa3c      38.111*(dba^2.9)  
+#> 2 Lonicera maackii     28dce6      51.996*(dba^2.77) 
+#> 3 Rosa multiflora      a1646f      37.637*(dba^2.779)
+#> 4 Rubus allegheniensis b61369      43.992*(dba^2.86) 
+#> 5 Rubus phoenicolasius b61369      43.992*(dba^2.86) 
+#> 6 Viburnum prunifolium 5e2dea      29.615*(dba^3.243)
+```
+
+Yes, but the problem is that we still don’t support `dba`.

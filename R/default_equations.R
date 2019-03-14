@@ -1,44 +1,16 @@
-#' For speed, save store the result of `default_eqn(allodb::master())`.
-"default_equations"
-
 default_eqn_impl <- function(data) {
   out <- data %>%
-    pick_useful_cols_rows() %>%
+    pick_useful_cols() %>%
     purrr::modify_at(c("dbh_unit", "bms_unit"), fixme_units) %>%
     modify_default_eqn()
 
   new_eqn(dplyr::as_tibble(out))
 }
 
-pick_useful_cols_rows <- function(data) {
-  crucial_cols <- data[ , allodb_eqn_crucial(), drop = TRUE]
-  fixme_exclude_failing_equations(crucial_cols)
-}
-
-modify_default_eqn <- function(passing) {
-  passing %>%
-    dplyr::mutate(
-      eqn_source = "default",
-      eqn = format_equations(passing$equation_allometry),
-      allometry_specificity = gsub(" ", "_", .data$allometry_specificity),
-      equation_allometry = NULL,
-      anatomic_relevance = .data$dependent_variable_biomass_component
-    ) %>%
-    dplyr::rename(
-      sp = .data$species,
-      eqn_type = .data$allometry_specificity,
-      dbh_unit = .data$dbh_units_original,
-      bms_unit = .data$biomass_units_original
-    ) %>%
-    # Recover missing values represented as the literal "NA"
-    purrr::modify_if(is.character, readr::parse_character) %>%
-    # Make it easier to find values (all lowercase)
-    purrr::modify_if(is.character, tolower) %>%
-    # Order
-    dplyr::select(bmss_default_vars()) %>%
-    dplyr::filter(stats::complete.cases(.)) %>%
-    unique()
-}
+#' `default_equations` stores the result of `default_eqn(allodb::master())`.
+#' This is for speed.
+#'
+"default_equations"
 
 #' Restructure equations from __allodb__.
 #'
@@ -67,44 +39,37 @@ modify_default_eqn <- function(passing) {
 default_eqn <- function(data) {
   fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
 
-  passing <- pick_useful_cols_rows(data)
-  warn_dropping_failing_equations(data, passing)
-
-  default_eqn_impl(passing)
+  out <- pick_useful_cols(data)
+  default_eqn_impl(out)
 }
 
-
-#' Exclude equations that can't be evaluated.
-#'
-#' This function tries to evaluate __allodb__ equations and excludes the ones
-#' that err.
-#'
-#' @param data An equations dataframe, e.g. `allodb::master()`.
-#'
-#' @return A dataframe with all equations that can be successfully evaluated.
-#' @export
-#' @family internal functions that flag issues to be fixed
-#'
-#' @examples
-#' fixme_exclude_failing_equations(allodb::master())
-fixme_exclude_failing_equations <- function(data) {
-  exclude_failing_eqn_id <-
-    !data$equation_id %in% fixme_pull_failing_eqn(allodb::master())
-  data[exclude_failing_eqn_id, , drop = FALSE]
+pick_useful_cols <- function(data) {
+  crucial_cols <- data[ , allodb_eqn_crucial(), drop = TRUE]
 }
 
-warn_dropping_failing_equations <- function(data, out) {
-  fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
-
-  n_drop <- nrow(data) - nrow(out)
-  warn(
-    glue(
-      "Dropping {n_drop} equations that can't be evaluated.
-      Identify failing equations with `fixme_pull_failing_eqn(allodb::master())`"
-    )
-    )
-
-  invisible(data)
+modify_default_eqn <- function(out) {
+  out %>%
+    dplyr::mutate(
+      eqn_source = "default",
+      eqn = format_equations(out$equation_allometry),
+      allometry_specificity = gsub(" ", "_", .data$allometry_specificity),
+      equation_allometry = NULL,
+      anatomic_relevance = .data$dependent_variable_biomass_component
+    ) %>%
+    dplyr::rename(
+      sp = .data$species,
+      eqn_type = .data$allometry_specificity,
+      dbh_unit = .data$dbh_units_original,
+      bms_unit = .data$biomass_units_original
+    ) %>%
+    # Recover missing values represented as the literal "NA"
+    purrr::modify_if(is.character, readr::parse_character) %>%
+    # Make it easier to find values (all lowercase)
+    purrr::modify_if(is.character, tolower) %>%
+    # Order
+    dplyr::select(bmss_default_vars()) %>%
+    dplyr::filter(stats::complete.cases(.)) %>%
+    unique()
 }
 
 new_eqn <- function(x) {

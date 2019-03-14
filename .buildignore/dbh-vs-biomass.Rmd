@@ -122,3 +122,52 @@ census_equations_biomass %>%
   ylab("agb [Ton] in grey and biomass [kg] in black") +
   xlab("dbh [mm]")
 ```
+
+### Why some `biomass` values are missing?
+
+Missing `biomass` is entirely explained by missing `dbh`.
+
+```{r}
+failed <- census_equations_biomass %>%
+  filter(is.na(biomass)) %>%
+  select(rowid, site, matches("status"), dbh, sp, biomass)
+
+any(!is.na(failed$dbh))
+
+naniar::vis_miss(failed)
+```
+
+But when where those missing `dbh` values enter the data?
+
+```{r}
+odd_rowids <- unique(failed$rowid)
+
+# add_species() outputs non-missing dbh values
+census %>% 
+  add_species(species, site = "SCBI") %>% 
+  filter(rowid %in% odd_rowids) %>% 
+  select(rowid, dbh, sp)
+```
+
+`allo_find()` outputs missing dbh values. This doesn't seem right. Even if there is no matching equation in allodb, `dbh` should be the same as it is in the census data.
+
+```{r}
+census %>% 
+  add_species(species, site = "SCBI") %>% 
+  allo_find() %>% 
+  filter(rowid %in% odd_rowids) %>% 
+  select(rowid, dbh, sp, matches("eqn"))
+```
+
+Does allodb have matching equaitons?
+
+```{r}
+failed_species <- unique(failed$sp)
+allodb::master() %>% 
+  filter(site == "SCBI") %>% 
+  filter(tolower(species) %in% failed_species) %>% 
+  select(species, equation_id, equation_allometry) %>% 
+  print(n = Inf)
+```
+
+Yes, but the problem is that we still don't support `dba`.
