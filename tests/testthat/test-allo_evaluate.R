@@ -18,8 +18,8 @@ test_that("allo_evaluate informs returned value is in [kg]", {
 
   expect_false(
     identical(
-      allo_evaluate_impl(eqn, "g"),
-      allo_evaluate_impl(eqn, "kg")
+      suppressWarnings(allo_evaluate_impl(eqn, "g")),
+      suppressWarnings(allo_evaluate_impl(eqn, "kg"))
     )
   )
 })

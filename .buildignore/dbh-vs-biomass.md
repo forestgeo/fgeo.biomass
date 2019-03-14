@@ -4,12 +4,12 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages -------------------------------------------------- tidyverse 1.2.1 --
+#> -- Attaching packages ------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.0       v purrr   0.3.1  
 #> v tibble  2.0.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
-#> -- Conflicts ----------------------------------------------------- tidyverse_conflicts() --
+#> -- Conflicts ---------------------------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -45,10 +45,16 @@ census_equations <- allo_find(census_species)
 #> Assuming `dbh` data in [mm].
 #> Joining, by = c("sp", "site")
 #> Converting `dbh` based on `dbh_unit`.
+#> Warning: Can't convert all units (inserting 176 missing values):
+#> the 'to' argument is not an acceptable unit.
 
 biomass <- allo_evaluate(census_equations)
 #> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
 #> `biomass` values are given in [kg].
+#> Warning: Can't convert all units (inserting 176 missing values):
+#> the 'from' argument is not an acceptable unit.
+#> Warning: Can't evaluate all equations (inserting 127 missing values):
+#> object 'dba' not found
 #> Warning: 
 #>     `biomass` may be invalid.
 #>     We still don't suppor the ability to select dbh-specific equations
@@ -179,8 +185,7 @@ census_equations_biomass %>%
   geom_point(aes(y = biomass), size = 0.3) +
   ylab("agb [Ton] in grey and biomass [kg] in black") +
   xlab("dbh [mm]")
-#> Warning: Removed 303 rows containing missing values (geom_point).
-
+#> Warning: Removed 176 rows containing missing values (geom_point).
 #> Warning: Removed 303 rows containing missing values (geom_point).
 ```
 
@@ -203,14 +208,15 @@ census_equations_biomass %>%
   facet_wrap("sp", ncol = 4) +
   ylab("agb [Ton] in grey and biomass [kg] in black") +
   xlab("dbh [mm]")
-#> Warning: Removed 303 rows containing missing values (geom_point).
-
+#> Warning: Removed 176 rows containing missing values (geom_point).
 #> Warning: Removed 303 rows containing missing values (geom_point).
 ```
 
 ![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ### Why some `biomass` values are missing?
+
+This section is WORK IN PROGRESS. No need for feedback yet.
 
 Missing `biomass` is entirely explained by missing `dbh`.
 
@@ -220,7 +226,7 @@ failed <- census_equations_biomass %>%
   select(rowid, site, matches("status"), dbh, sp, biomass)
 
 any(!is.na(failed$dbh))
-#> [1] FALSE
+#> [1] TRUE
 
 naniar::vis_miss(failed)
 ```
@@ -270,18 +276,18 @@ census %>%
 #> Overwriting `sp`; it now stores Latin species names.
 #> Adding `rowid`.
 #> # A tibble: 303 x 6
-#>    rowid   dbh sp                   eqn   eqn_source eqn_type
-#>    <int> <dbl> <chr>                <chr> <chr>      <chr>   
-#>  1    25    NA hamamelis virginiana <NA>  <NA>       <NA>    
-#>  2    27    NA hamamelis virginiana <NA>  <NA>       <NA>    
-#>  3    35    NA juniperus virginiana <NA>  <NA>       <NA>    
-#>  4    91    NA unidentified unk     <NA>  <NA>       <NA>    
-#>  5   115    NA crataegus sp         <NA>  <NA>       <NA>    
-#>  6   129    NA hamamelis virginiana <NA>  <NA>       <NA>    
-#>  7   197    NA hamamelis virginiana <NA>  <NA>       <NA>    
-#>  8   199    NA hamamelis virginiana <NA>  <NA>       <NA>    
-#>  9   204    NA hamamelis virginiana <NA>  <NA>       <NA>    
-#> 10   222    NA ulmus sp             <NA>  <NA>       <NA>    
+#>    rowid   dbh sp                   eqn                eqn_source eqn_type
+#>    <int> <dbl> <chr>                <chr>              <chr>      <chr>   
+#>  1    25  1.10 hamamelis virginiana 38.111 * (dba^2.9) default    species 
+#>  2    27  4.2  hamamelis virginiana 38.111 * (dba^2.9) default    species 
+#>  3    35 NA    juniperus virginiana <NA>               <NA>       <NA>    
+#>  4    91 NA    unidentified unk     <NA>               <NA>       <NA>    
+#>  5   115 NA    crataegus sp         <NA>               <NA>       <NA>    
+#>  6   129  3.67 hamamelis virginiana 38.111 * (dba^2.9) default    species 
+#>  7   197  4    hamamelis virginiana 38.111 * (dba^2.9) default    species 
+#>  8   199  5.35 hamamelis virginiana 38.111 * (dba^2.9) default    species 
+#>  9   204  2.85 hamamelis virginiana 38.111 * (dba^2.9) default    species 
+#> 10   222 NA    ulmus sp             <NA>               <NA>       <NA>    
 #> # ... with 293 more rows
 ```
 

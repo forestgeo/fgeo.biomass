@@ -8,7 +8,7 @@ test_that("allo_find outputs equations that can' be evaluated (#24)", {
   species <- fgeo.biomass::scbi_species
   census_species <- census %>% add_species(species, site = "scbi")
 
-  out <- allo_find(census_species)
+  out <- expect_warning(allo_find(census_species), "Can't convert all units")
   expect_true(any(grepl("dba", out$eqn)))
 })
 
@@ -17,7 +17,10 @@ test_that("allo_find informs value passed to `dbh_unit`", {
   species <- fgeo.biomass::scbi_species
   census_species <- census %>% add_species(species, site = "scbi")
 
-  expect_message(allo_find(census_species), "dbh.*in.*mm")
+  expect_message(
+    suppressWarnings(allo_find(census_species)),
+    "dbh.*in.*mm"
+  )
 })
 
 test_that("allo_find drops no row", {

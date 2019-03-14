@@ -125,6 +125,8 @@ census_equations_biomass %>%
 
 ### Why some `biomass` values are missing?
 
+This section is WORK IN PROGRESS. No need for feedback yet.
+
 Missing `biomass` is entirely explained by missing `dbh`.
 
 ```{r}
