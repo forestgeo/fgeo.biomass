@@ -200,7 +200,9 @@ census_equations_biomass %>%
   geom_hline(yintercept = 5000, color = "red") +
   geom_point(aes(y = agb * 1e3), color = "grey") +
   geom_point(aes(y = biomass), size = 0.3) +
-  facet_wrap("sp", ncol = 4)
+  facet_wrap("sp", ncol = 4) +
+  ylab("agb [Ton] in grey and biomass [kg] in black") +
+  xlab("dbh [mm]")
 #> Warning: Removed 303 rows containing missing values (geom_point).
 
 #> Warning: Removed 303 rows containing missing values (geom_point).
