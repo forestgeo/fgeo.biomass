@@ -30,6 +30,8 @@ allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 #' library(dplyr)
 #'
 #' best <- fgeo.biomass::scbi_tree1 %>%
+#'   # Pick few rows for a quick example
+#'   sample_n(1000) %>%
 #'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
 #'   allo_find()
 #'
