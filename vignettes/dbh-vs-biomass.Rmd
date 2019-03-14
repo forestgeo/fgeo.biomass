@@ -12,28 +12,23 @@ knitr::opts_chunk$set(
 set.seed(1)
 ```
 
-The goal is to plot dbh (x) versus biomass (y) by species -- mapping each species to a color ([issue](https://github.com/forestgeo/allodb/issues/73)).
-
 ```{r}
+# Setup
 library(tidyverse)
 library(fgeo.biomass)
 ```
 
-Let's first drop rows with missing `dbh` values as we can't calculate biomass for them.
+---
+
+The goal is to plot dbh (x) versus biomass (y) by species ([issue](https://github.com/forestgeo/allodb/issues/73)). 
+
+Let's first drop rows with missing `dbh` values as we can't calculate biomass for them. For now, let's work with a sample of the entire data for a quicker exploration. The main patterns should be the same.
 
 ```{r}
 census <- fgeo.biomass::scbi_tree1 %>% 
   filter(!is.na(dbh)) %>% 
   # Sample a few rows for speed
   sample_n(5000)
-```
-
-This is unexpected: Some dead trees have non-missing `dbh` values. I do nothing about it and continue.
-
-```{r}
-census %>% 
-  filter(status == "D") %>% 
-  select(dbh, matches("status"))
 ```
 
 Let's find allometric equations in allodb and calculate biomass.
@@ -43,78 +38,80 @@ species <- fgeo.biomass::scbi_species
 census_species <- census %>% 
   add_species(species, site = "SCBI")
 
-with_equations <- allo_find(census_species)
+census_equations <- allo_find(census_species)
 
-biomass <- allo_evaluate(with_equations)
+biomass <- allo_evaluate(census_equations)
 biomass
-```
-
-Let's visualize the results. First, lets plot `dbh` vs. `agb`. `agb` comes with the data; it is not what we calculated and it's maybe invalid, but it is can help have a vague idea of what to expect.
-
-```{r}
-eqn_biomass <- with_equations %>% right_join(biomass)
-
-eqn_biomass %>% 
-  ggplot(aes(dbh, agb)) + 
-  geom_point()
 ```
 
 Now let's plot `dbh` vs. `biomass`.
 
 ```{r, cache=TRUE}
-eqn_biomass %>% 
-  right_join(biomass) %>% 
+census_equations_biomass <- census_equations %>% right_join(biomass)
+
+census_equations_biomass %>% 
   ggplot(aes(dbh, biomass)) + 
   geom_point()
 ```
 
-Some values appear to be surprisingly high. 
+A few `biomass` values seem too high.
 
 ```{r}
-eqn_biomass %>% 
-  right_join(biomass) %>% 
+census_equations_biomass %>% 
   ggplot(aes(sp, biomass)) +
   geom_boxplot() +
   coord_flip()
 ```
 
-They seem to all come from the _Nyssa Sylvatica_. Is it's allometric equation correct?
+The highest `biomass` values come from a few species. Are the allometric equations for those species correct?
 
 ```{r}
-eqn_biomass %>% 
+descending_biomass <- census_equations_biomass %>% 
   select(sp, equation_id, eqn, dbh, biomass) %>% 
   arrange(desc(biomass))
+
+descending_biomass %>% print(n = 30)
 ```
 
-To see more detail on the lower `biomass` values, let's remove that species and plot again.
+To see more detail on the lower `biomass` values, let's remove the odd species and plot again.
 
 ```{r, cache=TRUE}
-eqn_biomass %>% 
-  filter(sp != "nyssa sylvatica") %>% 
-  ggplot(aes(dbh, biomass, color = sp)) +
-  geom_point()
+odd_species <- descending_biomass %>% 
+  slice(1:30) %>% 
+  pull(sp) %>% 
+  unique()
+
+census_equations_biomass %>% 
+  filter(!sp %in% odd_species) %>% 
+  ggplot(aes(dbh, biomass)) +
+  geom_point() +
+  theme(legend.position = "bottom")
 ```
 
-This is more informative.
+This makes more sense. 
 
----
-
-Some `biomass` values are missing. 
+Let's use the `agb` values that come with the data as a reference. `agb` appears to be not in [kg] but in [Ton], so we need to adjust accordingly. 
 
 ```{r}
-failed <- census_species %>% 
-  right_join(biomass) %>% 
-  filter(is.na(biomass)) %>% 
-  select(rowid, site, matches("status"), dbh, sp, biomass)
-
-failed
+census_equations_biomass %>% 
+  filter(!sp %in% odd_species) %>% 
+  ggplot(aes(x = dbh)) +
+  geom_point(aes(y = agb * 1e3), color = "grey") +
+  geom_point(aes(y = biomass), size = 0.3) +
+  ylab(" agb [Ton] in grey and biomass [kg] in black")
 ```
 
-Is this because the corresponding species couldn't be found in allodb? 
 
-```{r}
-failed_species <- unique(failed$sp)
-all(failed_species %in% tolower(species$Latin))
+The relationship between `dbh` and `biomass` looks quite similar to that of `dbh` and `agb`. Some difference is expected, as `agb` was apparently calculated using allometric equations for tropical species, but SCBI is in a temperate zone.
+
+Here is a similar comparison, this time by species.
+
+```{r, fig.height=14}
+census_equations_biomass %>% 
+  filter(!sp %in% odd_species) %>% 
+  ggplot(aes(x = dbh)) +
+  geom_point(aes(y = agb * 1e3), color = "grey") +
+  geom_point(aes(y = biomass), size = 0.3) +
+  facet_wrap("sp", ncol = 4)
 ```
 
-No. Information for these species is available. I need to investigate what's going on.
