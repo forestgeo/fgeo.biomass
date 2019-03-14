@@ -1,5 +1,7 @@
 ---
 output: github_document 
+editor_options: 
+  chunk_output_type: console
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -42,10 +44,12 @@ library(dplyr)
 library(tidyr)
 ```
 
-As an example, we will use census and species datasets from the ForestGEO plot at the [Smithsonian Conservation Biology Institute](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute) (SCBI).
+As an example, we will use census and species datasets from the ForestGEO plot at the [Smithsonian Conservation Biology Institute](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute) (SCBI). This is a relatively large dataset. For a quick example we'll pick just a few rows.
 
 ```{r}
-census <- fgeo.biomass::scbi_tree1
+census <- fgeo.biomass::scbi_tree1 %>% 
+  # Pick a few rows for speed
+  sample_n(5000)
 
 census
 ```
@@ -102,8 +106,11 @@ equations %>%
 For the rows for which an equation was found in __allodb__, we can now calculate biomass. `allo_evaluate()` evaluates each allometric equation by replacing the literal string "dbh" with the corresponding value for each row in the `dbh` column, then doing the actual computation and storing the result in the the new `biomass` column.
 
 ```{r}
-with_biomass <- equations %>% 
+biomass <- equations %>% 
   allo_evaluate()
+biomass
+
+with_biomass <- biomass %>% right_join(equations)
 
 with_biomass %>% 
   select(eqn, dbh, biomass)
