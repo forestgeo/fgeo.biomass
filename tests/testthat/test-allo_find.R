@@ -1,16 +1,16 @@
 context("allo_find")
 
-# library(dplyr)
-#
-# test_that("allo_find outputs equations that can' be evaluated (#24)", {
-#   set.seed(1)
-#   census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(5000)
-#   species <- fgeo.biomass::scbi_species
-#   census_species <- census %>% add_species(species, site = "scbi")
-#
-#   out <- allo_find(census_species)
-#   expect_true(any(grepl("dba", out$eqn)))
-# })
+library(dplyr)
+
+test_that("allo_find outputs equations that can' be evaluated (#24)", {
+  set.seed(1)
+  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(5000)
+  species <- fgeo.biomass::scbi_species
+  census_species <- census %>% add_species(species, site = "scbi")
+
+  out <- allo_find(census_species)
+  expect_true(any(grepl("dba", out$eqn)))
+})
 
 test_that("allo_find informs value passed to `dbh_unit`", {
   census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(30)
