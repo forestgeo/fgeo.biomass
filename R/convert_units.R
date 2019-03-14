@@ -22,7 +22,10 @@ convert_units <- function(x, from, to) {
   data_ <- tibble::tibble(x, from, to)
   safe_convert <- purrr::safely(measurements::conv_unit, otherwise = NA_real_)
 
-  purrr::pmap(data_, safe_convert) %>%
+  .result <- purrr::pmap(data_, safe_convert)
+
+  warn_if_errors(.result, "Can't convert all units")
+  .result %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
     purrr::pluck("result")

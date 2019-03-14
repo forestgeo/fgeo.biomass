@@ -2,6 +2,13 @@ context("convert_units")
 
 library(dplyr)
 
+test_that("convert_units warns problems", {
+  expect_warning(
+    convert_units(c(1, 10), from = "cm", to = c("m", "bad")),
+    "Can't convert all units"
+  )
+})
+
 test_that("convert_units converts `dbh`", {
   data <- tibble::tribble(
     ~dbh, ~dbh_unit,
