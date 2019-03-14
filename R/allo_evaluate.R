@@ -1,45 +1,40 @@
 allo_evaluate_impl <- function(data, to) {
-  # FIXME: Refactor: remove dead code. This is no longer needed.
-  if (is.list(data$eqn)) {
-    data <- tidyr::unnest(data)
-  }
-
-  eval_dbh <- function(text, dbh) {
-    eval(parse(text = text), envir = list(dbh = dbh))
-  }
-  safe_eval_dbh <- purrr::safely(eval_dbh, otherwise = NA_real_)
   .biomass <- purrr::map2(data$eqn, data$dbh, ~safe_eval_dbh(.x, .y))
-
   result <- dplyr::mutate(data, biomass = purrr::map_dbl(.biomass, "result"))
   result$biomass <- convert_units(
     result$biomass, from = result$bms_unit, to = to
   )
-
-  warn_if_errors <- function(x) {
-    non_null <- x %>%
-      purrr::transpose() %>%
-      purrr::pluck("error") %>%
-      purrr::discard(is.null)
-
-    if (any(purrr::map_lgl(non_null, ~hasName(.x, "message")))) {
-      error_msg <- non_null %>%
-        purrr::map_chr("message") %>%
-        unique() %>%
-        glue::glue_collapse(sep = "\n")
-      warn(
-        glue(
-          "Can't evaluate all equations \\
-           (inserting {length(non_null)} missing values):
-           {error_msg}"
-        )
-      )
-    }
-
-    invisible(x)
-  }
   warn_if_errors(.biomass)
-
   result
+}
+
+eval_dbh <- function(text, dbh) {
+  eval(parse(text = text), envir = list(dbh = dbh))
+}
+safe_eval_dbh <- purrr::safely(eval_dbh, otherwise = NA_real_)
+
+warn_if_errors <- function(x) {
+  non_null <- x %>%
+    purrr::transpose() %>%
+    purrr::pluck("error") %>%
+    purrr::discard(is.null)
+
+  if (any(purrr::map_lgl(non_null, ~ rlang::has_name(.x, "message")))) {
+    error_msg <- non_null %>%
+      purrr::map_chr("message") %>%
+      unique() %>%
+      glue::glue_collapse(sep = "\n")
+
+    warn(
+      glue(
+        "Can't evaluate all equations \\
+         (inserting {length(non_null)} missing values):
+         {error_msg}"
+      )
+    )
+  }
+
+  invisible(x)
 }
 allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 
