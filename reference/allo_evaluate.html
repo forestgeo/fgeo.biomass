@@ -154,10 +154,9 @@
   <span class='co'># Pick few rows for a quick example</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample.html'>sample_n</a></span>(<span class='fl'>1000</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining `allodb::equations` with `allodb::sitespecies` by:</span>
-#&gt; <span class='message'> equation_id, dependent_variable_biomass_component, allometry_specificity, dbh_min_cm, dbh_max_cm.</span></div><div class='output co'>#&gt; <span class='message'>Then joining with `allodb::sites_info` by 'site'.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 51 missing values):</span>
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 70 missing values):</span>
 #&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='input'>
-<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).</span></div><div class='output co'>#&gt; <span class='message'>`biomass` values are given in [kg].</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 51 missing values):</span>
+<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).</span></div><div class='output co'>#&gt; <span class='message'>`biomass` values are given in [kg].</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 70 missing values):</span>
 #&gt; <span class='warning'>the 'from' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't evaluate all equations (inserting 21 missing values):</span>
 #&gt; <span class='warning'>object 'dba' not found</span></div><div class='output co'>#&gt; <span class='warning'>Warning: </span>
 #&gt; <span class='warning'>    `biomass` may be invalid.</span>
@@ -170,7 +169,7 @@
 #&gt;  2     2  NA    
 #&gt;  3     3   0.306
 #&gt;  4     4   0.282
-#&gt;  5     5  65.8  
+#&gt;  5     5 146.   
 #&gt;  6     6 403.   
 #&gt;  7     7   4.57 
 #&gt;  8     8  NA    
