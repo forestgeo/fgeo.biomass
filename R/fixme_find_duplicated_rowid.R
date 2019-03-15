@@ -10,7 +10,10 @@
 #'   * `fixme_drop_duplicated_rowid()` returns a dataframe with a single row per
 #'   rowid value.
 #' @examples
+#' library(dplyr)
+#'
 #' best <- fgeo.biomass::scbi_tree1 %>%
+#'   sample_n(500) %>%
 #'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
 #'   allo_find()
 #'

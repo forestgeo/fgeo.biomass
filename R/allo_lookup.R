@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
-#' census <- fgeo.biomass::scbi_tree1
+#' library(dplyr)
+#'
+#' census <- fgeo.biomass::scbi_tree1 %>% sample_n(500)
 #' species <- fgeo.biomass::scbi_species
 #'
 #' best <- census %>%

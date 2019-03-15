@@ -25,7 +25,10 @@ rowid value.
 Handle multiple \code{rowid}s: find duplicates and pick a single row.
 }
 \examples{
+library(dplyr)
+
 best <- fgeo.biomass::scbi_tree1 \%>\%
+  sample_n(500) \%>\%
   add_species(fgeo.biomass::scbi_species, "scbi") \%>\%
   allo_find()
 

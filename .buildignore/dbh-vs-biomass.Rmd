@@ -23,13 +23,11 @@ library(fgeo.biomass)
 
 The goal is to plot dbh (x) versus biomass (y) by species ([issue](https://github.com/forestgeo/allodb/issues/73)). 
 
-Let's first drop rows with missing `dbh` values as we can't calculate biomass for them. For now, let's work with a sample of the entire data for a quicker exploration. The main patterns should be the same.
+Let's first drop rows with missing `dbh` values as we can't calculate biomass for them.
 
 ```{r}
 census <- fgeo.biomass::scbi_tree1 %>% 
-  filter(!is.na(dbh)) %>% 
-  # Sample a few rows for speed
-  sample_n(5000)
+  filter(!is.na(dbh))
 ```
 
 Let's find allometric equations in allodb and calculate biomass.
@@ -45,131 +43,78 @@ biomass <- allo_evaluate(census_equations)
 biomass
 ```
 
-Now let's plot `dbh` vs. `biomass`.
+Now let's plot `dbh` vs. `biomass` and use the preexisting `agb` column as a coarse reference.
 
 ```{r, cache=TRUE}
 census_equations_biomass <- census_equations %>% right_join(biomass)
 
 census_equations_biomass %>% 
+  # Convert agb from [Mg] to [kg]
+  mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(dbh, biomass)) + 
-  geom_point()
+  # Reference based on allometries for tropical trees
+  geom_point(aes(y = agb_kg), color = "grey", size = 4) +
+  geom_point(aes(y = biomass)) +
+  ylab("Reference `agb` (grey) and calculated biomass (black) in [kg]") +
+  xlab("dbh [mm]")
 ```
 
-A few `biomass` values seem too high.
+Values over 40,000 appear to be outliers.
 
 ```{r}
 census_equations_biomass %>% 
   ggplot(aes(sp, biomass)) +
+  geom_hline(yintercept = 4e4, color = "red") +
   geom_boxplot() +
+  ylab("biomass [kg]") +
   coord_flip()
 ```
 
-The highest `biomass` values come from a few species. Are the allometric equations for those species correct?
+Let's identify the odd `rowid`s to later exclude them. This should improve the plots. But we need to check if this equations are correct. (Remember the code doesn't yet handle height-dependent allometries; could this be the problem?)
 
 ```{r}
-descending_biomass <- census_equations_biomass %>% 
-  select(sp, equation_id, eqn, dbh, biomass) %>% 
-  arrange(desc(biomass))
-
-descending_biomass %>% print(n = 30)
-```
-
-To see more detail on the lower `biomass` values, let's remove the odd species and plot again.
-
-```{r, cache=TRUE}
-odd_species <- descending_biomass %>% 
-  slice(1:30) %>% 
-  pull(sp) %>% 
+# Saving rowid to later exclude them
+odd_rowids <- census_equations_biomass %>% 
+  filter(biomass > 4e4) %>% 
+  mutate(agb = agb * 1e3) %>% 
+  select(rowid, sp, equation_id, biomass, agb) %>% 
+  # Show the data as it is up to this point, then continue to get odd rowid
+  print() %>% 
+  pull(rowid) %>% 
   unique()
 
+odd_rowids
+```
+
+Let's remove the odd `rowid`s and plot again, this time mapping each species by color.
+
+```{r, cache=TRUE}
 census_equations_biomass %>% 
-  filter(!sp %in% odd_species) %>% 
-  ggplot(aes(dbh, biomass)) +
-  geom_point() +
-  theme(legend.position = "bottom") +
+  filter(!rowid %in% odd_rowids) %>% 
+  # Convert agb from [Mg] to [kg]
+  mutate(agb_kg = agb * 1e3) %>% 
+  ggplot(aes(dbh)) + 
+  # Reference based on allometries for tropical trees
+  geom_point(aes(y = agb_kg), color = "grey", size = 4) +
+  # Removing the legend to keep the plot simple
+  geom_point(aes(y = biomass, color = sp)) +
+  guides(color = "none") +
   ylab("biomass [kg]") +
   xlab("dbh [mm]")
 ```
 
-This makes more sense. 
-
-Let's use the `agb` values that come with the data as a reference. `agb` appears to be not in [kg] but in [Ton], so we need to adjust accordingly. Let's also use a red line to differenciate species which biomass is almost always under 5000 [kg].
-
-```{r}
-census_equations_biomass %>% 
-  filter(!sp %in% odd_species) %>% 
-  ggplot(aes(x = dbh)) +
-  geom_hline(yintercept = 5000, color = "red") +
-  geom_point(aes(y = agb * 1e3), color = "grey") +
-  geom_point(aes(y = biomass), size = 0.3) +
-  ylab("agb [Ton] in grey and biomass [kg] in black") +
-  xlab("dbh [mm]")
-```
-
-
-The relationship between `dbh` and `biomass` looks quite similar to that of `dbh` and `agb`. Some difference is expected, as `agb` was apparently calculated using allometric equations for tropical species, but SCBI is in a temperate zone.
-
-Here is a similar comparison, this time by species.
+We can see two groups of data-points: Those that rise above about 10,000 kg and those that don't. Let's add a horizontal reference to clearly see those groups, and let's facet the plot to identify each species.
 
 ```{r, fig.height=14}
 census_equations_biomass %>% 
-  filter(!sp %in% odd_species) %>% 
+  filter(!rowid %in% odd_rowids) %>% 
+  # Convert agb from [Mg] to [kg]
+  mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
-  geom_hline(yintercept = 5000, color = "red") +
-  geom_point(aes(y = agb * 1e3), color = "grey") +
-  geom_point(aes(y = biomass), size = 0.3) +
+  geom_hline(yintercept = 1e4, color = "red") +
+  geom_point(aes(y = agb_kg), size = 0.3) +
+  geom_point(aes(y = biomass)) +
   facet_wrap("sp", ncol = 4) +
-  ylab("agb [Ton] in grey and biomass [kg] in black") +
+  ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
   xlab("dbh [mm]")
 ```
-
-### Why some `biomass` values are missing?
-
-This section is WORK IN PROGRESS. No need for feedback yet.
-
-Missing `biomass` is entirely explained by missing `dbh`.
-
-```{r}
-failed <- census_equations_biomass %>%
-  filter(is.na(biomass)) %>%
-  select(rowid, site, matches("status"), dbh, sp, biomass)
-
-any(!is.na(failed$dbh))
-
-naniar::vis_miss(failed)
-```
-
-But when where those missing `dbh` values enter the data?
-
-```{r}
-odd_rowids <- unique(failed$rowid)
-
-# add_species() outputs non-missing dbh values
-census %>% 
-  add_species(species, site = "SCBI") %>% 
-  filter(rowid %in% odd_rowids) %>% 
-  select(rowid, dbh, sp)
-```
-
-`allo_find()` outputs missing dbh values. This doesn't seem right. Even if there is no matching equation in allodb, `dbh` should be the same as it is in the census data.
-
-```{r}
-census %>% 
-  add_species(species, site = "SCBI") %>% 
-  allo_find() %>% 
-  filter(rowid %in% odd_rowids) %>% 
-  select(rowid, dbh, sp, matches("eqn"))
-```
-
-Does allodb have matching equaitons?
-
-```{r}
-failed_species <- unique(failed$sp)
-allodb::master() %>% 
-  filter(site == "SCBI") %>% 
-  filter(tolower(species) %in% failed_species) %>% 
-  select(species, equation_id, equation_allometry) %>% 
-  print(n = Inf)
-```
-
-Yes, but the problem is that we still don't support `dba`.

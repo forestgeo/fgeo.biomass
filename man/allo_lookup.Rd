@@ -18,7 +18,9 @@ A dataframe.
 Look up in \strong{allodb} information about each \code{equation_id}.
 }
 \examples{
-census <- fgeo.biomass::scbi_tree1
+library(dplyr)
+
+census <- fgeo.biomass::scbi_tree1 \%>\% sample_n(500)
 species <- fgeo.biomass::scbi_species
 
 best <- census \%>\%
