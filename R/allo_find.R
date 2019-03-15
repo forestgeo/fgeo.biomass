@@ -1,7 +1,8 @@
 allo_find_impl <- function(dbh_species, dbh_unit = "mm", custom_eqn = NULL) {
   inform(glue("Assuming `dbh` data in [{dbh_unit}]."))
 
-  eqn <- custom_eqn %||% fgeo.biomass::default_eqn(allodb::master())
+  eqn <- custom_eqn %||%
+    suppressMessages(fgeo.biomass::default_eqn(allodb::master()))
   abort_if_not_eqn(eqn)
   result <- dplyr::left_join(dbh_species, eqn)
 

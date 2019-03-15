@@ -40,9 +40,6 @@ census_species <- census %>%
 
 census_equations <- allo_find(census_species)
 #> Assuming `dbh` data in [mm].
-#> Joining `allodb::equations` with `allodb::sitespecies` by:
-#>  equation_id, dependent_variable_biomass_component, allometry_specificity, dbh_min_cm, dbh_max_cm.
-#> Then joining with `allodb::sites_info` by 'site'.
 #> Joining, by = c("sp", "site")
 #> Converting `dbh` based on `dbh_unit`.
 #> Warning: Can't convert all units (inserting 1209 missing values):
