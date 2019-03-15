@@ -160,38 +160,42 @@ type.</p>
   <span class='no'>census</span>, <span class='no'>species</span>,
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
 )</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 31 x 29
-#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
-#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
-#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
-#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
-#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
-#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
-#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
-#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
-#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
-#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
-#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
-#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
-#&gt; # … with 21 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining `allodb::equations` with `allodb::sitespecies` by:</span>
+#&gt; <span class='message'> equation_id, dependent_variable_biomass_component, allometry_specificity, dbh_min_cm, dbh_max_cm.</span></div><div class='output co'>#&gt; <span class='message'>Then joining with `allodb::sites_info` by 'site'.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 3 missing values):</span>
+#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; # A tibble: 30 x 29
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   7471   7471 60486 1       fagu… 0616    106   316.   11367        1
+#&gt;  2     2  13149  13149 1022… 1       cary… 1021    191.  409.   18241        1
+#&gt;  3     3  32913     NA 1333… &lt;NA&gt;    lind… 1310    258.  181.      NA       NA
+#&gt;  4     4  30160  30160 2011… 1       lind… 2010    385   198.   39052        1
+#&gt;  5     5  21419  21419 1508… 1       lind… 1509    297.  180.   28380        1
+#&gt;  6     6  38731     NA 33008 &lt;NA&gt;    lind… 0301     46.5   4.20    NA       NA
+#&gt;  7     7   4191   4191 30568 1       quer… 0316     49.2 303.    7317        1
+#&gt;  8     8  29689  29689 2006… 1       ulmu… 2006    400   120    38457        1
+#&gt;  9     9  34133     NA 1533… &lt;NA&gt;    ulmu… 1509    299.  179.      NA       NA
+#&gt; 10    10  25926  25926 1800… 1       ulmu… 1801    345.    7.80 33900        1
+#&gt; # … with 20 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
 #&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
 #&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
 #&gt; #   bms_unit &lt;chr&gt;</div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"cm"</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [cm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 31 x 29
-#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
-#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
-#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
-#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
-#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
-#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
-#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
-#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
-#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
-#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
-#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
-#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
-#&gt; # … with 21 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"cm"</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [cm].</span></div><div class='output co'>#&gt; <span class='message'>Joining `allodb::equations` with `allodb::sitespecies` by:</span>
+#&gt; <span class='message'> equation_id, dependent_variable_biomass_component, allometry_specificity, dbh_min_cm, dbh_max_cm.</span></div><div class='output co'>#&gt; <span class='message'>Then joining with `allodb::sites_info` by 'site'.</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 3 missing values):</span>
+#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; # A tibble: 30 x 29
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   7471   7471 60486 1       fagu… 0616    106   316.   11367        1
+#&gt;  2     2  13149  13149 1022… 1       cary… 1021    191.  409.   18241        1
+#&gt;  3     3  32913     NA 1333… &lt;NA&gt;    lind… 1310    258.  181.      NA       NA
+#&gt;  4     4  30160  30160 2011… 1       lind… 2010    385   198.   39052        1
+#&gt;  5     5  21419  21419 1508… 1       lind… 1509    297.  180.   28380        1
+#&gt;  6     6  38731     NA 33008 &lt;NA&gt;    lind… 0301     46.5   4.20    NA       NA
+#&gt;  7     7   4191   4191 30568 1       quer… 0316     49.2 303.    7317        1
+#&gt;  8     8  29689  29689 2006… 1       ulmu… 2006    400   120    38457        1
+#&gt;  9     9  34133     NA 1533… &lt;NA&gt;    ulmu… 1509    299.  179.      NA       NA
+#&gt; 10    10  25926  25926 1800… 1       ulmu… 1801    345.    7.80 33900        1
+#&gt; # … with 20 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
 #&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
 #&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
@@ -215,19 +219,20 @@ type.</p>
 )
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; # A tibble: 30 x 29
-#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
-#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
-#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
-#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
-#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
-#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
-#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
-#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
-#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
-#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
-#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
-#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 30 missing values):</span>
+#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; # A tibble: 30 x 29
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   7471   7471 60486 1       fagu… 0616    106   316.   11367        1
+#&gt;  2     2  13149  13149 1022… 1       cary… 1021    191.  409.   18241        1
+#&gt;  3     3  32913     NA 1333… &lt;NA&gt;    lind… 1310    258.  181.      NA       NA
+#&gt;  4     4  30160  30160 2011… 1       lind… 2010    385   198.   39052        1
+#&gt;  5     5  21419  21419 1508… 1       lind… 1509    297.  180.   28380        1
+#&gt;  6     6  38731     NA 33008 &lt;NA&gt;    lind… 0301     46.5   4.20    NA       NA
+#&gt;  7     7   4191   4191 30568 1       quer… 0316     49.2 303.    7317        1
+#&gt;  8     8  29689  29689 2006… 1       ulmu… 2006    400   120    38457        1
+#&gt;  9     9  34133     NA 1533… &lt;NA&gt;    ulmu… 1509    299.  179.      NA       NA
+#&gt; 10    10  25926  25926 1800… 1       ulmu… 1801    345.    7.80 33900        1
 #&gt; # … with 20 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
 #&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
@@ -235,18 +240,18 @@ type.</p>
 #&gt; #   bms_unit &lt;chr&gt;</div><div class='input'>
 <span class='no'>census_species</span> <span class='kw'>%&gt;%</span>
 <span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; # A tibble: 30 x 29
-#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
-#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
-#&gt;  1     1   1259   1259 10298 1       rubu… 0106     12.3 106    3592        1
-#&gt;  2     2   9087   9087 72449 1       unid… 0732    133.  629   13363        1
-#&gt;  3     3  12118  12118 1004… 1       lind… 1003    196.   40.1 16963        1
-#&gt;  4     4  25637  25637 1723… 1       asim… 1721    325.  414.  33578        1
-#&gt;  5     5  19295  19295 1404… 1       nyss… 1406    279.  102.  25806        1
-#&gt;  6     6  17407  17407 1304… 1       jugl… 1303    248.   50.9 23501        1
-#&gt;  7     7  28454  28454 1920… 1       corn… 1918    372.  359.  37012        1
-#&gt;  8     8  38205     NA 2037… &lt;NA&gt;    lind… 2007    382.  130.     NA       NA
-#&gt;  9     9   7264   7264 60268 1       cary… 0604    103.   71.2 11102        1
-#&gt; 10    10   8736   8736 72091 1       quer… 0718    140.  353.  13004        1
+#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
+#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+#&gt;  1     1   7471   7471 60486 1       fagu… 0616    106   316.   11367        1
+#&gt;  2     2  13149  13149 1022… 1       cary… 1021    191.  409.   18241        1
+#&gt;  3     3  32913     NA 1333… &lt;NA&gt;    lind… 1310    258.  181.      NA       NA
+#&gt;  4     4  30160  30160 2011… 1       lind… 2010    385   198.   39052        1
+#&gt;  5     5  21419  21419 1508… 1       lind… 1509    297.  180.   28380        1
+#&gt;  6     6  38731     NA 33008 &lt;NA&gt;    lind… 0301     46.5   4.20    NA       NA
+#&gt;  7     7   4191   4191 30568 1       quer… 0316     49.2 303.    7317        1
+#&gt;  8     8  29689  29689 2006… 1       ulmu… 2006    400   120    38457        1
+#&gt;  9     9  34133     NA 1533… &lt;NA&gt;    ulmu… 1509    299.  179.      NA       NA
+#&gt; 10    10  25926  25926 1800… 1       ulmu… 1801    345.    7.80 33900        1
 #&gt; # … with 20 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
 #&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
