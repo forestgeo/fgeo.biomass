@@ -42,13 +42,13 @@ census_equations <- allo_find(census_species)
 #> Assuming `dbh` data in [mm].
 #> Joining, by = c("sp", "site")
 #> Converting `dbh` based on `dbh_unit`.
-#> Warning: Can't convert all units (inserting 1209 missing values):
+#> Warning: Can't convert all units (inserting 1899 missing values):
 #> the 'to' argument is not an acceptable unit.
 
 biomass <- allo_evaluate(census_equations)
 #> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
 #> `biomass` values are given in [kg].
-#> Warning: Can't convert all units (inserting 1209 missing values):
+#> Warning: Can't convert all units (inserting 1899 missing values):
 #> the 'from' argument is not an acceptable unit.
 #> Warning: Can't evaluate all equations (inserting 819 missing values):
 #> object 'dba' not found
@@ -64,7 +64,7 @@ biomass
 #>  1     1   1.30 
 #>  2     2   0.879
 #>  3     3   0.750
-#>  4     4  61.4  
+#>  4     4 136.   
 #>  5     5  NA    
 #>  6     6  NA    
 #>  7     7  NA    
