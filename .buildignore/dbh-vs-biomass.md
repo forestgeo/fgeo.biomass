@@ -4,12 +4,12 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages ------------------------------------------------------------------------- tidyverse 1.2.1 --
+#> -- Attaching packages --------------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.0       v purrr   0.3.1  
 #> v tibble  2.0.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
-#> -- Conflicts ---------------------------------------------------------------------------- tidyverse_conflicts() --
+#> -- Conflicts ------------------------------------------------ tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -156,7 +156,7 @@ census_equations_biomass %>%
   # Removing the legend to keep the plot simple
   geom_point(aes(y = biomass, color = sp)) +
   guides(color = "none") +
-  ylab("biomass [kg]") +
+  ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
   xlab("dbh [mm]")
 #> Warning: Removed 1209 rows containing missing values (geom_point).
 #> Warning: Removed 2028 rows containing missing values (geom_point).
@@ -175,11 +175,12 @@ census_equations_biomass %>%
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
   geom_hline(yintercept = 1e4, color = "red") +
-  geom_point(aes(y = agb_kg), size = 0.3) +
-  geom_point(aes(y = biomass)) +
+  geom_point(aes(y = agb_kg), size = 1.5, color = "grey") +
+  geom_point(aes(y = biomass), size = 1, color = "black") +
   facet_wrap("sp", ncol = 4) +
   ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
-  xlab("dbh [mm]")
+  xlab("dbh [mm]") +
+  theme_bw()
 #> Warning: Removed 1209 rows containing missing values (geom_point).
 #> Warning: Removed 2028 rows containing missing values (geom_point).
 ```

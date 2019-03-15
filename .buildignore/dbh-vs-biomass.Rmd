@@ -99,7 +99,7 @@ census_equations_biomass %>%
   # Removing the legend to keep the plot simple
   geom_point(aes(y = biomass, color = sp)) +
   guides(color = "none") +
-  ylab("biomass [kg]") +
+  ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
   xlab("dbh [mm]")
 ```
 
@@ -112,9 +112,10 @@ census_equations_biomass %>%
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
   geom_hline(yintercept = 1e4, color = "red") +
-  geom_point(aes(y = agb_kg), size = 0.3) +
-  geom_point(aes(y = biomass)) +
+  geom_point(aes(y = agb_kg), size = 1.5, color = "grey") +
+  geom_point(aes(y = biomass), size = 1, color = "black") +
   facet_wrap("sp", ncol = 4) +
   ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
-  xlab("dbh [mm]")
+  xlab("dbh [mm]") +
+  theme_bw()
 ```
