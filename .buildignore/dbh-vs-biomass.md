@@ -4,12 +4,12 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages ------------------------------------------- tidyverse 1.2.1 --
+#> -- Attaching packages ------------------------------------------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.0       v purrr   0.3.1  
 #> v tibble  2.0.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
-#> -- Conflicts ---------------------------------------------- tidyverse_conflicts() --
+#> -- Conflicts ---------------------------------------------------------------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -123,20 +123,20 @@ could this be the problem?)
 odd_rowids <- census_equations_biomass %>% 
   filter(biomass > 4e4) %>% 
   mutate(agb = agb * 1e3) %>% 
-  select(rowid, sp, equation_id, biomass, agb) %>% 
+  select(rowid, sp, equation_id, eqn, biomass, agb) %>% 
   # Show the data as it is up to this point, then continue to get odd rowid
   print() %>% 
   pull(rowid) %>% 
   unique()
-#> # A tibble: 6 x 5
-#>   rowid sp               equation_id biomass    agb
-#>   <int> <chr>            <chr>         <dbl>  <dbl>
-#> 1 10311 quercus velutina 7640f0       42803. 26603.
-#> 2 10311 quercus velutina c70dea       42803. 26603.
-#> 3 14883 quercus falcata  81397c       81866.  5632.
-#> 4 14883 quercus falcata  6943b4       81866.  5632.
-#> 5 19273 quercus velutina 7640f0       51701. 31636.
-#> 6 19273 quercus velutina c70dea       51701. 31636.
+#> # A tibble: 6 x 6
+#>   rowid sp            equation_id eqn                        biomass    agb
+#>   <int> <chr>         <chr>       <chr>                        <dbl>  <dbl>
+#> 1 10311 quercus velu~ 7640f0      2.1457 * (dbh^2.503)        42803. 26603.
+#> 2 10311 quercus velu~ c70dea      10^(1.00005 + 2.10621 * (~  42803. 26603.
+#> 3 14883 quercus falc~ 81397c      2.30252 * (dbh^2)^1.6839    81866.  5632.
+#> 4 14883 quercus falc~ 6943b4      2.23731 * (dbh^2)^1.26394   81866.  5632.
+#> 5 19273 quercus velu~ 7640f0      2.1457 * (dbh^2.503)        51701. 31636.
+#> 6 19273 quercus velu~ c70dea      10^(1.00005 + 2.10621 * (~  51701. 31636.
 
 odd_rowids
 #> [1] 10311 14883 19273

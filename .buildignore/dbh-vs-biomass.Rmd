@@ -77,7 +77,7 @@ Let's identify the odd `rowid`s to later exclude them. This should improve the p
 odd_rowids <- census_equations_biomass %>% 
   filter(biomass > 4e4) %>% 
   mutate(agb = agb * 1e3) %>% 
-  select(rowid, sp, equation_id, biomass, agb) %>% 
+  select(rowid, sp, equation_id, eqn, biomass, agb) %>% 
   # Show the data as it is up to this point, then continue to get odd rowid
   print() %>% 
   pull(rowid) %>% 
