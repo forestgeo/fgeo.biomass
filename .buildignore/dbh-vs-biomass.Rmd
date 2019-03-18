@@ -38,17 +38,76 @@ census_species <- census %>%
   add_species(species, site = "SCBI")
 
 census_equations <- allo_find(census_species)
+```
 
-biomass <- allo_evaluate(census_equations)
+Notice the warning that some species couldn't be matched. Later we will fall back to using generic equations but we don't support that feature yet. For now can can't calculate `biomass` for rows containing those species so we will now drop them.
+
+```{r}
+# Useless for now
+census_equations %>% 
+  filter(is.na(equation_id)) %>% 
+  select(rowid, site, sp, equation_id)
+
+# Dropping useless rows to continue
+census_equations2 <- census_equations %>% 
+  filter(!is.na(equation_id))
+```
+
+We can now calculate `biomass`.
+
+```{r}
+biomass <- allo_evaluate(census_equations2)
 biomass
 ```
 
-Now let's plot `dbh` vs. `biomass` and use the preexisting `agb` column as a coarse reference.
+We now learn that some equations couldn't be evaluated. The problem now is that we still don't support the ability to calculate biomass from values of `dba` which results in missing `biomass` values. Let's confirm this
+
+```{r}
+census_equations_biomass <- census_equations2 %>% right_join(biomass)
+census_equations_biomass %>% 
+  filter(is.na(biomass)) %>% 
+  select(rowid, site, sp, dbh, eqn, biomass)
+```
+
+Let's drop the corresponding rows as we can't do much with them.
+
+```{r}
+census_equations_biomass2 <- census_equations_biomass %>% filter(!is.na(biomass))
+```
+
+Now let's box plot `biomass` by species.
+
+```{r}
+census_equations_biomass2 %>% 
+  ggplot(aes(sp, biomass)) +
+  geom_hline(yintercept = 4e4, color = "red") +
+  geom_boxplot() +
+  ylab("biomass [kg]") +
+  coord_flip()
+```
+
+The biomass of _Liriodendron sp._ seems relatively too high. Here is what it's equations look like.
+
+```{r}
+odd_sp <- "liriodendron tulipifera"
+
+census_equations_biomass2 %>% 
+  filter(sp == odd_sp) %>% 
+  select(sp, eqn) %>% 
+  unique()
+```
+
+Krista suggested that the problem may be that the code still doesn't handle dbh-specific equations ([comment](https://github.com/forestgeo/allodb/issues/73#issuecomment-473979550)). We'll implement this feature ASAP. But until then, let's exclude this species.
+
+```{r}
+census_equations_biomass3 <- census_equations_biomass2 %>% 
+  filter(!sp == odd_sp)
+```
+
+Let's see what `dbh` versus `biomass` looks like now.
 
 ```{r, cache=TRUE}
-census_equations_biomass <- census_equations %>% right_join(biomass)
-
-census_equations_biomass %>% 
+census_equations_biomass3 %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(dbh, biomass)) + 
@@ -59,59 +118,22 @@ census_equations_biomass %>%
   xlab("dbh [mm]")
 ```
 
-Values over 40,000 appear to be outliers.
+A few points over 40000 [kg] seem relatively too high.
 
 ```{r}
-census_equations_biomass %>% 
-  ggplot(aes(sp, biomass)) +
-  geom_hline(yintercept = 4e4, color = "red") +
-  geom_boxplot() +
-  ylab("biomass [kg]") +
-  coord_flip()
-```
-
-Let's identify the odd `rowid`s to later exclude them. This should improve the plots. But we need to check if this equations are correct. (Remember the code doesn't yet handle height-dependent allometries; could this be the problem?)
-
-```{r}
-# Saving rowid to later exclude them
-odd_rowids <- census_equations_biomass %>% 
+census_equations_biomass3 %>% 
   filter(biomass > 4e4) %>% 
-  mutate(agb = agb * 1e3) %>% 
-  select(rowid, sp, equation_id, eqn, biomass, agb) %>% 
-  # Show the data as it is up to this point, then continue to get odd rowid
-  print() %>% 
-  pull(rowid) %>% 
-  unique()
-
-odd_rowids
+  select(sp, equation_id, eqn)
 ```
 
-Let's remove the odd `rowid`s and plot again, this time mapping each species by color.
-
-```{r, cache=TRUE}
-census_equations_biomass %>% 
-  filter(!rowid %in% odd_rowids) %>% 
-  # Convert agb from [Mg] to [kg]
-  mutate(agb_kg = agb * 1e3) %>% 
-  ggplot(aes(dbh)) + 
-  # Reference based on allometries for tropical trees
-  geom_point(aes(y = agb_kg), color = "grey", size = 4) +
-  # Removing the legend to keep the plot simple
-  geom_point(aes(y = biomass, color = sp)) +
-  guides(color = "none") +
-  ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
-  xlab("dbh [mm]")
-```
-
-We can see two groups of data-points: Those that rise above about 10,000 kg and those that don't. Let's add a horizontal reference to clearly see those groups, and let's facet the plot to identify each species.
+For a better visualization let's remove those values for now, and plot the same relationship but this time by species.
 
 ```{r, fig.height=14}
-census_equations_biomass %>% 
-  filter(!rowid %in% odd_rowids) %>% 
+census_equations_biomass3 %>% 
+  filter(!biomass > 4e4) %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
-  geom_hline(yintercept = 1e4, color = "red") +
   geom_point(aes(y = agb_kg), size = 1.5, color = "grey") +
   geom_point(aes(y = biomass), size = 1, color = "black") +
   facet_wrap("sp", ncol = 4) +
