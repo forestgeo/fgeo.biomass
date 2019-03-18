@@ -40,7 +40,7 @@ test_that("allo_find drops no row", {
   species <- fgeo.biomass::scbi_species
   census_species <- census %>% add_species(species, site = "scbi")
 
-  out <- allo_find(census_species)
+  out <- suppressWarnings(allo_find(census_species))
   expect_true(nrow(census_species) <= nrow(out))
 })
 

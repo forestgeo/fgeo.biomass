@@ -1,4 +1,4 @@
-allo_find_impl <- function(dbh_species, dbh_unit = "mm", custom_eqn = NULL) {
+allo_find_impl <- function(data, dbh_unit = "mm", custom_eqn = NULL) {
   inform(glue("Assuming `dbh` data in [{dbh_unit}]."))
 
   eqn <- custom_eqn %||%
@@ -7,29 +7,9 @@ allo_find_impl <- function(dbh_species, dbh_unit = "mm", custom_eqn = NULL) {
 
   .by <- c("sp", "site")
   message("Joining, by = ", paste0(.by, collapse = ', '), ".")
-  result <- dplyr::left_join(dbh_species, eqn, by = .by)
+  result <- dplyr::left_join(data, eqn, by = .by)
 
-
-
-  sp_to_match <- dbh_species[["sp"]]
-  sp_available <- unique(
-    eqn[eqn$site %in% unique(dbh_species$site), , drop = FALSE]$sp
-  )
-  sp_matching <- sp_to_match %in% sp_available
-  n_missmatch <- sum(!sp_matching)
-  if (n_missmatch > 0) {
-    sp_missmatching <- paste0(
-      sort(unique(sp_to_match[!sp_matching])),
-      collapse = ", "
-    )
-    warn(glue("
-      Can't find equations matching these species \\
-      (inserting {n_missmatch} missing values):
-      {sp_missmatching}
-    "))
-  }
-
-
+  warn_if_species_missmatch(data, eqn)
 
   inform("Converting `dbh` based on `dbh_unit`.")
   result$dbh <- convert_units(
@@ -39,9 +19,26 @@ allo_find_impl <- function(dbh_species, dbh_unit = "mm", custom_eqn = NULL) {
   result
 }
 
+warn_if_species_missmatch <- function(data, eqn) {
+  to_match <- data[["sp"]]
+  available <- unique(eqn[eqn$site %in% unique(data$site), , drop = FALSE]$sp)
+  .matching <- to_match %in% available
+
+  if (sum(!.matching) > 0) {
+    missmatching <- paste0(sort(unique(to_match[!.matching])), collapse = ", ")
+    warn(glue("
+      Can't find equations matching these species \\
+      (inserting {sum(!.matching)} missing values):
+      {missmatching}
+      "))
+  }
+
+  invisible(data)
+}
+
 #' Find allometric equations in allodb or in a custom equations-table.
 #'
-#' @param dbh_species A dataframe as those created with [add_species()].
+#' @param data A dataframe as those created with [add_species()].
 #' @param dbh_unit Character string giving the unit of the expected input dbh.
 #' @param custom_eqn A dataframe of class "eqn".
 #'

@@ -4,10 +4,10 @@
 \alias{allo_find}
 \title{Find allometric equations in allodb or in a custom equations-table.}
 \usage{
-allo_find(dbh_species, dbh_unit = "mm", custom_eqn = NULL)
+allo_find(data, dbh_unit = "mm", custom_eqn = NULL)
 }
 \arguments{
-\item{dbh_species}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}
+\item{data}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}
 
 \item{dbh_unit}{Character string giving the unit of the expected input dbh.}
 
