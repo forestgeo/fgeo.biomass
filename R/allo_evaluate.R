@@ -1,10 +1,13 @@
-allo_evaluate_impl <- function(data, to) {
+allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
+  data$dbh <- convert_units(data$dbh, from = dbh_unit, to = data$dbh_unit)
+
   .biomass <- purrr::map2(data$eqn, data$dbh, ~safe_eval_dbh(.x, .y))
   result <- dplyr::mutate(data, biomass = purrr::map_dbl(.biomass, "result"))
   result$biomass <- convert_units(
-    result$biomass, from = result$bms_unit, to = to
+    result$biomass, from = result$bms_unit, to = biomass_unit
   )
   warn_if_errors(.biomass, "Can't evaluate all equations")
+
   result
 }
 
@@ -13,12 +16,13 @@ eval_dbh <- function(text, dbh) {
 }
 safe_eval_dbh <- purrr::safely(eval_dbh, otherwise = NA_real_)
 
-allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
+eval_memoised <- memoise::memoise(allo_evaluate_impl)
 
 #' Evaluate equations, giving a biomass result per row.
 #'
 #' @param data A dataframe as those created with [allo_find()].
-#' @param output_units Character string giving the output unit e.g. "kg".
+#' @param dbh_unit Character string giving the unit of the expected input dbh.
+#' @param biomass_unit Character string giving the output unit e.g. "kg".
 #' @family functions to manipulate equations
 #'
 #' @return A dataframe with a single row by each value of `rowid`.
@@ -34,11 +38,14 @@ allo_evaluate_memoised <- memoise::memoise(allo_evaluate_impl)
 #'   allo_find()
 #'
 #' allo_evaluate(best)
-allo_evaluate <- function(data, output_units = "kg") {
-  inform_expected_units()
+#'
+#' allo_evaluate(best, dbh_unit = "cm", biomass_unit = "Mg")
+allo_evaluate <- function(data, dbh_unit = "mm", biomass_unit = "kg") {
+  inform(glue("Assuming `dbh` unit in [{dbh_unit}]."))
 
-  inform(glue("`biomass` values are given in [{output_units}]."))
-   out <- allo_evaluate_memoised(data, output_units)
+  inform("Converting `dbh` based on `dbh_unit`.")
+  inform(glue("`biomass` values are given in [{biomass_unit}]."))
+  out <- eval_memoised(data, dbh_unit = dbh_unit, biomass_unit = biomass_unit)
 
   warn("
     `biomass` may be invalid.
@@ -50,11 +57,3 @@ allo_evaluate <- function(data, output_units = "kg") {
   summarize(by_rowid, biomass = sum(.data$biomass))
 }
 
-inform_expected_units <- function() {
-  inform(
-    glue(
-      "Assuming `dbh` units in [cm] \\
-      (to convert units see `?measurements::conv_unit()`)."
-    )
-  )
-}

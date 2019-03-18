@@ -4,13 +4,13 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages ----------------------------------------------- tidyverse 1.2.1 --
+#> -- Attaching packages ---------------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.0       v purrr   0.3.1  
 #> v tibble  2.0.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
 #> Warning: package 'purrr' was built under R version 3.5.3
-#> -- Conflicts -------------------------------------------------- tidyverse_conflicts() --
+#> -- Conflicts ------------------------------------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -40,14 +40,15 @@ census_species <- census %>%
 #> Adding `rowid`.
 
 census_equations <- allo_find(census_species)
-#> Assuming `dbh` data in [mm].
-#> Joining, by = c("sp", "site")
+#> Warning: Can't find equations matching these species (inserting 1159 missing values):
+#> acer sp, carya sp, crataegus sp, fraxinus sp, juniperus virginiana, quercus prinus, quercus sp, ulmus sp, unidentified unk
+#> Joining, by = sp, site.
+
+biomass <- allo_evaluate(census_equations)
+#> Assuming `dbh` unit in [mm].
 #> Converting `dbh` based on `dbh_unit`.
 #> Warning: Can't convert all units (inserting 1159 missing values):
 #> the 'to' argument is not an acceptable unit.
-
-biomass <- allo_evaluate(census_equations)
-#> Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).
 #> `biomass` values are given in [kg].
 #> Warning: Can't convert all units (inserting 1159 missing values):
 #> the 'from' argument is not an acceptable unit.

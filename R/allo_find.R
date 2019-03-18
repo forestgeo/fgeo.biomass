@@ -1,22 +1,12 @@
-allo_find_impl <- function(data, dbh_unit = "mm", custom_eqn = NULL) {
-  inform(glue("Assuming `dbh` data in [{dbh_unit}]."))
-
+allo_find_impl <- function(data, custom_eqn = NULL) {
   eqn <- custom_eqn %||%
     suppressMessages(fgeo.biomass::default_eqn(allodb::master()))
   abort_if_not_eqn(eqn)
 
+  warn_if_species_missmatch(data, eqn)
   .by <- c("sp", "site")
   message("Joining, by = ", paste0(.by, collapse = ', '), ".")
-  result <- dplyr::left_join(data, eqn, by = .by)
-
-  warn_if_species_missmatch(data, eqn)
-
-  inform("Converting `dbh` based on `dbh_unit`.")
-  result$dbh <- convert_units(
-    result$dbh, from = dbh_unit, to = result$dbh_unit
-  )
-
-  result
+  dplyr::left_join(data, eqn, by = .by)
 }
 
 warn_if_species_missmatch <- function(data, eqn) {
@@ -39,7 +29,6 @@ warn_if_species_missmatch <- function(data, eqn) {
 #' Find allometric equations in allodb or in a custom equations-table.
 #'
 #' @param data A dataframe as those created with [add_species()].
-#' @param dbh_unit Character string giving the unit of the expected input dbh.
 #' @param custom_eqn A dataframe of class "eqn".
 #'
 #' @family functions to manipulate equations
@@ -57,8 +46,6 @@ warn_if_species_missmatch <- function(data, eqn) {
 #' )
 #'
 #' allo_find(census_species)
-#'
-#' allo_find(census_species, dbh_unit = "cm")
 #'
 #' # PROVIDE CUSTOM EQUAITONS ----------------------------------------------
 #' # Checks that the structure of your data isn't terriby wrong
