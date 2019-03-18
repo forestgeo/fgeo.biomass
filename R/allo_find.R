@@ -4,7 +4,32 @@ allo_find_impl <- function(dbh_species, dbh_unit = "mm", custom_eqn = NULL) {
   eqn <- custom_eqn %||%
     suppressMessages(fgeo.biomass::default_eqn(allodb::master()))
   abort_if_not_eqn(eqn)
-  result <- dplyr::left_join(dbh_species, eqn)
+
+  .by <- c("sp", "site")
+  message("Joining, by = ", paste0(.by, collapse = ', '), ".")
+  result <- dplyr::left_join(dbh_species, eqn, by = .by)
+
+
+
+  sp_to_match <- dbh_species[["sp"]]
+  sp_available <- unique(
+    eqn[eqn$site %in% unique(dbh_species$site), , drop = FALSE]$sp
+  )
+  sp_matching <- sp_to_match %in% sp_available
+  n_missmatch <- sum(!sp_matching)
+  if (n_missmatch > 0) {
+    sp_missmatching <- paste0(
+      sort(unique(sp_to_match[!sp_matching])),
+      collapse = ", "
+    )
+    warn(glue("
+      Can't find equations matching these species \\
+      (inserting {n_missmatch} missing values):
+      {sp_missmatching}
+    "))
+  }
+
+
 
   inform("Converting `dbh` based on `dbh_unit`.")
   result$dbh <- convert_units(

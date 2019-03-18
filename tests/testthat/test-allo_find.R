@@ -2,9 +2,21 @@ context("allo_find")
 
 library(dplyr)
 
+set.seed(1)
+
+test_that("allo_find warns non matching species", {
+  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(1000)
+  species <- fgeo.biomass::scbi_species
+  census_species <- census %>% add_species(species, site = "scbi")
+
+  expect_warning(
+    allo_find(census_species),
+    "Can't find equations matching these species"
+  )
+})
+
 test_that("allo_find outputs equations that can' be evaluated (#24)", {
-  set.seed(1)
-  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(5000)
+  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(1000)
   species <- fgeo.biomass::scbi_species
   census_species <- census %>% add_species(species, site = "scbi")
 
