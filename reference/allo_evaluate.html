@@ -122,7 +122,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>allo_evaluate</span>(<span class='no'>data</span>, <span class='kw'>output_units</span> <span class='kw'>=</span> <span class='st'>"kg"</span>)</pre>
+    <pre class="usage"><span class='fu'>allo_evaluate</span>(<span class='no'>data</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"mm"</span>, <span class='kw'>biomass_unit</span> <span class='kw'>=</span> <span class='st'>"kg"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,7 +132,11 @@
       <td><p>A dataframe as those created with <code><a href='allo_find.html'>allo_find()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>output_units</th>
+      <th>dbh_unit</th>
+      <td><p>Character string giving the unit of the expected input dbh.</p></td>
+    </tr>
+    <tr>
+      <th>biomass_unit</th>
       <td><p>Character string giving the output unit e.g. "kg".</p></td>
     </tr>
     </table>
@@ -154,9 +158,10 @@
   <span class='co'># Pick few rows for a quick example</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample.html'>sample_n</a></span>(<span class='fl'>1000</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>, <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` data in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("sp", "site")</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 70 missing values):</span>
-#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='input'>
-<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` units in [cm] (to convert units see `?measurements::conv_unit()`).</span></div><div class='output co'>#&gt; <span class='message'>`biomass` values are given in [kg].</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 70 missing values):</span>
+  <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't find equations matching these species (inserting 48 missing values):</span>
+#&gt; <span class='warning'>carya sp, quercus prinus, ulmus sp, unidentified unk</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = sp, site.</span></div><div class='input'>
+<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` unit in [mm].</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='message'>`biomass` values are given in [kg].</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 48 missing values):</span>
+#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 48 missing values):</span>
 #&gt; <span class='warning'>the 'from' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't evaluate all equations (inserting 21 missing values):</span>
 #&gt; <span class='warning'>object 'dba' not found</span></div><div class='output co'>#&gt; <span class='warning'>Warning: </span>
 #&gt; <span class='warning'>    `biomass` may be invalid.</span>
@@ -174,7 +179,28 @@
 #&gt;  7     7   4.57 
 #&gt;  8     8  NA    
 #&gt;  9     9  52.7  
-#&gt; 10    10  15.1  
+#&gt; 10    10  12.0  
+#&gt; # … with 990 more rows</div><div class='input'>
+<span class='fu'>allo_evaluate</span>(<span class='no'>best</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"cm"</span>, <span class='kw'>biomass_unit</span> <span class='kw'>=</span> <span class='st'>"Mg"</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` unit in [cm].</span></div><div class='output co'>#&gt; <span class='message'>Converting `dbh` based on `dbh_unit`.</span></div><div class='output co'>#&gt; <span class='message'>`biomass` values are given in [Mg].</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 48 missing values):</span>
+#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 48 missing values):</span>
+#&gt; <span class='warning'>the 'from' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't evaluate all equations (inserting 21 missing values):</span>
+#&gt; <span class='warning'>object 'dba' not found</span></div><div class='output co'>#&gt; <span class='warning'>Warning: </span>
+#&gt; <span class='warning'>    `biomass` may be invalid.</span>
+#&gt; <span class='warning'>    We still don't suppor the ability to select dbh-specific equations</span>
+#&gt; <span class='warning'>    (see https://github.com/forestgeo/fgeo.biomass/issues/9).</span>
+#&gt; <span class='warning'>  </span></div><div class='output co'>#&gt; # A tibble: 1,000 x 2
+#&gt;    rowid  biomass
+#&gt;    &lt;int&gt;    &lt;dbl&gt;
+#&gt;  1     1  NA     
+#&gt;  2     2  NA     
+#&gt;  3     3   0.0791
+#&gt;  4     4   0.0858
+#&gt;  5     5  49.1   
+#&gt;  6     6 141.    
+#&gt;  7     7   0.907 
+#&gt;  8     8  NA     
+#&gt;  9     9  30.5   
+#&gt; 10    10   4.94  
 #&gt; # … with 990 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
