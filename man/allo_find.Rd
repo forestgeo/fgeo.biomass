@@ -55,8 +55,7 @@ census_species \%>\%
 allo_find(custom_eqn = as_eqn(your_equations))
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{allo_evaluate}},
-  \code{\link{allo_lookup}}
+Other functions to manipulate equations: \code{\link{allo_evaluate}}
 
 Other constructors: \code{\link{add_species}}
 }
