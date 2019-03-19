@@ -35,7 +35,6 @@ unique(
 \seealso{
 \code{\link[=valid_units]{valid_units()}}.
 
-Other internal functions that flag issues to be fixed: \code{\link{fixme_pull_failing_eqn}},
-  \code{\link{handle_multiple_rowid}}
+Other internal functions that flag issues to be fixed: \code{\link{fixme_pull_failing_eqn}}
 }
 \concept{internal functions that flag issues to be fixed}
