@@ -10,7 +10,7 @@ default_eqn_impl <- function(data) {
 #' Restructure equations from __allodb__.
 #'
 #' This function restructures an equations-table from __allodb__ with columns as
-#' in [allodb_eqn_crucial()] (e.g. [allodb::master_tidy_tidy()]). It transforms its
+#' in [allodb_eqn_crucial()] (e.g. [allodb::master_tidy()]). It transforms its
 #' input into a default-equations table. Now this function is very strict and
 #' intrusive:
 #' * It drops problematic equations that can't be evaluated.
