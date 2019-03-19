@@ -31,7 +31,7 @@ test_that("allo_evaluate informs expected dbh units and given `biomass` units", 
   eqn <- suppressWarnings(allo_find(cns_sp))
 
   expect_message(
-    suppressWarnings(allo_evaluate(eqn, dbh_unit = "cm")),
+    suppressWarnings(allo_evaluate(eqn)),
     "Assuming `dbh`.*unit.*[cm]"
   )
   expect_message(

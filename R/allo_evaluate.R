@@ -21,7 +21,6 @@ eval_memoised <- memoise::memoise(allo_evaluate_impl)
 #' Evaluate equations, giving a biomass result per row.
 #'
 #' @param data A dataframe as those created with [allo_find()].
-#' @param dbh_unit Character string giving the unit of the expected input dbh.
 #' @param biomass_unit Character string giving the output unit e.g. "kg".
 #' @family functions to manipulate equations
 #'
@@ -40,7 +39,8 @@ eval_memoised <- memoise::memoise(allo_evaluate_impl)
 #' allo_evaluate(best)
 #'
 #' allo_evaluate(best, dbh_unit = "cm", biomass_unit = "Mg")
-allo_evaluate <- function(data, dbh_unit = "mm", biomass_unit = "kg") {
+allo_evaluate <- function(data, biomass_unit = "kg") {
+  dbh_unit = "mm"
   inform(glue("Assuming `dbh` unit in [{dbh_unit}]."))
 
   inform("Converting `dbh` based on `dbh_unit`.")
