@@ -33,7 +33,7 @@ allo_evaluate(best)
 allo_evaluate(best, dbh_unit = "cm", biomass_unit = "Mg")
 }
 \seealso{
-Other functions to manipulate equations: \code{\link{add_equations}},
-  \code{\link{allo_find}}, \code{\link{allo_lookup}}
+Other functions to manipulate equations: \code{\link{allo_find}},
+  \code{\link{allo_lookup}}
 }
 \concept{functions to manipulate equations}
