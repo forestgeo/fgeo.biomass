@@ -81,26 +81,3 @@ check_bms_cns <- function(census, species, site) {
   check_crucial_names(census, c("sp", "dbh"))
   check_crucial_names(species, "sp")
 }
-
-
-
-#' Crucial columns form __allodb__ equations-table.
-#'
-#' @return A string.
-#' @export
-#' @keywords internal
-#'
-#' @examples
-#' allodb_eqn_crucial()
-allodb_eqn_crucial <- function() {
-  c(
-    "equation_id",
-    "site",
-    "species",
-    "equation_allometry",
-    "allometry_specificity",
-    "dependent_variable_biomass_component",
-    "dbh_units_original",
-    "biomass_units_original"
-  )
-}

@@ -18,7 +18,9 @@
 #'   eqn_type = c("mixed_hardwood"),
 #'   anatomic_relevance = c("total aboveground biomass"),
 #'   dbh_unit = "cm",
-#'   bms_unit = "g"
+#'   bms_unit = "g",
+#'   dbh_min_cm = 0,
+#'   dbh_max_cm = Inf
 #' )
 #'
 #' class(as_eqn(your_equations))
@@ -38,7 +40,9 @@ validate_eqn <- function(data) {
     "eqn_type",
     "anatomic_relevance",
     "dbh_unit",
-    "bms_unit"
+    "bms_unit",
+    "dbh_min_cm",
+    "dbh_max_cm"
   )
   check_crucial_names(data, crucial)
 

@@ -40,6 +40,7 @@ default_eqn <- function(data) {
 
 pick_useful_cols <- function(data) {
   crucial_cols <- data[ , allodb_eqn_crucial(), drop = TRUE]
+  crucial_cols
 }
 
 modify_default_eqn <- function(out) {
@@ -76,6 +77,34 @@ new_eqn <- function(x) {
   structure(x, class = c("eqn", class(x)))
 }
 
+format_equations <- function(eqn) {
+  purrr::quietly(formatR::tidy_source)(text = eqn)$result$text.tidy
+}
+
+
+#' Crucial columns from __allodb__ equations-table.
+#'
+#' @return A string.
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' allodb_eqn_crucial()
+allodb_eqn_crucial <- function() {
+  c(
+    "equation_id",
+    "site",
+    "species",
+    "equation_allometry",
+    "allometry_specificity",
+    "dependent_variable_biomass_component",
+    "dbh_units_original",
+    "biomass_units_original",
+    "dbh_min_cm",
+    "dbh_max_cm"
+  )
+}
+
 bmss_default_vars <- function() {
   c("equation_id",
     "site",
@@ -85,11 +114,8 @@ bmss_default_vars <- function() {
     "eqn_type",
     "anatomic_relevance",
     "dbh_unit",
-    "bms_unit"
+    "bms_unit",
+    "dbh_min_cm",
+    "dbh_max_cm"
   )
 }
-
-format_equations <- function(eqn) {
-  purrr::quietly(formatR::tidy_source)(text = eqn)$result$text.tidy
-}
-
