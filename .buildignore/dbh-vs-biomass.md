@@ -4,13 +4,13 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages --------------------------------------------- tidyverse 1.2.1 --
+#> -- Attaching packages ------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.0       v purrr   0.3.1  
 #> v tibble  2.0.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
 #> Warning: package 'purrr' was built under R version 3.5.3
-#> -- Conflicts ------------------------------------------------ tidyverse_conflicts() --
+#> -- Conflicts ---------------------------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -145,7 +145,6 @@ Now let’s box plot `biomass` by species.
 ``` r
 census_equations_biomass2 %>% 
   ggplot(aes(sp, biomass)) +
-  geom_hline(yintercept = 4e4, color = "red") +
   geom_boxplot() +
   ylab("biomass [kg]") +
   coord_flip()
@@ -153,71 +152,54 @@ census_equations_biomass2 %>%
 
 ![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-The biomass of *Liriodendron sp.* seems relatively too high. Here is
-what it’s equations look like.
-
-``` r
-odd_sp <- "liriodendron tulipifera"
-
-census_equations_biomass2 %>% 
-  filter(sp == odd_sp) %>% 
-  select(sp, eqn) %>% 
-  unique()
-#> # A tibble: 2 x 2
-#>   sp                      eqn                                  
-#>   <chr>                   <chr>                                
-#> 1 liriodendron tulipifera 10^(0.8306 + 2.7308 * (log10(dbh^2)))
-#> 2 liriodendron tulipifera 10^(-1.236 + 2.635 * (log10(dbh)))
-```
-
-Krista suggested that the problem may be that the code still doesn’t
-handle dbh-specific equations
-([comment](https://github.com/forestgeo/allodb/issues/73#issuecomment-473979550)).
-We’ll implement this feature ASAP. But until then, let’s exclude this
-species.
-
-``` r
-census_equations_biomass3 <- census_equations_biomass2 %>% 
-  filter(!sp == odd_sp)
-```
-
 Let’s see what `dbh` versus `biomass` looks like now.
 
 ``` r
-census_equations_biomass3 %>% 
+census_equations_biomass2 %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(dbh, biomass)) + 
   # Reference based on allometries for tropical trees
   geom_point(aes(y = agb_kg), color = "grey", size = 4) +
-  geom_point(aes(y = biomass)) +
+  geom_point(aes(y = biomass, color = sp)) +
   ylab("Reference `agb` (grey) and calculated biomass (black) in [kg]") +
-  xlab("dbh [mm]")
+  xlab("dbh [mm]") +
+  theme(legend.position = "bottom")
 ```
 
-![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
-A few points over 40000 \[kg\] seem relatively too high.
+A few points over `3e4` \[kg\] seem relatively too high. Remember that
+we still don’t support some features (e.g. dbh-specific equations) that
+likely affect the magnitude of `biomass`.
 
 ``` r
-census_equations_biomass3 %>% 
-  filter(biomass > 4e4) %>% 
+census_equations_biomass2 %>% 
+  filter(biomass > 3e4) %>% 
   select(sp, equation_id, eqn)
-#> # A tibble: 4 x 3
-#>   sp               equation_id eqn                                  
-#>   <chr>            <chr>       <chr>                                
-#> 1 quercus velutina c70dea      10^(1.00005 + 2.10621 * (log10(dbh)))
-#> 2 quercus velutina 23ec05      exp(-0.34052 + 2.65803 * log(dbh))   
-#> 3 quercus velutina c70dea      10^(1.00005 + 2.10621 * (log10(dbh)))
-#> 4 quercus velutina 23ec05      exp(-0.34052 + 2.65803 * log(dbh))
+#> # A tibble: 12 x 3
+#>    sp                      equation_id eqn                                 
+#>    <chr>                   <chr>       <chr>                               
+#>  1 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
+#>  2 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))  
+#>  3 quercus velutina        c70dea      10^(1.00005 + 2.10621 * (log10(dbh)~
+#>  4 quercus velutina        23ec05      exp(-0.34052 + 2.65803 * log(dbh))  
+#>  5 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
+#>  6 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))  
+#>  7 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
+#>  8 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))  
+#>  9 quercus velutina        c70dea      10^(1.00005 + 2.10621 * (log10(dbh)~
+#> 10 quercus velutina        23ec05      exp(-0.34052 + 2.65803 * log(dbh))  
+#> 11 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
+#> 12 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))
 ```
 
 For a better visualization let’s remove those values for now, and plot
-the same relationship but this time by species.
+`dbh` versus `biomass` again, this time by species.
 
 ``` r
-census_equations_biomass3 %>% 
-  filter(!biomass > 4e4) %>% 
+census_equations_biomass2 %>% 
+  filter(!biomass > 3e4) %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
@@ -229,4 +211,4 @@ census_equations_biomass3 %>%
   theme_bw()
 ```
 
-![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->

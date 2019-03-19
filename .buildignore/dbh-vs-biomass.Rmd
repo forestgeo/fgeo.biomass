@@ -80,57 +80,39 @@ Now let's box plot `biomass` by species.
 ```{r}
 census_equations_biomass2 %>% 
   ggplot(aes(sp, biomass)) +
-  geom_hline(yintercept = 4e4, color = "red") +
   geom_boxplot() +
   ylab("biomass [kg]") +
   coord_flip()
 ```
 
-The biomass of _Liriodendron sp._ seems relatively too high. Here is what it's equations look like.
-
-```{r}
-odd_sp <- "liriodendron tulipifera"
-
-census_equations_biomass2 %>% 
-  filter(sp == odd_sp) %>% 
-  select(sp, eqn) %>% 
-  unique()
-```
-
-Krista suggested that the problem may be that the code still doesn't handle dbh-specific equations ([comment](https://github.com/forestgeo/allodb/issues/73#issuecomment-473979550)). We'll implement this feature ASAP. But until then, let's exclude this species.
-
-```{r}
-census_equations_biomass3 <- census_equations_biomass2 %>% 
-  filter(!sp == odd_sp)
-```
-
 Let's see what `dbh` versus `biomass` looks like now.
 
-```{r, cache=TRUE}
-census_equations_biomass3 %>% 
+```{r, cache=TRUE, fig.height=14}
+census_equations_biomass2 %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(dbh, biomass)) + 
   # Reference based on allometries for tropical trees
   geom_point(aes(y = agb_kg), color = "grey", size = 4) +
-  geom_point(aes(y = biomass)) +
+  geom_point(aes(y = biomass, color = sp)) +
   ylab("Reference `agb` (grey) and calculated biomass (black) in [kg]") +
-  xlab("dbh [mm]")
+  xlab("dbh [mm]") +
+  theme(legend.position = "bottom")
 ```
 
-A few points over 40000 [kg] seem relatively too high.
+A few points over `3e4` [kg] seem relatively too high. Remember that we still don't support some features (e.g. dbh-specific equations) that likely affect the magnitude of `biomass`.
 
 ```{r}
-census_equations_biomass3 %>% 
-  filter(biomass > 4e4) %>% 
+census_equations_biomass2 %>% 
+  filter(biomass > 3e4) %>% 
   select(sp, equation_id, eqn)
 ```
 
-For a better visualization let's remove those values for now, and plot the same relationship but this time by species.
+For a better visualization let's remove those values for now, and plot `dbh` versus `biomass` again, this time by species.
 
 ```{r, fig.height=14}
-census_equations_biomass3 %>% 
-  filter(!biomass > 4e4) %>% 
+census_equations_biomass2 %>% 
+  filter(!biomass > 3e4) %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
