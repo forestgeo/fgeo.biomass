@@ -4,6 +4,36 @@ library(dplyr)
 
 set.seed(1)
 
+test_that("allo_find does not warn if dbh in [mm]", {
+  data <- fgeo.biomass::scbi_tree1 %>%
+    dplyr::sample_n(1000) %>%
+    filter(!is.na(dbh)) %>%
+    add_species(fgeo.biomass::scbi_species, "scbi")
+
+  warnings <- paste0(purrr::quietly(allo_find)(data)$warnings, collapse = ", ")
+  expect_false(grepl("should be.*mm", warnings))
+})
+
+test_that("allo_find informs expected dbh units in [mm]", {
+  cns_sp <- fgeo.biomass::scbi_tree1 %>%
+    dplyr::sample_n(30) %>%
+    add_species(fgeo.biomass::scbi_species, "scbi")
+
+  expect_message(
+    suppressWarnings(allo_find(cns_sp)),
+    "Assuming.*dbh.*in.*mm"
+  )
+})
+
+test_that("allo_find outputs column `dbh_in_range`", {
+  cns_sp <- fgeo.biomass::scbi_tree1 %>%
+    dplyr::sample_n(30) %>%
+    add_species(fgeo.biomass::scbi_species, "scbi")
+  eqn <- suppressWarnings(allo_find(cns_sp))
+  has_column_named_dbh_in_range <- any(grepl("dbh_in_range", names(eqn)))
+  expect_true(has_column_named_dbh_in_range)
+})
+
 test_that("allo_find warns non matching species", {
   census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(1000)
   species <- fgeo.biomass::scbi_species
@@ -41,7 +71,7 @@ test_that("allo_find errs if custom_eqn is not created with as_eqn", {
   )
 
   expect_error(
-    allo_find(custom_eqn = your_equations),
+    suppressWarnings(allo_find(census_species, custom_eqn = your_equations)),
     "must be of class 'eqn'"
   )
 })

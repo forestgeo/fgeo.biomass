@@ -47,7 +47,7 @@ test_that("allo_evaluate informs that it converts `dbh` as in `dbh_unit`", {
     census, species,
     site = "scbi"
   )
-  eqn <- suppressMessages(allo_find(census_species))
+  eqn <- suppressMessages(suppressWarnings(allo_find(census_species)))
 
   expect_message(
     suppressWarnings(allo_evaluate(eqn)),

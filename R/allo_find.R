@@ -1,4 +1,4 @@
-allo_find_impl <- function(data, custom_eqn = NULL) {
+allo_find_impl <- function(data, custom_eqn) {
   eqn <- custom_eqn %||%
     suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
   abort_if_not_eqn(eqn)
@@ -6,8 +6,15 @@ allo_find_impl <- function(data, custom_eqn = NULL) {
   warn_if_species_missmatch(data, eqn)
   .by <- c("sp", "site")
   message("Joining, by = ", paste0(.by, collapse = ', '), ".")
-  dplyr::left_join(data, eqn, by = .by)
+  out <- dplyr::left_join(data, eqn, by = .by)
+
+  out$dbh_in_range <- is_in_range(
+    out$dbh, min = out$dbh_min_mm, max = out$dbh_max_mm
+  )
+
+  out
 }
+allo_find_memoised <- memoise::memoise(allo_find_impl)
 
 warn_if_species_missmatch <- function(data, eqn) {
   to_match <- data[["sp"]]
@@ -75,7 +82,11 @@ warn_if_species_missmatch <- function(data, eqn) {
 #' census_species %>%
 #' allo_find(custom_eqn = as_eqn(your_equations))
 #' @family constructors
-allo_find <- memoise::memoise(allo_find_impl)
+allo_find <- function(data, custom_eqn = NULL) {
+  inform("Assuming `dbh` in [mm] (required to find dbh-specific equations).")
+  warn_odd_dbh(data$dbh)
+  allo_find_memoised(data, custom_eqn = custom_eqn)
+}
 
 abort_if_not_eqn <- function(custom_eqn) {
   if (!inherits(custom_eqn, "eqn")) {
