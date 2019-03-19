@@ -19,8 +19,8 @@
 #'   anatomic_relevance = c("total aboveground biomass"),
 #'   dbh_unit = "cm",
 #'   bms_unit = "g",
-#'   dbh_min_cm = 0,
-#'   dbh_max_cm = Inf
+#'   dbh_min_mm = 0,
+#'   dbh_max_mm = Inf
 #' )
 #'
 #' class(as_eqn(your_equations))
