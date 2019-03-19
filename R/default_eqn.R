@@ -10,9 +10,9 @@ default_eqn_impl <- function(data) {
 #' Restructure equations from __allodb__.
 #'
 #' This function restructures an equations-table from __allodb__ with columns as
-#' in [allodb_eqn_crucial()] (e.g. [allodb::master()]). It transforms its input
-#' into a default-equations table. Now this function is very
-#' strict and intrusive:
+#' in [allodb_eqn_crucial()] (e.g. [allodb::master_tidy_tidy()]). It transforms its
+#' input into a default-equations table. Now this function is very strict and
+#' intrusive:
 #' * It drops problematic equations that can't be evaluated.
 #' * It adds and remove columns.
 #' * It renames columns.
@@ -22,7 +22,7 @@ default_eqn_impl <- function(data) {
 #' * It replaces spaces (" ") with underscore ("_") in values of
 #' allometry_specificity for easier manipulation.
 #'
-#' @param data [allodb::master()] or similar.
+#' @param data [allodb::master_tidy()] or similar.
 #'
 #' @family internal objects that will be hidden or removed
 #'
@@ -30,7 +30,7 @@ default_eqn_impl <- function(data) {
 #' @export
 #'
 #' @examples
-#' default_eqn(allodb::master())
+#' default_eqn(allodb::master_tidy())
 default_eqn <- function(data) {
   fgeo.tool::check_crucial_names(data, allodb_eqn_crucial())
 

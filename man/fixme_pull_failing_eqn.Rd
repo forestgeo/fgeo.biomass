@@ -7,7 +7,7 @@
 fixme_pull_failing_eqn(data)
 }
 \arguments{
-\item{data}{An \strong{allodb} equations-table (e.g. allodb::master()).}
+\item{data}{An \strong{allodb} equations-table (e.g. allodb::master_tidy()).}
 }
 \value{
 A character vector.
@@ -16,7 +16,7 @@ A character vector.
 Failing equations, that can't be evaluated.
 }
 \examples{
-fixme_pull_failing_eqn(allodb::master())
+fixme_pull_failing_eqn(allodb::master_tidy())
 }
 \seealso{
 Other internal functions that flag issues to be fixed: \code{\link{fixme_units}},

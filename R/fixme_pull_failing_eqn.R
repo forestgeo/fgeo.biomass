@@ -8,14 +8,14 @@ fixme_pull_failing_eqn_impl <- function(data) {
 
 #' Failing equations, that can't be evaluated.
 #'
-#' @param data An __allodb__ equations-table (e.g. allodb::master()).
+#' @param data An __allodb__ equations-table (e.g. allodb::master_tidy()).
 #' @family internal functions that flag issues to be fixed
 #'
 #' @return A character vector.
 #' @export
 #'
 #' @examples
-#' fixme_pull_failing_eqn(allodb::master())
+#' fixme_pull_failing_eqn(allodb::master_tidy())
 fixme_pull_failing_eqn <- memoise::memoise(fixme_pull_failing_eqn_impl)
 
 failing_eqn <- function(data, .f) {

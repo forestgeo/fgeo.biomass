@@ -1,6 +1,6 @@
 allo_find_impl <- function(data, custom_eqn = NULL) {
   eqn <- custom_eqn %||%
-    suppressMessages(fgeo.biomass::default_eqn(allodb::master()))
+    suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
   abort_if_not_eqn(eqn)
 
   warn_if_species_missmatch(data, eqn)

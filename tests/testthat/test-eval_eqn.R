@@ -1,7 +1,7 @@
 context("eval_eqn.R")
 
 test_that("FIXME: Problems in equations (#54)", {
-  error_msg <- some_error(allodb::master(), eval_eqn) %>%
+  error_msg <- some_error(allodb::master_tidy(), eval_eqn) %>%
     purrr::discard(is.null) %>%
     purrr::map_chr("message") %>%
     unique() %>%

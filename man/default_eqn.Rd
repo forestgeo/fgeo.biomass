@@ -7,16 +7,16 @@
 default_eqn(data)
 }
 \arguments{
-\item{data}{\code{\link[allodb:master]{allodb::master()}} or similar.}
+\item{data}{\code{\link[allodb:master_tidy]{allodb::master_tidy()}} or similar.}
 }
 \value{
 A dataframe.
 }
 \description{
 This function restructures an equations-table from \strong{allodb} with columns as
-in \code{\link[=allodb_eqn_crucial]{allodb_eqn_crucial()}} (e.g. \code{\link[allodb:master]{allodb::master()}}). It transforms its input
-into a default-equations table. Now this function is very
-strict and intrusive:
+in \code{\link[=allodb_eqn_crucial]{allodb_eqn_crucial()}} (e.g. \code{\link[allodb:master_tidy_tidy]{allodb::master_tidy_tidy()}}). It transforms its
+input into a default-equations table. Now this function is very strict and
+intrusive:
 \itemize{
 \item It drops problematic equations that can't be evaluated.
 \item It adds and remove columns.
@@ -29,6 +29,6 @@ allometry_specificity for easier manipulation.
 }
 }
 \examples{
-default_eqn(allodb::master())
+default_eqn(allodb::master_tidy())
 }
 \concept{internal objects that will be hidden or removed}

@@ -11,5 +11,5 @@ test_that("default_eqn has expected columns", {
        "dbh_unit",
        "bms_unit"
     )
-  expect_named(default_eqn(allodb::master()), nms)
+  expect_named(default_eqn(allodb::master_tidy()), nms)
 })
