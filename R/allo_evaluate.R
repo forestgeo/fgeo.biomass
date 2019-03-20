@@ -38,7 +38,7 @@ eval_memoised <- memoise::memoise(allo_evaluate_impl)
 #'
 #' allo_evaluate(best)
 #'
-#' allo_evaluate(best, dbh_unit = "cm", biomass_unit = "Mg")
+#' allo_evaluate(best, biomass_unit = "Mg")
 allo_evaluate <- function(data, biomass_unit = "kg") {
   dbh_unit = "mm"
   inform(glue("Assuming `dbh` unit in [{dbh_unit}]."))
