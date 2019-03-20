@@ -1,31 +1,32 @@
 #' Try to convert units to conform with `measurements::conv_unit_options`.
 #'
-#' `fixme_units()` leaves valid units untouched, fix invalid known units, and
+#' `fix_units()` leaves valid units untouched, fix invalid known units, and
 #'   flags invalid unknown units.
 #' @param x A character vector of units.
 #'
 #' @return A character vector.
 #' @export
-#' @family internal functions that flag issues to be fixed
+#' @keywords internal
+#'
 #' @seealso [valid_units()].
 #'
 #' @examples
 #' x <- c("mm", "cm", "m", "in", "in^2", "cm^2", "BAD")
-#' fixme_units(x)
+#' fix_units(x)
 #'
 #' unique(
 #'   allodb::equations$dbh_units_original
 #' )
 #'
 #' unique(
-#'   fixme_units(allodb::equations$dbh_units_original)
+#'   fix_units(allodb::equations$dbh_units_original)
 #' )
 #'
 #' unique(
-#'   fixme_units(allodb::equations$biomass_units_original)
+#'   fix_units(allodb::equations$biomass_units_original)
 #' )
-fixme_units <- function(x) {
-  purrr::map_chr(x, ~ fixme_units_one(.x))
+fix_units <- function(x) {
+  purrr::map_chr(x, ~ fix_units_one(.x))
 }
 
 #' Valid units as per `measurements::conv_unit_options`.
@@ -45,7 +46,7 @@ valid_units <- function() {
   measurements::conv_unit_options
 }
 
-fixme_units_one <- function(x) {
+fix_units_one <- function(x) {
   dplyr::case_when(
     is_valid_unit(x) ~ identity(x),
 

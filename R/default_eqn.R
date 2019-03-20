@@ -1,7 +1,7 @@
 default_eqn_impl <- function(data) {
   out <- data %>%
     pick_useful_cols() %>%
-    purrr::modify_at(c("dbh_unit", "bms_unit"), fixme_units) %>%
+    purrr::modify_at(c("dbh_unit", "bms_unit"), fix_units) %>%
     modify_default_eqn()
 
   new_eqn(dplyr::as_tibble(out))

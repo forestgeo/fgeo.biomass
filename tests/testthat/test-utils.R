@@ -1,4 +1,4 @@
-context("utils")
+context("is_in_range")
 
 test_that("is_in_range returns true if in range, else returns false", {
   expect_true(is_in_range(1, min = 1, max = 10))
@@ -6,6 +6,8 @@ test_that("is_in_range returns true if in range, else returns false", {
   expect_false(is_in_range(11, min = 1, max = 10))
   expect_false(is_in_range(0, min = 1, max = 10))
 })
+
+context("warn_odd_dbh")
 
 test_that("warn_odd_dbh warns dbh outside [10-100) range", {
   msg <- "should be"
@@ -18,3 +20,14 @@ test_that("warn_odd_dbh warns dbh outside [10-100) range", {
   expect_silent(warn_odd_dbh(15))
 })
 
+context("eval_eqn.R")
+
+test_that("FIXME: Problems in equations (#54)", {
+  error_msg <- some_error(allodb::master_tidy(), eval_eqn) %>%
+    purrr::discard(is.null) %>%
+    purrr::map_chr("message") %>%
+    unique() %>%
+    glue_collapse(sep = "\n")
+
+  warn(glue("Problems to fix:\n {error_msg}"))
+})

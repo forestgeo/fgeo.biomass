@@ -54,7 +54,3 @@ reference:
   - title: Helpers (may eventually be hidden)
     contents:
       - has_concept("helpers")
-
-  - title: Internal functions that flag issues to be fixed
-    contents:
-      - has_concept("internal functions that flag issues to be fixed")
