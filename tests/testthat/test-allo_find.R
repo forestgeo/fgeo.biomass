@@ -25,15 +25,6 @@ test_that("allo_find informs expected dbh units in [mm]", {
   )
 })
 
-test_that("allo_find outputs column `dbh_in_range`", {
-  cns_sp <- fgeo.biomass::scbi_tree1 %>%
-    dplyr::sample_n(30) %>%
-    add_species(fgeo.biomass::scbi_species, "scbi")
-  eqn <- suppressWarnings(allo_find(cns_sp))
-  has_column_named_dbh_in_range <- any(grepl("dbh_in_range", names(eqn)))
-  expect_true(has_column_named_dbh_in_range)
-})
-
 test_that("allo_find warns non matching species", {
   census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(1000)
   species <- fgeo.biomass::scbi_species

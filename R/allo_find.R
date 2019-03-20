@@ -4,6 +4,28 @@ allo_find_impl <- function(data, custom_eqn) {
   abort_if_not_eqn(eqn)
 
   warn_if_species_missmatch(data, eqn)
+
+  inform("* Searching equations according to site and species.")
+  .by <- c("sp", "site")
+  dbh_all <- dplyr::left_join(data, eqn, by = .by)
+
+  inform("* Refining equations according to dbh.")
+  dbh_all$dbh_in_range <- is_in_range(
+    dbh_all$dbh, min = dbh_all$dbh_min_mm, max = dbh_all$dbh_max_mm
+  )
+  in_range <- filter(dbh_all, .data$dbh_in_range)
+  out <- suppressMessages(dplyr::left_join(data, in_range))
+  out$dbh_in_range <- NULL
+
+  out
+}
+
+allo_find_impl_original <- function(data, custom_eqn) {
+  eqn <- custom_eqn %||%
+    suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
+  abort_if_not_eqn(eqn)
+
+  warn_if_species_missmatch(data, eqn)
   .by <- c("sp", "site")
   message("Joining, by = ", paste0(.by, collapse = ', '), ".")
   out <- dplyr::left_join(data, eqn, by = .by)
