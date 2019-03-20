@@ -57,16 +57,16 @@ census
 #> # A tibble: 5,000 x 20
 #>    treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
 #>     <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>    <int>
-#>  1  16014  16014 1208~ 1       libe  1205    235.   97.2 21878        1
-#>  2  34229     NA 1534~ <NA>    astr  1522    290.  426.     NA       NA
-#>  3  38845     NA 33122 <NA>    libe  0301     57.6  14.8    NA       NA
-#>  4  29821  29821 2007~ 1       astr  2010    392.  185.  38611        1
-#>  5  39455     NA 53167 <NA>    astr  0516     88.7 316.     NA       NA
-#>  6  39420     NA 53132 <NA>    qupr  0505     90.5  95.8    NA       NA
-#>  7   3995   3995 30361 1       unk   0307     57.7 139.   7095        1
-#>  8  23729  23729 1623~ 1       cagl  1623    314.  449.  31219        1
-#>  9  10622  10622 90369 1       litu  0905    173.   94.6 15201        1
-#> 10  39651     NA 73116 <NA>    libe  0715    127   297.     NA       NA
+#>  1  10484  10484 90224 1       libe  0901     174.  14.2 15039        1
+#>  2  26916  26916 1815~ 1       unk   1803     342.  49.5 35147        1
+#>  3  34582     NA 1633~ <NA>    libe  1605     316.  91.4    NA       NA
+#>  4  23293  23293 1610~ 1       unk   1614     307. 271.  30736        1
+#>  5  11455  11455 92297 1       astr  0923     178  451.  16179        1
+#>  6  26248  26248 1803~ 1       libe  1803     359.  50.4 34348        1
+#>  7  33806     NA 1530~ <NA>    libe  1502     280.  23.7    NA       NA
+#>  8  28657  28657 1922~ 1       quru  1919     367. 380   37228        1
+#>  9  28425  28425 1909~ 1       cato  1916     367. 319.  36983        1
+#> 10  18743  18743 1324~ 1       qual  1328     245. 541.  25201        1
 #> # ... with 4,990 more rows, and 10 more variables: dbh <dbl>, pom <chr>,
 #> #   hom <dbl>, ExactDate <chr>, DFstatus <chr>, codes <chr>,
 #> #   nostems <dbl>, date <dbl>, status <chr>, agb <dbl>
@@ -87,15 +87,15 @@ census %>%
 #>    sp   
 #>    <chr>
 #>  1 libe 
-#>  2 astr 
+#>  2 unk  
 #>  3 libe 
-#>  4 astr 
+#>  4 unk  
 #>  5 astr 
-#>  6 qupr 
-#>  7 unk  
-#>  8 cagl 
-#>  9 litu 
-#> 10 libe 
+#>  6 libe 
+#>  7 libe 
+#>  8 quru 
+#>  9 cato 
+#> 10 qual 
 #> # ... with 4,990 more rows
 ```
 
@@ -136,18 +136,18 @@ census_species <- census %>%
 census_species %>% 
   select(matches(sp_or_latin))
 #> # A tibble: 5,000 x 1
-#>    sp                     
-#>  * <chr>                  
-#>  1 lindera benzoin        
-#>  2 asimina triloba        
-#>  3 lindera benzoin        
-#>  4 asimina triloba        
-#>  5 asimina triloba        
-#>  6 quercus prinus         
-#>  7 unidentified unk       
-#>  8 carya glabra           
-#>  9 liriodendron tulipifera
-#> 10 lindera benzoin        
+#>    sp              
+#>  * <chr>           
+#>  1 lindera benzoin 
+#>  2 unidentified unk
+#>  3 lindera benzoin 
+#>  4 unidentified unk
+#>  5 asimina triloba 
+#>  6 lindera benzoin 
+#>  7 lindera benzoin 
+#>  8 quercus rubra   
+#>  9 carya tomentosa 
+#> 10 quercus alba    
 #> # ... with 4,990 more rows
 ```
 
@@ -164,67 +164,33 @@ site.
 ``` r
 equations <- census_species %>% 
   allo_find()
-#> Warning: Can't find equations matching these species (inserting 148 missing values):
-#> acer sp, carya sp, crataegus sp, quercus prinus, ulmus sp, unidentified unk
-#> Joining, by = sp, site.
+#> Assuming `dbh` in [mm] (required to find dbh-specific equations).
+#> * Searching equations according to site and species.
+#> Warning: Can't find equations matching these species:
+#> carya sp, crataegus sp, quercus prinus, quercus sp, ulmus sp, unidentified unk
+#> * Refining equations according to dbh.
+#> Warning: Can't find equations for 3255 rows (inserting `NA`).
 
 equations
-#> # A tibble: 5,822 x 29
+#> # A tibble: 5,036 x 31
 #>    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID
 #>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>
-#>  1     1  16014  16014 1208~ 1       lind~ 1205    235.   97.2 21878
-#>  2     2  34229     NA 1534~ <NA>    asim~ 1522    290.  426.     NA
-#>  3     3  38845     NA 33122 <NA>    lind~ 0301     57.6  14.8    NA
-#>  4     4  29821  29821 2007~ 1       asim~ 2010    392.  185.  38611
-#>  5     5  39455     NA 53167 <NA>    asim~ 0516     88.7 316.     NA
-#>  6     6  39420     NA 53132 <NA>    quer~ 0505     90.5  95.8    NA
-#>  7     7   3995   3995 30361 1       unid~ 0307     57.7 139.   7095
-#>  8     8  23729  23729 1623~ 1       cary~ 1623    314.  449.  31219
-#>  9     9  10622  10622 90369 1       liri~ 0905    173.   94.6 15201
-#> 10     9  10622  10622 90369 1       liri~ 0905    173.   94.6 15201
-#> # ... with 5,812 more rows, and 19 more variables: CensusID <int>,
+#>  1     1  10484  10484 90224 1       lind~ 0901     174.  14.2 15039
+#>  2     2  26916  26916 1815~ 1       unid~ 1803     342.  49.5 35147
+#>  3     3  34582     NA 1633~ <NA>    lind~ 1605     316.  91.4    NA
+#>  4     4  23293  23293 1610~ 1       unid~ 1614     307. 271.  30736
+#>  5     5  11455  11455 92297 1       asim~ 0923     178  451.  16179
+#>  6     6  26248  26248 1803~ 1       lind~ 1803     359.  50.4 34348
+#>  7     7  33806     NA 1530~ <NA>    lind~ 1502     280.  23.7    NA
+#>  8     8  28657  28657 1922~ 1       quer~ 1919     367. 380   37228
+#>  9     9  28425  28425 1909~ 1       cary~ 1916     367. 319.  36983
+#> 10    10  18743  18743 1324~ 1       quer~ 1328     245. 541.  25201
+#> # ... with 5,026 more rows, and 21 more variables: CensusID <int>,
 #> #   dbh <dbl>, pom <chr>, hom <dbl>, ExactDate <chr>, DFstatus <chr>,
 #> #   codes <chr>, nostems <dbl>, date <dbl>, status <chr>, agb <dbl>,
 #> #   site <chr>, equation_id <chr>, eqn <chr>, eqn_source <chr>,
 #> #   eqn_type <chr>, anatomic_relevance <chr>, dbh_unit <chr>,
-#> #   bms_unit <chr>
-```
-
-If you need more information about each equation, `allo_lookup()` helps
-you to look it up in **allodb**.
-
-``` r
-equations %>% 
-  allo_lookup(allodb::master())
-#> Joining `equations` and `sitespecies` by 'equation_id'; then `sites_info` by 'site'.
-#> Joining, by = "equation_id"
-#> # A tibble: 245,281 x 44
-#>    rowid equation_id ref_id equation_allome~ equation_form dependent_varia~
-#>    <int> <chr>       <chr>  <chr>            <chr>         <chr>           
-#>  1     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  2     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  3     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  4     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  5     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  6     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  7     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  8     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#>  9     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#> 10     1 f08fff      chojn~ exp(-2.2118+2.4~ exp(a+b*log(~ Total abovegrou~
-#> # ... with 245,271 more rows, and 38 more variables:
-#> #   independent_variable <chr>, allometry_specificity <chr>,
-#> #   geographic_area <chr>, dbh_min_cm <chr>, dbh_max_cm <chr>,
-#> #   sample_size <chr>, dbh_units_original <chr>,
-#> #   biomass_units_original <chr>, allometry_development_method <chr>,
-#> #   regression_model <chr>, other_equations_tested <chr>,
-#> #   log_biomass <chr>, bias_corrected <chr>, bias_correction_factor <chr>,
-#> #   notes_fitting_model <chr>, original_data_availability <chr>,
-#> #   warning <chr>, site <chr>, family <chr>, species <chr>,
-#> #   species_code <chr>, life_form <chr>, equation_group <chr>,
-#> #   equation_taxa <chr>, notes_on_species <chr>, wsg_id <chr>,
-#> #   wsg_specificity <chr>, id <chr>, Site <chr>, lat <chr>, long <chr>,
-#> #   UTM_Zone <chr>, UTM_X <chr>, UTM_Y <chr>, intertropical <chr>,
-#> #   size.ha <chr>, E <chr>, wsg.site.name <chr>
+#> #   bms_unit <chr>, dbh_min_mm <dbl>, dbh_max_mm <dbl>
 ```
 
 ### Calculating biomass
@@ -240,32 +206,28 @@ biomass <- equations %>%
   allo_evaluate()
 #> Assuming `dbh` unit in [mm].
 #> Converting `dbh` based on `dbh_unit`.
-#> Warning: Can't convert all units (inserting 148 missing values):
-#> the 'to' argument is not an acceptable unit.
 #> `biomass` values are given in [kg].
-#> Warning: Can't convert all units (inserting 148 missing values):
+#> Warning: Can't convert all units (inserting 3255 missing values):
+#> the 'to' argument is not an acceptable unit.
+#> Warning: Can't convert all units (inserting 3255 missing values):
 #> the 'from' argument is not an acceptable unit.
-#> Warning: Can't evaluate all equations (inserting 119 missing values):
+#> Warning: Can't evaluate all equations (inserting 23 missing values):
 #> object 'dba' not found
-#> Warning: 
-#>     `biomass` may be invalid.
-#>     We still don't suppor the ability to select dbh-specific equations
-#>     (see https://github.com/forestgeo/fgeo.biomass/issues/9).
-#> 
+#> Warning: `biomass` may be invalid. This is still work in progress.
 biomass
 #> # A tibble: 5,000 x 2
-#>    rowid  biomass
-#>    <int>    <dbl>
-#>  1     1    0.273
-#>  2     2   NA    
-#>  3     3   NA    
-#>  4     4    0.684
-#>  5     5   NA    
-#>  6     6   NA    
-#>  7     7   NA    
-#>  8     8    1.09 
-#>  9     9 6033.   
-#> 10    10   NA    
+#>    rowid biomass
+#>    <int>   <dbl>
+#>  1     1    NA  
+#>  2     2    NA  
+#>  3     3    NA  
+#>  4     4    NA  
+#>  5     5    NA  
+#>  6     6    NA  
+#>  7     7    NA  
+#>  8     8    51.5
+#>  9     9    NA  
+#> 10    10    NA  
 #> # ... with 4,990 more rows
 
 with_biomass <- biomass %>% right_join(equations)
@@ -273,20 +235,20 @@ with_biomass <- biomass %>% right_join(equations)
 
 with_biomass %>% 
   select(eqn, dbh, biomass)
-#> # A tibble: 5,822 x 3
-#>    eqn                                     dbh  biomass
-#>    <chr>                                 <dbl>    <dbl>
-#>  1 exp(-2.2118 + 2.4133 * log(dbh))       14.6    0.273
-#>  2 exp(-2.48 + 2.4835 * log(dbh))         NA     NA    
-#>  3 exp(-2.2118 + 2.4133 * log(dbh))       NA     NA    
-#>  4 exp(-2.48 + 2.4835 * log(dbh))         23.3    0.684
-#>  5 exp(-2.48 + 2.4835 * log(dbh))         NA     NA    
-#>  6 <NA>                                   NA     NA    
-#>  7 <NA>                                   87.3   NA    
-#>  8 10^(-1.326 + 2.762 * (log10(dbh)))     31.2    1.09 
-#>  9 10^(0.8306 + 2.7308 * (log10(dbh^2))) 123.  6033.   
-#> 10 10^(-1.236 + 2.635 * (log10(dbh)))    123.  6033.   
-#> # ... with 5,812 more rows
+#> # A tibble: 5,036 x 3
+#>    eqn                               dbh biomass
+#>    <chr>                           <dbl>   <dbl>
+#>  1 <NA>                             10.8    NA  
+#>  2 <NA>                             64.6    NA  
+#>  3 <NA>                             NA      NA  
+#>  4 <NA>                            174.     NA  
+#>  5 <NA>                             20.8    NA  
+#>  6 <NA>                             10.5    NA  
+#>  7 <NA>                             NA      NA  
+#>  8 exp(4.9967 + 2.3944 * log(dbh)) 115.     51.5
+#>  9 <NA>                             48.9    NA  
+#> 10 <NA>                            742.     NA  
+#> # ... with 5,026 more rows
 ```
 
 Commonly we would further summarize the result. For that you can use the
@@ -298,20 +260,20 @@ with_biomass %>%
   group_by(sp) %>% 
   summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
   arrange(desc(total_biomass))
-#> # A tibble: 54 x 2
+#> # A tibble: 51 x 2
 #>    sp                      total_biomass
 #>    <chr>                           <dbl>
-#>  1 liriodendron tulipifera  17128238904.
-#>  2 quercus velutina              404277.
-#>  3 quercus rubra                  95656.
-#>  4 quercus alba                   79730.
-#>  5 nyssa sylvatica                72348.
-#>  6 fraxinus americana             49579.
-#>  7 carya glabra                   46606.
-#>  8 tilia americana                29910.
-#>  9 carya tomentosa                21039.
-#> 10 juglans nigra                  18113.
-#> # ... with 44 more rows
+#>  1 liriodendron tulipifera       156171.
+#>  2 quercus velutina               99156.
+#>  3 quercus alba                   43186.
+#>  4 carya glabra                   29234.
+#>  5 carya tomentosa                28363.
+#>  6 quercus rubra                  22465.
+#>  7 fraxinus americana             20618.
+#>  8 juglans nigra                  18932.
+#>  9 carya ovalis                   16891.
+#> 10 carya cordiformis              14357.
+#> # ... with 41 more rows
 ```
 
 ### Providing custom equations
@@ -327,7 +289,7 @@ as_eqn("really bad data")
 #> Error in validate_eqn(data): is.data.frame(data) is not TRUE
 as_eqn(data.frame(1))
 #> Error: Ensure your data set has these variables:
-#> equation_id, site, sp, eqn, eqn_type, anatomic_relevance, dbh_unit, bms_unit
+#> equation_id, site, sp, eqn, eqn_type, anatomic_relevance, dbh_unit, bms_unit, dbh_min_mm, dbh_max_mm
 
 # GOOD
 custom_equations <- tibble::tibble(
@@ -338,7 +300,9 @@ custom_equations <- tibble::tibble(
   eqn_type = c("mixed_hardwood"),
   anatomic_relevance = c("total aboveground biomass"),
   dbh_unit = "cm",
-  bms_unit = "g"
+  bms_unit = "g",
+  dbh_min_mm = 0,
+  dbh_max_mm = Inf,
 )
 
 class(as_eqn(custom_equations))
@@ -350,28 +314,31 @@ We can now use the argument `custom_eqn` to pass our custom equations to
 
 ``` r
 allo_find(census_species, custom_eqn = as_eqn(custom_equations))
-#> Warning: Can't find equations matching these species (inserting 5000 missing values):
-#> acer negundo, acer platanoides, acer rubrum, acer sp, ailanthus altissima, amelanchier arborea, asimina triloba, berberis thunbergii, carpinus caroliniana, carya cordiformis, carya glabra, carya ovalis, carya sp, carya tomentosa, castanea dentata, celtis occidentalis, cercis canadensis, chionanthus virginicus, cornus florida, corylus americana, crataegus sp, elaeagnus umbellata, fagus grandifolia, fraxinus americana, fraxinus nigra, fraxinus pennsylvanica, hamamelis virginiana, ilex verticillata, juglans cinerea, juglans nigra, lindera benzoin, liriodendron tulipifera, lonicera maackii, nyssa sylvatica, pinus strobus, platanus occidentalis, prunus avium, prunus serotina, quercus alba, quercus prinus, quercus rubra, quercus velutina, robinia pseudoacacia, rosa multiflora, rubus allegheniensis, rubus phoenicolasius, sambucus canadensis, sassafras albidum, tilia americana, ulmus americana, ulmus rubra, ulmus sp, unidentified unk, viburnum prunifolium
-#> Joining, by = sp, site.
-#> # A tibble: 5,000 x 29
+#> Assuming `dbh` in [mm] (required to find dbh-specific equations).
+#> * Searching equations according to site and species.
+#> Warning: Can't find equations matching these species:
+#> acer negundo, acer platanoides, acer rubrum, ailanthus altissima, amelanchier arborea, asimina triloba, carpinus caroliniana, carya cordiformis, carya glabra, carya ovalis, carya sp, carya tomentosa, castanea dentata, celtis occidentalis, cercis canadensis, cornus florida, crataegus sp, diospyros virginiana, elaeagnus umbellata, fagus grandifolia, fraxinus americana, fraxinus nigra, fraxinus pennsylvanica, hamamelis virginiana, ilex verticillata, juglans nigra, lindera benzoin, liriodendron tulipifera, lonicera maackii, nyssa sylvatica, pinus strobus, pinus virginiana, platanus occidentalis, prunus avium, prunus serotina, quercus alba, quercus prinus, quercus rubra, quercus sp, quercus velutina, robinia pseudoacacia, rosa multiflora, rubus phoenicolasius, sambucus canadensis, sassafras albidum, tilia americana, ulmus americana, ulmus rubra, ulmus sp, unidentified unk, viburnum prunifolium
+#> * Refining equations according to dbh.
+#> Warning: Can't find equations for 5000 rows (inserting `NA`).
+#> # A tibble: 5,000 x 31
 #>    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID
 #>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>
-#>  1     1  16014  16014 1208~ 1       lind~ 1205    235.   97.2 21878
-#>  2     2  34229     NA 1534~ <NA>    asim~ 1522    290.  426.     NA
-#>  3     3  38845     NA 33122 <NA>    lind~ 0301     57.6  14.8    NA
-#>  4     4  29821  29821 2007~ 1       asim~ 2010    392.  185.  38611
-#>  5     5  39455     NA 53167 <NA>    asim~ 0516     88.7 316.     NA
-#>  6     6  39420     NA 53132 <NA>    quer~ 0505     90.5  95.8    NA
-#>  7     7   3995   3995 30361 1       unid~ 0307     57.7 139.   7095
-#>  8     8  23729  23729 1623~ 1       cary~ 1623    314.  449.  31219
-#>  9     9  10622  10622 90369 1       liri~ 0905    173.   94.6 15201
-#> 10    10  39651     NA 73116 <NA>    lind~ 0715    127   297.     NA
-#> # ... with 4,990 more rows, and 19 more variables: CensusID <int>,
+#>  1     1  10484  10484 90224 1       lind~ 0901     174.  14.2 15039
+#>  2     2  26916  26916 1815~ 1       unid~ 1803     342.  49.5 35147
+#>  3     3  34582     NA 1633~ <NA>    lind~ 1605     316.  91.4    NA
+#>  4     4  23293  23293 1610~ 1       unid~ 1614     307. 271.  30736
+#>  5     5  11455  11455 92297 1       asim~ 0923     178  451.  16179
+#>  6     6  26248  26248 1803~ 1       lind~ 1803     359.  50.4 34348
+#>  7     7  33806     NA 1530~ <NA>    lind~ 1502     280.  23.7    NA
+#>  8     8  28657  28657 1922~ 1       quer~ 1919     367. 380   37228
+#>  9     9  28425  28425 1909~ 1       cary~ 1916     367. 319.  36983
+#> 10    10  18743  18743 1324~ 1       quer~ 1328     245. 541.  25201
+#> # ... with 4,990 more rows, and 21 more variables: CensusID <int>,
 #> #   dbh <dbl>, pom <chr>, hom <dbl>, ExactDate <chr>, DFstatus <chr>,
 #> #   codes <chr>, nostems <dbl>, date <dbl>, status <chr>, agb <dbl>,
 #> #   site <chr>, equation_id <chr>, eqn <chr>, eqn_source <chr>,
 #> #   eqn_type <chr>, anatomic_relevance <chr>, dbh_unit <chr>,
-#> #   bms_unit <chr>
+#> #   bms_unit <chr>, dbh_min_mm <chr>, dbh_max_mm <chr>
 ```
 
 This is what the entire workflow looks like:
@@ -380,18 +347,15 @@ This is what the entire workflow looks like:
 census_species %>%
   allo_find(custom_eqn = as_eqn(custom_equations)) %>%
   allo_evaluate()
+#> Assuming `dbh` in [mm] (required to find dbh-specific equations).
 #> Assuming `dbh` unit in [mm].
 #> Converting `dbh` based on `dbh_unit`.
-#> Warning: Can't convert all units (inserting 5000 missing values):
-#> the 'to' argument is not an acceptable unit.
 #> `biomass` values are given in [kg].
 #> Warning: Can't convert all units (inserting 5000 missing values):
+#> the 'to' argument is not an acceptable unit.
+#> Warning: Can't convert all units (inserting 5000 missing values):
 #> the 'from' argument is not an acceptable unit.
-#> Warning: 
-#>     `biomass` may be invalid.
-#>     We still don't suppor the ability to select dbh-specific equations
-#>     (see https://github.com/forestgeo/fgeo.biomass/issues/9).
-#> 
+#> Warning: `biomass` may be invalid. This is still work in progress.
 #> # A tibble: 5,000 x 2
 #>    rowid biomass
 #>    <int>   <dbl>
