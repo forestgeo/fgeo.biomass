@@ -17,6 +17,10 @@ allo_find_impl <- function(data, custom_eqn) {
   out <- suppressMessages(dplyr::left_join(data, in_range))
   out$dbh_in_range <- NULL
 
+  warn(glue("
+    Can't find equations for {sum(is.na(out$equation_id))} rows (inserting `NA`).
+  "))
+
   out
 }
 allo_find_memoised <- memoise::memoise(allo_find_impl)
