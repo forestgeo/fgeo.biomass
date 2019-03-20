@@ -41,8 +41,8 @@ validate_eqn <- function(data) {
     "anatomic_relevance",
     "dbh_unit",
     "bms_unit",
-    "dbh_min_cm",
-    "dbh_max_cm"
+    "dbh_min_mm",
+    "dbh_max_mm"
   )
   check_crucial_names(data, crucial)
 
