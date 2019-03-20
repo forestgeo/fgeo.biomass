@@ -3,11 +3,10 @@ allo_find_impl <- function(data, custom_eqn) {
     suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
   abort_if_not_eqn(eqn)
 
-  warn_if_species_missmatch(data, eqn)
-
   inform("* Searching equations according to site and species.")
   .by <- c("sp", "site")
   dbh_all <- dplyr::left_join(data, eqn, by = .by)
+  warn_if_species_missmatch(data, eqn)
 
   inform("* Refining equations according to dbh.")
   dbh_all$dbh_in_range <- is_in_range(
@@ -16,30 +15,11 @@ allo_find_impl <- function(data, custom_eqn) {
   in_range <- filter(dbh_all, .data$dbh_in_range)
   out <- suppressMessages(dplyr::left_join(data, in_range))
   out$dbh_in_range <- NULL
-
-  warn(glue("
-    Can't find equations for {sum(is.na(out$equation_id))} rows (inserting `NA`).
-  "))
+  warn_if_missing_equations(out)
 
   out
 }
 allo_find_memoised <- memoise::memoise(allo_find_impl)
-
-warn_if_species_missmatch <- function(data, eqn) {
-  to_match <- data[["sp"]]
-  available <- unique(eqn[eqn$site %in% unique(data$site), , drop = FALSE]$sp)
-  .matching <- to_match %in% available
-
-  if (sum(!.matching) > 0) {
-    missmatching <- paste0(sort(unique(to_match[!.matching])), collapse = ", ")
-    warn(glue("
-      Can't find equations matching these species:
-      {missmatching}
-      "))
-  }
-
-  invisible(data)
-}
 
 #' Find allometric equations in allodb or in a custom equations-table.
 #'
@@ -106,4 +86,31 @@ abort_if_not_eqn <- function(custom_eqn) {
   }
 
   invisible(custom_eqn)
+}
+
+warn_if_species_missmatch <- function(data, eqn) {
+  to_match <- data[["sp"]]
+  available <- unique(eqn[eqn$site %in% unique(data$site), , drop = FALSE]$sp)
+  .matching <- to_match %in% available
+
+  if (sum(!.matching) > 0) {
+    missmatching <- paste0(sort(unique(to_match[!.matching])), collapse = ", ")
+    warn(glue("
+      Can't find equations matching these species:
+      {missmatching}
+      "))
+  }
+
+  invisible(data)
+}
+
+warn_if_missing_equations <- function(data) {
+  missing_equations <- sum(is.na(data$equation_id))
+  if (missing_equations > 0) {
+    warn(glue("
+      Can't find equations for {missing_equations} rows (inserting `NA`).
+    "))
+  }
+
+  invisible(data)
 }
