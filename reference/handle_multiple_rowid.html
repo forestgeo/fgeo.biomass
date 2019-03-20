@@ -161,7 +161,7 @@ rowid value.</p></li>
   <span class='fu'><a href='allo_find.html'>allo_find</a></span>()</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't find equations matching these species (inserting 11 missing values):</span>
 #&gt; <span class='warning'>quercus prinus, unidentified unk</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = sp, site.</span></div><div class='input'>
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 98 x 30
+  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; # A tibble: 100 x 30
 #&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
 #&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
 #&gt;  1   299   3170   3170 22141 1       tili… 0221     21.9  401.  6098        1
@@ -174,13 +174,13 @@ rowid value.</p></li>
 #&gt;  8     6   7758   7758 62180 1       nyss… 0621    109    411. 11703        1
 #&gt;  9     6   7758   7758 62180 1       nyss… 0621    109    411. 11703        1
 #&gt; 10     6   7758   7758 62180 1       nyss… 0621    109    411. 11703        1
-#&gt; # … with 88 more rows, and 19 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; # … with 90 more rows, and 19 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
 #&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
 #&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
 #&gt; #   bms_unit &lt;chr&gt;, n &lt;int&gt;</div><div class='input'>
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_drop_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 41 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 459 x 29
+  <span class='fu'>fixme_drop_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 42 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 458 x 29
 #&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
 #&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
 #&gt;  1     1  11900  11900 1002… 1       lind… 1001    181.   10.1  16691        1
@@ -193,7 +193,7 @@ rowid value.</p></li>
 #&gt;  8    11  27600  27600 1827… 1       frax… 1832    350   624.   35912        1
 #&gt;  9    12  24197  24197 1702… 1       lind… 1701    336.    3.80 31805        1
 #&gt; 10    13  28437  28437 1920… 1       ulmu… 1917    380.  338.   36995        1
-#&gt; # … with 449 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; # … with 448 more rows, and 18 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
 #&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
 #&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
@@ -201,7 +201,7 @@ rowid value.</p></li>
 <span class='co'># Should return 0-rows</span>
 <span class='no'>best</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>fixme_drop_duplicated_rowid</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 41 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 0 x 30
+  <span class='fu'>fixme_find_duplicated_rowid</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 42 rows with duplicated `rowid` values.</span></div><div class='output co'>#&gt; # A tibble: 0 x 30
 #&gt; # … with 30 variables: rowid &lt;int&gt;, treeID &lt;int&gt;, stemID &lt;int&gt;, tag &lt;chr&gt;,
 #&gt; #   StemTag &lt;chr&gt;, sp &lt;chr&gt;, quadrat &lt;chr&gt;, gx &lt;dbl&gt;, gy &lt;dbl&gt;, DBHID &lt;int&gt;,
 #&gt; #   CensusID &lt;int&gt;, dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;, ExactDate &lt;chr&gt;,
