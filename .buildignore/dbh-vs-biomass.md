@@ -4,15 +4,6 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages -------------------------------------------- tidyverse 1.2.1 --
-#> v ggplot2 3.1.0       v purrr   0.3.1  
-#> v tibble  2.0.1       v dplyr   0.8.0.1
-#> v tidyr   0.8.3       v stringr 1.4.0  
-#> v readr   1.3.1       v forcats 0.4.0
-#> Warning: package 'purrr' was built under R version 3.5.3
-#> -- Conflicts ----------------------------------------------- tidyverse_conflicts() --
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
 ```
 
@@ -40,35 +31,42 @@ census_species <- census %>%
 #> Adding `rowid`.
 
 census_equations <- allo_find(census_species)
-#> Warning: Can't find equations matching these species (inserting 1159 missing values):
+#> Assuming `dbh` in [mm] (required to find dbh-specific equations).
+#> * Searching equations according to site and species.
+#> Warning: Can't find equations matching these species:
 #> acer sp, carya sp, crataegus sp, fraxinus sp, juniperus virginiana, quercus prinus, quercus sp, ulmus sp, unidentified unk
-#> Joining, by = sp, site.
+#> * Refining equations according to dbh.
+#> Warning: Can't find equations for 17132 rows (inserting `NA`).
 ```
 
-Notice the warning that some species couldn’t be matched. Later we will
-fall back to using generic equations but we don’t support that feature
-yet. For now can can’t calculate `biomass` for rows containing those
-species so we will now drop them.
+Notice the warning that equations couldn’t be found. This is in part
+because, for this site, some species in the data couldn’t be matched
+with a corresponding species in allodb, and/or because the equations
+available are not adequate for the dbh range the doesn’t include the
+actual dbh values in the data. Later we will fall back to using generic
+equations but we don’t support that feature yet. For now we can’t
+calculate `biomass` for rows containing those species so we will now
+drop them.
 
 ``` r
 # Useless for now
 census_equations %>% 
   filter(is.na(equation_id)) %>% 
   select(rowid, site, sp, equation_id)
-#> # A tibble: 1,159 x 4
-#>    rowid site  sp               equation_id
-#>    <int> <chr> <chr>            <chr>      
-#>  1     7 scbi  unidentified unk <NA>       
-#>  2    75 scbi  ulmus sp         <NA>       
-#>  3   354 scbi  unidentified unk <NA>       
-#>  4   682 scbi  unidentified unk <NA>       
-#>  5   757 scbi  unidentified unk <NA>       
-#>  6  1002 scbi  ulmus sp         <NA>       
-#>  7  1007 scbi  unidentified unk <NA>       
-#>  8  1099 scbi  unidentified unk <NA>       
-#>  9  1109 scbi  carya sp         <NA>       
-#> 10  1136 scbi  unidentified unk <NA>       
-#> # ... with 1,149 more rows
+#> # A tibble: 17,132 x 4
+#>    rowid site  sp                   equation_id
+#>    <int> <chr> <chr>                <chr>      
+#>  1     1 scbi  lindera benzoin      <NA>       
+#>  2     2 scbi  lindera benzoin      <NA>       
+#>  3     3 scbi  lindera benzoin      <NA>       
+#>  4     4 scbi  nyssa sylvatica      <NA>       
+#>  5     5 scbi  hamamelis virginiana <NA>       
+#>  6     7 scbi  unidentified unk     <NA>       
+#>  7     9 scbi  viburnum prunifolium <NA>       
+#>  8    10 scbi  asimina triloba      <NA>       
+#>  9    11 scbi  asimina triloba      <NA>       
+#> 10    12 scbi  asimina triloba      <NA>       
+#> # ... with 17,122 more rows
 
 # Dropping useless rows to continue
 census_equations2 <- census_equations %>% 
@@ -82,28 +80,24 @@ biomass <- allo_evaluate(census_equations2)
 #> Assuming `dbh` unit in [mm].
 #> Converting `dbh` based on `dbh_unit`.
 #> `biomass` values are given in [kg].
-#> Warning: Can't evaluate all equations (inserting 819 missing values):
+#> Warning: Can't evaluate all equations (inserting 245 missing values):
 #> object 'dba' not found
-#> Warning: 
-#>     `biomass` may be invalid.
-#>     We still don't suppor the ability to select dbh-specific equations
-#>     (see https://github.com/forestgeo/fgeo.biomass/issues/9).
-#> 
+#> Warning: `biomass` may be invalid. This is still work in progress.
 biomass
-#> # A tibble: 30,022 x 2
+#> # A tibble: 14,049 x 2
 #>    rowid biomass
 #>    <int>   <dbl>
-#>  1     1   1.30 
-#>  2     2   0.879
-#>  3     3   0.750
-#>  4     4 136.   
-#>  5     5  NA    
-#>  6     6  NA    
-#>  7     8   5.69 
-#>  8     9  NA    
-#>  9    10   0.211
-#> 10    11   0.126
-#> # ... with 30,012 more rows
+#>  1     6   NA   
+#>  2     8    5.69
+#>  3    17   11.3 
+#>  4    21  231.  
+#>  5    22   10.3 
+#>  6    23   NA   
+#>  7    26    4.15
+#>  8    29  469.  
+#>  9    34    3.44
+#> 10    38    4.96
+#> # ... with 14,039 more rows
 ```
 
 We now learn that some equations couldn’t be evaluated. The problem now
@@ -117,20 +111,20 @@ census_equations_biomass <- census_equations2 %>% right_join(biomass)
 census_equations_biomass %>% 
   filter(is.na(biomass)) %>% 
   select(rowid, site, sp, dbh, eqn, biomass)
-#> # A tibble: 819 x 6
-#>    rowid site  sp                     dbh eqn                  biomass
-#>    <int> <chr> <chr>                <dbl> <chr>                  <dbl>
-#>  1     5 scbi  hamamelis virginiana  87   38.111 * (dba^2.9)        NA
-#>  2     6 scbi  hamamelis virginiana  22.5 38.111 * (dba^2.9)        NA
-#>  3     9 scbi  viburnum prunifolium  38.3 29.615 * (dba^3.243)      NA
-#>  4    23 scbi  hamamelis virginiana  24.9 38.111 * (dba^2.9)        NA
-#>  5    24 scbi  rosa multiflora       18.6 37.637 * (dba^2.779)      NA
-#>  6    25 scbi  rosa multiflora       14.1 37.637 * (dba^2.779)      NA
-#>  7    27 scbi  hamamelis virginiana  74.5 38.111 * (dba^2.9)        NA
-#>  8    28 scbi  rosa multiflora       13.3 37.637 * (dba^2.779)      NA
-#>  9    33 scbi  rosa multiflora       22.9 37.637 * (dba^2.779)      NA
-#> 10    49 scbi  rosa multiflora       18.9 37.637 * (dba^2.779)      NA
-#> # ... with 809 more rows
+#> # A tibble: 245 x 6
+#>    rowid site  sp                     dbh eqn                biomass
+#>    <int> <chr> <chr>                <dbl> <chr>                <dbl>
+#>  1     6 scbi  hamamelis virginiana  22.5 38.111 * (dba^2.9)      NA
+#>  2    23 scbi  hamamelis virginiana  24.9 38.111 * (dba^2.9)      NA
+#>  3    69 scbi  hamamelis virginiana  37.8 38.111 * (dba^2.9)      NA
+#>  4    81 scbi  hamamelis virginiana  12   38.111 * (dba^2.9)      NA
+#>  5    88 scbi  hamamelis virginiana  28.3 38.111 * (dba^2.9)      NA
+#>  6    91 scbi  hamamelis virginiana  21.4 38.111 * (dba^2.9)      NA
+#>  7   108 scbi  hamamelis virginiana  35.3 38.111 * (dba^2.9)      NA
+#>  8   109 scbi  hamamelis virginiana  38.2 38.111 * (dba^2.9)      NA
+#>  9   133 scbi  hamamelis virginiana  26.6 38.111 * (dba^2.9)      NA
+#> 10   134 scbi  hamamelis virginiana  17.4 38.111 * (dba^2.9)      NA
+#> # ... with 235 more rows
 ```
 
 Let’s drop the corresponding rows as we can’t do much with
@@ -169,37 +163,10 @@ census_equations_biomass2 %>%
 
 ![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
-A few points over `3e4` \[kg\] seem relatively too high. Remember that
-we still don’t support some features (e.g. dbh-specific equations) that
-likely affect the magnitude of `biomass`.
+And now lets facet the plot by species.
 
 ``` r
 census_equations_biomass2 %>% 
-  filter(biomass > 3e4) %>% 
-  select(sp, equation_id, eqn)
-#> # A tibble: 12 x 3
-#>    sp                      equation_id eqn                                 
-#>    <chr>                   <chr>       <chr>                               
-#>  1 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
-#>  2 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))  
-#>  3 quercus velutina        c70dea      10^(1.00005 + 2.10621 * (log10(dbh)~
-#>  4 quercus velutina        23ec05      exp(-0.34052 + 2.65803 * log(dbh))  
-#>  5 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
-#>  6 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))  
-#>  7 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
-#>  8 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))  
-#>  9 quercus velutina        c70dea      10^(1.00005 + 2.10621 * (log10(dbh)~
-#> 10 quercus velutina        23ec05      exp(-0.34052 + 2.65803 * log(dbh))  
-#> 11 liriodendron tulipifera 94f593      10^(0.8306 + 1.527 * (log10(dbh^2)))
-#> 12 liriodendron tulipifera c48e81      10^(-1.236 + 2.635 * (log10(dbh)))
-```
-
-For a better visualization let’s remove those values for now, and plot
-`dbh` versus `biomass` again, this time by species.
-
-``` r
-census_equations_biomass2 %>% 
-  filter(!biomass > 3e4) %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
@@ -211,4 +178,4 @@ census_equations_biomass2 %>%
   theme_bw()
 ```
 
-![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](dbh-vs-biomass_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->

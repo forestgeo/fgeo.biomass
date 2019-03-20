@@ -7,6 +7,7 @@ editor_options:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  cache = TRUE,
   collapse = TRUE,
   comment = "#>"
 )
@@ -40,7 +41,7 @@ census_species <- census %>%
 census_equations <- allo_find(census_species)
 ```
 
-Notice the warning that some species couldn't be matched. Later we will fall back to using generic equations but we don't support that feature yet. For now can can't calculate `biomass` for rows containing those species so we will now drop them.
+Notice the warning that equations couldn't be found. This is in part because, for this site, some species in the data couldn't be matched with a corresponding species in allodb, and/or because the equations available are not adequate for the dbh range the doesn't include the actual dbh values in the data. Later we will fall back to using generic equations but we don't support that feature yet. For now we can't calculate `biomass` for rows containing those species so we will now drop them.
 
 ```{r}
 # Useless for now
@@ -87,7 +88,7 @@ census_equations_biomass2 %>%
 
 Let's see what `dbh` versus `biomass` looks like now.
 
-```{r, cache=TRUE, fig.height=14}
+```{r, fig.height=14}
 census_equations_biomass2 %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
@@ -100,19 +101,10 @@ census_equations_biomass2 %>%
   theme(legend.position = "bottom")
 ```
 
-A few points over `3e4` [kg] seem relatively too high. Remember that we still don't support some features (e.g. dbh-specific equations) that likely affect the magnitude of `biomass`.
-
-```{r}
-census_equations_biomass2 %>% 
-  filter(biomass > 3e4) %>% 
-  select(sp, equation_id, eqn)
-```
-
-For a better visualization let's remove those values for now, and plot `dbh` versus `biomass` again, this time by species.
+And now lets facet the plot by species.
 
 ```{r, fig.height=14}
 census_equations_biomass2 %>% 
-  filter(!biomass > 3e4) %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +
