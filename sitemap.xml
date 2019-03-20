@@ -4,9 +4,6 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//index.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_equations.html</loc>
-  </url>
-  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_species.html</loc>
   </url>
   <url>
@@ -16,16 +13,13 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_find.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_lookup.html</loc>
-  </url>
-  <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/allodb_eqn_crucial.html</loc>
-  </url>
-  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/as_eqn.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/convert_units.html</loc>
+  </url>
+  <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/crucial_equation_cols.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/default_eqn.html</loc>
@@ -34,13 +28,7 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/fgeo.biomass-package.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/fixme_pull_failing_eqn.html</loc>
-  </url>
-  <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/fixme_units.html</loc>
-  </url>
-  <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/handle_multiple_rowid.html</loc>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/fix_units.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/pipe.html</loc>

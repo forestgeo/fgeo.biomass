@@ -33,9 +33,9 @@
 <meta property="og:title" content="Restructure equations from <strong>allodb</strong>. — default_eqn" />
 
 <meta property="og:description" content="This function restructures an equations-table from allodb with columns as
-in allodb_eqn_crucial() (e.g. allodb::master()). It transforms its input
-into a default-equations table. Now this function is very
-strict and intrusive:
+in crucial_equation_cols() (e.g. allodb::master_tidy()). It transforms its
+input into a default-equations table. Now this function is very strict and
+intrusive:
 It drops problematic equations that can't be evaluated.
 It adds and remove columns.
 It renames columns.
@@ -131,9 +131,9 @@ allometry_specificity for easier manipulation.
     <div class="ref-description">
     
     <p>This function restructures an equations-table from <strong>allodb</strong> with columns as
-in <code><a href='allodb_eqn_crucial.html'>allodb_eqn_crucial()</a></code> (e.g. <code><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>allodb::master()</a></code>). It transforms its input
-into a default-equations table. Now this function is very
-strict and intrusive:</p><ul>
+in <code><a href='crucial_equation_cols.html'>crucial_equation_cols()</a></code> (e.g. <code><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>allodb::master_tidy()</a></code>). It transforms its
+input into a default-equations table. Now this function is very strict and
+intrusive:</p><ul>
 <li><p>It drops problematic equations that can't be evaluated.</p></li>
 <li><p>It adds and remove columns.</p></li>
 <li><p>It renames columns.</p></li>
@@ -153,7 +153,7 @@ allometry_specificity for easier manipulation.</p></li>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p><code><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>allodb::master()</a></code> or similar.</p></td>
+      <td><p><code><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>allodb::master_tidy()</a></code> or similar.</p></td>
     </tr>
     </table>
     
@@ -163,7 +163,7 @@ allometry_specificity for easier manipulation.</p></li>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>default_eqn</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>master</a></span>())</div><div class='output co'>#&gt; <span class='message'>Joining `equations` and `sitespecies` by 'equation_id'; then `sites_info` by 'site'.</span></div><div class='output co'>#&gt; # A tibble: 769 x 9
+    <pre class="examples"><div class='input'><span class='fu'>default_eqn</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>master_tidy</a></span>())</div><div class='output co'>#&gt; <span class='message'>Joining `equations` and `sitespecies` by 'equation_id'; then `sites_info` by 'site'.</span></div><div class='output co'>#&gt; # A tibble: 769 x 11
 #&gt;    equation_id site  sp    eqn   eqn_source eqn_type anatomic_releva… dbh_unit
 #&gt;  * &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;            &lt;chr&gt;   
 #&gt;  1 2060ea      lill… acer… 10^(… default    species  total abovegrou… cm      
@@ -176,7 +176,8 @@ allometry_specificity for easier manipulation.</p></li>
 #&gt;  8 c59e03      serc  amel… exp(… default    genus    stem biomass (w… cm      
 #&gt;  9 c59e03      tyson amel… exp(… default    genus    stem biomass (w… cm      
 #&gt; 10 c59e03      umbc  amel… exp(… default    genus    stem biomass (w… cm      
-#&gt; # … with 759 more rows, and 1 more variable: bms_unit &lt;chr&gt;</div></pre>
+#&gt; # … with 759 more rows, and 3 more variables: bms_unit &lt;chr&gt;, dbh_min_mm &lt;dbl&gt;,
+#&gt; #   dbh_max_mm &lt;dbl&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
