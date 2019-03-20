@@ -46,8 +46,7 @@ warn_if_species_missmatch <- function(data, eqn) {
   if (sum(!.matching) > 0) {
     missmatching <- paste0(sort(unique(to_match[!.matching])), collapse = ", ")
     warn(glue("
-      Can't find equations matching these species \\
-      (inserting {sum(!.matching)} missing values):
+      Can't find equations matching these species:
       {missmatching}
       "))
   }
