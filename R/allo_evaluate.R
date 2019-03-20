@@ -47,11 +47,7 @@ allo_evaluate <- function(data, biomass_unit = "kg") {
   inform(glue("`biomass` values are given in [{biomass_unit}]."))
   out <- eval_memoised(data, dbh_unit = dbh_unit, biomass_unit = biomass_unit)
 
-  warn("
-    `biomass` may be invalid.
-    We still don't suppor the ability to select dbh-specific equations
-    (see https://github.com/forestgeo/fgeo.biomass/issues/9).
-  ")
+  warn("`biomass` may be invalid. This is still work in progress.")
 
   by_rowid <- group_by(out, .data$rowid)
   summarize(by_rowid, biomass = sum(.data$biomass))

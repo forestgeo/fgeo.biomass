@@ -4,12 +4,10 @@
 \alias{allo_evaluate}
 \title{Evaluate equations, giving a biomass result per row.}
 \usage{
-allo_evaluate(data, dbh_unit = "mm", biomass_unit = "kg")
+allo_evaluate(data, biomass_unit = "kg")
 }
 \arguments{
 \item{data}{A dataframe as those created with \code{\link[=allo_find]{allo_find()}}.}
-
-\item{dbh_unit}{Character string giving the unit of the expected input dbh.}
 
 \item{biomass_unit}{Character string giving the output unit e.g. "kg".}
 }
@@ -30,7 +28,7 @@ best <- fgeo.biomass::scbi_tree1 \%>\%
 
 allo_evaluate(best)
 
-allo_evaluate(best, dbh_unit = "cm", biomass_unit = "Mg")
+allo_evaluate(best, biomass_unit = "Mg")
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{allo_find}}
