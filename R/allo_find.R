@@ -3,18 +3,22 @@ allo_find_impl <- function(data, custom_eqn) {
     suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
   abort_if_not_eqn(eqn)
 
-  inform("* Searching equations according to site and species.")
+  inform("* Matching equations by site and species.")
   .by <- c("sp", "site")
-  dbh_all <- dplyr::left_join(data, eqn, by = .by)
-  warn_if_species_missmatch(data, eqn)
+  matched <- dplyr::left_join(data, eqn, by = .by)
 
   inform("* Refining equations according to dbh.")
-  dbh_all$dbh_in_range <- is_in_range(
-    dbh_all$dbh, min = dbh_all$dbh_min_mm, max = dbh_all$dbh_max_mm
+  matched$dbh_in_range <- is_in_range(
+    matched$dbh, min = matched$dbh_min_mm, max = matched$dbh_max_mm
   )
-  in_range <- filter(dbh_all, .data$dbh_in_range)
-  out <- suppressMessages(dplyr::left_join(data, in_range))
-  out$dbh_in_range <- NULL
+  in_range <- filter(matched, .data$dbh_in_range)
+  refined <- suppressMessages(dplyr::left_join(data, in_range))
+  refined$dbh_in_range <- NULL
+
+  inform("* Using generic equations where expert equations can't be found.")
+  out <- prefer_expert_equaitons(refined)
+
+  warn_if_species_missmatch(out, eqn)
   warn_if_missing_equations(out)
 
   out
@@ -98,7 +102,7 @@ warn_if_species_missmatch <- function(data, eqn) {
     warn(glue("
       Can't find equations matching these species:
       {missmatching}
-      "))
+    "))
   }
 
   invisible(data)
@@ -113,4 +117,11 @@ warn_if_missing_equations <- function(data) {
   }
 
   invisible(data)
+}
+
+prefer_expert_equaitons <- function(data) {
+  data %>%
+    group_by(.data$rowid) %>%
+    filter(replace_na(prefer_false(.data$is_generic), TRUE)) %>%
+    ungroup()
 }

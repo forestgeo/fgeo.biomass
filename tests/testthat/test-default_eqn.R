@@ -1,5 +1,12 @@
 context("default_eqn")
 
+test_that("default_eqn `is_generic` maps to equation_group == 'Generic'", {
+  expect_equal(
+    default_eqn(allodb::master_tidy())$is_generic,
+    tolower(allodb::master_tidy()$equation_group) == "generic"
+  )
+})
+
 test_that("defualt_eqn outputs dbh_min and dbh_max in [mm]", {
   data <- default_eqn(allodb::master_tidy())
 
@@ -23,7 +30,8 @@ test_that("default_eqn has expected columns", {
       "dbh_unit",
       "bms_unit",
       "dbh_min_mm",
-      "dbh_max_mm"
+      "dbh_max_mm",
+      "is_generic"
   )
   expect_named(default_eqn(allodb::master_tidy()), nms)
 })

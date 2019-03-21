@@ -1,3 +1,17 @@
+prefer_false <- function(x) {
+  stopifnot(is.logical(x))
+  if (all(x[!is.na(x)])) {
+    x
+  } else {
+    !x
+  }
+}
+
+replace_na <- function(x, replacement) {
+  x[is.na(x)] <- replacement
+  x
+}
+
 is_in_range <- function(x, min, max) {
   x >= min & x <= max
 }

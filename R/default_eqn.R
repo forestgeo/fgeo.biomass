@@ -52,7 +52,10 @@ modify_default_eqn <- function(out) {
       equation_allometry = NULL,
       anatomic_relevance = .data$dependent_variable_biomass_component,
       dbh_min_mm = measurements::conv_unit(.data$dbh_min_cm, "cm", to = "mm"),
-      dbh_max_mm = measurements::conv_unit(.data$dbh_max_cm, "cm", to = "mm")
+      dbh_max_mm = measurements::conv_unit(.data$dbh_max_cm, "cm", to = "mm"),
+      is_generic = dplyr::if_else(
+        tolower(.data$equation_group) == "generic", TRUE, FALSE
+      )
     ) %>%
     dplyr::rename(
       sp = .data$species,
@@ -102,7 +105,8 @@ crucial_equation_cols <- function() {
     "dbh_units_original",
     "biomass_units_original",
     "dbh_min_cm",
-    "dbh_max_cm"
+    "dbh_max_cm",
+    "equation_group"
   )
 }
 
@@ -117,6 +121,7 @@ output_cols <- function() {
     "dbh_unit",
     "bms_unit",
     "dbh_min_mm",
-    "dbh_max_mm"
+    "dbh_max_mm",
+    "is_generic"
   )
 }

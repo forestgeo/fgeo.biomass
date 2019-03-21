@@ -1,3 +1,43 @@
+context("prefer_false")
+
+expect_equal(prefer_false(c(T, NA)), c(T, NA))
+expect_equal(prefer_false(c(F, NA)), c(T, NA))
+expect_equal(prefer_false(c(F, NA, T)), c(T, NA, F))
+
+expect_equal(
+  replace_na(
+    prefer_false(c(F, NA, T)),
+    TRUE
+  ),
+  c(T, T, F)
+)
+
+expect_equal(prefer_false(c(T)), c(T))
+expect_equal(prefer_false(c(F)), c(T))
+expect_equal(prefer_false(c(F, T)), c(T, F))
+expect_equal(prefer_false(c(T, T)), c(T, T))
+expect_equal(prefer_false(c(T, F, F)), c(F, T, T))
+
+dfm <- tibble::tribble(
+  ~id, ~lgl,
+  1,   TRUE,
+  1,   FALSE,
+  2,   FALSE,
+  3,   TRUE,
+)
+
+# Ungrouped
+out <- filter(dfm, prefer_false(lgl))
+expect_equal(out$id, c(1, 2))
+expect_equal(out$lgl, c(FALSE, FALSE))
+
+# Grouped
+out <- filter(group_by(dfm, id), prefer_false(lgl))
+expect_equal(out$id, c(1, 2, 3))
+expect_equal(out$lgl, c(FALSE, FALSE, TRUE))
+
+
+
 context("is_in_range")
 
 test_that("is_in_range returns true if in range, else returns false", {
