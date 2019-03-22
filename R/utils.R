@@ -1,5 +1,6 @@
 prefer_false <- function(x) {
   stopifnot(is.logical(x))
+
   if (all(x[!is.na(x)])) {
     x
   } else {

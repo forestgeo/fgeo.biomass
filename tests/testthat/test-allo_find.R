@@ -65,25 +65,3 @@ test_that("allo_find drops no row", {
   out <- suppressWarnings(allo_find(census_species))
   expect_true(nrow(census_species) <= nrow(out))
 })
-
-test_that("allo_find errs if custom_eqn is not created with as_eqn", {
-  census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
-  species <- fgeo.biomass::scbi_species
-  census_species <- add_species(
-    census, species,
-    site = "scbi"
-  )
-  your_equations <- tibble::tibble(
-    equation_id = c("000001"),
-    site = c("scbi"),
-    sp = c("paulownia tomentosa"),
-    eqn = c("exp(-2.48 + 2.4835 * log(dbh))"),
-    eqn_type = c("mixed_hardwood"),
-    anatomic_relevance = c("total aboveground biomass")
-  )
-
-  expect_error(
-    suppressWarnings(allo_find(census_species, custom_eqn = your_equations)),
-    "must be of class 'eqn'"
-  )
-})
