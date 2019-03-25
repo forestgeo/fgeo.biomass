@@ -122,7 +122,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>allo_find</span>(<span class='no'>data</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>allo_find</span>(<span class='no'>data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,10 +130,6 @@
     <tr>
       <th>data</th>
       <td><p>A dataframe as those created with <code><a href='add_species.html'>add_species()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>custom_eqn</th>
-      <td><p>A dataframe of class "eqn".</p></td>
     </tr>
     </table>
     
@@ -155,8 +151,8 @@ type.</p>
   <span class='no'>census</span>, <span class='no'>species</span>,
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
 )</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` in [mm] (required to find dbh-specific equations).</span></div><div class='output co'>#&gt; <span class='message'>* Searching equations according to site and species.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't find equations matching these species:</span>
-#&gt; <span class='warning'>carya sp, quercus prinus, unidentified unk</span></div><div class='output co'>#&gt; <span class='message'>* Refining equations according to dbh.</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations for 20 rows (inserting `NA`).</span></div><div class='output co'>#&gt; # A tibble: 30 x 31
+<span class='fu'>allo_find</span>(<span class='no'>census_species</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` in [mm] (required to find dbh-specific equations).</span></div><div class='output co'>#&gt; <span class='message'>* Matching equations by site and species.</span></div><div class='output co'>#&gt; <span class='message'>* Refining equations according to dbh.</span></div><div class='output co'>#&gt; <span class='message'>* Using generic equations where expert equations can't be found.</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations matching these species:</span>
+#&gt; <span class='warning'>  carya sp, quercus prinus, unidentified unk</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations for 20 rows (inserting `NA`).</span></div><div class='output co'>#&gt; # A tibble: 30 x 32
 #&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
 #&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
 #&gt;  1     1   8186   8186 70167 1       liri… 0707    123   124.  12261        1
@@ -169,70 +165,12 @@ type.</p>
 #&gt;  8     8   5371   5371 40907 1       asim… 0411     63.1 204    8771        1
 #&gt;  9     9  37347     NA 2016… &lt;NA&gt;    asim… 2024    383.  473.     NA       NA
 #&gt; 10    10  36010     NA 1915… &lt;NA&gt;    lind… 1911    377.  204.     NA       NA
-#&gt; # … with 20 more rows, and 20 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; # … with 20 more rows, and 21 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
 #&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
 #&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
-#&gt; #   bms_unit &lt;chr&gt;, dbh_min_mm &lt;dbl&gt;, dbh_max_mm &lt;dbl&gt;</div><div class='input'>
-<span class='co'># PROVIDE CUSTOM EQUAITONS ----------------------------------------------</span>
-<span class='co'># Checks that the structure of your data isn't terriby wrong</span>
-<span class='co'># BAD</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='st'>"really bad data"</span>))</div><div class='output co'>#&gt; Error in validate_eqn(data) : is.data.frame(data) is not TRUE</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='fl'>1</span>)))</div><div class='output co'>#&gt; Error : Ensure your data set has these variables:
-#&gt; equation_id, site, sp, eqn, eqn_type, anatomic_relevance, dbh_unit, bms_unit, dbh_min_mm, dbh_max_mm</div><div class='input'>
-<span class='co'># GOOD</span>
-<span class='no'>your_equations</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(
-  <span class='kw'>equation_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"000001"</span>),
-  <span class='kw'>site</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"scbi"</span>),
-  <span class='kw'>sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"tilia americana"</span>),
-  <span class='co'># Watning: Fake!</span>
-  <span class='kw'>eqn</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"exp(-2.48 + 2.4835 * log(dbh))"</span>),
-  <span class='kw'>eqn_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"mixed_hardwood"</span>),
-  <span class='kw'>anatomic_relevance</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"total aboveground biomass"</span>),
- <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"cm"</span>,
- <span class='kw'>bms_unit</span> <span class='kw'>=</span> <span class='st'>"g"</span>,
- <span class='kw'>dbh_min_mm</span> <span class='kw'>=</span> <span class='fl'>0</span>,
- <span class='kw'>dbh_max_mm</span> <span class='kw'>=</span> <span class='fl'>Inf</span>
-)
-
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; [1] "eqn"        "tbl_df"     "tbl"        "data.frame"</div><div class='input'>
-<span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` in [mm] (required to find dbh-specific equations).</span></div><div class='output co'>#&gt; <span class='message'>* Searching equations according to site and species.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't find equations matching these species:</span>
-#&gt; <span class='warning'>asimina triloba, carpinus caroliniana, carya sp, carya tomentosa, fagus grandifolia, fraxinus americana, hamamelis virginiana, ilex verticillata, lindera benzoin, liriodendron tulipifera, nyssa sylvatica, quercus prinus, unidentified unk</span></div><div class='output co'>#&gt; <span class='message'>* Refining equations according to dbh.</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations for 30 rows (inserting `NA`).</span></div><div class='output co'>#&gt; # A tibble: 30 x 31
-#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
-#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
-#&gt;  1     1   8186   8186 70167 1       liri… 0707    123   124.  12261        1
-#&gt;  2     2   2753   2753 20557 1       fagu… 0207     24.5 128.   5589        1
-#&gt;  3     3  12378  12378 1007… 1       carp… 1004    185.   73.8 17291        1
-#&gt;  4     4  40003     NA 93109 &lt;NA&gt;    lind… 0902    174.   23.6    NA       NA
-#&gt;  5     5   4685   4685 32463 1       cary… 0330     52.7 581    7897        1
-#&gt;  6     6  28816  28816 1924… 1       cary… 1925    375.  485.  37406        1
-#&gt;  7     7   9107   9107 80005 1       frax… 0801    142.   12.4 13383        1
-#&gt;  8     8   5371   5371 40907 1       asim… 0411     63.1 204    8771        1
-#&gt;  9     9  37347     NA 2016… &lt;NA&gt;    asim… 2024    383.  473.     NA       NA
-#&gt; 10    10  36010     NA 1915… &lt;NA&gt;    lind… 1911    377.  204.     NA       NA
-#&gt; # … with 20 more rows, and 20 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
-#&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
-#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
-#&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
-#&gt; #   bms_unit &lt;chr&gt;, dbh_min_mm &lt;chr&gt;, dbh_max_mm &lt;chr&gt;</div><div class='input'>
-<span class='no'>census_species</span> <span class='kw'>%&gt;%</span>
-<span class='fu'>allo_find</span>(<span class='kw'>custom_eqn</span> <span class='kw'>=</span> <span class='fu'><a href='as_eqn.html'>as_eqn</a></span>(<span class='no'>your_equations</span>))</div><div class='output co'>#&gt; <span class='message'>Assuming `dbh` in [mm] (required to find dbh-specific equations).</span></div><div class='output co'>#&gt; # A tibble: 30 x 31
-#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
-#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
-#&gt;  1     1   8186   8186 70167 1       liri… 0707    123   124.  12261        1
-#&gt;  2     2   2753   2753 20557 1       fagu… 0207     24.5 128.   5589        1
-#&gt;  3     3  12378  12378 1007… 1       carp… 1004    185.   73.8 17291        1
-#&gt;  4     4  40003     NA 93109 &lt;NA&gt;    lind… 0902    174.   23.6    NA       NA
-#&gt;  5     5   4685   4685 32463 1       cary… 0330     52.7 581    7897        1
-#&gt;  6     6  28816  28816 1924… 1       cary… 1925    375.  485.  37406        1
-#&gt;  7     7   9107   9107 80005 1       frax… 0801    142.   12.4 13383        1
-#&gt;  8     8   5371   5371 40907 1       asim… 0411     63.1 204    8771        1
-#&gt;  9     9  37347     NA 2016… &lt;NA&gt;    asim… 2024    383.  473.     NA       NA
-#&gt; 10    10  36010     NA 1915… &lt;NA&gt;    lind… 1911    377.  204.     NA       NA
-#&gt; # … with 20 more rows, and 20 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
-#&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
-#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
-#&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
-#&gt; #   bms_unit &lt;chr&gt;, dbh_min_mm &lt;chr&gt;, dbh_max_mm &lt;chr&gt;</div></pre>
+#&gt; #   bms_unit &lt;chr&gt;, dbh_min_mm &lt;dbl&gt;, dbh_max_mm &lt;dbl&gt;, is_generic &lt;lgl&gt;</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
