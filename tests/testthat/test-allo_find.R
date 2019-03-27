@@ -13,7 +13,7 @@ test_that("allo_find matches 'any *'", {
     site = "scbi"
   )
 
-  dbh_values <- c(10, 50, 100)
+  dbh_values <- c(10, 50, 600)
   data2 <- data %>%
     # Pull any three rows of one species
     filter(sp %in% unique(sp)[[1]]) %>%
@@ -66,14 +66,31 @@ test_that("allo_find does not warn if dbh in [mm]", {
   expect_false(grepl("should be.*mm", warnings))
 })
 
-test_that("allo_find informs expected dbh units in [mm]", {
+test_that("allo_find is sensitive to units", {
   cns_sp <- fgeo.biomass::scbi_tree1 %>%
-    dplyr::sample_n(30) %>%
+    dplyr::sample_n(100) %>%
+    add_species(fgeo.biomass::scbi_species, "scbi")
+
+  expect_equal(
+    suppressWarnings(allo_find(cns_sp))$dbh,
+    suppressWarnings(allo_find(cns_sp, dbh_unit = "mm"))$dbh
+  )
+  expect_false(
+    identical(
+      suppressWarnings(allo_find(cns_sp, dbh_unit = "cm"))$dbh,
+      suppressWarnings(allo_find(cns_sp, dbh_unit = "mm"))$dbh
+    )
+  )
+})
+
+test_that("allo_find guesses dbh units in [mm]", {
+  cns_sp <- fgeo.biomass::scbi_tree1 %>%
+    dplyr::sample_n(100) %>%
     add_species(fgeo.biomass::scbi_species, "scbi")
 
   expect_message(
     suppressWarnings(allo_find(cns_sp)),
-    "Assuming.*dbh.*in.*mm"
+    "Guessing.*dbh.*in.*mm"
   )
 })
 

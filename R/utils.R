@@ -1,3 +1,7 @@
+inform_provide_dbh_units_manually <- function() {
+  inform("You may provide the `dbh` unit manually via the argument `dbh_unit`.")
+}
+
 prefer_false <- function(x) {
   stopifnot(is.logical(x))
 
@@ -15,19 +19,6 @@ replace_na <- function(x, replacement) {
 
 is_in_range <- function(x, min, max) {
   x >= min & x <= max
-}
-
-warn_odd_dbh <- function(x) {
-  min_dbh <- min(x, na.rm = TRUE)
-  out_of_range <- !min_dbh >= 10 || !min_dbh < 100
-  if (out_of_range) {
-    warn(glue("
-      `dbh` should be in [mm] (suspicious minimum `dbh`: {min_dbh}).
-      Do you need to convert `dbh` units with `measurements::conv_unit()`?
-    "))
-  }
-
-  invisible(x)
 }
 
 warn_if_errors <- function(x, problem) {

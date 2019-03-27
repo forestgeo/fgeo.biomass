@@ -4,10 +4,12 @@
 \alias{allo_find}
 \title{Find allometric equations in allodb or in a custom equations-table.}
 \usage{
-allo_find(data)
+allo_find(data, dbh_unit = NULL)
 }
 \arguments{
 \item{data}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}
+
+\item{dbh_unit}{Character string giving the unit of dbh values, e.g. "mm".}
 }
 \value{
 A nested dataframe with each row containing the data of an equation
@@ -24,7 +26,7 @@ census_species <- add_species(
   site = "scbi"
 )
 
-allo_find(census_species)
+allo_find(census_species, dbh_unit = "mm")
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{allo_evaluate}}

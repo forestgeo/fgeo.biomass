@@ -1,4 +1,6 @@
-allo_find_impl <- function(data) {
+allo_find_impl <- function(data, dbh_unit) {
+  data$dbh <- convert_units(data$dbh, dbh_unit, "mm")
+
   eqn <- suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
 
   inform("* Matching equations by site and species.")
@@ -30,6 +32,7 @@ allo_find_memoised <- memoise::memoise(allo_find_impl)
 #' Find allometric equations in allodb or in a custom equations-table.
 #'
 #' @param data A dataframe as those created with [add_species()].
+#' @param dbh_unit Character string giving the unit of dbh values, e.g. "mm".
 #'
 #' @family functions to manipulate equations
 #'
@@ -45,12 +48,18 @@ allo_find_memoised <- memoise::memoise(allo_find_impl)
 #'   site = "scbi"
 #' )
 #'
-#' allo_find(census_species)
+#' allo_find(census_species, dbh_unit = "mm")
 #' @family constructors
-allo_find <- function(data) {
-  inform("Assuming `dbh` in [mm] (required to find dbh-specific equations).")
-  warn_odd_dbh(data$dbh)
-  allo_find_memoised(data)
+allo_find <- function(data, dbh_unit = NULL) {
+  if (is.null(dbh_unit)) {
+    dbh_unit <- guess_dbh_unit(data$dbh)
+    inform(glue("
+      Guessing `dbh` in [{dbh_unit}] (required to find dbh-specific equations).
+    "))
+    inform_provide_dbh_units_manually()
+  }
+
+  allo_find_memoised(data, dbh_unit = dbh_unit)
 }
 
 warn_if_species_missmatch <- function(data, eqn) {

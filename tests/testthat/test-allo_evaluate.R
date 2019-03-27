@@ -4,7 +4,7 @@ set.seed(1)
 
 test_that("allo_evaluate informs returned value is in [kg]", {
   cns_sp <- fgeo.biomass::scbi_tree1 %>%
-    dplyr::sample_n(30) %>%
+    dplyr::sample_n(100) %>%
     add_species(fgeo.biomass::scbi_species, "scbi")
   eqn <- suppressWarnings(allo_find(cns_sp))
 
@@ -24,24 +24,38 @@ test_that("allo_evaluate informs returned value is in [kg]", {
   )
 })
 
-test_that("allo_evaluate informs expected dbh units and given `biomass` units", {
+test_that("allo_evaluate is sensitive to dbh_units", {
   cns_sp <- fgeo.biomass::scbi_tree1 %>%
-    dplyr::sample_n(30) %>%
+    dplyr::sample_n(100) %>%
+    add_species(fgeo.biomass::scbi_species, "scbi")
+  eqn <- suppressWarnings(suppressMessages(allo_find(cns_sp)))
+
+  out <- suppressWarnings(allo_evaluate(eqn))
+  out_mm <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "mm"))
+  expect_identical(out, out_mm)
+
+  out_cm <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "cm"))
+  expect_false(identical(out, out_cm))
+})
+
+test_that("allo_evaluate informs guessed dbh units and given `biomass` units", {
+  cns_sp <- fgeo.biomass::scbi_tree1 %>%
+    dplyr::sample_n(100) %>%
     add_species(fgeo.biomass::scbi_species, "scbi")
   eqn <- suppressWarnings(allo_find(cns_sp))
 
   expect_message(
     suppressWarnings(allo_evaluate(eqn)),
-    "Assuming `dbh`.*unit.*[cm]"
+    "Guessing `dbh`.*in.*mm"
   )
   expect_message(
     suppressWarnings(allo_evaluate(eqn)),
-    "`biomass`.*in.*[kg]"
+    "`biomass`.*in.*kg"
   )
 })
 
 test_that("allo_evaluate informs that it converts `dbh` as in `dbh_unit`", {
-  census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
+  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(100)
   species <- fgeo.biomass::scbi_species
   census_species <- add_species(
     census, species,
@@ -80,7 +94,7 @@ test_that("allo_evaluate retuns no duplicated rowid", {
 })
 
 test_that("allo_evaluate returns expected columns", {
-  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(30)
+  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(100)
   cns_sp <- census %>% add_species(fgeo.biomass::scbi_species, "scbi")
   eqn <- suppressWarnings(allo_find(cns_sp))
 
