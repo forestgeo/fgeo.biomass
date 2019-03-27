@@ -69,7 +69,7 @@ modify_default_eqn <- function(out) {
     purrr::modify_if(is.character, tolower) %>%
     # Order
     dplyr::select(output_cols()) %>%
-    dplyr::filter(stats::complete.cases(.)) %>%
+    # dplyr::filter(stats::complete.cases(.)) %>%
     unique()
 }
 
