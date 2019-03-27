@@ -3,6 +3,37 @@ context("allo_find")
 library(dplyr)
 set.seed(1)
 
+
+
+test_that("allo_find matches 'any *'", {
+  census <- fgeo.biomass::scbi_tree1
+  species <- fgeo.biomass::scbi_species
+  data <- add_species(
+    census, species,
+    site = "scbi"
+  )
+
+  dbh_values <- c(10, 50, 100)
+  data2 <- data %>%
+    # Pull any three rows of one species
+    filter(sp %in% unique(sp)[[1]]) %>%
+    slice(1:3) %>%
+    # Replace sp by one that for which site = "any *"
+    mutate(sp = "abies amabilis", dbh = dbh_values)
+
+  equation_id_are_missing <- suppressWarnings(allo_find(data2)) %>%
+    select(rowid, sp, equation_id, site) %>%
+    pull(equation_id) %>%
+    is.na() %>%
+    all()
+
+  expect_false(equation_id_are_missing)
+})
+
+
+
+
+
 test_that("allo_find prefers expert over generic equations (allo#72)", {
   cns_sp <- fgeo.biomass::scbi_tree1 %>%
     dplyr::sample_n(1000) %>%

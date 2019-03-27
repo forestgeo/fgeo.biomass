@@ -3,7 +3,11 @@ allo_find_impl <- function(data) {
 
   inform("* Matching equations by site and species.")
   .by <- c("sp", "site")
-  matched <- dplyr::left_join(data, eqn, by = .by)
+
+  eqn_from_here <- replace_site(
+    eqn, from = "any temperate na", to = unique(data$site)
+  )
+  matched <- dplyr::left_join(data, eqn_from_here, by = .by)
 
   inform("* Refining equations according to dbh.")
   matched$dbh_in_range <- is_in_range(
@@ -16,7 +20,7 @@ allo_find_impl <- function(data) {
   inform("* Using generic equations where expert equations can't be found.")
   out <- prefer_expert_equaitons(refined)
 
-  warn_if_species_missmatch(out, eqn)
+  warn_if_species_missmatch(out, eqn_from_here)
   warn_if_missing_equations(out)
 
   out
@@ -42,7 +46,6 @@ allo_find_memoised <- memoise::memoise(allo_find_impl)
 #' )
 #'
 #' allo_find(census_species)
-#'
 #' @family constructors
 allo_find <- function(data) {
   inform("Assuming `dbh` in [mm] (required to find dbh-specific equations).")
@@ -82,4 +85,13 @@ prefer_expert_equaitons <- function(data) {
     group_by(.data$rowid) %>%
     filter(replace_na(prefer_false(.data$is_generic), TRUE)) %>%
     ungroup()
+}
+
+replace_site <- function(eqn, from, to) {
+  eqn_from_here <- mutate(eqn,
+    site = dplyr::case_when(
+      tolower(.data$site) == from ~ to,
+      TRUE ~ .data$site
+    )
+  )
 }

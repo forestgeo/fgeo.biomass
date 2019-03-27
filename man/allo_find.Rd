@@ -25,7 +25,6 @@ census_species <- add_species(
 )
 
 allo_find(census_species)
-
 }
 \seealso{
 Other functions to manipulate equations: \code{\link{allo_evaluate}}
