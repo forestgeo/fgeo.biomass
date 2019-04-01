@@ -101,7 +101,8 @@ allodb_cols <- function() {
     "biomass_units_original",
     "dbh_min_cm",
     "dbh_max_cm",
-    "equation_group"
+    "equation_group",
+    "life_form"
   )
 }
 
@@ -117,6 +118,7 @@ output_cols <- function() {
     "bms_unit",
     "dbh_min_mm",
     "dbh_max_mm",
-    "is_generic"
+    "is_generic",
+    "life_form"
   )
 }

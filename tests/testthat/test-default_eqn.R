@@ -1,5 +1,14 @@
 context("default_eqn")
 
+test_that("default_eqn returns `life_form`", {
+  expect_true(
+    rlang::has_name(
+      default_eqn(allodb::master_tidy()),
+      "life_form"
+    )
+  )
+})
+
 test_that("default_eqn `is_generic` maps to equation_group == 'Generic'", {
   expect_equal(
     default_eqn(allodb::master_tidy())$is_generic,
@@ -31,7 +40,8 @@ test_that("default_eqn has expected columns", {
       "bms_unit",
       "dbh_min_mm",
       "dbh_max_mm",
-      "is_generic"
+      "is_generic",
+      "life_form"
   )
   expect_named(default_eqn(allodb::master_tidy()), nms)
 })
