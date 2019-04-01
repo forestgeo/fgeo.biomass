@@ -46,12 +46,12 @@ Notice the warning that equations couldn't be found. This is in part because, fo
 ```{r}
 # Useless for now
 census_equations %>% 
-  filter(is.na(equation_id)) %>% 
-  select(rowid, site, sp, equation_id)
+  filter(is.na(eqn_id)) %>% 
+  select(rowid, site, sp, eqn_id)
 
 # Dropping useless rows to continue
 census_equations2 <- census_equations %>% 
-  filter(!is.na(equation_id))
+  filter(!is.na(eqn_id))
 ```
 
 We can now calculate `biomass`.

@@ -4,12 +4,12 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages ------------------ tidyverse 1.2.1 --
+#> -- Attaching packages ---------------------------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.0       v purrr   0.3.2  
 #> v tibble  2.1.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
-#> -- Conflicts --------------------- tidyverse_conflicts() --
+#> -- Conflicts ------------------------------------------------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -61,26 +61,26 @@ drop them.
 ``` r
 # Useless for now
 census_equations %>% 
-  filter(is.na(equation_id)) %>% 
-  select(rowid, site, sp, equation_id)
+  filter(is.na(eqn_id)) %>% 
+  select(rowid, site, sp, eqn_id)
 #> # A tibble: 17,132 x 4
-#>    rowid site  sp                   equation_id
-#>    <int> <chr> <chr>                <chr>      
-#>  1     1 scbi  lindera benzoin      <NA>       
-#>  2     2 scbi  lindera benzoin      <NA>       
-#>  3     3 scbi  lindera benzoin      <NA>       
-#>  4     4 scbi  nyssa sylvatica      <NA>       
-#>  5     5 scbi  hamamelis virginiana <NA>       
-#>  6     7 scbi  unidentified unk     <NA>       
-#>  7     9 scbi  viburnum prunifolium <NA>       
-#>  8    10 scbi  asimina triloba      <NA>       
-#>  9    11 scbi  asimina triloba      <NA>       
-#> 10    12 scbi  asimina triloba      <NA>       
+#>    rowid site  sp                   eqn_id
+#>    <int> <chr> <chr>                <chr> 
+#>  1     1 scbi  lindera benzoin      <NA>  
+#>  2     2 scbi  lindera benzoin      <NA>  
+#>  3     3 scbi  lindera benzoin      <NA>  
+#>  4     4 scbi  nyssa sylvatica      <NA>  
+#>  5     5 scbi  hamamelis virginiana <NA>  
+#>  6     7 scbi  unidentified unk     <NA>  
+#>  7     9 scbi  viburnum prunifolium <NA>  
+#>  8    10 scbi  asimina triloba      <NA>  
+#>  9    11 scbi  asimina triloba      <NA>  
+#> 10    12 scbi  asimina triloba      <NA>  
 #> # ... with 17,122 more rows
 
 # Dropping useless rows to continue
 census_equations2 <- census_equations %>% 
-  filter(!is.na(equation_id))
+  filter(!is.na(eqn_id))
 ```
 
 We can now calculate `biomass`.

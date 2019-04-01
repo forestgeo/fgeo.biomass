@@ -29,19 +29,20 @@ test_that("defualt_eqn outputs dbh_min and dbh_max in [mm]", {
 })
 
 test_that("default_eqn has expected columns", {
-  nms <- c("equation_id",
-      "site",
-      "sp",
-      "eqn",
-      "eqn_source",
-      "eqn_type",
-      "anatomic_relevance",
-      "dbh_unit",
-      "bms_unit",
-      "dbh_min_mm",
-      "dbh_max_mm",
-      "is_generic",
-      "life_form"
+  nms <- c(
+    "eqn_id",
+    "site",
+    "sp",
+    "eqn",
+    "eqn_source",
+    "eqn_type",
+    "anatomic_relevance",
+    "dbh_unit",
+    "bms_unit",
+    "dbh_min_mm",
+    "dbh_max_mm",
+    "is_generic",
+    "life_form"
   )
   expect_named(default_eqn(allodb::master_tidy()), nms)
 })

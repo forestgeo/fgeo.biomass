@@ -48,32 +48,3 @@ warn_if_errors <- function(x, problem) {
 format_eqn <- function(text) {
   formatR::tidy_source(text = text)$text.tidy
 }
-
-fixme_pull_failing_eqn_impl <- function(data) {
-  funs <- c(eval_eqn, format_eqn)
-  funs %>%
-    purrr::map(~failing_eqn(data, .x)) %>%
-    unlist() %>%
-    unique()
-}
-
-
-
-#' Failing equations, that can't be evaluated.
-#'
-#' This is a temporary helper to quickly see what equations are still failing.
-#'
-#' @param data An __allodb__ equations-table (e.g. allodb::master_tidy()).
-#'
-#' @return A character vector.
-#'
-#' @examples
-#' fixme_pull_failing_eqn(allodb::master_tidy())
-#' @noRd
-fixme_pull_failing_eqn <- memoise::memoise(fixme_pull_failing_eqn_impl)
-
-failing_eqn <- function(data, .f) {
-  ok <- purrr::quietly(purrr::map_lgl)(some_error(data, .f), is.null)$result
-  unique(data[!ok, ][["equation_id"]])
-}
-

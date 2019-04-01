@@ -21,18 +21,14 @@ test_that("allo_find matches 'any *'", {
     # Replace sp by one that for which site = "any *"
     mutate(sp = "abies amabilis", dbh = dbh_values)
 
-  equation_id_are_missing <- suppressWarnings(allo_find(data2)) %>%
-    select(rowid, sp, equation_id, site) %>%
-    pull(equation_id) %>%
+  eqn_id_are_missing <- suppressWarnings(allo_find(data2)) %>%
+    select(rowid, sp, eqn_id, site) %>%
+    pull(eqn_id) %>%
     is.na() %>%
     all()
 
-  expect_false(equation_id_are_missing)
+  expect_false(eqn_id_are_missing)
 })
-
-
-
-
 
 test_that("allo_find prefers expert over generic equations (allo#72)", {
   cns_sp <- fgeo.biomass::scbi_tree1 %>%

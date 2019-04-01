@@ -45,6 +45,7 @@ select_useful_cols <- function(data) {
 modify_default_eqn <- function(out) {
   out %>%
     dplyr::mutate(
+      eqn_id = .data$equation_id,
       eqn_source = "default",
       eqn = format_equations(out$equation_allometry),
       allometry_specificity = gsub(" ", "_", .data$allometry_specificity),
@@ -107,7 +108,8 @@ allodb_cols <- function() {
 }
 
 output_cols <- function() {
-  c("equation_id",
+  c(
+    "eqn_id",
     "site",
     "sp",
     "eqn",
