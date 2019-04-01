@@ -45,21 +45,6 @@ warn_if_errors <- function(x, problem) {
   invisible(x)
 }
 
-eval_eqn <- function(txt) {
-  out <- eval(parse(text = txt), envir = list(dbh = 10))
-  if (is.nan(out)) stop("Bad equation", call. = FALSE)
-}
-
-some_error <- function(data, .f) {
-  suppressWarnings({
-    data %>%
-      dplyr::pull("equation_allometry") %>%
-      purrr::map(purrr::safely(.f)) %>%
-      purrr::transpose() %>%
-      purrr::pluck("error")
-  })
-}
-
 format_eqn <- function(text) {
   formatR::tidy_source(text = text)$text.tidy
 }

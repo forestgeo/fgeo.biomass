@@ -1,8 +1,9 @@
 default_eqn_impl <- function(data) {
   out <- data %>%
-    pick_useful_cols() %>%
+    select_useful_cols() %>%
     purrr::modify_at(c("dbh_unit", "bms_unit"), fix_units) %>%
-    modify_default_eqn()
+    modify_default_eqn() %>%
+    dplyr::select(output_cols())
 
   new_eqn(dplyr::as_tibble(out))
 }
@@ -10,7 +11,7 @@ default_eqn_impl <- function(data) {
 #' Restructure equations from __allodb__.
 #'
 #' This function restructures an equations-table from __allodb__ with columns as
-#' in [crucial_equation_cols()] (e.g. [allodb::master_tidy()]). It transforms its
+#' in [allodb_cols()] (e.g. [allodb::master_tidy()]). It transforms its
 #' input into a default-equations table. Now this function is very strict and
 #' intrusive:
 #' * It drops problematic equations that can't be evaluated.
@@ -32,14 +33,12 @@ default_eqn_impl <- function(data) {
 #' @examples
 #' default_eqn(allodb::master_tidy())
 default_eqn <- function(data) {
-  fgeo.tool::check_crucial_names(data, crucial_equation_cols())
-
-  out <- pick_useful_cols(data)
-  default_eqn_impl(out)
+  fgeo.tool::check_crucial_names(data, allodb_cols())
+  default_eqn_impl(data)
 }
 
-pick_useful_cols <- function(data) {
-  crucial_cols <- data[ , crucial_equation_cols(), drop = TRUE]
+select_useful_cols <- function(data) {
+  crucial_cols <- data[ , allodb_cols(), drop = TRUE]
   crucial_cols
 }
 
@@ -66,11 +65,7 @@ modify_default_eqn <- function(out) {
     # Recover missing values represented as the literal "NA"
     purrr::modify_if(is.character, readr::parse_character) %>%
     # Make it easier to find values (all lowercase)
-    purrr::modify_if(is.character, tolower) %>%
-    # Order
-    dplyr::select(output_cols()) %>%
-    # dplyr::filter(stats::complete.cases(.)) %>%
-    unique()
+    purrr::modify_if(is.character, tolower)
 }
 
 new_eqn <- function(x) {
@@ -93,8 +88,8 @@ format_equations <- function(eqn) {
 #' @keywords internal
 #'
 #' @examples
-#' crucial_equation_cols()
-crucial_equation_cols <- function() {
+#' allodb_cols()
+allodb_cols <- function() {
   c(
     "equation_id",
     "site",
