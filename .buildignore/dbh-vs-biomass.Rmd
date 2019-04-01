@@ -41,7 +41,13 @@ census_species <- census %>%
 census_equations <- allo_find(census_species)
 ```
 
-Notice the warning that equations couldn't be found. This is in part because, for this site, some species in the data couldn't be matched with a corresponding species in allodb, and/or because the equations available are not adequate for the dbh range the doesn't include the actual dbh values in the data. Later we will fall back to using generic equations but we don't support that feature yet. For now we can't calculate `biomass` for rows containing those species so we will now drop them.
+Notice the warning that equations couldn't be found. Here are some reasons:
+
+* Some species in the data have no matching species in allodb.
+* The available equations were designed for a dbh range that doesn't include actual dbh values in the data.
+* The available equations are a function of an independent variable that we still don't support (e.g. dba).
+
+Let's drop those rows as we can't calculate `biomass` for them.
 
 ```{r}
 # Useless for now
@@ -61,35 +67,28 @@ biomass <- allo_evaluate(census_equations2)
 biomass
 ```
 
-We now learn that some equations couldn't be evaluated. The problem now is that we still don't support the ability to calculate biomass from values of `dba` which results in missing `biomass` values. Let's confirm this
+Let's add `biomass` to the data we've been using.
 
 ```{r}
-census_equations_biomass <- census_equations2 %>% right_join(biomass)
-census_equations_biomass %>% 
-  filter(is.na(biomass)) %>% 
-  select(rowid, site, sp, dbh, eqn, biomass)
-```
-
-Let's drop the corresponding rows as we can't do much with them.
-
-```{r}
-census_equations_biomass2 <- census_equations_biomass %>% filter(!is.na(biomass))
+census_equations_biomass <- census_equations2 %>%
+  right_join(biomass)
+census_equations_biomass
 ```
 
 Now let's box plot `biomass` by species.
 
 ```{r}
-census_equations_biomass2 %>% 
+census_equations_biomass %>% 
   ggplot(aes(sp, biomass)) +
   geom_boxplot() +
   ylab("biomass [kg]") +
   coord_flip()
 ```
 
-Let's see what `dbh` versus `biomass` looks like now.
+Let's explore `dbh` versus `biomass`.
 
 ```{r, fig.height=14}
-census_equations_biomass2 %>% 
+census_equations_biomass %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(dbh, biomass)) + 
@@ -104,7 +103,7 @@ census_equations_biomass2 %>%
 And now lets facet the plot by species.
 
 ```{r, fig.height=14}
-census_equations_biomass2 %>% 
+census_equations_biomass %>% 
   # Convert agb from [Mg] to [kg]
   mutate(agb_kg = agb * 1e3) %>% 
   ggplot(aes(x = dbh)) +

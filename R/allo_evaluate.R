@@ -1,4 +1,47 @@
 allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
+  data_ <- mutate(
+    data,
+    presplit_rowid = seq_len(nrow(data)),
+    is_shrub = is_shrub(.data$life_form)
+  )
+
+  biomass_tree <- filter(data_, !is_shrub) %>%
+    row_biomass(dbh_unit = dbh_unit, biomass_unit = biomass_unit)
+  biomass_shrub <- filter(data_, is_shrub) %>%
+    main_stem_biomass_or_na(dbh_unit = dbh_unit, biomass_unit = biomass_unit)
+
+  out <- dplyr::bind_rows(biomass_shrub, biomass_tree) %>%
+    dplyr::arrange(.data$presplit_rowid) %>%
+    select(
+      -.data$presplit_rowid,
+      -.data$is_shrub
+    )
+
+  out
+}
+
+main_stem_biomass_or_na <- function(data, dbh_unit, biomass_unit) {
+  # Main stem biomass
+  main_stem_biomass <- data %>%
+    # Avoid clash with rowid inserted by pick_main_stem()
+    dplyr::rename(rowid_data = .data$rowid) %>%
+    fgeo.tool::pick_main_stem() %>%
+    row_biomass(dbh_unit = dbh_unit, biomass_unit = biomass_unit) %>%
+    dplyr::rename(rowid = .data$rowid_data)
+
+  # Expand `biomass` filling with `NA` at non-main-stems
+  joint <- suppressMessages(dplyr::full_join(main_stem_biomass, data))
+  result <- joint %>%
+    dplyr::arrange(.data$rowid) %>%
+    dplyr::group_by(.data$rowid) %>%
+    dplyr::arrange(.data$rowid, .data$biomass) %>%
+    dplyr::filter(dplyr::row_number() == 1L) %>%
+    dplyr::ungroup()
+
+  result
+}
+
+row_biomass <- function(data, dbh_unit, biomass_unit) {
   data$dbh <- convert_units(data$dbh, from = dbh_unit, to = data$dbh_unit)
 
   .biomass <- purrr::map2(data$eqn, data$dbh, ~safe_eval_dbh(.x, .y))
@@ -43,16 +86,42 @@ eval_memoised <- memoise::memoise(allo_evaluate_impl)
 allo_evaluate <- function(data,
                           dbh_unit = guess_dbh_unit(data$dbh),
                           biomass_unit = "kg") {
+  warn_if_tree_table(data)
+  warn_if_stem_table_with_shrubs(data)
+
   inform(glue("Guessing `dbh` in [{dbh_unit}]"))
   inform_provide_dbh_units_manually()
 
   inform("Converting `dbh` based on `dbh_unit`.")
   inform(glue("`biomass` values are given in [{biomass_unit}]."))
-  out <- eval_memoised(data, dbh_unit = dbh_unit, biomass_unit = biomass_unit)
+  row_biomass <- eval_memoised(
+    data, dbh_unit = dbh_unit, biomass_unit = biomass_unit
+  )
 
-  warn("`biomass` may be invalid. This is still work in progress.")
-
-  by_rowid <- group_by(out, .data$rowid)
+  by_rowid <- group_by(row_biomass, .data$rowid)
   summarize(by_rowid, biomass = sum(.data$biomass))
 }
 
+warn_if_tree_table <- function(data) {
+  if (! has_multiple_stems(data)) {
+    warn(glue("
+      Detected a single stem per tree. Consider these properties of the result:
+      * For trees, `biomass` is that of the main stem.
+      * For shrubs, `biomass` is that of the entire shrub.
+      Do you need a multi-stem table?
+    "))
+  }
+
+  invisible(data)
+}
+
+warn_if_stem_table_with_shrubs <- function(data) {
+  if (has_multiple_stems(data) &&
+      any(grepl("shrub", tolower(data$life_form)))) {
+    inform(
+      "Shrub `biomass` given for main stems only but applies to the whole shrub."
+    )
+  }
+
+  invisible(data)
+}

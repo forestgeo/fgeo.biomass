@@ -1,3 +1,12 @@
+context("has_multiple_stems")
+
+test_that("has_multiple_stems returns true if dealing with stem table", {
+  skip_if_not_installed("fgeo.data")
+
+  expect_true(has_multiple_stems(fgeo.data::luquillo_stem6_1ha))
+  expect_false(has_multiple_stems(fgeo.biomass::scbi_tree1))
+})
+
 context("replace_na")
 
 test_that("replace_na can replace NA with TRUE", {

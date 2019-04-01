@@ -55,18 +55,18 @@ census <- fgeo.biomass::scbi_tree1 %>%
 
 census
 #> # A tibble: 5,000 x 20
-#>    treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
-#>     <int>  <int> <chr> <chr>   <chr> <chr>   <dbl>  <dbl> <int>    <int>
-#>  1   3646   3646 22630 1       litu  0232     30.9 630     6635        1
-#>  2   3570   3570 22552 1       caovl 0230     37.3 594.    6556        1
-#>  3  24736  24736 1708~ 1       libe  1702    329.   37.7  32515        1
-#>  4  10359  10359 90092 1       libe  0902    178.   37.8  14898        1
-#>  5  13700  13700 1102~ 1       libe  1101    208.    9.90 18867        1
-#>  6  31558     NA 1033~ <NA>    astr  1017    194.  333.      NA       NA
-#>  7   5924   5924 42542 1       quve  0430     78.1 598.    9446        1
-#>  8   3667   3667 22651 1       cato  0232     20.2 634.    6657        1
-#>  9   8244   8244 70226 1       qual  0702    139.   27.6  12327        1
-#> 10  22048  22048 1523~ 1       astr  1521    290.  410.   29157        1
+#>    treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
+#>     <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>    <int>
+#>  1  11356  11356 92193 1       nysy  0921     171  410.  16077        1
+#>  2  10892  10892 90648 1       caca  0912     160. 229.  15521        1
+#>  3  30255  30255 2012~ 1       juni  2013     380. 257.  39164        1
+#>  4  37112     NA 1939~ <NA>    libe  1909     375. 170.     NA       NA
+#>  5  21991  21991 1522~ 1       astr  1521     288. 402   29086        1
+#>  6  33883     NA 1530~ <NA>    libe  1502     290.  36.3    NA       NA
+#>  7  22812  22812 1604~ 1       libe  1603     309.  41.5 30146        1
+#>  8  29025  29025 1926~ 1       astr  1926     377. 515.  37635        1
+#>  9  31794     NA 1132~ <NA>    libe  1106     212. 116.     NA       NA
+#> 10   6484   6484 50613 1       quru  0512      93  233.  10161        1
 #> # ... with 4,990 more rows, and 10 more variables: dbh <dbl>, pom <chr>,
 #> #   hom <dbl>, ExactDate <chr>, DFstatus <chr>, codes <chr>,
 #> #   nostems <dbl>, date <dbl>, status <chr>, agb <dbl>
@@ -86,16 +86,16 @@ census %>%
 #> # A tibble: 5,000 x 1
 #>    sp   
 #>    <chr>
-#>  1 litu 
-#>  2 caovl
-#>  3 libe 
+#>  1 nysy 
+#>  2 caca 
+#>  3 juni 
 #>  4 libe 
-#>  5 libe 
-#>  6 astr 
-#>  7 quve 
-#>  8 cato 
-#>  9 qual 
-#> 10 astr 
+#>  5 astr 
+#>  6 libe 
+#>  7 libe 
+#>  8 astr 
+#>  9 libe 
+#> 10 quru 
 #> # ... with 4,990 more rows
 ```
 
@@ -136,18 +136,18 @@ census_species <- census %>%
 census_species %>% 
   select(matches(sp_or_latin))
 #> # A tibble: 5,000 x 1
-#>    sp                     
-#>  * <chr>                  
-#>  1 liriodendron tulipifera
-#>  2 carya ovalis           
-#>  3 lindera benzoin        
-#>  4 lindera benzoin        
-#>  5 lindera benzoin        
-#>  6 asimina triloba        
-#>  7 quercus velutina       
-#>  8 carya tomentosa        
-#>  9 quercus alba           
-#> 10 asimina triloba        
+#>    sp                  
+#>  * <chr>               
+#>  1 nyssa sylvatica     
+#>  2 carpinus caroliniana
+#>  3 juglans nigra       
+#>  4 lindera benzoin     
+#>  5 asimina triloba     
+#>  6 lindera benzoin     
+#>  7 lindera benzoin     
+#>  8 asimina triloba     
+#>  9 lindera benzoin     
+#> 10 quercus rubra       
 #> # ... with 4,990 more rows
 ```
 
@@ -170,24 +170,24 @@ equations <- census_species %>%
 #> * Refining equations according to dbh.
 #> * Using generic equations where expert equations can't be found.
 #> Warning:   Can't find equations matching these species:
-#>   carya sp, quercus prinus, quercus sp, ulmus sp, unidentified unk
-#> Warning: Can't find equations for 3223 rows (inserting `NA`).
+#>   carya sp, crataegus sp, fraxinus sp, hamamelis virginiana, juniperus virginiana, lonicera maackii, quercus prinus, quercus sp, rosa multiflora, rubus allegheniensis, rubus phoenicolasius, ulmus sp, unidentified unk, viburnum prunifolium
+#> Warning: Can't find equations for 3267 rows (inserting `NA`).
 
 equations
-#> # A tibble: 5,032 x 33
-#>    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID
-#>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl>  <dbl> <int>
-#>  1     1   3646   3646 22630 1       liri~ 0232     30.9 630     6635
-#>  2     2   3570   3570 22552 1       cary~ 0230     37.3 594.    6556
-#>  3     3  24736  24736 1708~ 1       lind~ 1702    329.   37.7  32515
-#>  4     4  10359  10359 90092 1       lind~ 0902    178.   37.8  14898
-#>  5     5  13700  13700 1102~ 1       lind~ 1101    208.    9.90 18867
-#>  6     6  31558     NA 1033~ <NA>    asim~ 1017    194.  333.      NA
-#>  7     7   5924   5924 42542 1       quer~ 0430     78.1 598.    9446
-#>  8     8   3667   3667 22651 1       cary~ 0232     20.2 634.    6657
-#>  9     9   8244   8244 70226 1       quer~ 0702    139.   27.6  12327
-#> 10    10  22048  22048 1523~ 1       asim~ 1521    290.  410.   29157
-#> # ... with 5,022 more rows, and 23 more variables: CensusID <int>,
+#> # A tibble: 5,025 x 33
+#>    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID
+#>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>
+#>  1     1  11356  11356 92193 1       nyss~ 0921     171  410.  16077
+#>  2     2  10892  10892 90648 1       carp~ 0912     160. 229.  15521
+#>  3     3  30255  30255 2012~ 1       jugl~ 2013     380. 257.  39164
+#>  4     4  37112     NA 1939~ <NA>    lind~ 1909     375. 170.     NA
+#>  5     5  21991  21991 1522~ 1       asim~ 1521     288. 402   29086
+#>  6     6  33883     NA 1530~ <NA>    lind~ 1502     290.  36.3    NA
+#>  7     7  22812  22812 1604~ 1       lind~ 1603     309.  41.5 30146
+#>  8     8  29025  29025 1926~ 1       asim~ 1926     377. 515.  37635
+#>  9     9  31794     NA 1132~ <NA>    lind~ 1106     212. 116.     NA
+#> 10    10   6484   6484 50613 1       quer~ 0512      93  233.  10161
+#> # ... with 5,015 more rows, and 23 more variables: CensusID <int>,
 #> #   dbh <dbl>, pom <chr>, hom <dbl>, ExactDate <chr>, DFstatus <chr>,
 #> #   codes <chr>, nostems <dbl>, date <dbl>, status <chr>, agb <dbl>,
 #> #   site <chr>, eqn_id <chr>, eqn <chr>, eqn_source <chr>, eqn_type <chr>,
@@ -206,31 +206,33 @@ storing the result in the the new `biomass` column.
 ``` r
 biomass <- equations %>% 
   allo_evaluate()
+#> Warning:   Detected a single stem per tree. Consider these properties of the result:
+#>   * For trees, `biomass` is that of the main stem.
+#>   * For shrubs, `biomass` is that of the entire shrub.
+#>   Do you need a multi-stem table?
 #> Guessing `dbh` in [mm]
 #> You may provide the `dbh` unit manually via the argument `dbh_unit`.
 #> Converting `dbh` based on `dbh_unit`.
 #> `biomass` values are given in [kg].
-#> Warning: Can't convert all units (inserting 3223 missing values):
+#> Warning: Can't convert all units (inserting 3267 missing values):
 #> the 'to' argument is not an acceptable unit.
-#> Warning: Can't convert all units (inserting 3223 missing values):
+#> Warning: Can't convert all units (inserting 3267 missing values):
 #> the 'from' argument is not an acceptable unit.
-#> Warning: Can't evaluate all equations (inserting 39 missing values):
-#> object 'dba' not found
-#> Warning: `biomass` may be invalid. This is still work in progress.
+#> Joining, by = c("rowid", "treeID", "stemID", "tag", "StemTag", "sp", "quadrat", "gx", "gy", "DBHID", "CensusID", "dbh", "pom", "hom", "ExactDate", "DFstatus", "codes", "nostems", "date", "status", "agb", "site", "eqn_id", "eqn", "eqn_source", "eqn_type", "anatomic_relevance", "dbh_unit", "bms_unit", "dbh_min_mm", "dbh_max_mm", "is_generic", "life_form", "presplit_rowid", "is_shrub")
 biomass
 #> # A tibble: 5,000 x 2
 #>    rowid biomass
 #>    <int>   <dbl>
-#>  1     1   709. 
-#>  2     2   547. 
-#>  3     3    NA  
-#>  4     4    NA  
-#>  5     5    NA  
-#>  6     6    NA  
-#>  7     7  1462. 
-#>  8     8    NA  
-#>  9     9    50.8
-#> 10    10    NA  
+#>  1     1   11.8 
+#>  2     2    1.60
+#>  3     3 1769.  
+#>  4     4   NA   
+#>  5     5   NA   
+#>  6     6   NA   
+#>  7     7   NA   
+#>  8     8   NA   
+#>  9     9   NA   
+#> 10    10   NA   
 #> # ... with 4,990 more rows
 
 with_biomass <- biomass %>% right_join(equations)
@@ -238,20 +240,20 @@ with_biomass <- biomass %>% right_join(equations)
 
 with_biomass %>% 
   select(eqn, dbh, biomass)
-#> # A tibble: 5,032 x 3
-#>    eqn                                     dbh biomass
-#>    <chr>                                 <dbl>   <dbl>
-#>  1 10^(-1.236 + 2.635 * (log10(dbh)))    356.    709. 
-#>  2 10^(-1.326 + 2.762 * (log10(dbh)))    296.    547. 
-#>  3 <NA>                                   18.5    NA  
-#>  4 <NA>                                   11.9    NA  
-#>  5 <NA>                                   11.5    NA  
-#>  6 <NA>                                   NA      NA  
-#>  7 10^(1.00005 + 2.10621 * (log10(dbh))) 394.   1462. 
-#>  8 <NA>                                   46.8    NA  
-#>  9 10^(-1.266 + 2.613 * (log10(dbh)))    137.     50.8
-#> 10 <NA>                                   10.8    NA  
-#> # ... with 5,022 more rows
+#> # A tibble: 5,025 x 3
+#>    eqn                                dbh biomass
+#>    <chr>                            <dbl>   <dbl>
+#>  1 2.56795 * (dbh^2)^1.18685         67.4   11.8 
+#>  2 exp(-2.48 + 2.4835 * log(dbh))    32.8    1.60
+#>  3 exp(-2.5095 + 2.6175 * log(dbh)) 454.  1769.  
+#>  4 <NA>                              NA     NA   
+#>  5 <NA>                              23.8   NA   
+#>  6 <NA>                              NA     NA   
+#>  7 <NA>                              12     NA   
+#>  8 <NA>                              13.3   NA   
+#>  9 <NA>                              NA     NA   
+#> 10 <NA>                             668.    NA   
+#> # ... with 5,015 more rows
 ```
 
 Commonly we would further summarize the result. For that you can use the
@@ -263,20 +265,20 @@ with_biomass %>%
   group_by(sp) %>% 
   summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
   arrange(desc(total_biomass))
-#> # A tibble: 49 x 2
+#> # A tibble: 56 x 2
 #>    sp                      total_biomass
 #>    <chr>                           <dbl>
-#>  1 liriodendron tulipifera       145840.
-#>  2 quercus velutina              112852.
-#>  3 quercus alba                   46357.
-#>  4 carya glabra                   29138.
-#>  5 fraxinus americana             23157.
-#>  6 juglans nigra                  22437.
-#>  7 carya tomentosa                21710.
-#>  8 quercus rubra                  18481.
-#>  9 carya ovalis                   13348.
-#> 10 carya cordiformis              12635.
-#> # ... with 39 more rows
+#>  1 liriodendron tulipifera       168975.
+#>  2 quercus velutina              108593.
+#>  3 carya glabra                   43604.
+#>  4 quercus alba                   33349.
+#>  5 carya tomentosa                26200.
+#>  6 fraxinus americana             22532.
+#>  7 quercus rubra                  13947.
+#>  8 juglans nigra                  10756.
+#>  9 fagus grandifolia               8997.
+#> 10 carya ovalis                    8673.
+#> # ... with 46 more rows
 ```
 
 ### Issues

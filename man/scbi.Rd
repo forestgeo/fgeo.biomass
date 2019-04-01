@@ -5,6 +5,8 @@
 \alias{scbi}
 \alias{scbi_tree1}
 \alias{scbi_species}
+\alias{scbi_stem_shrub_tiny}
+\alias{scbi_stem_tree_tiny}
 \title{Data from SCBI.}
 \format{Objects of class tbl_df (inherit from tbl, data.frame). See structure
 in \strong{Examples}.}
@@ -15,12 +17,25 @@ http://bit.ly/scbi-forestgeo-data
 scbi_tree1
 
 scbi_species
+
+scbi_stem_shrub_tiny
+
+scbi_stem_tree_tiny
 }
 \description{
-Data from SCBI.
+\itemize{
+\item \code{scbi_tree1} and \code{scbi_species} are complete tree and species tables from
+SCBI.
+\item \code{scbi_stem_shrub_tiny} and \code{scbi_stem_tree_tiny} are small example datasets
+containing exclusively shrubs and trees.
+}
 }
 \examples{
 str(scbi_tree1)
+
+str(scbi_stem_shrub_tiny)
+
+str(scbi_stem_tree_tiny)
 
 str(scbi_species)
 }

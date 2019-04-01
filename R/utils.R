@@ -1,3 +1,22 @@
+# is_shrub(c("Tree", "Shrub", "Shrub, small tree", "Tree or Shrub", NA))
+is_shrub <- function(x) {
+  grepl("shrub", x, ignore.case = TRUE)
+}
+
+has_multiple_stems <- function(data) {
+  check_crucial_names(low(data), c("treeid", "stemid"))
+
+  by_treeid <- group_by(low(data), .data$treeid)
+  n_stemid_per_treeid <- mutate(
+    by_treeid, n = dplyr::n_distinct(.data$stemid)
+  )$n
+  any(n_stemid_per_treeid > 1)
+}
+
+low <- function(x) {
+  rlang::set_names(x, tolower)
+}
+
 inform_provide_dbh_units_manually <- function() {
   inform("You may provide the `dbh` unit manually via the argument `dbh_unit`.")
 }
