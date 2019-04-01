@@ -3,9 +3,17 @@ default_eqn_impl <- function(data) {
     select_useful_cols() %>%
     purrr::modify_at(c("dbh_unit", "bms_unit"), fix_units) %>%
     modify_default_eqn() %>%
-    dplyr::select(output_cols())
+    pick_supported_independent_variables() %>%
+    select(output_cols())
 
   new_eqn(dplyr::as_tibble(out))
+}
+
+pick_supported_independent_variables <- function(data) {
+  data %>%
+    filter(grepl("dbh", .data$eqn)) %>%
+    filter(!grepl("age", .data$eqn)) %>%
+    filter(!grepl("[^a-z]h[^a-z]", .data$eqn))
 }
 
 #' Restructure equations from __allodb__.

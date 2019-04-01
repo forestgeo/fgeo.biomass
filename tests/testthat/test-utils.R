@@ -46,31 +46,3 @@ test_that("is_in_range returns true if in range, else returns false", {
   expect_false(is_in_range(11, min = 1, max = 10))
   expect_false(is_in_range(0, min = 1, max = 10))
 })
-
-context("eval_eqn.R")
-
-test_that("FIXME: Problems in equations (#54)", {
-  eval_eqn <- function(txt) {
-    out <- eval(parse(text = txt), envir = list(dbh = 10))
-    if (is.nan(out)) stop("Bad equation", call. = FALSE)
-  }
-
-  some_error <- function(data, .f, eqn) {
-    suppressWarnings({
-      data %>%
-        dplyr::pull(eqn) %>%
-        purrr::map(purrr::safely(.f)) %>%
-        purrr::transpose() %>%
-        purrr::pluck("error")
-    })
-  }
-
-  error_msg <- some_error(default_eqn(allodb::master_tidy()), eval_eqn, "eqn") %>%
-  # error_msg <- some_error(allodb::master_tidy(), eval_eqn, "equation_allometry") %>%
-    purrr::discard(is.null) %>%
-    purrr::map_chr("message") %>%
-    unique() %>%
-    glue_collapse(sep = "\n")
-
-  warn(glue("Problems to fix:\n {error_msg}"))
-})
