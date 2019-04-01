@@ -4,13 +4,12 @@ Plot dbh vs. biomass by species
 ``` r
 # Setup
 library(tidyverse)
-#> -- Attaching packages --------------------------------------------- tidyverse 1.2.1 --
-#> v ggplot2 3.1.0       v purrr   0.3.1  
-#> v tibble  2.0.1       v dplyr   0.8.0.1
+#> -- Attaching packages ------------------ tidyverse 1.2.1 --
+#> v ggplot2 3.1.0       v purrr   0.3.2  
+#> v tibble  2.1.1       v dplyr   0.8.0.1
 #> v tidyr   0.8.3       v stringr 1.4.0  
 #> v readr   1.3.1       v forcats 0.4.0
-#> Warning: package 'purrr' was built under R version 3.5.3
-#> -- Conflicts ------------------------------------------------ tidyverse_conflicts() --
+#> -- Conflicts --------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(fgeo.biomass)
@@ -40,7 +39,8 @@ census_species <- census %>%
 #> Adding `rowid`.
 
 census_equations <- allo_find(census_species)
-#> Assuming `dbh` in [mm] (required to find dbh-specific equations).
+#>   Guessing `dbh` in [mm] (required to find dbh-specific equations).
+#> You may provide the `dbh` unit manually via the argument `dbh_unit`.
 #> * Matching equations by site and species.
 #> * Refining equations according to dbh.
 #> * Using generic equations where expert equations can't be found.
@@ -87,7 +87,8 @@ We can now calculate `biomass`.
 
 ``` r
 biomass <- allo_evaluate(census_equations2)
-#> Assuming `dbh` unit in [mm].
+#> Guessing `dbh` in [mm]
+#> You may provide the `dbh` unit manually via the argument `dbh_unit`.
 #> Converting `dbh` based on `dbh_unit`.
 #> `biomass` values are given in [kg].
 #> Warning: Can't evaluate all equations (inserting 245 missing values):
