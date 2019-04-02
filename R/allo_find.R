@@ -7,7 +7,7 @@ allo_find_impl <- function(data, dbh_unit) {
   .by <- c("sp", "site")
 
   eqn_from_here <- replace_site(
-    eqn, from = "any temperate na", to = unique(data$site)
+    eqn, from = "any-temperate-north america", to = unique(data$site)
   )
   matched <- dplyr::left_join(data, eqn_from_here, by = .by)
 
