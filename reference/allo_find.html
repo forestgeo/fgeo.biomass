@@ -156,7 +156,7 @@ type.</p>
   <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
 )</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='input'>
 <span class='fu'>allo_find</span>(<span class='no'>census_species</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"mm"</span>)</div><div class='output co'>#&gt; <span class='message'>* Matching equations by site and species.</span></div><div class='output co'>#&gt; <span class='message'>* Refining equations according to dbh.</span></div><div class='output co'>#&gt; <span class='message'>* Using generic equations where expert equations can't be found.</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations matching these species:</span>
-#&gt; <span class='warning'>  carya sp, quercus prinus, unidentified unk</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations for 20 rows (inserting `NA`).</span></div><div class='output co'>#&gt; # A tibble: 30 x 32
+#&gt; <span class='warning'>  carya sp, hamamelis virginiana, quercus prinus, unidentified unk</span></div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations for 20 rows (inserting `NA`).</span></div><div class='output co'>#&gt; # A tibble: 30 x 33
 #&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
 #&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
 #&gt;  1     1   8186   8186 70167 1       liri… 0707    123   124.  12261        1
@@ -169,11 +169,12 @@ type.</p>
 #&gt;  8     8   5371   5371 40907 1       asim… 0411     63.1 204    8771        1
 #&gt;  9     9  37347     NA 2016… &lt;NA&gt;    asim… 2024    383.  473.     NA       NA
 #&gt; 10    10  36010     NA 1915… &lt;NA&gt;    lind… 1911    377.  204.     NA       NA
-#&gt; # … with 20 more rows, and 21 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; # … with 20 more rows, and 22 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
-#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, equation_id &lt;chr&gt;, eqn &lt;chr&gt;,
+#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, site &lt;chr&gt;, eqn_id &lt;chr&gt;, eqn &lt;chr&gt;,
 #&gt; #   eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;,
-#&gt; #   bms_unit &lt;chr&gt;, dbh_min_mm &lt;dbl&gt;, dbh_max_mm &lt;dbl&gt;, is_generic &lt;lgl&gt;</div></pre>
+#&gt; #   bms_unit &lt;chr&gt;, dbh_min_mm &lt;dbl&gt;, dbh_max_mm &lt;dbl&gt;, is_generic &lt;lgl&gt;,
+#&gt; #   life_form &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

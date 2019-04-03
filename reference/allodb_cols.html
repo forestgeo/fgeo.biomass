@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Restructure equations from <strong>allodb</strong>. — default_eqn • fgeo.biomass</title>
+<title>Crucial columns from <strong>allodb</strong> equations-table. — allodb_cols • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,21 +30,9 @@
 
 
 
-<meta property="og:title" content="Restructure equations from <strong>allodb</strong>. — default_eqn" />
+<meta property="og:title" content="Crucial columns from <strong>allodb</strong> equations-table. — allodb_cols" />
 
-<meta property="og:description" content="This function restructures an equations-table from allodb with columns as
-in allodb_cols() (e.g. allodb::master_tidy()). It transforms its
-input into a default-equations table. Now this function is very strict and
-intrusive:
-It drops problematic equations that can't be evaluated.
-It adds and remove columns.
-It renames columns.
-It transforms text-values to lowercase to simplify matching.
-It re-formats the text-representation of equations.
-It drops missing values.
-It replaces spaces (&quot; &quot;) with underscore (&quot;_&quot;) in values of
-allometry_specificity for easier manipulation.
-" />
+<meta property="og:description" content="Crucial columns from allodb equations-table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,66 +111,41 @@ allometry_specificity for easier manipulation.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Restructure equations from <strong>allodb</strong>.</h1>
+    <h1>Crucial columns from <strong>allodb</strong> equations-table.</h1>
     <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/default_eqn.R'><code>R/default_eqn.R</code></a></small>
-    <div class="hidden name"><code>default_eqn.Rd</code></div>
+    <div class="hidden name"><code>allodb_cols.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function restructures an equations-table from <strong>allodb</strong> with columns as
-in <code><a href='allodb_cols.html'>allodb_cols()</a></code> (e.g. <code><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>allodb::master_tidy()</a></code>). It transforms its
-input into a default-equations table. Now this function is very strict and
-intrusive:</p><ul>
-<li><p>It drops problematic equations that can't be evaluated.</p></li>
-<li><p>It adds and remove columns.</p></li>
-<li><p>It renames columns.</p></li>
-<li><p>It transforms text-values to lowercase to simplify matching.</p></li>
-<li><p>It re-formats the text-representation of equations.</p></li>
-<li><p>It drops missing values.</p></li>
-<li><p>It replaces spaces (" ") with underscore ("_") in values of
-allometry_specificity for easier manipulation.</p></li>
-</ul>
+    <p>Crucial columns from <strong>allodb</strong> equations-table.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>default_eqn</span>(<span class='no'>data</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>data</th>
-      <td><p><code><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>allodb::master_tidy()</a></code> or similar.</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='fu'>allodb_cols</span>()</pre>
+        
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe.</p>
+    <p>A string.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>default_eqn</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/allodb/topics/master'>master_tidy</a></span>())</div><div class='output co'>#&gt; <span class='message'>Joining `equations` and `sitespecies` by 'equation_id'; then `sites_info` by 'site'.</span></div><div class='output co'>#&gt; # A tibble: 730 x 13
-#&gt;    eqn_id site  sp    eqn   eqn_source eqn_type anatomic_releva… dbh_unit
-#&gt;  * &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;            &lt;chr&gt;   
-#&gt;  1 2060ea lill… acer… 10^(… default    species  total abovegrou… cm      
-#&gt;  2 2060ea tyson acer… 10^(… default    species  total abovegrou… cm      
-#&gt;  3 a4d879 lill… acer… 10^(… default    species  total abovegrou… cm      
-#&gt;  4 a4d879 tyson acer… 10^(… default    species  total abovegrou… cm      
-#&gt;  5 c59e03 lill… amel… exp(… default    genus    stem biomass (w… cm      
-#&gt;  6 c59e03 scbi  amel… exp(… default    genus    stem biomass (w… cm      
-#&gt;  7 c59e03 serc  amel… exp(… default    genus    stem biomass (w… cm      
-#&gt;  8 c59e03 serc  amel… exp(… default    genus    stem biomass (w… cm      
-#&gt;  9 c59e03 tyson amel… exp(… default    genus    stem biomass (w… cm      
-#&gt; 10 c59e03 umbc  amel… exp(… default    genus    stem biomass (w… cm      
-#&gt; # … with 720 more rows, and 5 more variables: bms_unit &lt;chr&gt;, dbh_min_mm &lt;dbl&gt;,
-#&gt; #   dbh_max_mm &lt;dbl&gt;, is_generic &lt;lgl&gt;, life_form &lt;chr&gt;</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>allodb_cols</span>()</div><div class='output co'>#&gt;  [1] "equation_id"                         
+#&gt;  [2] "site"                                
+#&gt;  [3] "species"                             
+#&gt;  [4] "equation_allometry"                  
+#&gt;  [5] "allometry_specificity"               
+#&gt;  [6] "dependent_variable_biomass_component"
+#&gt;  [7] "dbh_units_original"                  
+#&gt;  [8] "biomass_units_original"              
+#&gt;  [9] "dbh_min_cm"                          
+#&gt; [10] "dbh_max_cm"                          
+#&gt; [11] "equation_group"                      
+#&gt; [12] "life_form"                           </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
       
