@@ -8,6 +8,7 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   cache = TRUE,
+  out.width = "90%",
   collapse = TRUE,
   comment = "#>"
 )
@@ -41,21 +42,14 @@ census_species <- census %>%
 census_equations <- allo_find(census_species)
 ```
 
-Notice the warning that equations couldn't be found. Here are some reasons:
+Notice the warning that equations couldn't be found. There may be two reasons:
 
-* Some species in the data have no matching species in allodb.
-* The available equations were designed for a dbh range that doesn't include actual dbh values in the data.
-* The available equations are a function of an independent variable that we still don't support (e.g. dba).
+* Some stems in the data belong to species with no matching species in allodb.
+* Some stems in the data belong to species that do match species in allodb but the available equations were designed for a dbh range that doesn't include actual dbh values in the data.
 
 Let's drop those rows as we can't calculate `biomass` for them.
 
 ```{r}
-# Useless for now
-census_equations %>% 
-  filter(is.na(eqn_id)) %>% 
-  select(rowid, site, sp, eqn_id)
-
-# Dropping useless rows to continue
 census_equations2 <- census_equations %>% 
   filter(!is.na(eqn_id))
 ```
@@ -64,18 +58,22 @@ We can now calculate `biomass`.
 
 ```{r}
 biomass <- allo_evaluate(census_equations2)
+
 biomass
 ```
+
+Notice the warning reminding us that we are using a tree-table (as opposed to a stem-table), and informing us about how to interpret the resulting `biomass` values for trees and shrubs.
 
 Let's add `biomass` to the data we've been using.
 
 ```{r}
 census_equations_biomass <- census_equations2 %>%
   right_join(biomass)
+
 census_equations_biomass
 ```
 
-Now let's box plot `biomass` by species.
+Now let's make a box-plot of `biomass` by species.
 
 ```{r}
 census_equations_biomass %>% 

@@ -11,7 +11,11 @@ default_eqn_impl <- function(data) {
 
 pick_supported_independent_variables <- function(data) {
   data %>%
-    filter(grepl("dbh", .data$eqn)) %>%
+    filter(
+      grepl(surround_not_alnum("dba"), .data$eqn) |
+      grepl(surround_not_alnum("dbh"), .data$eqn)
+    ) %>%
+    # filter(grepl(surround_not_alnum("dbh"), .data$eqn)) %>%
     filter(!grepl("age", .data$eqn)) %>%
     filter(!grepl("[^a-z]h[^a-z]", .data$eqn))
 }

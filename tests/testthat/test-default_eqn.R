@@ -1,30 +1,5 @@
 context("default_eqn")
 
-test_that("default_eqn outputs equations that can be evaluated (#54)", {
-  eval_eqn <- function(txt) {
-    out <- eval(parse(text = txt), envir = list(dbh = 10))
-    if (is.nan(out)) stop("Bad equation", call. = FALSE)
-  }
-
-  some_error <- function(data, .f, eqn) {
-    suppressWarnings({
-      data %>%
-        dplyr::pull(eqn) %>%
-        purrr::map(purrr::safely(.f)) %>%
-        purrr::transpose() %>%
-        purrr::pluck("error")
-    })
-  }
-
-  no_error <- default_eqn(allodb::master_tidy()) %>%
-    some_error(eval_eqn, "eqn") %>%
-    purrr::discard(is.null) %>%
-    purrr::map_chr("message") %>%
-    unique()
-
-  expect_equal(no_error, character(0))
-})
-
 test_that("default_eqn returns `life_form`", {
   expect_true(
     rlang::has_name(

@@ -2,7 +2,7 @@
 #'
 #' * `scbi_tree1` and `scbi_species` are complete tree and species tables from
 #' SCBI.
-#' * `scbi_stem_shrub_tiny` and `scbi_stem_tree_tiny` are small example datasets
+#' * `scbi_stem_tiny_shrub` and `scbi_stem_tiny_tree` are small example datasets
 #' containing exclusively shrubs and trees.
 #'
 #' @name scbi
@@ -16,9 +16,9 @@
 #' @examples
 #' str(scbi_tree1)
 #'
-#' str(scbi_stem_shrub_tiny)
+#' str(scbi_stem_tiny_shrub)
 #'
-#' str(scbi_stem_tree_tiny)
+#' str(scbi_stem_tiny_tree)
 #'
 #' str(scbi_species)
 NULL
@@ -28,9 +28,9 @@ NULL
 #' @rdname scbi
 "scbi_species"
 #' @rdname scbi
-"scbi_stem_shrub_tiny"
+"scbi_stem_tiny_shrub"
 #' @rdname scbi
-"scbi_stem_tree_tiny"
+"scbi_stem_tiny_tree"
 
 
 

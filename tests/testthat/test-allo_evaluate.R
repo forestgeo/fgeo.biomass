@@ -2,22 +2,55 @@ context("allo_evaluate")
 
 set.seed(1)
 
-test_that("allo_evaluate with stem table computes biomass of main shrub stem", {
-  shrubs <- fgeo.biomass::scbi_stem_shrub_tiny
+test_that("allo_evaluate handles independent variable `dba`", {
+  shrubs <- fgeo.biomass::scbi_stem_tiny_shrub
 
   eqn <- suppressWarnings({
     shrubs %>%
       add_species(scbi_species, "scbi") %>%
       allo_find(dbh_unit = "mm")
   })
-  biomass_asis <- suppressWarnings(
-    sum(allo_evaluate(eqn, dbh_unit = "mm")$biomass, na.rm = TRUE)
-  )
+  eqn_dba <- eqn %>%
+    filter(grepl("dba", .data$eqn))
+
+  out <- suppressWarnings(allo_evaluate(eqn_dba, dbh_unit = "mm"))
+  can_handle_dba <- all(is.na(out$biomass))
+  expect_false(can_handle_dba)
+})
+
+test_that("allo_evaluate with shrub-dba outputs known output", {
+  shrubs <- fgeo.biomass::scbi_stem_tiny_shrub
+
+  eqn <- suppressWarnings({
+    shrubs %>%
+      add_species(scbi_species, "scbi") %>%
+      allo_find(dbh_unit = "mm")
+  })
+  eqn_dba <- eqn %>%
+    filter(grepl("dba", .data$eqn))
+
+  out <- suppressWarnings(allo_evaluate(eqn_dba, dbh_unit = "mm"))
+  expect_known_output(out, "ref-shrub-dba", update = FALSE)
+})
+
+test_that("allo_evaluate with stem table computes biomass of main shrub stem", {
+  shrubs <- fgeo.biomass::scbi_stem_tiny_shrub
+
+  eqn <- suppressWarnings({
+    shrubs %>%
+      add_species(scbi_species, "scbi") %>%
+      allo_find(dbh_unit = "mm") %>%
+      filter(matches_string(.data$eqn, "dbh"))
+  })
+
+  out <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "mm"))
+  biomass_asis <- sum(out$biomass, na.rm = TRUE)
 
   eqn2 <- suppressWarnings({
     fgeo.tool::pick_main_stem(shrubs) %>%
-    add_species(scbi_species, "scbi") %>%
-    allo_find(dbh_unit = "mm")
+      add_species(scbi_species, "scbi") %>%
+      allo_find(dbh_unit = "mm") %>%
+      filter(matches_string(.data$eqn, "dbh"))
   })
   biomass_main_stems <- suppressWarnings(
     sum(allo_evaluate(eqn2, dbh_unit = "mm")$biomass, na.rm = TRUE)
@@ -26,10 +59,22 @@ test_that("allo_evaluate with stem table computes biomass of main shrub stem", {
   expect_equal(biomass_main_stems, biomass_asis)
 })
 
+test_that("allo_evaluate with shrub-dbh outputs known output", {
+  shrubs <- fgeo.biomass::scbi_stem_tiny_shrub
+
+  eqn <- suppressWarnings({
+    shrubs %>%
+      add_species(scbi_species, "scbi") %>%
+      allo_find(dbh_unit = "mm")
+  })
+  out <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "mm"))
+  expect_known_output(out, "ref-shrub-dbh", update = FALSE)
+})
+
 test_that("allo_evaluate informs how we hanlde biomass of multi-stem shrubs", {
   spp <- suppressWarnings(
     add_species(
-      fgeo.biomass::scbi_stem_shrub_tiny, fgeo.biomass::scbi_species, "scbi"
+      fgeo.biomass::scbi_stem_tiny_shrub, fgeo.biomass::scbi_species, "scbi"
     )
   )
   eqn <- suppressWarnings(allo_find(spp, dbh_unit = "mm"))
@@ -48,6 +93,15 @@ test_that("allo_evaluate warns if the data is a tree table", {
     allo_evaluate(eqn),
     "Detected a single stem per tree"
   )
+})
+
+test_that("allo_evaluate with tree-dbh outputs equal to known reference", {
+  cns_sp <- fgeo.biomass::scbi_tree1 %>%
+    dplyr::sample_n(100) %>%
+    add_species(fgeo.biomass::scbi_species, "scbi")
+  eqn <- suppressWarnings(allo_find(cns_sp))
+  out <- suppressWarnings(allo_evaluate(eqn))
+  expect_known_output(out, "ref-tree-dbh", update = FALSE)
 })
 
 test_that("allo_evaluate informs returned value is in [kg]", {

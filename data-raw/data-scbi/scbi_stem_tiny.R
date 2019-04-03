@@ -13,7 +13,6 @@ stem <- readr::read_csv(path) %>%
   mutate(n = n_distinct(stemID)) %>%
   ungroup() %>%
   filter(n > 1) %>%
-  # select(-n) %>%
   arrange(treeID, stemID, tag, dbh) %>%
   filter(!is.na(dbh))
 
@@ -31,17 +30,6 @@ dbh_dependent_shrub_codes <- fgeo.biomass::scbi_species %>%
   filter(Latin %in% spp) %>%
   pull(sp)
 
-common_min_dbh_for_shrubs <- 30
-ids_shrubs <- stem %>%
-  filter(sp %in% dbh_dependent_shrub_codes) %>%
-  fgeo.tool::pick_main_stem() %>%
-  filter(dbh > common_min_dbh_for_shrubs) %>%
-  sample_n(5) %>%
-  pull(treeID)
-scbi_stem_shrub_tiny <- stem %>%
-  filter(treeID %in% ids_shrubs) %>%
-  select(-n)
-
 common_min_dbh_for_trees <- 85
 ids_tree <- stem %>%
   filter(!sp %in% dbh_dependent_shrub_codes) %>%
@@ -49,11 +37,48 @@ ids_tree <- stem %>%
   filter(dbh > common_min_dbh_for_trees) %>%
   sample_n(5) %>%
   pull(treeID)
-scbi_stem_tree_tiny <- stem %>%
+scbi_stem_tiny_tree <- stem %>%
   filter(treeID %in% ids_tree) %>%
   select(-n)
 
+use_data(scbi_stem_tiny_tree, overwrite =  TRUE)
 
 
-use_data(scbi_stem_shrub_tiny, overwrite = TRUE)
-use_data(scbi_stem_tree_tiny, overwrite =  TRUE)
+
+pick_independent_variable <- function(indep_var) {
+  set.seed(1)
+
+  spp <- allodb::master_tidy() %>%
+    filter(
+      site == "scbi",
+      str_detect(tolower(life_form), "shrub"),
+      grepl(indep_var, equation_form),
+      !grepl("[^a-z]h[^a-z]", equation_form),
+    ) %>%
+    pull(species) %>%
+    unique()
+
+  shrub_dbh <- fgeo.biomass::scbi_species %>%
+    filter(Latin %in% spp) %>%
+    pull(sp)
+
+  common_min_dbh_for_shrubs <- 30
+
+  ids <- stem %>%
+    filter(sp %in% shrub_dbh) %>%
+    fgeo.tool::pick_main_stem() %>%
+    filter(dbh > common_min_dbh_for_shrubs) %>%
+    sample_n(5) %>%
+    pull(treeID)
+
+  stem %>%
+    filter(treeID %in% ids) %>%
+    select(-n)
+}
+
+scbi_stem_tiny_shrub <- bind_rows(
+  pick_independent_variable("dbh"),
+  pick_independent_variable("dba")
+)
+
+use_data(scbi_stem_tiny_shrub, overwrite = TRUE)

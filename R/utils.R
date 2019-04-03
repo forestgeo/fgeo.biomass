@@ -1,3 +1,12 @@
+matches_string <- function(x, string) {
+  grepl(surround_not_alnum(string), x)
+}
+
+# surround_not_alnum("dbh")
+surround_not_alnum <- function(x) {
+  paste0("[^[:alnum:]]+", x, "[^[:alnum:]]+")
+}
+
 # is_shrub(c("Tree", "Shrub", "Shrub, small tree", "Tree or Shrub", NA))
 is_shrub <- function(x) {
   grepl("shrub", x, ignore.case = TRUE)
