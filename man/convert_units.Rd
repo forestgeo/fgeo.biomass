@@ -4,7 +4,7 @@
 \alias{convert_units}
 \title{A safe version of \code{measurements::conv_unit()}.}
 \usage{
-convert_units(x, from, to)
+convert_units(x, from, to, quietly = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector giving the measurement value in its original units.}
@@ -12,6 +12,8 @@ convert_units(x, from, to)
 \item{from}{the unit in which the measurement was made.}
 
 \item{to}{the unit to which the measurement is to be converted.}
+
+\item{quietly}{\code{TRUE} suppresses warning.}
 }
 \value{
 As in \code{measurements::conv_unit()} if possible, or NA.
@@ -27,6 +29,7 @@ measurements::conv_unit(c(1, NA), from = "cm", to = "m")
 
 # Passes
 convert_units(c(1, 10), from = "cm", to = c("m", "bad"))
+convert_units(c(1, 10), from = "cm", to = c("m", "bad"), quietly = TRUE)
 # Errs
 try(measurements::conv_unit(c(1, 10), from = "cm", to = c("m", "bad")))
 }

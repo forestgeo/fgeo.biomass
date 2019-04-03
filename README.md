@@ -57,16 +57,16 @@ census
 #> # A tibble: 5,000 x 20
 #>    treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
 #>     <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>    <int>
-#>  1  11356  11356 92193 1       nysy  0921     171  410.  16077        1
-#>  2  10892  10892 90648 1       caca  0912     160. 229.  15521        1
-#>  3  30255  30255 2012~ 1       juni  2013     380. 257.  39164        1
-#>  4  37112     NA 1939~ <NA>    libe  1909     375. 170.     NA       NA
-#>  5  21991  21991 1522~ 1       astr  1521     288. 402   29086        1
-#>  6  33883     NA 1530~ <NA>    libe  1502     290.  36.3    NA       NA
-#>  7  22812  22812 1604~ 1       libe  1603     309.  41.5 30146        1
-#>  8  29025  29025 1926~ 1       astr  1926     377. 515.  37635        1
-#>  9  31794     NA 1132~ <NA>    libe  1106     212. 116.     NA       NA
-#> 10   6484   6484 50613 1       quru  0512      93  233.  10161        1
+#>  1  19017  19017 1401~ 1       libe  1402    275    28.8 25496        1
+#>  2  34342     NA 1631~ <NA>    libe  1602    306.   23.6    NA       NA
+#>  3  18511  18511 1321~ 1       qual  1321    250   401.  24966        1
+#>  4   9140   9140 80038 1       amar  0802    145.   37.1 13421        1
+#>  5   4721   4721 32500 1       cato  0331     56.4 608.   7934        1
+#>  6  33381     NA 1433~ <NA>    prse  1407    267.  126      NA       NA
+#>  7  25486  25486 1721~ 1       nysy  1724    322.  474.  33423        1
+#>  8  34575     NA 1633~ <NA>    libe  1605    320.   99.7    NA       NA
+#>  9  27828  27828 1902~ 1       libe  1903    372.   48   36244        1
+#> 10  18314  18314 1314~ 1       astr  1316    253.  300.  24732        1
 #> # ... with 4,990 more rows, and 10 more variables: dbh <dbl>, pom <chr>,
 #> #   hom <dbl>, ExactDate <chr>, DFstatus <chr>, codes <chr>,
 #> #   nostems <dbl>, date <dbl>, status <chr>, agb <dbl>
@@ -86,16 +86,16 @@ census %>%
 #> # A tibble: 5,000 x 1
 #>    sp   
 #>    <chr>
-#>  1 nysy 
-#>  2 caca 
-#>  3 juni 
-#>  4 libe 
-#>  5 astr 
-#>  6 libe 
-#>  7 libe 
-#>  8 astr 
+#>  1 libe 
+#>  2 libe 
+#>  3 qual 
+#>  4 amar 
+#>  5 cato 
+#>  6 prse 
+#>  7 nysy 
+#>  8 libe 
 #>  9 libe 
-#> 10 quru 
+#> 10 astr 
 #> # ... with 4,990 more rows
 ```
 
@@ -136,18 +136,18 @@ census_species <- census %>%
 census_species %>% 
   select(matches(sp_or_latin))
 #> # A tibble: 5,000 x 1
-#>    sp                  
-#>  * <chr>               
-#>  1 nyssa sylvatica     
-#>  2 carpinus caroliniana
-#>  3 juglans nigra       
-#>  4 lindera benzoin     
-#>  5 asimina triloba     
-#>  6 lindera benzoin     
-#>  7 lindera benzoin     
-#>  8 asimina triloba     
-#>  9 lindera benzoin     
-#> 10 quercus rubra       
+#>    sp                 
+#>  * <chr>              
+#>  1 lindera benzoin    
+#>  2 lindera benzoin    
+#>  3 quercus alba       
+#>  4 amelanchier arborea
+#>  5 carya tomentosa    
+#>  6 prunus serotina    
+#>  7 nyssa sylvatica    
+#>  8 lindera benzoin    
+#>  9 lindera benzoin    
+#> 10 asimina triloba    
 #> # ... with 4,990 more rows
 ```
 
@@ -170,24 +170,24 @@ equations <- census_species %>%
 #> * Refining equations according to dbh.
 #> * Using generic equations where expert equations can't be found.
 #> Warning:   Can't find equations matching these species:
-#>   carya sp, crataegus sp, fraxinus sp, hamamelis virginiana, juniperus virginiana, lonicera maackii, quercus prinus, quercus sp, rosa multiflora, rubus allegheniensis, rubus phoenicolasius, ulmus sp, unidentified unk, viburnum prunifolium
-#> Warning: Can't find equations for 3267 rows (inserting `NA`).
+#>   carya sp, crataegus sp, fraxinus sp, hamamelis virginiana, juniperus virginiana, quercus prinus, quercus sp, rosa multiflora, rubus allegheniensis, rubus phoenicolasius, ulmus sp, unidentified unk, viburnum prunifolium
+#> Warning: Can't find equations for 3281 rows (inserting `NA`).
 
 equations
-#> # A tibble: 5,025 x 33
+#> # A tibble: 5,029 x 33
 #>    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID
 #>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>
-#>  1     1  11356  11356 92193 1       nyss~ 0921     171  410.  16077
-#>  2     2  10892  10892 90648 1       carp~ 0912     160. 229.  15521
-#>  3     3  30255  30255 2012~ 1       jugl~ 2013     380. 257.  39164
-#>  4     4  37112     NA 1939~ <NA>    lind~ 1909     375. 170.     NA
-#>  5     5  21991  21991 1522~ 1       asim~ 1521     288. 402   29086
-#>  6     6  33883     NA 1530~ <NA>    lind~ 1502     290.  36.3    NA
-#>  7     7  22812  22812 1604~ 1       lind~ 1603     309.  41.5 30146
-#>  8     8  29025  29025 1926~ 1       asim~ 1926     377. 515.  37635
-#>  9     9  31794     NA 1132~ <NA>    lind~ 1106     212. 116.     NA
-#> 10    10   6484   6484 50613 1       quer~ 0512      93  233.  10161
-#> # ... with 5,015 more rows, and 23 more variables: CensusID <int>,
+#>  1     1  19017  19017 1401~ 1       lind~ 1402    275    28.8 25496
+#>  2     2  34342     NA 1631~ <NA>    lind~ 1602    306.   23.6    NA
+#>  3     3  18511  18511 1321~ 1       quer~ 1321    250   401.  24966
+#>  4     4   9140   9140 80038 1       amel~ 0802    145.   37.1 13421
+#>  5     4   9140   9140 80038 1       amel~ 0802    145.   37.1 13421
+#>  6     5   4721   4721 32500 1       cary~ 0331     56.4 608.   7934
+#>  7     6  33381     NA 1433~ <NA>    prun~ 1407    267.  126      NA
+#>  8     7  25486  25486 1721~ 1       nyss~ 1724    322.  474.  33423
+#>  9     8  34575     NA 1633~ <NA>    lind~ 1605    320.   99.7    NA
+#> 10     9  27828  27828 1902~ 1       lind~ 1903    372.   48   36244
+#> # ... with 5,019 more rows, and 23 more variables: CensusID <int>,
 #> #   dbh <dbl>, pom <chr>, hom <dbl>, ExactDate <chr>, DFstatus <chr>,
 #> #   codes <chr>, nostems <dbl>, date <dbl>, status <chr>, agb <dbl>,
 #> #   site <chr>, eqn_id <chr>, eqn <chr>, eqn_source <chr>, eqn_type <chr>,
@@ -214,25 +214,20 @@ biomass <- equations %>%
 #> You may provide the `dbh` unit manually via the argument `dbh_unit`.
 #> Converting `dbh` based on `dbh_unit`.
 #> `biomass` values are given in [kg].
-#> Warning: Can't convert all units (inserting 3267 missing values):
-#> the 'to' argument is not an acceptable unit.
-#> Warning: Can't convert all units (inserting 3267 missing values):
-#> the 'from' argument is not an acceptable unit.
-#> Joining, by = c("rowid", "treeID", "stemID", "tag", "StemTag", "sp", "quadrat", "gx", "gy", "DBHID", "CensusID", "dbh", "pom", "hom", "ExactDate", "DFstatus", "codes", "nostems", "date", "status", "agb", "site", "eqn_id", "eqn", "eqn_source", "eqn_type", "anatomic_relevance", "dbh_unit", "bms_unit", "dbh_min_mm", "dbh_max_mm", "is_generic", "life_form", "presplit_rowid", "is_shrub")
 biomass
 #> # A tibble: 5,000 x 2
 #>    rowid biomass
 #>    <int>   <dbl>
-#>  1     1   11.8 
-#>  2     2    1.60
-#>  3     3 1769.  
-#>  4     4   NA   
-#>  5     5   NA   
+#>  1     1   NA   
+#>  2     2   NA   
+#>  3     3  967.  
+#>  4     4    2.10
+#>  5     5  183.  
 #>  6     6   NA   
-#>  7     7   NA   
+#>  7     7   27.8 
 #>  8     8   NA   
 #>  9     9   NA   
-#> 10    10   NA   
+#> 10    10    3.63
 #> # ... with 4,990 more rows
 
 with_biomass <- biomass %>% right_join(equations)
@@ -240,20 +235,20 @@ with_biomass <- biomass %>% right_join(equations)
 
 with_biomass %>% 
   select(eqn, dbh, biomass)
-#> # A tibble: 5,025 x 3
-#>    eqn                                dbh biomass
-#>    <chr>                            <dbl>   <dbl>
-#>  1 2.56795 * (dbh^2)^1.18685         67.4   11.8 
-#>  2 exp(-2.48 + 2.4835 * log(dbh))    32.8    1.60
-#>  3 exp(-2.5095 + 2.6175 * log(dbh)) 454.  1769.  
-#>  4 <NA>                              NA     NA   
-#>  5 <NA>                              23.8   NA   
-#>  6 <NA>                              NA     NA   
-#>  7 <NA>                              12     NA   
-#>  8 <NA>                              13.3   NA   
-#>  9 <NA>                              NA     NA   
-#> 10 <NA>                             668.    NA   
-#> # ... with 5,015 more rows
+#> # A tibble: 5,029 x 3
+#>    eqn                                   dbh biomass
+#>    <chr>                               <dbl>   <dbl>
+#>  1 <NA>                                 15.1   NA   
+#>  2 <NA>                                 NA     NA   
+#>  3 10^(-1.266 + 2.613 * (log10(dbh)))  424.   967.  
+#>  4 10^(2.5368 + 1.3197 * (log10(dbh)))  85.8    2.10
+#>  5 10^(2.0865 + 0.9449 * (log10(dbh)))  85.8    2.10
+#>  6 10^(-1.326 + 2.762 * (log10(dbh)))  199.   183.  
+#>  7 <NA>                                 NA     NA   
+#>  8 2.56795 * (dbh^2)^1.18685            96.7   27.8 
+#>  9 <NA>                                 NA     NA   
+#> 10 <NA>                                 22.5   NA   
+#> # ... with 5,019 more rows
 ```
 
 Commonly we would further summarize the result. For that you can use the
@@ -265,20 +260,20 @@ with_biomass %>%
   group_by(sp) %>% 
   summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
   arrange(desc(total_biomass))
-#> # A tibble: 56 x 2
+#> # A tibble: 55 x 2
 #>    sp                      total_biomass
 #>    <chr>                           <dbl>
-#>  1 liriodendron tulipifera       168975.
-#>  2 quercus velutina              108593.
-#>  3 carya glabra                   43604.
-#>  4 quercus alba                   33349.
-#>  5 carya tomentosa                26200.
-#>  6 fraxinus americana             22532.
-#>  7 quercus rubra                  13947.
-#>  8 juglans nigra                  10756.
-#>  9 fagus grandifolia               8997.
-#> 10 carya ovalis                    8673.
-#> # ... with 46 more rows
+#>  1 liriodendron tulipifera       135487.
+#>  2 quercus velutina              128961.
+#>  3 quercus alba                   45888.
+#>  4 juglans nigra                  34762.
+#>  5 carya glabra                   33651.
+#>  6 quercus rubra                  25647.
+#>  7 carya tomentosa                23494.
+#>  8 fraxinus americana             23372.
+#>  9 carya cordiformis              12760.
+#> 10 carya ovalis                   12220.
+#> # ... with 45 more rows
 ```
 
 ### Issues

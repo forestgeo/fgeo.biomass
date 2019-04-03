@@ -42,12 +42,13 @@ main_stem_biomass_or_na <- function(data, dbh_unit, biomass_unit) {
 }
 
 row_biomass <- function(data, dbh_unit, biomass_unit) {
-  data$dbh <- convert_units(data$dbh, from = dbh_unit, to = data$dbh_unit)
+  data$dbh <- convert_units(
+    data$dbh, from = dbh_unit, to = data$dbh_unit, quietly = TRUE)
 
   .biomass <- purrr::map2(data$eqn, data$dbh, ~safe_eval_dbh(.x, .y))
   result <- dplyr::mutate(data, biomass = purrr::map_dbl(.biomass, "result"))
   result$biomass <- convert_units(
-    result$biomass, from = result$bms_unit, to = biomass_unit
+    result$biomass, from = result$bms_unit, to = biomass_unit, quietly = TRUE
   )
   warn_if_errors(.biomass, "Can't evaluate all equations")
 

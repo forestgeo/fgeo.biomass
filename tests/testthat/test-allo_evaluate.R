@@ -115,17 +115,17 @@ test_that("allo_evaluate informs that it converts `dbh` as in `dbh_unit`", {
   )
 })
 
-test_that("allo_evaluate warns if can't convert units", {
-  census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(1000)
-  species <- fgeo.biomass::scbi_species
-  census_species <- census %>%
-    add_species(species, site = "scbi")
-
-  out <- expect_warning(
-    allo_evaluate(suppressWarnings(allo_find(census_species))),
-  "Can't convert all units"
-  )
-})
+# test_that("allo_evaluate warns if can't convert units", {
+#   census <- fgeo.biomass::scbi_tree1 %>% dplyr::sample_n(1000)
+#   species <- fgeo.biomass::scbi_species
+#   census_species <- census %>%
+#     add_species(species, site = "scbi")
+#
+#   out <- expect_warning(
+#     allo_evaluate(suppressWarnings(allo_find(census_species))),
+#   "Can't convert all units"
+#   )
+# })
 
 test_that("allo_evaluate retuns no duplicated rowid", {
   cns_sp <- fgeo.biomass::scbi_tree1 %>%

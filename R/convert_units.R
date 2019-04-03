@@ -4,6 +4,7 @@
 #' convert a unit -- instead it outputs NA.
 #'
 #' @inheritParams measurements::conv_unit
+#' @param quietly `TRUE` suppresses warning.
 #'
 #' @return As in `measurements::conv_unit()` if possible, or NA.
 #' @export

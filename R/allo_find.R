@@ -1,5 +1,5 @@
 allo_find_impl <- function(data, dbh_unit) {
-  data$dbh <- convert_units(data$dbh, dbh_unit, "mm")
+  data$dbh <- convert_units(data$dbh, dbh_unit, "mm", quietly = TRUE)
 
   eqn <- suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
 
