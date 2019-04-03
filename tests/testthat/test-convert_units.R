@@ -2,6 +2,12 @@ context("convert_units")
 
 library(dplyr)
 
+test_that("convert_units is silent if quietly = TRUE", {
+  expect_silent(
+    convert_units(c(1, 10), from = "cm", to = c("m", "bad"), quietly = TRUE)
+  )
+})
+
 test_that("convert_units warns problems", {
   expect_warning(
     convert_units(c(1, 10), from = "cm", to = c("m", "bad")),
