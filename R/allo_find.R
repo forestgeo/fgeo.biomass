@@ -9,14 +9,14 @@ allo_find_impl <- function(data, dbh_unit) {
   eqn_from_here <- replace_site(
     eqn, from = "any-temperate-north america", to = unique(data$site)
   )
-  matched <- dplyr::left_join(data, eqn_from_here, by = .by)
+  matched <- left_join(data, eqn_from_here, by = .by)
 
   inform("* Refining equations according to dbh.")
   matched$dbh_in_range <- is_in_range(
     matched$dbh, min = matched$dbh_min_mm, max = matched$dbh_max_mm
   )
   in_range <- filter(matched, .data$dbh_in_range)
-  refined <- suppressMessages(dplyr::left_join(data, in_range))
+  refined <- suppressMessages(left_join(data, in_range))
   refined$dbh_in_range <- NULL
 
   inform("* Using generic equations where expert equations can't be found.")

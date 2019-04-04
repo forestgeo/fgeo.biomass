@@ -48,7 +48,8 @@ test_that("allo_evaluate with stem table computes biomass of main shrub stem", {
   bmss <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "mm"))
   biomass_asis <- sum(bmss$biomass, na.rm = TRUE)
 
-  biomass_is_distributed_beyond_main_stems <- dplyr::left_join(eqn, bmss) %>%
+  biomass_is_distributed_beyond_main_stems <- eqn %>%
+    left_join(bmss) %>%
     select(rowid, treeID, dbh, biomass) %>%
     filter(!is.na(dbh)) %>%
     add_count(treeID) %>%

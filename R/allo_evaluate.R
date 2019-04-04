@@ -1,101 +1,34 @@
 allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
-  check_crucial_names(data, "treeID")
+  check_crucial_names(low(data), "treeid")
 
-  data_ <- mutate(
-    data,
-    presplit_rowid = seq_len(nrow(data)),
-    is_shrub = is_shrub(.data$life_form)
-  )
+  data_ <- low(data) %>%
+    mutate(
+      presplit_rowid = seq_len(nrow(data)),
+      is_shrub = is_shrub(.data$life_form)
+    )
 
   biomass_tree <- data_ %>%
     filter(!is_shrub) %>%
-    row_biomass(
-      .name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit
-    )
-  # biomass_shrub_dbh <- data_ %>%
-  #   filter(is_shrub & matches_string(.data$eqn, "dbh")) %>%
-  #   main_stem_biomass(
-  #     .name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit
-  #   )
+    row_biomass(.name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit)
   biomass_shrub_dbh <- data_ %>%
     filter(is_shrub & matches_string(.data$eqn, "dbh")) %>%
-    add_total_biomass_from_main_stem(
-      .name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit
-    ) %>%
-    group_by(.data$treeID) %>%
-    mutate(biomass =
-        unique(.data$total_biomass) * contribution_to_basal_area(.data$dbh)
-    ) %>%
-    ungroup()
-
+    row_biomass_from_main_stem(dbh_unit = dbh_unit, biomass_unit = biomass_unit)
   biomass_shrub_dba <- data_ %>%
     filter(is_shrub & matches_string(.data$eqn, "dba")) %>%
-    group_by(.data$treeID) %>%
-    mutate(
-      dba = basal_diameter(.data$dbh) * contribution_to_basal_area(.data$dbh)
-    ) %>%
-    ungroup() %>%
-    row_biomass(
-      .name = "dba", dbh_unit = dbh_unit, biomass_unit = biomass_unit
-    ) %>%
-    mutate(dba = NULL)
+    row_biomass_from_dba(dbh_unit = dbh_unit, biomass_unit = biomass_unit)
 
-  out <- dplyr::bind_rows(
+  dplyr::bind_rows(
     biomass_tree,
     biomass_shrub_dbh,
     biomass_shrub_dba
     ) %>%
-    dplyr::arrange(.data$presplit_rowid) %>%
+    arrange(.data$presplit_rowid) %>%
     select(-.data$presplit_rowid, -.data$is_shrub)
-
-  out
-}
-
-add_total_biomass_from_main_stem <- function(data,
-                                             .name = "dbh",
-                                             dbh_unit,
-                                             biomass_unit) {
-  data %>%
-    # Avoid clash with rowid inserted by pick_main_stem()
-    dplyr::rename(rowid_data = .data$rowid) %>%
-    fgeo.tool::pick_main_stem() %>%
-    row_biomass(
-      .name = .name, dbh_unit = dbh_unit, biomass_unit = biomass_unit
-    ) %>%
-    dplyr::rename(
-      rowid = .data$rowid_data,
-      total_biomass = .data$biomass
-    ) %>%
-    select(.data$treeID, .data$total_biomass) %>%
-    dplyr::right_join(data)
-}
-
-main_stem_biomass <- function(data, .name = "dbh", dbh_unit, biomass_unit) {
-  # Main stem biomass
-  main_stem_biomass <- data %>%
-    # Avoid clash with rowid inserted by pick_main_stem()
-    dplyr::rename(rowid_data = .data$rowid) %>%
-    fgeo.tool::pick_main_stem() %>%
-    row_biomass(
-      .name = .name, dbh_unit = dbh_unit, biomass_unit = biomass_unit
-    ) %>%
-    dplyr::rename(rowid = .data$rowid_data)
-
-  # Expand `biomass` filling with `NA` at non-main-stems
-  joint <- suppressMessages(dplyr::full_join(main_stem_biomass, data))
-  result <- joint %>%
-    dplyr::arrange(.data$rowid) %>%
-    dplyr::group_by(.data$rowid) %>%
-    dplyr::arrange(.data$rowid, .data$biomass) %>%
-    dplyr::filter(dplyr::row_number() == 1L) %>%
-    dplyr::ungroup()
-
-  result
 }
 
 row_biomass <- function(data, .name, dbh_unit, biomass_unit) {
   if (identical(nrow(data), 0L)) {
-    result <- tibbKle::add_column(data, biomass = numeric(0))
+    result <- tibble::add_column(data, biomass = numeric(0))
     return(result)
   }
 
@@ -113,11 +46,51 @@ row_biomass <- function(data, .name, dbh_unit, biomass_unit) {
 
   result
 }
+
 eva_var <- function(.text, .values, .name) {
   .envir <- rlang::set_names(list(.values), .name)
   eval(parse(text = .text), envir = .envir)
 }
+
 safe_eval <- purrr::safely(eva_var, otherwise = NA_real_)
+
+row_biomass_from_main_stem <- function(data, dbh_unit, biomass_unit) {
+  total_biomass <- data %>%
+    # Avoid clash with rowid inserted by pick_main_stem()
+    dplyr::rename(rowid_data = .data$rowid) %>%
+    fgeo.tool::pick_main_stem() %>%
+    row_biomass(
+      .name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit
+    ) %>%
+    dplyr::rename(
+      rowid = .data$rowid_data,
+      total_biomass = .data$biomass
+    ) %>%
+    select(.data$treeid, .data$total_biomass)
+
+  data %>%
+    left_join(total_biomass, by = "treeid") %>%
+    group_by(.data$treeid) %>%
+    mutate(
+      biomass = unique(.data$total_biomass) *
+        contribution_to_basal_area(.data$dbh),
+      total_biomass = NULL
+    ) %>%
+    ungroup()
+}
+
+row_biomass_from_dba <- function(data, .data, dbh_unit, biomass_unit) {
+  data %>%
+    group_by(.data$treeid) %>%
+    mutate(
+      dba = basal_diameter(.data$dbh) * contribution_to_basal_area(.data$dbh)
+    ) %>%
+    ungroup() %>%
+    row_biomass(
+      .name = "dba", dbh_unit = dbh_unit, biomass_unit = biomass_unit
+    ) %>%
+    mutate(dba = NULL)
+}
 
 eval_memoised <- memoise::memoise(allo_evaluate_impl)
 

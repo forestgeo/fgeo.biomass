@@ -23,7 +23,7 @@ add_species <- function(census, species, site) {
   .site <- tolower(site)
   check_bms_cns(.census, .species, .site)
 
-  all <- dplyr::left_join(.census, .species, by = "sp")
+  all <- left_join(.census, .species, by = "sp")
 
   inform("Adding `site`.")
   inform("Overwriting `sp`; it now stores Latin species names.")
