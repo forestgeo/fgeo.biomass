@@ -124,7 +124,7 @@ convert a unit -- instead it outputs NA.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>convert_units</span>(<span class='no'>x</span>, <span class='no'>from</span>, <span class='no'>to</span>)</pre>
+    <pre class="usage"><span class='fu'>convert_units</span>(<span class='no'>x</span>, <span class='no'>from</span>, <span class='no'>to</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +140,10 @@ convert a unit -- instead it outputs NA.</p>
     <tr>
       <th>to</th>
       <td><p>the unit to which the measurement is to be converted.</p></td>
+    </tr>
+    <tr>
+      <th>quietly</th>
+      <td><p><code>TRUE</code> suppresses warning.</p></td>
     </tr>
     </table>
     
@@ -157,7 +161,7 @@ convert a unit -- instead it outputs NA.</p>
 <span class='kw pkg'>measurements</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/measurements/topics/conv_unit'>conv_unit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>NA</span>), <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"cm"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"m"</span>)</div><div class='output co'>#&gt; [1] 0.01   NA</div><div class='input'>
 <span class='co'># Passes</span>
 <span class='fu'>convert_units</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"cm"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"m"</span>, <span class='st'>"bad"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Can't convert all units (inserting 1 missing values):</span>
-#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; [1] 0.01   NA</div><div class='input'><span class='co'># Errs</span>
+#&gt; <span class='warning'>the 'to' argument is not an acceptable unit.</span></div><div class='output co'>#&gt; [1] 0.01   NA</div><div class='input'><span class='fu'>convert_units</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"cm"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"m"</span>, <span class='st'>"bad"</span>), <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 0.01   NA</div><div class='input'><span class='co'># Errs</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='kw pkg'>measurements</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/measurements/topics/conv_unit'>conv_unit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"cm"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"m"</span>, <span class='st'>"bad"</span>)))</div><div class='output co'>#&gt; Error in measurements::conv_unit(c(1, 10), from = "cm", to = c("m", "bad")) : 
 #&gt;   the 'to' argument is not an acceptable unit.</div></pre>
   </div>
