@@ -1,4 +1,6 @@
 allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
+  check_crucial_names(data, "treeID")
+
   data_ <- mutate(
     data,
     presplit_rowid = seq_len(nrow(data)),
@@ -10,11 +12,22 @@ allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
     row_biomass(
       .name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit
     )
+  # biomass_shrub_dbh <- data_ %>%
+  #   filter(is_shrub & matches_string(.data$eqn, "dbh")) %>%
+  #   main_stem_biomass(
+  #     .name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit
+  #   )
   biomass_shrub_dbh <- data_ %>%
     filter(is_shrub & matches_string(.data$eqn, "dbh")) %>%
-    main_stem_biomass(
+    add_total_biomass_from_main_stem(
       .name = "dbh", dbh_unit = dbh_unit, biomass_unit = biomass_unit
-    )
+    ) %>%
+    group_by(.data$treeID) %>%
+    mutate(biomass =
+        unique(.data$total_biomass) * contribution_to_basal_area(.data$dbh)
+    ) %>%
+    ungroup()
+
   biomass_shrub_dba <- data_ %>%
     filter(is_shrub & matches_string(.data$eqn, "dba")) %>%
     group_by(.data$treeID) %>%
@@ -36,6 +49,25 @@ allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
     select(-.data$presplit_rowid, -.data$is_shrub)
 
   out
+}
+
+add_total_biomass_from_main_stem <- function(data,
+                                             .name = "dbh",
+                                             dbh_unit,
+                                             biomass_unit) {
+  data %>%
+    # Avoid clash with rowid inserted by pick_main_stem()
+    dplyr::rename(rowid_data = .data$rowid) %>%
+    fgeo.tool::pick_main_stem() %>%
+    row_biomass(
+      .name = .name, dbh_unit = dbh_unit, biomass_unit = biomass_unit
+    ) %>%
+    dplyr::rename(
+      rowid = .data$rowid_data,
+      total_biomass = .data$biomass
+    ) %>%
+    select(.data$treeID, .data$total_biomass) %>%
+    dplyr::right_join(data)
 }
 
 main_stem_biomass <- function(data, .name = "dbh", dbh_unit, biomass_unit) {
@@ -63,7 +95,7 @@ main_stem_biomass <- function(data, .name = "dbh", dbh_unit, biomass_unit) {
 
 row_biomass <- function(data, .name, dbh_unit, biomass_unit) {
   if (identical(nrow(data), 0L)) {
-    result <- tibble::add_column(data, biomass = numeric(0))
+    result <- tibbKle::add_column(data, biomass = numeric(0))
     return(result)
   }
 

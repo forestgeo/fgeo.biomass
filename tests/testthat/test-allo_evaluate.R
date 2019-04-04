@@ -1,5 +1,7 @@
 context("allo_evaluate")
 
+library(dplyr)
+
 set.seed(1)
 
 test_that("allo_evaluate handles independent variable `dba`", {
@@ -43,8 +45,46 @@ test_that("allo_evaluate with stem table computes biomass of main shrub stem", {
       filter(matches_string(.data$eqn, "dbh"))
   })
 
+  bmss <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "mm"))
+  biomass_asis <- sum(bmss$biomass, na.rm = TRUE)
+
+  biomass_is_distributed_beyond_main_stems <- dplyr::left_join(eqn, bmss) %>%
+    select(rowid, treeID, dbh, biomass) %>%
+    filter(!is.na(dbh)) %>%
+    add_count(treeID) %>%
+    filter(n > 1) %>%
+    group_by(treeID) %>%
+    mutate(no_na = any(is.na(biomass))) %>%
+    pull() %>%
+    Negate(any)()
+
+  expect_true(biomass_is_distributed_beyond_main_stems)
+})
+
+test_that("allo_evaluate with shrub-dbh outputs known output", {
+  shrubs <- fgeo.biomass::scbi_stem_tiny_shrub
+
+  eqn <- suppressWarnings({
+    shrubs %>%
+      add_species(scbi_species, "scbi") %>%
+      allo_find(dbh_unit = "mm")
+  })
   out <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "mm"))
-  biomass_asis <- sum(out$biomass, na.rm = TRUE)
+  expect_known_output(out, "ref-shrub-dbh", update = FALSE)
+})
+
+test_that("allo_evaluate with stem table computes biomass of main shrub stem", {
+  shrubs <- fgeo.biomass::scbi_stem_tiny_shrub
+
+  eqn <- suppressWarnings({
+    shrubs %>%
+      add_species(scbi_species, "scbi") %>%
+      allo_find(dbh_unit = "mm") %>%
+      filter(matches_string(.data$eqn, "dbh"))
+  })
+
+  out1 <- suppressWarnings(allo_evaluate(eqn, dbh_unit = "mm"))
+  biomass_asis <- sum(out1$biomass, na.rm = TRUE)
 
   eqn2 <- suppressWarnings({
     fgeo.tool::pick_main_stem(shrubs) %>%
@@ -52,9 +92,9 @@ test_that("allo_evaluate with stem table computes biomass of main shrub stem", {
       allo_find(dbh_unit = "mm") %>%
       filter(matches_string(.data$eqn, "dbh"))
   })
-  biomass_main_stems <- suppressWarnings(
-    sum(allo_evaluate(eqn2, dbh_unit = "mm")$biomass, na.rm = TRUE)
-  )
+
+  out2 <- suppressWarnings(allo_evaluate(eqn2, dbh_unit = "mm"))
+  biomass_main_stems <- sum(out2$biomass, na.rm = TRUE)
 
   expect_equal(biomass_main_stems, biomass_asis)
 })
