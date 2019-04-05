@@ -1,14 +1,13 @@
 allo_find_impl <- function(data, dbh_unit) {
   data$dbh <- convert_units(data$dbh, dbh_unit, "mm", quietly = TRUE)
 
-  eqn <- suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
 
   inform("* Matching equations by site and species.")
-  .by <- c("sp", "site")
-
+  eqn <- suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
   eqn_from_here <- replace_site(
     eqn, from = "any-temperate-north america", to = unique(data$site)
   )
+  .by <- c("sp", "site")
   matched <- left_join(data, eqn_from_here, by = .by)
 
   inform("* Refining equations according to dbh.")
@@ -20,7 +19,7 @@ allo_find_impl <- function(data, dbh_unit) {
   refined$dbh_in_range <- NULL
 
   inform("* Using generic equations where expert equations can't be found.")
-  out <- prefer_expert_equaitons(refined)
+  out <- prefer_expert_equations(refined)
 
   warn_if_species_missmatch(out, eqn_from_here)
   warn_if_missing_equations(out)
@@ -51,6 +50,8 @@ allo_find_memoised <- memoise::memoise(allo_find_impl)
 #' allo_find(census_species, dbh_unit = "mm")
 #' @family constructors
 allo_find <- function(data, dbh_unit = NULL) {
+  check_crucial_names(data, c("sp", "site", "rowid"))
+
   if (is.null(dbh_unit)) {
     dbh_unit <- guess_dbh_unit(data$dbh)
     inform(glue("
@@ -89,7 +90,9 @@ warn_if_missing_equations <- function(data) {
   invisible(data)
 }
 
-prefer_expert_equaitons <- function(data) {
+prefer_expert_equations <- function(data) {
+  check_crucial_names(data, "is_generic")
+
   data %>%
     group_by(.data$rowid) %>%
     filter(replace_na(prefer_false(.data$is_generic), TRUE)) %>%

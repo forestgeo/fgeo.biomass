@@ -2,10 +2,7 @@ allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
   check_crucial_names(low(data), "treeid")
 
   data_ <- low(data) %>%
-    mutate(
-      presplit_rowid = seq_len(nrow(data)),
-      is_shrub = is_shrub(.data$life_form)
-    )
+    mutate(tmp_id = seq_len(nrow(data)), is_shrub = is_shrub(.data$life_form))
 
   biomass_tree <- data_ %>%
     filter(!is_shrub) %>%
@@ -22,8 +19,8 @@ allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
     biomass_shrub_dbh,
     biomass_shrub_dba
     ) %>%
-    arrange(.data$presplit_rowid) %>%
-    select(-.data$presplit_rowid, -.data$is_shrub)
+    arrange(.data$tmp_id) %>%
+    select(-.data$tmp_id, -.data$is_shrub)
 
   by_rowid <- group_by(biomass, .data$rowid)
   summarize(by_rowid, biomass = sum(.data$biomass))
