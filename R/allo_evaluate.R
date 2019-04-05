@@ -17,13 +17,54 @@ allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
     filter(is_shrub & matches_string(.data$eqn, "dba")) %>%
     row_biomass_from_dba(dbh_unit = dbh_unit, biomass_unit = biomass_unit)
 
-  dplyr::bind_rows(
+  biomass <- dplyr::bind_rows(
     biomass_tree,
     biomass_shrub_dbh,
     biomass_shrub_dba
     ) %>%
     arrange(.data$presplit_rowid) %>%
     select(-.data$presplit_rowid, -.data$is_shrub)
+
+  by_rowid <- group_by(biomass, .data$rowid)
+  summarize(by_rowid, biomass = sum(.data$biomass))
+}
+
+eval_memoised <- memoise::memoise(allo_evaluate_impl)
+
+#' Evaluate equations, giving a biomass result per row.
+#'
+#' @param data A dataframe as those created with [allo_find()].
+#' @param dbh_unit Character string giving the unit of dbh values, e.g. "mm".
+#' @param biomass_unit Character string giving the output unit e.g. "kg".
+#' @family functions to manipulate equations
+#'
+#' @return A dataframe with a single row by each value of `rowid`.
+#' @export
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' best <- fgeo.biomass::scbi_tree1 %>%
+#'   # Pick few rows for a quick example
+#'   sample_n(500) %>%
+#'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
+#'   allo_find()
+#'
+#' allo_evaluate(best)
+#'
+#' allo_evaluate(best, biomass_unit = "Mg")
+allo_evaluate <- function(data,
+                          dbh_unit = guess_dbh_unit(data$dbh),
+                          biomass_unit = "kg") {
+  warn_if_tree_table(data)
+
+  inform(glue("Guessing `dbh` in [{dbh_unit}]"))
+  inform_provide_dbh_units_manually()
+
+  inform("Converting `dbh` based on `dbh_unit`.")
+  inform(glue("`biomass` values are given in [{biomass_unit}]."))
+
+  eval_memoised(data, dbh_unit = dbh_unit, biomass_unit = biomass_unit)
 }
 
 row_biomass <- function(data, .name, dbh_unit, biomass_unit) {
@@ -92,68 +133,17 @@ row_biomass_from_dba <- function(data, .data, dbh_unit, biomass_unit) {
     mutate(dba = NULL)
 }
 
-eval_memoised <- memoise::memoise(allo_evaluate_impl)
-
-#' Evaluate equations, giving a biomass result per row.
-#'
-#' @param data A dataframe as those created with [allo_find()].
-#' @param dbh_unit Character string giving the unit of dbh values, e.g. "mm".
-#' @param biomass_unit Character string giving the output unit e.g. "kg".
-#' @family functions to manipulate equations
-#'
-#' @return A dataframe with a single row by each value of `rowid`.
-#' @export
-#'
-#' @examples
-#' library(dplyr)
-#'
-#' best <- fgeo.biomass::scbi_tree1 %>%
-#'   # Pick few rows for a quick example
-#'   sample_n(500) %>%
-#'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
-#'   allo_find()
-#'
-#' allo_evaluate(best)
-#'
-#' allo_evaluate(best, biomass_unit = "Mg")
-allo_evaluate <- function(data,
-                          dbh_unit = guess_dbh_unit(data$dbh),
-                          biomass_unit = "kg") {
-  warn_if_tree_table(data)
-  warn_if_stem_table_with_shrubs(data)
-
-  inform(glue("Guessing `dbh` in [{dbh_unit}]"))
-  inform_provide_dbh_units_manually()
-
-  inform("Converting `dbh` based on `dbh_unit`.")
-  inform(glue("`biomass` values are given in [{biomass_unit}]."))
-  row_biomass <- eval_memoised(
-    data, dbh_unit = dbh_unit, biomass_unit = biomass_unit
-  )
-
-  by_rowid <- group_by(row_biomass, .data$rowid)
-  summarize(by_rowid, biomass = sum(.data$biomass))
-}
-
 warn_if_tree_table <- function(data) {
-  if (! has_multiple_stems(data)) {
-    warn(glue("
-      Detected a single stem per tree. Consider these properties of the result:
-      * For trees, `biomass` is that of the main stem.
-      * For shrubs, `biomass` is that of the entire shrub.
-      Do you need a multi-stem table?
-    "))
-  }
+  if (!has_multiple_stems(data)) {
+    warn("Detected a single stem per tree. Do you need a multi-stem table?")
 
-  invisible(data)
-}
+    if (any(grepl("tree", data$life_form))) {
+      warn("* For trees, `biomass` is that of the main stem.")
+    }
 
-warn_if_stem_table_with_shrubs <- function(data) {
-  if (has_multiple_stems(data) &&
-      any(grepl("shrub", tolower(data$life_form)))) {
-    inform(
-      "Shrub `biomass` given for main stems only but applies to the whole shrub."
-    )
+    if (any(grepl("shrub", data$life_form))) {
+      warn("* For shrubs, `biomass` is that of the entire shrub.")
+    }
   }
 
   invisible(data)
