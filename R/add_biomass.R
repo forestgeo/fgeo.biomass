@@ -1,4 +1,44 @@
-allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
+#' Add biomass.
+#'
+#' @inheritParams add_species
+#' @param data A dataframe as those created with [add_equations()].
+#' @param dbh_unit Character string giving the unit of dbh values, e.g. "mm".
+#' @param biomass_unit Character string giving the output unit e.g. "kg".
+#'
+#' @return A dataframe with a single row by each value of `rowid`.
+#' @export
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' data <- bind_rows(
+#'   fgeo.biomass::scbi_stem_tiny_tree,
+#'   fgeo.biomass::scbi_stem_tiny_shrub
+#' )
+#'
+#' species <- fgeo.biomass::scbi_species
+#'
+#' add_biomass(data, species, site = "scbi")
+#'
+#' data %>%
+#'   add_biomass(species, site = "scbi", biomass_unit = "Mg") %>%
+#'   select(species, biomass, dbh, everything())
+add_biomass <- function(data,
+                        species,
+                        site,
+                        dbh_unit = guess_dbh_unit(data$dbh),
+                        biomass_unit = "kg") {
+  with_spp <- add_species(data, species = species, site = site)
+  with_eqn <- add_equations(with_spp, dbh_unit = dbh_unit)
+
+  with_bms <- evaluate_equations(with_eqn, biomass_unit = biomass_unit)
+  out <- left_join(with_spp, with_bms, by = "rowid")
+
+  inform_new_columns(out, data)
+  out
+}
+
+evaluate_equations_impl <- function(data, dbh_unit, biomass_unit) {
   check_crucial_names(low(data), "treeid")
 
   data_ <- low(data) %>%
@@ -18,7 +58,7 @@ allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
     biomass_tree,
     biomass_shrub_dbh,
     biomass_shrub_dba
-    ) %>%
+  ) %>%
     arrange(.data$tmp_id) %>%
     select(-.data$tmp_id, -.data$is_shrub)
 
@@ -26,39 +66,16 @@ allo_evaluate_impl <- function(data, dbh_unit, biomass_unit) {
   summarize(by_rowid, biomass = sum(.data$biomass))
 }
 
-eval_memoised <- memoise::memoise(allo_evaluate_impl)
+eval_memoised <- memoise::memoise(evaluate_equations_impl)
 
-#' Evaluate equations, giving a biomass result per row.
-#'
-#' @param data A dataframe as those created with [allo_find()].
-#' @param dbh_unit Character string giving the unit of dbh values, e.g. "mm".
-#' @param biomass_unit Character string giving the output unit e.g. "kg".
-#' @family functions to manipulate equations
-#'
-#' @return A dataframe with a single row by each value of `rowid`.
-#' @export
-#'
-#' @examples
-#' library(dplyr)
-#'
-#' best <- fgeo.biomass::scbi_tree1 %>%
-#'   # Pick few rows for a quick example
-#'   sample_n(500) %>%
-#'   add_species(fgeo.biomass::scbi_species, "scbi") %>%
-#'   allo_find()
-#'
-#' allo_evaluate(best)
-#'
-#' allo_evaluate(best, biomass_unit = "Mg")
-allo_evaluate <- function(data,
-                          dbh_unit = guess_dbh_unit(data$dbh),
-                          biomass_unit = "kg") {
+evaluate_equations <- function(data,
+                               dbh_unit = guess_dbh_unit(data$dbh),
+                               biomass_unit = "kg") {
   warn_if_tree_table(data)
 
   inform(glue("Guessing `dbh` in [{dbh_unit}]"))
   inform_provide_dbh_units_manually()
 
-  inform("Converting `dbh` based on `dbh_unit`.")
   inform(glue("`biomass` values are given in [{biomass_unit}]."))
 
   eval_memoised(data, dbh_unit = dbh_unit, biomass_unit = biomass_unit)

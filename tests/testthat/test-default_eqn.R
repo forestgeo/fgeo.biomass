@@ -25,7 +25,7 @@ test_that("default_eqn has expected columns", {
   nms <- c(
     "eqn_id",
     "site",
-    "sp",
+    "species",
     "eqn",
     "eqn_source",
     "eqn_type",

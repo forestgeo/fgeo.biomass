@@ -1,3 +1,12 @@
+inform_new_columns <- function(new, old) {
+  cols <- collapse_single_quote(setdiff(names(new), names(old)))
+  inform(glue("Adding new columns:\n{cols}"))
+}
+
+collapse_single_quote <- function(x) {
+  glue::glue_collapse(glue::single_quote(x), ",")
+}
+
 matches_string <- function(x, string) {
   grepl(surround_not_alnum(string), x)
 }

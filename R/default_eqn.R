@@ -50,8 +50,7 @@ default_eqn <- function(data) {
 }
 
 select_useful_cols <- function(data) {
-  crucial_cols <- data[ , allodb_cols(), drop = TRUE]
-  crucial_cols
+  data[ , allodb_cols(), drop = TRUE]
 }
 
 modify_default_eqn <- function(out) {
@@ -70,7 +69,6 @@ modify_default_eqn <- function(out) {
       )
     ) %>%
     dplyr::rename(
-      sp = .data$species,
       eqn_type = .data$allometry_specificity,
       dbh_unit = .data$dbh_units_original,
       bms_unit = .data$biomass_units_original
@@ -123,7 +121,7 @@ output_cols <- function() {
   c(
     "eqn_id",
     "site",
-    "sp",
+    "species",
     "eqn",
     "eqn_source",
     "eqn_type",

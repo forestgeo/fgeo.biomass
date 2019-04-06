@@ -15,28 +15,22 @@
 #' census <- fgeo.biomass::scbi_tree1
 #' species <- fgeo.biomass::scbi_species
 #' census %>%
-#'   add_species(species, site = "scbi") %>%
-#'   dplyr::select(rowid, site, sp)
+#'   add_species(species, site = "scbi")
 add_species <- function(census, species, site) {
-  .census <- rlang::set_names(census, tolower)
-  .species <- rlang::set_names(species, tolower)
-  .site <- tolower(site)
-  check_bms_cns(.census, .species, .site)
+  check_add_species(low(census), low(species), tolower(site))
 
-  all <- left_join(.census, .species, by = "sp")
+  all <- left_join(low(census), low(species), by = "sp")
+  out <- mutate(census, site = tolower(site), species = tolower(all$latin))
 
-  inform("Adding `site`.")
-  inform("Overwriting `sp`; it now stores Latin species names.")
-  out <- mutate(census, site = .site, sp = tolower(all$latin))
   if (rlang::has_name(out, "rowid")) {
     abort("`census` must not contain a column named `rowid`. Please remove it.")
   }
-  inform(glue("Adding `rowid`."))
   out <- tibble::rowid_to_column(out)
 
   warn_sp_missmatch(census, species)
-  warn_missing_sp(out$sp)
-  new_add_species(dplyr::as_tibble(out))
+  warn_missing_species(out$species)
+
+  dplyr::as_tibble(out)
 }
 
 warn_sp_missmatch <- function(census, species) {
@@ -53,25 +47,16 @@ warn_sp_missmatch <- function(census, species) {
   invisible(census)
 }
 
-warn_missing_sp <- function(x) {
+warn_missing_species <- function(x) {
   n_na <- is.na(x)
   if (any(n_na)) {
-    warn(glue("`sp` has {sum(n_na)} missing values"))
+    warn(glue("`species` has {sum(n_na)} missing values"))
   }
 
   invisible(x)
 }
 
-new_add_species <- function(x) {
-  stopifnot(tibble::is.tibble(x))
-  if (inherits(x, "add_species")) {
-    return(x)
-  }
-
-  structure(x, class = c("add_species", class(x)))
-}
-
-check_bms_cns <- function(census, species, site) {
+check_add_species <- function(census, species, site) {
   stopifnot(
     is.data.frame(census),
     is.data.frame(species),
@@ -79,5 +64,5 @@ check_bms_cns <- function(census, species, site) {
     length(site) == 1
   )
   check_crucial_names(census, c("sp", "dbh"))
-  check_crucial_names(species, "sp")
+  check_crucial_names(species, c("sp", "latin"))
 }

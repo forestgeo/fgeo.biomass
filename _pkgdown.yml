@@ -49,7 +49,6 @@ reference:
   - title: Main functions
     contents:
       - matches("add_")
-      - matches("allo_")
 
   - title: Helpers (may eventually be hidden)
     contents:

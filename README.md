@@ -33,270 +33,144 @@ Install the development version of **fgeo.biomass** with:
 
 ## Example
 
-In addition to **fgeo.biomass**, here we will use some other general
-purpose packages for manipulating data.
+In addition to the fgeo.biomass package we will use dplyr and ggplot2
+for data wrangling and plotting.
 
 ``` r
-library(fgeo.biomass)
+library(ggplot2)
 library(dplyr)
-library(tidyr)
+library(fgeo.biomass)
 ```
 
-As an example, we will use census and species datasets from the
-ForestGEO plot at the [Smithsonian Conservation Biology
+We’ll use the `add_biomass()` with these inputs:
+
+1.  A ForestGEO-like *stem* or *tree* table.
+2.  A *species* table (internally used to look up the Latin species
+    names from the species codes in the `sp` column of the census
+    table).
+
+We’ll use data from the [Smithsonian Conservation Biology
 Institute](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute)
-(SCBI). This is a relatively large dataset. For a quick example we’ll
-pick just a few rows.
+(SCBI). We first pick alive trees and drop missing `dbh` values as we
+can’t calculate biomass for them.
 
 ``` r
 census <- fgeo.biomass::scbi_tree1 %>% 
-  # Pick a few rows for speed
-  sample_n(5000)
+  filter(status == "A", !is.na(dbh))
 
 census
-#> # A tibble: 5,000 x 20
-#>    treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
-#>     <int>  <int> <chr> <chr>   <chr> <chr>   <dbl>  <dbl> <int>    <int>
-#>  1   1180   1180 10210 1       libe  0104      9.5  71.8   3432        1
-#>  2  22948  22948 1606~ 1       libe  1603    309.   48.8  30349        1
-#>  3  11645  11645 92501 1       litu  0929    178.  563.   16378        1
-#>  4  39674     NA 81028 <NA>    ceca  0907    163.  135.      NA       NA
-#>  5  11558  11558 92411 1       acru  0926    170.  507    16289        1
-#>  6  29100  29100 1927~ 1       fram  1932    362.  625.   37717        1
-#>  7   9069   9069 72430 1       ceca  0731    140.  607.   13344        1
-#>  8  37529     NA 2030~ <NA>    libe  2001    390.    8.10    NA       NA
-#>  9  32072     NA 1232~ <NA>    libe  1206    230.  119.      NA       NA
-#> 10   8503   8503 70501 1       caca  0710    136.  181    12729        1
-#> # ... with 4,990 more rows, and 10 more variables: dbh <dbl>, pom <chr>,
+#> # A tibble: 30,050 x 20
+#>    treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID
+#>     <int>  <int> <chr> <chr>   <chr> <chr>   <dbl> <dbl> <int>    <int>
+#>  1      1      1 10079 1       libe  0104     3.70  73       1        1
+#>  2      2      2 10168 1       libe  0103    17.3   58.9     3        1
+#>  3      3      3 10567 1       libe  0110     9    197.      5        1
+#>  4      4      4 12165 1       nysy  0122    14.2  428.      7        1
+#>  5      5      5 12190 1       havi  0122     9.40 436.      9        1
+#>  6      6      6 12192 1       havi  0122     1.30 434      13        1
+#>  7      8      8 12261 1       libe  0125    18    484.     17        1
+#>  8      9      9 12456 1       vipr  0130    18    598.     19        1
+#>  9     10     10 12551 1       astr  0132     5.60 628.     22        1
+#> 10     11     11 12608 1       astr  0132    13.3  623.     24        1
+#> # ... with 30,040 more rows, and 10 more variables: dbh <dbl>, pom <chr>,
 #> #   hom <dbl>, ExactDate <chr>, DFstatus <chr>, codes <chr>,
 #> #   nostems <dbl>, date <dbl>, status <chr>, agb <dbl>
 ```
 
-To match the census data with the best available allometric-equations we
-need (a) the name of the ForestGEO site (here “scbi”), and (b) each
-species’ Latin name. But instead of Latin names, ForestGEO’s *census*
-tables record species codes.
-
-``` r
-# To search for specific columns in the datasets
-sp_or_latin <- "^sp$|^Latin$"
-
-census %>% 
-  select(matches(sp_or_latin))
-#> # A tibble: 5,000 x 1
-#>    sp   
-#>    <chr>
-#>  1 libe 
-#>  2 libe 
-#>  3 litu 
-#>  4 ceca 
-#>  5 acru 
-#>  6 fram 
-#>  7 ceca 
-#>  8 libe 
-#>  9 libe 
-#> 10 caca 
-#> # ... with 4,990 more rows
-```
-
-The species’ Latin names are recorded in *species* tables.
+We now use `add_biomass()` to add biomass to our census dataset.
 
 ``` r
 species <- fgeo.biomass::scbi_species
 
-species %>% 
-  select(matches(sp_or_latin))
-#> # A tibble: 73 x 2
-#>    sp    Latin               
-#>    <chr> <chr>               
-#>  1 acne  Acer negundo        
-#>  2 acpl  Acer platanoides    
-#>  3 acru  Acer rubrum         
-#>  4 acsp  Acer sp             
-#>  5 aial  Ailanthus altissima 
-#>  6 amar  Amelanchier arborea 
-#>  7 astr  Asimina triloba     
-#>  8 beth  Berberis thunbergii 
-#>  9 caca  Carpinus caroliniana
-#> 10 caco  Carya cordiformis   
-#> # ... with 63 more rows
-```
-
-We can then add species’ Latin names to the census data by joining the
-*census* and *species* tables. We may do that with `dplyr::left_join()`
-but `fgeo.biomass::add_species()` is more specialized.
-
-``` r
-census_species <- census %>%
-  add_species(species, "scbi")
-#> Adding `site`.
-#> Overwriting `sp`; it now stores Latin species names.
-#> Adding `rowid`.
-
-census_species %>% 
-  select(matches(sp_or_latin))
-#> # A tibble: 5,000 x 1
-#>    sp                     
-#>  * <chr>                  
-#>  1 lindera benzoin        
-#>  2 lindera benzoin        
-#>  3 liriodendron tulipifera
-#>  4 cercis canadensis      
-#>  5 acer rubrum            
-#>  6 fraxinus americana     
-#>  7 cercis canadensis      
-#>  8 lindera benzoin        
-#>  9 lindera benzoin        
-#> 10 carpinus caroliniana   
-#> # ... with 4,990 more rows
-```
-
-### Finding the best available allometric-equations
-
-Before we added the Latin name of each species to the census data into
-the `sp` column. Now we want to find the best available
-allometric-equations for as many rows as possible with `allo_find()`. We
-may not have allometric equations form all species. Although the code
-will eventually fall back to more general equations, for now we just
-drop the rows that don’t match the available species for the specified
-site.
-
-``` r
-equations <- census_species %>% 
-  allo_find()
-#>   Guessing `dbh` in [mm] (required to find dbh-specific equations).
-#> You may provide the `dbh` unit manually via the argument `dbh_unit`.
+with_biomass <- census %>% 
+  add_biomass(species, site = "SCBI")
 #> * Matching equations by site and species.
 #> * Refining equations according to dbh.
 #> * Using generic equations where expert equations can't be found.
 #> Warning:   Can't find equations matching these species:
-#>   carya sp, crataegus sp, fraxinus sp, quercus prinus, quercus sp, ulmus sp, unidentified unk
-#> Warning: Can't find equations for 3252 rows (inserting `NA`).
-
-equations
-#> # A tibble: 5,022 x 33
-#>    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID
-#>    <int>  <int>  <int> <chr> <chr>   <chr> <chr>   <dbl>  <dbl> <int>
-#>  1     1   1180   1180 10210 1       lind~ 0104      9.5  71.8   3432
-#>  2     2  22948  22948 1606~ 1       lind~ 1603    309.   48.8  30349
-#>  3     3  11645  11645 92501 1       liri~ 0929    178.  563.   16378
-#>  4     4  39674     NA 81028 <NA>    cerc~ 0907    163.  135.      NA
-#>  5     5  11558  11558 92411 1       acer~ 0926    170.  507    16289
-#>  6     6  29100  29100 1927~ 1       frax~ 1932    362.  625.   37717
-#>  7     7   9069   9069 72430 1       cerc~ 0731    140.  607.   13344
-#>  8     8  37529     NA 2030~ <NA>    lind~ 2001    390.    8.10    NA
-#>  9     9  32072     NA 1232~ <NA>    lind~ 1206    230.  119.      NA
-#> 10    10   8503   8503 70501 1       carp~ 0710    136.  181    12729
-#> # ... with 5,012 more rows, and 23 more variables: CensusID <int>,
-#> #   dbh <dbl>, pom <chr>, hom <dbl>, ExactDate <chr>, DFstatus <chr>,
-#> #   codes <chr>, nostems <dbl>, date <dbl>, status <chr>, agb <dbl>,
-#> #   site <chr>, eqn_id <chr>, eqn <chr>, eqn_source <chr>, eqn_type <chr>,
-#> #   anatomic_relevance <chr>, dbh_unit <chr>, bms_unit <chr>,
-#> #   dbh_min_mm <dbl>, dbh_max_mm <dbl>, is_generic <lgl>, life_form <chr>
-```
-
-### Calculating biomass
-
-For the rows for which an equation was found in **allodb**, we can now
-calculate biomass. `allo_evaluate()` evaluates each allometric equation
-by replacing the literal string “dbh” with the corresponding value for
-each row in the `dbh` column, then doing the actual computation and
-storing the result in the the new `biomass` column.
-
-``` r
-biomass <- equations %>% 
-  allo_evaluate()
-#> Warning:   Detected a single stem per tree. Consider these properties of the result:
-#>   * For trees, `biomass` is that of the main stem.
-#>   * For shrubs, `biomass` is that of the entire shrub.
-#>   Do you need a multi-stem table?
+#>   acer sp, carya sp, crataegus sp, fraxinus sp, quercus prinus, quercus sp, ulmus sp, unidentified unk
+#> Warning: Can't find equations for 16385 rows (inserting `NA`).
+#> Warning: Detected a single stem per tree. Do you need a multi-stem table?
+#> Warning: * For trees, `biomass` is that of the main stem.
+#> Warning: * For shrubs, `biomass` is that of the entire shrub.
 #> Guessing `dbh` in [mm]
 #> You may provide the `dbh` unit manually via the argument `dbh_unit`.
-#> Converting `dbh` based on `dbh_unit`.
 #> `biomass` values are given in [kg].
-biomass
-#> # A tibble: 5,000 x 2
-#>    rowid biomass
-#>    <int>   <dbl>
-#>  1     1    2.98
-#>  2     2   NA   
-#>  3     3  130.  
-#>  4     4   NA   
-#>  5     5   67.6 
-#>  6     6  648.  
-#>  7     7    8.81
-#>  8     8   NA   
-#>  9     9   NA   
-#> 10    10   13.3 
-#> # ... with 4,990 more rows
-
-with_biomass <- biomass %>% right_join(equations)
-#> Joining, by = "rowid"
-
-with_biomass %>% 
-  select(eqn, dbh, biomass)
-#> # A tibble: 5,022 x 3
-#>    eqn                                        dbh biomass
-#>    <chr>                                    <dbl>   <dbl>
-#>  1 exp(-2.2118 + 2.4133 * log(dbh))          39.3    2.98
-#>  2 <NA>                                      23.2   NA   
-#>  3 10^(-1.236 + 2.635 * (log10(dbh)))       187.   130.  
-#>  4 <NA>                                      NA     NA   
-#>  5 exp(4.5893 + 2.43 * log(dbh))            147     67.6 
-#>  6 3.203 + (-0.234 * dbh) + 0.006 * (dbh^2) 348    648.  
-#>  7 exp(-2.5095 + 2.5437 * log(dbh))          63.1    8.81
-#>  8 <NA>                                      NA     NA   
-#>  9 <NA>                                      NA     NA   
-#> 10 exp(-2.48 + 2.4835 * log(dbh))            76.9   13.3 
-#> # ... with 5,012 more rows
+#> Adding new columns:
+#> 'rowid','site','species','biomass'
 ```
 
-Commonly we would further summarize the result. For that you can use the
-**dplyr** package or any general purpose tool. For example, this summary
-gives the total biomass for each species in descending order.
+We are warned that we are using a tree-table (as opposed to a
+stem-table), and informed about how to interpret the resulting `biomass`
+values for trees and shrubs.
+
+Some equations couldn’t be found. There may be two reasons:
+
+  - Some stems in the data belong to species with no matching species in
+    allodb.
+  - Some stems in the data belong to species that do match species in
+    allodb but the available equations were designed for a dbh range
+    that doesn’t include actual dbh values in the data.
+
+Here are the most interesting columns of the result:
 
 ``` r
 with_biomass %>% 
-  group_by(sp) %>% 
-  summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
-  arrange(desc(total_biomass))
-#> # A tibble: 57 x 2
-#>    sp                      total_biomass
-#>    <chr>                           <dbl>
-#>  1 liriodendron tulipifera       162662.
-#>  2 quercus velutina              107577.
-#>  3 carya glabra                   38897.
-#>  4 quercus alba                   37609.
-#>  5 quercus rubra                  34530.
-#>  6 carya tomentosa                24536.
-#>  7 juglans nigra                  18711.
-#>  8 fraxinus americana             18102.
-#>  9 carya ovalis                   15899.
-#> 10 nyssa sylvatica                 7760.
-#> # ... with 47 more rows
+  select(treeID, species, biomass)
+#> # A tibble: 30,050 x 3
+#>    treeID species              biomass
+#>     <int> <chr>                  <dbl>
+#>  1      1 lindera benzoin       NA    
+#>  2      2 lindera benzoin       NA    
+#>  3      3 lindera benzoin       NA    
+#>  4      4 nyssa sylvatica       NA    
+#>  5      5 hamamelis virginiana  NA    
+#>  6      6 hamamelis virginiana   0.400
+#>  7      8 lindera benzoin        5.69 
+#>  8      9 viburnum prunifolium  NA    
+#>  9     10 asimina triloba       NA    
+#> 10     11 asimina triloba       NA    
+#> # ... with 30,040 more rows
 ```
 
-### Issues
+Let’s now visualize the relationship between `dbh` and b`biomass` by
+`species` (black points), in comparison with `agb` (above ground
+biomass) values calculated with allometric equations for tropical trees
+(grey points).
 
-Our progress is recorded in this [Kanban project
-board](https://github.com/forestgeo/allodb/projects/4). Because we still
-don’t support some features, the the biomass result currently is invalid
-and excludes some trees.
+``` r
+with_biomass %>% 
+  # Convert agb from [Mg] to [kg]
+  mutate(agb_kg = agb * 1e3) %>% 
+  ggplot(aes(x = dbh)) +
+  geom_point(aes(y = agb_kg), size = 1.5, color = "grey") +
+  geom_point(aes(y = biomass), size = 1, color = "black") +
+  facet_wrap("species", ncol = 4) +
+  ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
+  xlab("dbh [mm]") +
+  theme_bw()
+#> Warning: Removed 16385 rows containing missing values (geom_point).
+```
 
-Issues that result in invalid biomass:
+![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
-  - We still don’t handle units correctly
-    (<https://github.com/forestgeo/allodb/issues/42>).
+Above, the species for which `biomass` couldn’t be calculated show no
+black points, although they do show grey reference-points.
 
-Issues that result in data loss:
+To better understand the distribution of `biomass` values for each
+species we can use a box-plot.
 
-  - The output excludes equations that apply to only part of a tree
-    instead of the whole tree
-    (<https://github.com/forestgeo/allodb/issues/63>,
-    <https://github.com/forestgeo/fgeo.biomass/issues/9>).
+``` r
+with_biomass %>% 
+  ggplot(aes(species, biomass)) +
+  geom_boxplot(aes(species, agb), color = "grey") +
+  geom_boxplot() +
+  ylab("biomass [kg]") +
+  coord_flip()
+#> Warning: Removed 16385 rows containing non-finite values (stat_boxplot).
+```
 
-  - We exclude equations from shrubs
-    (<https://github.com/forestgeo/allodb/issues/41>).
+![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
 
 ## General information
 

@@ -25,10 +25,9 @@ library(dplyr)
 census <- fgeo.biomass::scbi_tree1
 species <- fgeo.biomass::scbi_species
 census \%>\%
-  add_species(species, site = "scbi") \%>\%
-  dplyr::select(rowid, site, sp)
+  add_species(species, site = "scbi")
 }
 \seealso{
-Other constructors: \code{\link{allo_find}}
+Other constructors: \code{\link{add_equations}}
 }
 \concept{constructors}

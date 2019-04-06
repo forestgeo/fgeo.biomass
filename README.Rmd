@@ -7,10 +7,13 @@ editor_options:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  cache = TRUE,
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-"
 )
+
+set.seed(1)
 ```
 
 # <img src="https://i.imgur.com/vTLlhbp.png" align="right" height=88 /> Calculate biomass
@@ -36,101 +39,78 @@ devtools::install_github("forestgeo/fgeo.biomass")
 ```
 ## Example
 
-In addition to __fgeo.biomass__, here we will use some other general purpose packages for manipulating data.
+In addition to the fgeo.biomass package we will use dplyr and ggplot2 for data wrangling and plotting.
 
 ```{r, message=FALSE}
-library(fgeo.biomass)
+library(ggplot2)
 library(dplyr)
-library(tidyr)
+library(fgeo.biomass)
 ```
 
-As an example, we will use census and species datasets from the ForestGEO plot at the [Smithsonian Conservation Biology Institute](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute) (SCBI). This is a relatively large dataset. For a quick example we'll pick just a few rows.
+We'll use the `add_biomass()` with these inputs:
+
+1. A ForestGEO-like _stem_ or _tree_ table.
+2. A _species_ table (internally used to look up the Latin species names from the species codes in the `sp` column of the census table).
+
+We'll use data from the [Smithsonian Conservation Biology Institute](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute) (SCBI). We first pick alive trees and drop missing `dbh` values as we can't calculate biomass for them.
 
 ```{r}
 census <- fgeo.biomass::scbi_tree1 %>% 
-  # Pick a few rows for speed
-  sample_n(5000)
+  filter(status == "A", !is.na(dbh))
 
 census
 ```
 
-To match the census data with the best available allometric-equations we need (a) the name of the ForestGEO site (here "scbi"), and (b) each species' Latin name. But instead of Latin names, ForestGEO's _census_ tables record species codes.
-
-```{r}
-# To search for specific columns in the datasets
-sp_or_latin <- "^sp$|^Latin$"
-
-census %>% 
-  select(matches(sp_or_latin))
-```
-
-The species' Latin names are recorded in _species_ tables.
+We now use `add_biomass()` to add biomass to our census dataset. 
 
 ```{r}
 species <- fgeo.biomass::scbi_species
 
-species %>% 
-  select(matches(sp_or_latin))
+with_biomass <- census %>% 
+  add_biomass(species, site = "SCBI")
 ```
 
-We can then add species' Latin names to the census data by joining the _census_ and _species_ tables. We may do that with `dplyr::left_join()` but `fgeo.biomass::add_species()` is more specialized.
+We are warned that we are using a tree-table (as opposed to a stem-table), and informed about how to interpret the resulting `biomass` values for trees and shrubs.
 
-```{r}
-census_species <- census %>%
-  add_species(species, "scbi")
+Some equations couldn't be found. There may be two reasons:
 
-census_species %>% 
-  select(matches(sp_or_latin))
-```
+* Some stems in the data belong to species with no matching species in allodb.
+* Some stems in the data belong to species that do match species in allodb but the available equations were designed for a dbh range that doesn't include actual dbh values in the data.
 
-### Finding the best available allometric-equations
-
-Before we added the Latin name of each species to the census data into the `sp` column. Now we want to find the best available allometric-equations for as many rows as possible with `allo_find()`. We may not have allometric equations form all species. Although the code will eventually fall back to more general equations, for now we just drop the rows that don't match the available species for the specified site.
-
-```{r}
-equations <- census_species %>% 
-  allo_find()
-
-equations
-```
-
-### Calculating biomass
-
-For the rows for which an equation was found in __allodb__, we can now calculate biomass. `allo_evaluate()` evaluates each allometric equation by replacing the literal string "dbh" with the corresponding value for each row in the `dbh` column, then doing the actual computation and storing the result in the the new `biomass` column.
-
-```{r}
-biomass <- equations %>% 
-  allo_evaluate()
-biomass
-
-with_biomass <- biomass %>% right_join(equations)
-
-with_biomass %>% 
-  select(eqn, dbh, biomass)
-```
-
-Commonly we would further summarize the result. For that you can use the __dplyr__ package or any general purpose tool. For example, this summary gives the total biomass for each species in descending order.
+Here are the most interesting columns of the result:
 
 ```{r}
 with_biomass %>% 
-  group_by(sp) %>% 
-  summarize(total_biomass = sum(biomass, na.rm = TRUE)) %>% 
-  arrange(desc(total_biomass))
+  select(treeID, species, biomass)
 ```
 
-### Issues
+Let's now visualize the relationship between `dbh` and b`biomass` by `species` (black points), in comparison with `agb` (above ground biomass) values calculated with allometric equations for tropical trees (grey points). 
 
-Our progress is recorded in this [Kanban project board](https://github.com/forestgeo/allodb/projects/4). Because we still don't support some features, the the biomass result currently is invalid and excludes some trees.
+```{r, fig.height=14}
+with_biomass %>% 
+  # Convert agb from [Mg] to [kg]
+  mutate(agb_kg = agb * 1e3) %>% 
+  ggplot(aes(x = dbh)) +
+  geom_point(aes(y = agb_kg), size = 1.5, color = "grey") +
+  geom_point(aes(y = biomass), size = 1, color = "black") +
+  facet_wrap("species", ncol = 4) +
+  ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
+  xlab("dbh [mm]") +
+  theme_bw()
+```
 
-Issues that result in invalid biomass:
+Above, the species for which `biomass` couldn't be calculated show no black points, although they do show grey reference-points.
 
-* We still don't handle units correctly (https://github.com/forestgeo/allodb/issues/42).
+To better understand the distribution of `biomass` values for each species we can use a box-plot.
 
-Issues that result in data loss:
-
-* The output excludes equations that apply to only part of a tree instead of the whole tree (https://github.com/forestgeo/allodb/issues/63, https://github.com/forestgeo/fgeo.biomass/issues/9).
-
-* We exclude equations from shrubs (https://github.com/forestgeo/allodb/issues/41).
+```{r}
+with_biomass %>% 
+  ggplot(aes(species, biomass)) +
+  geom_boxplot(aes(species, agb), color = "grey") +
+  geom_boxplot() +
+  ylab("biomass [kg]") +
+  coord_flip()
+```
 
 ## General information
 
@@ -160,4 +140,3 @@ A BibTeX entry for LaTeX users is
     year = {2017},
   }
 ```
-

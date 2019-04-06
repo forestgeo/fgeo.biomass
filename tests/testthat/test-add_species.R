@@ -1,13 +1,14 @@
 context("add_species")
 
-test_that("add_species preserves census-rows and warns missing `sp`", {
+test_that("add_species preserves census-rows and warns missing `sp` codes", {
   spp <- c("acne", "acpl", "acru")
   census <- fgeo.biomass::scbi_tree1 %>%
     dplyr::filter(sp %in% spp)
   species <- fgeo.biomass::scbi_species
   expect_true(
     identical(
-      nrow(add_species(census, species, "scbi")), nrow(census))
+      nrow(add_species(census, species, "scbi")),
+      nrow(census))
   )
 
   # Still preserves rows
@@ -22,7 +23,7 @@ test_that("add_species preserves census-rows and warns missing `sp`", {
     add_species(census, species_na, "scbi"),
     "*has.*missing values"
   )
-  expect_true(any(is.na(out$sp)))
+  expect_true(any(is.na(out$species)))
 
   expect_true(identical(nrow(out), nrow(census)))
 })
@@ -38,17 +39,5 @@ test_that("outputs the expected data structure", {
   )
 
   expect_true(length(fgeo.biomass::scbi_tree1) < length(out))
-  expect_true(all(c("rowid", "site", "sp", "dbh") %in% names(out)))
-})
-
-test_that("add_species informs when addint latin species names into `sp`", {
-  expect_message(
-    add_species(
-      fgeo.biomass::scbi_tree1,
-      fgeo.biomass::scbi_species,
-      site = "scbi"
-    ),
-    "`sp`.*now stores Latin species names"
-  )
-
+  expect_true(all(c("rowid", "site", "sp", "dbh", "species") %in% names(out)))
 })

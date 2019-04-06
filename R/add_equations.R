@@ -1,13 +1,15 @@
-allo_find_impl <- function(data, dbh_unit) {
-  data$dbh <- convert_units(data$dbh, dbh_unit, "mm", quietly = TRUE)
-
+add_equations_impl <- function(data, dbh_unit) {
+  data$dbh <- convert_units(
+    data$dbh, from = dbh_unit, to = "mm", quietly = TRUE
+  )
 
   inform("* Matching equations by site and species.")
   eqn <- suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
   eqn_from_here <- replace_site(
     eqn, from = "any-temperate-north america", to = unique(data$site)
   )
-  .by <- c("sp", "site")
+  .by <- c("species", "site")
+  # .by <- c("sp", "site")
   matched <- left_join(data, eqn_from_here, by = .by)
 
   inform("* Refining equations according to dbh.")
@@ -26,7 +28,7 @@ allo_find_impl <- function(data, dbh_unit) {
 
   out
 }
-allo_find_memoised <- memoise::memoise(allo_find_impl)
+add_equations_memoised <- memoise::memoise(add_equations_impl)
 
 #' Find allometric equations in allodb or in a custom equations-table.
 #'
@@ -47,10 +49,10 @@ allo_find_memoised <- memoise::memoise(allo_find_impl)
 #'   site = "scbi"
 #' )
 #'
-#' allo_find(census_species, dbh_unit = "mm")
+#' add_equations(census_species, dbh_unit = "mm")
 #' @family constructors
-allo_find <- function(data, dbh_unit = NULL) {
-  check_crucial_names(data, c("sp", "site", "rowid"))
+add_equations <- function(data, dbh_unit = NULL) {
+  check_crucial_names(data, c("species", "site", "rowid"))
 
   if (is.null(dbh_unit)) {
     dbh_unit <- guess_dbh_unit(data$dbh)
@@ -60,12 +62,14 @@ allo_find <- function(data, dbh_unit = NULL) {
     inform_provide_dbh_units_manually()
   }
 
-  allo_find_memoised(data, dbh_unit = dbh_unit)
+  add_equations_memoised(data, dbh_unit = dbh_unit)
 }
 
 warn_if_species_missmatch <- function(data, eqn) {
-  to_match <- data[["sp"]]
-  available <- unique(eqn[eqn$site %in% unique(data$site), , drop = FALSE]$sp)
+  to_match <- data[["species"]]
+  available <- unique(
+    eqn[eqn$site %in% unique(data$site), , drop = FALSE]$species
+  )
   .matching <- to_match %in% available
 
   if (sum(!.matching) > 0) {
