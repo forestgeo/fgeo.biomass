@@ -31,14 +31,18 @@ add_biomass <- function(data,
   with_spp <- add_species(data, species = species, site = site)
   with_eqn <- add_equations(with_spp, dbh_unit = dbh_unit)
 
-  with_bms <- evaluate_equations(with_eqn, biomass_unit = biomass_unit)
-  out <- left_join(with_spp, with_bms, by = "rowid")
+  with_bms <- add_component_biomass(with_eqn, biomass_unit = biomass_unit)
+
+  with_bms2 <- group_by(with_bms, .data$rowid)
+  with_bms3 <- summarize(with_bms2, biomass = sum(.data$biomass))
+
+  out <- left_join(with_spp, with_bms3, by = "rowid")
 
   inform_new_columns(out, data)
   out
 }
 
-evaluate_equations_impl <- function(data, dbh_unit, biomass_unit) {
+add_component_biomass_impl <- function(data, dbh_unit, biomass_unit) {
   check_crucial_names(low(data), "treeid")
 
   data_ <- low(data) %>%
@@ -62,13 +66,12 @@ evaluate_equations_impl <- function(data, dbh_unit, biomass_unit) {
     arrange(.data$tmp_id) %>%
     select(-.data$tmp_id, -.data$is_shrub)
 
-  by_rowid <- group_by(biomass, .data$rowid)
-  summarize(by_rowid, biomass = sum(.data$biomass))
+  biomass
 }
 
-eval_memoised <- memoise::memoise(evaluate_equations_impl)
+eval_memoised <- memoise::memoise(add_component_biomass_impl)
 
-evaluate_equations <- function(data,
+add_component_biomass <- function(data,
                                dbh_unit = guess_dbh_unit(data$dbh),
                                biomass_unit = "kg") {
   warn_if_tree_table(data)
