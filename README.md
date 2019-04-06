@@ -163,7 +163,6 @@ species we can use a box-plot.
 ``` r
 with_biomass %>% 
   ggplot(aes(species, biomass)) +
-  geom_boxplot(aes(species, agb), color = "grey") +
   geom_boxplot() +
   ylab("biomass [kg]") +
   coord_flip()

@@ -11,35 +11,62 @@
 #' @examples
 #' library(dplyr)
 #'
-#' data <- bind_rows(
-#'   fgeo.biomass::scbi_stem_tiny_tree,
-#'   fgeo.biomass::scbi_stem_tiny_shrub
-#' )
-#'
+#' data <- fgeo.biomass::scbi_tree1 %>% slice(1:500)
 #' species <- fgeo.biomass::scbi_species
 #'
 #' add_biomass(data, species, site = "scbi")
 #'
-#' data %>%
-#'   add_biomass(species, site = "scbi", biomass_unit = "Mg") %>%
-#'   select(species, biomass, dbh, everything())
+#' # Otputs one row per biomass component
+#' add_component_biomass(data, species, site = "scbi") %>%
+#'   filter(rowid == "131") %>%
+#'   select(rowid, treeid, stemid, dbh, matches("anatomic_relevance"), biomass)
+#'
+#' # Sums biomass across components
+#' add_biomass(data, species, site = "scbi") %>%
+#'   filter(rowid == "131") %>%
+#'   select(rowid, treeID, stemID, dbh, biomass)
 add_biomass <- function(data,
                         species,
                         site,
                         dbh_unit = guess_dbh_unit(data$dbh),
                         biomass_unit = "kg") {
-  with_spp <- add_species(data, species = species, site = site)
-  with_eqn <- add_equations(with_spp, dbh_unit = dbh_unit)
-
-  with_bms <- add_component_biomass(with_eqn, biomass_unit = biomass_unit)
-
-  with_bms2 <- group_by(with_bms, .data$rowid)
-  with_bms3 <- summarize(with_bms2, biomass = sum(.data$biomass))
-
-  out <- left_join(with_spp, with_bms3, by = "rowid")
+  biomass_by_component <- add_component_biomass(
+    data,
+    species = species,
+    site = site,
+    dbh_unit = dbh_unit,
+    biomass_unit = biomass_unit
+  )
+  biomass_by_rowid <- summarize(
+    group_by(biomass_by_component, .data$rowid),
+    biomass = sum(.data$biomass, na.rm = TRUE)
+  )
+  out <- left_join(
+    add_species(data, species = species, site = site),
+    biomass_by_rowid,
+    by = "rowid"
+  )
 
   inform_new_columns(out, data)
   out
+}
+
+#' @rdname add_biomass
+#' @export
+add_component_biomass <- function(data,
+                                  species,
+                                  site,
+                                  dbh_unit = guess_dbh_unit(data$dbh),
+                                  biomass_unit = "kg") {
+  inform(glue("Guessing `dbh` in [{dbh_unit}]"))
+  inform_provide_dbh_units_manually()
+  inform(glue("`biomass` values are given in [{biomass_unit}]."))
+
+  with_spp <- add_species(data, species = species, site = site)
+  with_eqn <- add_equations(with_spp, dbh_unit = dbh_unit)
+  warn_life_form_if_tree_table(with_eqn)
+
+  eval_memoised(with_eqn, dbh_unit = dbh_unit, biomass_unit = biomass_unit)
 }
 
 add_component_biomass_impl <- function(data, dbh_unit, biomass_unit) {
@@ -70,19 +97,6 @@ add_component_biomass_impl <- function(data, dbh_unit, biomass_unit) {
 }
 
 eval_memoised <- memoise::memoise(add_component_biomass_impl)
-
-add_component_biomass <- function(data,
-                               dbh_unit = guess_dbh_unit(data$dbh),
-                               biomass_unit = "kg") {
-  warn_if_tree_table(data)
-
-  inform(glue("Guessing `dbh` in [{dbh_unit}]"))
-  inform_provide_dbh_units_manually()
-
-  inform(glue("`biomass` values are given in [{biomass_unit}]."))
-
-  eval_memoised(data, dbh_unit = dbh_unit, biomass_unit = biomass_unit)
-}
 
 row_biomass <- function(data, .name, dbh_unit, biomass_unit) {
   if (identical(nrow(data), 0L)) {
@@ -150,7 +164,7 @@ row_biomass_from_dba <- function(data, .data, dbh_unit, biomass_unit) {
     mutate(dba = NULL)
 }
 
-warn_if_tree_table <- function(data) {
+warn_life_form_if_tree_table <- function(data) {
   if (!has_multiple_stems(data)) {
     warn("Detected a single stem per tree. Do you need a multi-stem table?")
 

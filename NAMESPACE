@@ -2,6 +2,7 @@
 
 export("%>%")
 export(add_biomass)
+export(add_component_biomass)
 export(add_equations)
 export(add_species)
 export(allodb_cols)

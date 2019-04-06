@@ -106,7 +106,6 @@ To better understand the distribution of `biomass` values for each species we ca
 ```{r}
 with_biomass %>% 
   ggplot(aes(species, biomass)) +
-  geom_boxplot(aes(species, agb), color = "grey") +
   geom_boxplot() +
   ylab("biomass [kg]") +
   coord_flip()
