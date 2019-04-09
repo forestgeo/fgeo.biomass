@@ -92,7 +92,7 @@ with_biomass <- census %>%
 #> * Using generic equations where expert equations can't be found.
 #> Warning:   Can't find equations matching these species:
 #>   acer sp, carya sp, crataegus sp, fraxinus sp, quercus prinus, quercus sp, ulmus sp, unidentified unk
-#> Warning: Can't find equations for 1 rows (inserting `NA`).
+#> Warning: Can't find equations for 16385 rows (inserting `NA`).
 #> Warning: Detected a single stem per tree. Do you need a multi-stem table?
 #> Warning: * For trees, `biomass` is that of the main stem.
 #> Warning: * For shrubs, `biomass` is that of the entire shrub.

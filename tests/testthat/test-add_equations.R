@@ -4,10 +4,13 @@ library(dplyr)
 set.seed(1)
 
 test_that("add_equations warns number of rows with NA based on input", {
-  data <- tibble(rowid = c(1, 1, 2, 2), eqn_id = c("a", NA, NA, NA))
+  data <- tibble(
+    rowid = c(1, 1, 2, 2, 3, 3),
+    eqn_id = c("a", NA, NA, NA, NA, NA)
+  )
   expect_warning(
     warn_if_missing_equations(data),
-    "Can't find equations for 1 rows"
+    "Can't find equations for 2 rows"
   )
 })
 
