@@ -19,7 +19,7 @@
 #' # Otputs one row per biomass component
 #' add_component_biomass(data, species, site = "scbi") %>%
 #'   filter(rowid == "131") %>%
-#'   select(rowid, treeid, stemid, dbh, matches("anatomic_relevance"), biomass)
+#'   select(rowid, treeID, stemID, dbh, matches("anatomic_relevance"), biomass)
 #'
 #' # Sums biomass across components
 #' add_biomass(data, species, site = "scbi") %>%
@@ -30,6 +30,8 @@ add_biomass <- function(data,
                         site,
                         dbh_unit = guess_dbh_unit(data$dbh),
                         biomass_unit = "kg") {
+  check_crucial_names(data, pull_chr(names(data), "^treeid$"))
+
   biomass_by_component <- add_component_biomass(
     data,
     species = species,
@@ -70,10 +72,11 @@ add_component_biomass <- function(data,
 }
 
 add_component_biomass_impl <- function(data, dbh_unit, biomass_unit) {
-  check_crucial_names(low(data), "treeid")
-
-  data_ <- low(data) %>%
-    mutate(tmp_id = seq_len(nrow(data)), is_shrub = is_shrub(.data$life_form))
+  data_ <- data %>%
+    mutate(
+      tmp_id = seq_len(nrow(data)),
+      is_shrub = is_shrub(.data$life_form)
+    )
 
   biomass_tree <- data_ %>%
     filter(!is_shrub) %>%
@@ -138,11 +141,12 @@ row_biomass_from_main_stem <- function(data, dbh_unit, biomass_unit) {
       rowid = .data$rowid_data,
       total_biomass = .data$biomass
     ) %>%
-    select(.data$treeid, .data$total_biomass)
+    select(matches("^treeid$"), .data$total_biomass)
 
+  treeid <- pull_chr(names(data), "^treeid$")
   data %>%
-    left_join(total_biomass, by = "treeid") %>%
-    group_by(.data$treeid) %>%
+    left_join(total_biomass, by = treeid) %>%
+    group_by(!! treeid_quo(data)) %>%
     mutate(
       biomass = unique(.data$total_biomass) *
         contribution_to_basal_area(.data$dbh),
@@ -153,7 +157,7 @@ row_biomass_from_main_stem <- function(data, dbh_unit, biomass_unit) {
 
 row_biomass_from_dba <- function(data, .data, dbh_unit, biomass_unit) {
   data %>%
-    group_by(.data$treeid) %>%
+    group_by(!! treeid_quo(data)) %>%
     mutate(
       dba = basal_diameter(.data$dbh) * contribution_to_basal_area(.data$dbh)
     ) %>%
@@ -178,4 +182,9 @@ warn_life_form_if_tree_table <- function(data) {
   }
 
   invisible(data)
+}
+
+treeid_quo <- function(data) {
+  treeid <- pull_chr(names(data), "^treeid$")
+  rlang::as_quosure(rlang::sym(treeid))
 }

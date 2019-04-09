@@ -3,6 +3,16 @@ context("add_biomass")
 library(dplyr)
 set.seed(1)
 
+test_that("add_equations output original names' case", {
+  data <- fgeo.biomass::scbi_tree1 %>% slice(1:100)
+  species <- fgeo.biomass::scbi_species
+  site <- "scbi"
+
+  out <- suppressWarnings(add_biomass(data, species, site))
+  preserves_names_case <- any(grepl("treeID", names(out)))
+  expect_true(preserves_names_case)
+})
+
 test_that("add_equations informs new added columns", {
   data <- fgeo.biomass::scbi_tree1 %>% slice(1:100)
   species <- fgeo.biomass::scbi_species
@@ -113,6 +123,21 @@ test_that("add_biomass informs guessed dbh units and given `biomass` units", {
     suppressWarnings(add_biomass(trees, species, site = "scbi")),
     "`biomass`.*in.*kg"
   )
+})
+
+context("add_component_biomass")
+
+test_that("add_equations output original names' case", {
+  data <- fgeo.biomass::scbi_tree1 %>% slice(1:100)
+  species <- fgeo.biomass::scbi_species
+  site <- "scbi"
+
+  out <- suppressWarnings(add_component_biomass(data, species, site))
+  preserves_names_case <- any(grepl("treeID", names(out)))
+  expect_true(preserves_names_case)
+
+  has_odd_name <- any(grepl("names\\(data\\)", names(out)))
+  expect_false(has_odd_name)
 })
 
 test_that("add_component_biomass retuns some duplicated rowid", {

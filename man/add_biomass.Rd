@@ -39,7 +39,7 @@ add_biomass(data, species, site = "scbi")
 # Otputs one row per biomass component
 add_component_biomass(data, species, site = "scbi") \%>\%
   filter(rowid == "131") \%>\%
-  select(rowid, treeid, stemid, dbh, matches("anatomic_relevance"), biomass)
+  select(rowid, treeID, stemID, dbh, matches("anatomic_relevance"), biomass)
 
 # Sums biomass across components
 add_biomass(data, species, site = "scbi") \%>\%

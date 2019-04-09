@@ -6,7 +6,7 @@ default_eqn_impl <- function(data) {
     pick_supported_independent_variables() %>%
     select(output_cols())
 
-  new_eqn(dplyr::as_tibble(out))
+  new_eqn(tibble::as_tibble(out))
 }
 
 pick_supported_independent_variables <- function(data) {

@@ -1,3 +1,11 @@
+pull_name <- function(x, pattern) {
+  grep(pattern, x, value = TRUE, ignore.case = TRUE)
+}
+
+pull_chr <- function(x, pattern) {
+  grep(pattern, x, value = TRUE, ignore.case = TRUE)
+}
+
 inform_new_columns <- function(new, old) {
   cols <- collapse_single_quote(setdiff(names(new), names(old)))
   inform(glue("Adding new columns:\n{cols}"))

@@ -39,5 +39,9 @@ test_that("outputs the expected data structure", {
   )
 
   expect_true(length(fgeo.biomass::scbi_tree1) < length(out))
-  expect_true(all(c("rowid", "site", "sp", "dbh", "species") %in% names(out)))
+  expect_true(
+    all(
+      c("rowid", "site", "sp", "dbh", "species", "treeID") %in% names(out)
+    )
+  )
 })

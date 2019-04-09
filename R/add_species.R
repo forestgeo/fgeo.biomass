@@ -17,10 +17,12 @@
 #' census %>%
 #'   add_species(species, site = "scbi")
 add_species <- function(census, species, site) {
-  check_add_species(low(census), low(species), tolower(site))
+  check_add_species(census, species, site)
 
-  all <- left_join(low(census), low(species), by = "sp")
-  out <- mutate(census, site = tolower(site), species = tolower(all$latin))
+  joint <- left_join(census, species, by = "sp")
+  out <- census
+  out$species <- tolower(joint[[pull_chr(names(joint), "latin")]])
+  out$site <- tolower(site)
 
   if (rlang::has_name(out, "rowid")) {
     abort("`census` must not contain a column named `rowid`. Please remove it.")
@@ -30,7 +32,7 @@ add_species <- function(census, species, site) {
   warn_sp_missmatch(census, species)
   warn_missing_species(out$species)
 
-  dplyr::as_tibble(out)
+  tibble::as_tibble(out)
 }
 
 warn_sp_missmatch <- function(census, species) {
@@ -63,6 +65,6 @@ check_add_species <- function(census, species, site) {
     is.character(site),
     length(site) == 1
   )
-  check_crucial_names(census, c("sp", "dbh"))
-  check_crucial_names(species, c("sp", "latin"))
+  check_crucial_names(low(census), c("sp", "dbh"))
+  check_crucial_names(low(species), c("sp", "latin"))
 }
