@@ -171,6 +171,66 @@ with_biomass %>%
 
 ![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
 
+For some species the maximum `dbh` for which `biomass` was calculated is
+much lower than the maximum `dbh` value for which the reference `agb`
+was calculated. This is because most equations in **allodb** are defined
+for a specific range of `dbh` values. Eventually **allodb** might
+provide equations beyond the `dbh` limits currently available.
+
+To explore this issue, here we use `add_component_biomass()` which
+allows us to see intermediary results that `add_biomass()` doesn’t show.
+
+``` r
+detailed_biomass <- suppressWarnings(suppressMessages(
+  add_component_biomass(census, species, site = "SCBI")
+))
+
+# Maximum `dbh` values by species
+max_by_species <- detailed_biomass %>% 
+  select(species, dbh_max_mm) %>% 
+  group_by(species) %>% 
+  arrange(desc(dbh_max_mm)) %>% 
+  filter(row_number() == 1L) %>% 
+  ungroup()
+
+# `dbh` is above the maximum limit, so `biomass` is missing (agb has a value)
+detailed_biomass %>% 
+  filter(dbh > 1000) %>% 
+  select(-dbh_max_mm) %>% 
+  left_join(max_by_species) %>% 
+  mutate(agb_kg = agb * 1e3) %>%
+  select(species, biomass, agb, dbh, dbh_max_mm) %>% 
+  arrange(species) %>%
+  print(n = Inf)
+#> Joining, by = "species"
+#> # A tibble: 23 x 5
+#>    species                 biomass   agb   dbh dbh_max_mm
+#>    <chr>                     <dbl> <dbl> <dbl>      <dbl>
+#>  1 fagus grandifolia            NA 13.7  1030.       630 
+#>  2 fraxinus americana           NA 14.2  1053.       550 
+#>  3 liriodendron tulipifera      NA  8.24 1012.       558.
+#>  4 liriodendron tulipifera      NA 11.2  1159.       558.
+#>  5 liriodendron tulipifera      NA 10.3  1118.       558.
+#>  6 liriodendron tulipifera      NA 10.6  1135.       558.
+#>  7 liriodendron tulipifera      NA  8.48 1025.       558.
+#>  8 liriodendron tulipifera      NA 15.9  1365.       558.
+#>  9 liriodendron tulipifera      NA  8.12 1006.       558.
+#> 10 liriodendron tulipifera      NA 11.5  1173.       558.
+#> 11 liriodendron tulipifera      NA 11.5  1174.       558.
+#> 12 liriodendron tulipifera      NA  9.02 1054        558.
+#> 13 liriodendron tulipifera      NA 13.9  1280.       558.
+#> 14 quercus alba                 NA 15.0  1018.       630 
+#> 15 quercus rubra                NA 27.7  1418.       550 
+#> 16 quercus rubra                NA 28.2  1432.       550 
+#> 17 quercus rubra                NA 25.5  1366.       550 
+#> 18 quercus rubra                NA 17.3  1143.       550 
+#> 19 quercus rubra                NA 21.9  1272.       550 
+#> 20 quercus velutina             NA 16.1  1107        889 
+#> 21 quercus velutina             NA 26.6  1393.       889 
+#> 22 quercus velutina             NA 15.6  1092.       889 
+#> 23 quercus velutina             NA 31.6  1511.       889
+```
+
 ## General information
 
   - [Getting help](SUPPORT.md).
@@ -180,22 +240,3 @@ with_biomass %>%
 ## Related project
 
   - [BIOMASS](https://CRAN.R-project.org/package=BIOMASS)
-
-<!-- end list -->
-
-    A BibTeX entry for LaTeX users is
-    
-      @Article{,
-        title = {BIOMASS : an {R} package for estimating above-ground biomass and its uncertainty in tropical forests},
-        volume = {8},
-        issn = {2041210X},
-        url = {http://doi.wiley.com/10.1111/2041-210X.12753},
-        doi = {10.1111/2041-210X.12753},
-        language = {en},
-        number = {9},
-        urldate = {2018-12-13},
-        journal = {Methods in Ecology and Evolution},
-        author = {Maxime Rejou-Mechain and Ariane Tanguy and Camille Piponiot and Jerome Chave and Bruno Herault},
-        editor = {Sarah Goslee},
-        year = {2017},
-      }

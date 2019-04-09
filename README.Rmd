@@ -111,6 +111,34 @@ with_biomass %>%
   coord_flip()
 ```
 
+For some species the maximum `dbh` for which `biomass` was calculated is much lower than the maximum `dbh` value for which the reference `agb` was calculated. This is because most equations in __allodb__ are defined for a specific range of `dbh` values. Eventually __allodb__ might provide equations beyond the `dbh` limits currently available.
+
+To explore this issue, here we use `add_component_biomass()` which allows us to see intermediary results that `add_biomass()` doesn't show.
+
+```{r}
+detailed_biomass <- suppressWarnings(suppressMessages(
+  add_component_biomass(census, species, site = "SCBI")
+))
+
+# Maximum `dbh` values by species
+max_by_species <- detailed_biomass %>% 
+  select(species, dbh_max_mm) %>% 
+  group_by(species) %>% 
+  arrange(desc(dbh_max_mm)) %>% 
+  filter(row_number() == 1L) %>% 
+  ungroup()
+
+# `dbh` is above the maximum limit, so `biomass` is missing (agb has a value)
+detailed_biomass %>% 
+  filter(dbh > 1000) %>% 
+  select(-dbh_max_mm) %>% 
+  left_join(max_by_species) %>% 
+  mutate(agb_kg = agb * 1e3) %>%
+  select(species, biomass, agb, dbh, dbh_max_mm) %>% 
+  arrange(species) %>%
+  print(n = Inf)
+```
+
 ## General information
 
 * [Getting help](SUPPORT.md).
@@ -120,22 +148,3 @@ with_biomass %>%
 ## Related project
 
 * [BIOMASS](https://CRAN.R-project.org/package=BIOMASS)
-
-```
-A BibTeX entry for LaTeX users is
-
-  @Article{,
-    title = {BIOMASS : an {R} package for estimating above-ground biomass and its uncertainty in tropical forests},
-    volume = {8},
-    issn = {2041210X},
-    url = {http://doi.wiley.com/10.1111/2041-210X.12753},
-    doi = {10.1111/2041-210X.12753},
-    language = {en},
-    number = {9},
-    urldate = {2018-12-13},
-    journal = {Methods in Ecology and Evolution},
-    author = {Maxime Rejou-Mechain and Ariane Tanguy and Camille Piponiot and Jerome Chave and Bruno Herault},
-    editor = {Sarah Goslee},
-    year = {2017},
-  }
-```
