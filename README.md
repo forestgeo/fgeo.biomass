@@ -120,16 +120,16 @@ with_biomass %>%
 #> # A tibble: 30,050 x 3
 #>    treeID species              biomass
 #>     <int> <chr>                  <dbl>
-#>  1      1 lindera benzoin        0    
-#>  2      2 lindera benzoin        0    
-#>  3      3 lindera benzoin        0    
-#>  4      4 nyssa sylvatica        0    
-#>  5      5 hamamelis virginiana   0    
+#>  1      1 lindera benzoin       NA    
+#>  2      2 lindera benzoin       NA    
+#>  3      3 lindera benzoin       NA    
+#>  4      4 nyssa sylvatica       NA    
+#>  5      5 hamamelis virginiana  NA    
 #>  6      6 hamamelis virginiana   0.400
 #>  7      8 lindera benzoin        5.69 
-#>  8      9 viburnum prunifolium   0    
-#>  9     10 asimina triloba        0    
-#> 10     11 asimina triloba        0    
+#>  8      9 viburnum prunifolium  NA    
+#>  9     10 asimina triloba       NA    
+#> 10     11 asimina triloba       NA    
 #> # ... with 30,040 more rows
 ```
 
@@ -149,6 +149,7 @@ with_biomass %>%
   ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
   xlab("dbh [mm]") +
   theme_bw()
+#> Warning: Removed 16385 rows containing missing values (geom_point).
 ```
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
@@ -165,6 +166,7 @@ with_biomass %>%
   geom_boxplot() +
   ylab("biomass [kg]") +
   coord_flip()
+#> Warning: Removed 16385 rows containing non-finite values (stat_boxplot).
 ```
 
 ![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->

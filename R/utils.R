@@ -1,7 +1,3 @@
-pull_name <- function(x, pattern) {
-  grep(pattern, x, value = TRUE, ignore.case = TRUE)
-}
-
 pull_chr <- function(x, pattern) {
   grep(pattern, x, value = TRUE, ignore.case = TRUE)
 }

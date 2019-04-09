@@ -41,7 +41,7 @@ add_biomass <- function(data,
   )
   biomass_by_rowid <- summarize(
     group_by(biomass_by_component, .data$rowid),
-    biomass = sum(.data$biomass, na.rm = TRUE)
+    biomass = sum_or_na(.data$biomass)
   )
   out <- left_join(
     add_species(data, species = species, site = site),
@@ -51,6 +51,14 @@ add_biomass <- function(data,
 
   inform_new_columns(out, data)
   out
+}
+
+sum_or_na <- function(x) {
+  if (all(is.na(x))) {
+    return(unique(x))
+  }
+
+  sum(x, na.rm = TRUE)
 }
 
 #' @rdname add_biomass

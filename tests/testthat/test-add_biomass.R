@@ -4,7 +4,7 @@ library(dplyr)
 set.seed(1)
 
 
-test_that("add_equations returns some missing values", {
+test_that("add_equations returns NA if all rows per rowid are NA", {
   data <- fgeo.biomass::scbi_tree1 %>% slice(1:100)
   species <- fgeo.biomass::scbi_species
   site <- "scbi"
