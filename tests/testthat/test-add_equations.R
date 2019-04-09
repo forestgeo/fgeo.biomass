@@ -3,6 +3,14 @@ context("add_equations")
 library(dplyr)
 set.seed(1)
 
+test_that("add_equations warns number of rows with NA based on input", {
+  data <- tibble(rowid = c(1, 1, 2, 2), eqn_id = c("a", NA, NA, NA))
+  expect_warning(
+    warn_if_missing_equations(data),
+    "Can't find equations for 1 rows"
+  )
+})
+
 test_that("add_equations returns expected names", {
   census <- dplyr::sample_n(fgeo.biomass::scbi_tree1, 30)
   species <- fgeo.biomass::scbi_species

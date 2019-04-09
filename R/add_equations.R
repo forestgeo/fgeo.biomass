@@ -84,7 +84,13 @@ warn_if_species_missmatch <- function(data, eqn) {
 }
 
 warn_if_missing_equations <- function(data) {
-  missing_equations <- sum(is.na(data$eqn_id))
+  missing_equations <- sum(
+    summarize(
+      group_by(data, .data$eqn_id),
+      all_na = all(is.na(.data$eqn_id)))$all_na
+  )
+
+  # missing_equations <- sum(is.na(data$eqn_id))
   if (missing_equations > 0) {
     warn(glue("
       Can't find equations for {missing_equations} rows (inserting `NA`).

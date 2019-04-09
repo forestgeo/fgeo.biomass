@@ -84,20 +84,20 @@ species <- fgeo.biomass::scbi_species
 
 with_biomass <- census %>% 
   add_biomass(species, site = "SCBI")
+#> Guessing `dbh` in [mm]
+#> You may provide the `dbh` unit manually via the argument `dbh_unit`.
+#> `biomass` values are given in [kg].
 #> * Matching equations by site and species.
 #> * Refining equations according to dbh.
 #> * Using generic equations where expert equations can't be found.
 #> Warning:   Can't find equations matching these species:
 #>   acer sp, carya sp, crataegus sp, fraxinus sp, quercus prinus, quercus sp, ulmus sp, unidentified unk
-#> Warning: Can't find equations for 16385 rows (inserting `NA`).
+#> Warning: Can't find equations for 1 rows (inserting `NA`).
 #> Warning: Detected a single stem per tree. Do you need a multi-stem table?
 #> Warning: * For trees, `biomass` is that of the main stem.
 #> Warning: * For shrubs, `biomass` is that of the entire shrub.
-#> Guessing `dbh` in [mm]
-#> You may provide the `dbh` unit manually via the argument `dbh_unit`.
-#> `biomass` values are given in [kg].
 #> Adding new columns:
-#> 'rowid','site','species','biomass'
+#> 'rowid','species','site','biomass'
 ```
 
 We are warned that we are using a tree-table (as opposed to a
@@ -120,16 +120,16 @@ with_biomass %>%
 #> # A tibble: 30,050 x 3
 #>    treeID species              biomass
 #>     <int> <chr>                  <dbl>
-#>  1      1 lindera benzoin       NA    
-#>  2      2 lindera benzoin       NA    
-#>  3      3 lindera benzoin       NA    
-#>  4      4 nyssa sylvatica       NA    
-#>  5      5 hamamelis virginiana  NA    
+#>  1      1 lindera benzoin        0    
+#>  2      2 lindera benzoin        0    
+#>  3      3 lindera benzoin        0    
+#>  4      4 nyssa sylvatica        0    
+#>  5      5 hamamelis virginiana   0    
 #>  6      6 hamamelis virginiana   0.400
 #>  7      8 lindera benzoin        5.69 
-#>  8      9 viburnum prunifolium  NA    
-#>  9     10 asimina triloba       NA    
-#> 10     11 asimina triloba       NA    
+#>  8      9 viburnum prunifolium   0    
+#>  9     10 asimina triloba        0    
+#> 10     11 asimina triloba        0    
 #> # ... with 30,040 more rows
 ```
 
@@ -149,7 +149,6 @@ with_biomass %>%
   ylab("Reference `agb` (grey) and calculated `biomass` (black) in [kg]") +
   xlab("dbh [mm]") +
   theme_bw()
-#> Warning: Removed 16385 rows containing missing values (geom_point).
 ```
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
@@ -166,7 +165,6 @@ with_biomass %>%
   geom_boxplot() +
   ylab("biomass [kg]") +
   coord_flip()
-#> Warning: Removed 16385 rows containing non-finite values (stat_boxplot).
 ```
 
 ![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->

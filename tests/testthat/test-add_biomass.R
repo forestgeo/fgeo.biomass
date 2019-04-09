@@ -3,6 +3,16 @@ context("add_biomass")
 library(dplyr)
 set.seed(1)
 
+
+test_that("add_equations returns some missing values", {
+  data <- fgeo.biomass::scbi_tree1 %>% slice(1:100)
+  species <- fgeo.biomass::scbi_species
+  site <- "scbi"
+
+  out <- suppressWarnings(add_biomass(data, species, site))
+  expect_true(any(is.na(out$biomass)))
+})
+
 test_that("add_equations output original names' case", {
   data <- fgeo.biomass::scbi_tree1 %>% slice(1:100)
   species <- fgeo.biomass::scbi_species
