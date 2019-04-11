@@ -4,10 +4,10 @@
 \alias{add_species}
 \title{Add \code{species} to a ForestGEO-like dataframe of census data.}
 \usage{
-add_species(census, species, site)
+add_species(data, species, site)
 }
 \arguments{
-\item{census}{A ForestGEO-like census-dataframe.}
+\item{data}{A ForestGEO-like census-dataframe.}
 
 \item{species}{A ForestGEO-like species-dataframe.}
 
