@@ -8,7 +8,7 @@ inform_new_columns <- function(new, old) {
 }
 
 collapse_single_quote <- function(x) {
-  glue::glue_collapse(glue::single_quote(x), ",")
+  glue::glue_collapse(glue::single_quote(x), ", ")
 }
 
 matches_string <- function(x, string) {
