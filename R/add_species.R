@@ -1,6 +1,6 @@
 #' Add `species` to a ForestGEO-like dataframe of census data.
 #'
-#' @param census A ForestGEO-like census-dataframe.
+#' @param data A ForestGEO-like census-dataframe.
 #' @param species A ForestGEO-like species-dataframe.
 #' @param site The name of the site. One of `allodb::sites_info$site`.
 #'
@@ -16,11 +16,11 @@
 #' species <- fgeo.biomass::scbi_species
 #' census %>%
 #'   add_species(species, site = "scbi")
-add_species <- function(census, species, site) {
-  check_add_species(census, species, site)
+add_species <- function(data, species, site) {
+  check_add_species(data, species, site)
 
-  joint <- left_join(census, species, by = "sp")
-  out <- census
+  joint <- left_join(data, species, by = "sp")
+  out <- data
   out$species <- tolower(joint[[pull_chr(names(joint), "latin")]])
   out$site <- tolower(site)
 
@@ -29,7 +29,7 @@ add_species <- function(census, species, site) {
   }
   out <- tibble::rowid_to_column(out)
 
-  warn_sp_missmatch(census, species)
+  warn_sp_missmatch(data, species)
   warn_missing_species(out$species)
 
   tibble::as_tibble(out)
