@@ -53,7 +53,8 @@ Imports:
     tibble (>= 2.0.1),
     tidyr (>= 0.8.2),
     measurements,
-    tidyselect
+    tidyselect,
+    BIOMASS
 Suggests: 
     covr (>= 3.2.1),
     spelling (>= 2.0),
