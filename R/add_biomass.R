@@ -2,7 +2,7 @@
 #'
 #' @inheritParams add_species
 #' @param data A dataframe as those created with [add_equations()].
-#' @param dbh_unit Character string giving the unit of dbh values, e.g. "mm".
+#' @template dbh_unit
 #' @param biomass_unit Character string giving the output unit e.g. "kg".
 #'
 #' @return A dataframe with a single row by each value of `rowid`.
@@ -68,8 +68,7 @@ add_component_biomass <- function(data,
                                   site,
                                   dbh_unit = guess_dbh_unit(data$dbh),
                                   biomass_unit = "kg") {
-  inform(glue("Guessing `dbh` in [{dbh_unit}]"))
-  inform_provide_dbh_units_manually()
+  inform_if_guessed_dbh_unit(dbh_unit)
   inform(glue("`biomass` values are given in [{biomass_unit}]."))
 
   with_spp <- add_species(data, species = species, site = site)
@@ -195,4 +194,13 @@ warn_life_form_if_tree_table <- function(data) {
 treeid_quo <- function(data) {
   treeid <- pull_chr(names(data), "^treeid$")
   rlang::as_quosure(rlang::sym(treeid))
+}
+
+inform_if_guessed_dbh_unit <- function(dbh_unit) {
+  if (inherits(dbh_unit, "guessed")) {
+    inform(glue("Guessing `dbh` in [{dbh_unit}]."))
+    inform_provide_dbh_units_manually()
+  }
+
+  invisible(dbh_unit)
 }

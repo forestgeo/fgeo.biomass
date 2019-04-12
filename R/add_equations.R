@@ -33,7 +33,7 @@ add_equations_memoised <- memoise::memoise(add_equations_impl)
 #' Find allometric equations in allodb or in a custom equations-table.
 #'
 #' @param data A dataframe as those created with [add_species()].
-#' @param dbh_unit Character string giving the unit of dbh values, e.g. "mm".
+#' @template dbh_unit
 #'
 #' @family functions to manipulate equations
 #'

@@ -18,7 +18,8 @@ add_component_biomass(data, species, site,
 
 \item{site}{The name of the site. One of \code{allodb::sites_info$site}.}
 
-\item{dbh_unit}{Character string giving the unit of dbh values, e.g. "mm".}
+\item{dbh_unit}{Character string giving the unit of dbh values, e.g. "mm"
+(see \code{\link[=valid_units]{valid_units()}}).}
 
 \item{biomass_unit}{Character string giving the output unit e.g. "kg".}
 }

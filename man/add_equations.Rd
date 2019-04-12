@@ -9,7 +9,8 @@ add_equations(data, dbh_unit = NULL)
 \arguments{
 \item{data}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}
 
-\item{dbh_unit}{Character string giving the unit of dbh values, e.g. "mm".}
+\item{dbh_unit}{Character string giving the unit of dbh values, e.g. "mm"
+(see \code{\link[=valid_units]{valid_units()}}).}
 }
 \value{
 A nested dataframe with each row containing the data of an equation

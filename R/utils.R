@@ -1,3 +1,8 @@
+pull_region <- function(region, regions) {
+  stopifnot(length(region) == 1)
+  grep(region, regions, value = TRUE, ignore.case = TRUE)
+}
+
 pull_chr <- function(x, pattern) {
   grep(pattern, x, value = TRUE, ignore.case = TRUE)
 }

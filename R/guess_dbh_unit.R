@@ -41,12 +41,23 @@ guess_dbh_unit <- function(x) {
   }
 
   if (min(x, na.rm = TRUE) < 1.1 && max(x, na.rm = TRUE) < 500) {
-    return("cm")
+    return(new_guessed("cm"))
   }
 
   if (min(x, na.rm = TRUE) > 9 && max(x, na.rm = TRUE) > 500) {
-    return("mm")
+    return(new_guessed("mm"))
   }
 
   abort("Can't guess `dbh` units.")
+}
+
+new_guessed <- function(x) {
+  stopifnot(is.character(x))
+
+  new_class <- "guessed"
+  if (inherits(x, new_class)) {
+    return(x)
+  }
+
+  structure(x, class = c(new_class, class(x)))
 }

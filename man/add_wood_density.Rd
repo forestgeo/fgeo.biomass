@@ -38,7 +38,8 @@ set to 'World', but you can restrict the WD estimates to a single region :
 }
 \value{
 A dataframe as that passed to \code{data}, but with additional columns giving
-taxonomic information, and the following wood density information:
+taxonomic information, and the following wood density information (oven dry
+mass/fresh volume in g/cm^3):
 \itemize{
 \item wd_mean: Mean wood density.
 \item wd_sd: Standard deviation of the wood density that can be used in error
@@ -49,11 +50,11 @@ is set, the name of the stand (mean of the current stand).
 }
 }
 \description{
-This function wraps \link[BIOMASS:getWoodDensity]{BIOMASS::getWoodDensity}, which you may use for more
-options and see for more details. It estimates the wood density of the trees
-from their taxonomy or from their congeners using the global wood density
-database (Chave et al. 2009, Zanne et al. 2009) or any additional dataset.
-The resulting values of wood density can either be attributed to an
+This function wraps some features of \code{\link[BIOMASS:getWoodDensity]{BIOMASS::getWoodDensity()}}, which you
+may see for more details and options. It estimates the wood density of the
+trees from their taxonomy or from their congeners using the global wood
+density database (Chave et al. 2009, Zanne et al. 2009) or any additional
+dataset. The resulting values of wood density can either be attributed to an
 individual at the level of a species, genus, or family.
 }
 \details{

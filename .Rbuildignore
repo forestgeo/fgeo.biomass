@@ -1,3 +1,4 @@
+^man-roxygen$
 ^README_cache$
 ^vignettes/dbh-vs-biomass_cache$
 ^vignettes/dbh-vs-biomass\.Rmd$
