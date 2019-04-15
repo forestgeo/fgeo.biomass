@@ -25,12 +25,15 @@
 #' biomass of tropical trees_, Global Change Biology, 20 (10), 3177-3190
 #'
 #' @examples
-#' library(dplyr)
+#' library(fgeo.biomass)
 #'
 #' data <- fgeo.biomass::scbi_stem_tiny_tree
 #' species <- fgeo.biomass::scbi_species
 #'
-#' add_tropical_biomass(data, species) %>%
+#' add_tropical_biomass(data, species, region = "pantropical")
+#'
+#' data %>%
+#'   add_tropical_biomass(species, latitude = -34, longitude = -58) %>%
 #'   select(biomass, everything())
 add_tropical_biomass <- function(data,
                                  species,
