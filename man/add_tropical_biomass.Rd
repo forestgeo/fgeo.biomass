@@ -47,6 +47,7 @@ options and details. It uses pantropical models from Chave et al. 2014 to
 estimate the above-ground biomass of tropical trees.
 }
 \examples{
+library(dplyr)
 library(fgeo.biomass)
 
 data <- fgeo.biomass::scbi_stem_tiny_tree

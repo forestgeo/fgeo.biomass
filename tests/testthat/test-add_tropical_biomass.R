@@ -2,6 +2,56 @@ context("add_tropical_biomass")
 
 library(dplyr)
 
+test_that("add_tropical_biomass errs elegantly", {
+  data <- fgeo.biomass::scbi_stem_tiny_tree
+  species <- fgeo.biomass::scbi_species
+
+  # ok
+  expect_error(
+    add_tropical_biomass(
+      data, species, region = NULL, latitude = -38, longitude = -58
+    ),
+    NA
+  )
+
+  expect_error(add_tropical_biomass(), "data.*missing")
+  expect_error(add_tropical_biomass(data), "species.*missing")
+  expect_error(
+    add_tropical_biomass(
+      data, species, region = NULL, latitude = -38, longitude = NULL
+    ),
+    "must be non-NULL"
+  )
+
+  expect_error(
+    add_tropical_biomass(data, species, region = "bad"),
+    "region.*must be"
+  )
+
+  expect_error(
+    add_tropical_biomass(data, species, region = c("bad", "nope")),
+    "must be.*single character string"
+  )
+
+  expect_error(
+    add_tropical_biomass(data, species, dbh_unit = c("cm", "mm")),
+    "must be.*single character string"
+  )
+
+})
+
+test_that("add_tropical_biomass returns `longitude`, `latitude`", {
+  data <- fgeo.biomass::scbi_stem_tiny_tree
+  species <- fgeo.biomass::scbi_species
+
+  out <- add_tropical_biomass(data, species, latitude = -34, longitude = -58)
+  has_names_lat_long <- c("latitude", "longitude") %>%
+    purrr::map_lgl(~ hasName(out, .x)) %>%
+    all()
+
+  expect_true(has_names_lat_long)
+})
+
 test_that("add_tropical_biomass works with `longitude`, `latitude`", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
@@ -16,13 +66,13 @@ test_that("add_tropical_biomass informs new columns", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
-  expect_message(
+  expect_output(
     add_tropical_biomass(data, species),
     "new column.*biomass"
   )
 })
 
-test_that("add_tropical_biomass can take region insensity to case", {
+test_that("add_tropical_biomass can take region insensitive to case", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
@@ -68,14 +118,14 @@ test_that("add_tropical_biomass informs if guessing dbh unit", {
   species <- fgeo.biomass::scbi_species
 
   # Don't expect `message`
-  message <- "Guessing `dbh` in "
+  message <- "Guessing dbh in "
   msg <- purrr::quietly(add_tropical_biomass)(
     as.data.frame(data), species, dbh_unit = "mm"
   )$messages
   expect_false(grepl(message, glue_collapse(msg)))
 
   # Do expect `message`
-  expect_message(
+  expect_output(
     add_tropical_biomass(as.data.frame(data), species),
     message
   )

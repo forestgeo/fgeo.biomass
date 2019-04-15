@@ -69,7 +69,7 @@ add_component_biomass <- function(data,
                                   dbh_unit = guess_dbh_unit(data$dbh),
                                   biomass_unit = "kg") {
   inform_if_guessed_dbh_unit(dbh_unit)
-  inform(glue("`biomass` values are given in [{biomass_unit}]."))
+  ui_info("{ui_field('biomass')} values are given in [{biomass_unit}].")
 
   with_spp <- add_species(data, species = species, site = site)
   with_eqn <- add_equations(with_spp, dbh_unit = dbh_unit)
@@ -196,11 +196,3 @@ treeid_quo <- function(data) {
   rlang::as_quosure(rlang::sym(treeid))
 }
 
-inform_if_guessed_dbh_unit <- function(dbh_unit) {
-  if (inherits(dbh_unit, "guessed")) {
-    inform(glue("Guessing `dbh` in [{dbh_unit}]."))
-    inform_provide_dbh_units_manually()
-  }
-
-  invisible(dbh_unit)
-}

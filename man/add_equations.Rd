@@ -4,7 +4,7 @@
 \alias{add_equations}
 \title{Find allometric equations in allodb or in a custom equations-table.}
 \usage{
-add_equations(data, dbh_unit = NULL)
+add_equations(data, dbh_unit = guess_dbh_unit(data$dbh))
 }
 \arguments{
 \item{data}{A dataframe as those created with \code{\link[=add_species]{add_species()}}.}

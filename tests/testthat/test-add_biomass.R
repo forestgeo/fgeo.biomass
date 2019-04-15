@@ -3,7 +3,6 @@ context("add_biomass")
 library(dplyr)
 set.seed(1)
 
-
 test_that("add_equations returns NA if all rows per rowid are NA", {
   data <- fgeo.biomass::scbi_tree1 %>% slice(1:100)
   species <- fgeo.biomass::scbi_species
@@ -37,9 +36,9 @@ test_that("add_equations informs new added columns", {
   species <- fgeo.biomass::scbi_species
   site <- "scbi"
 
-  expect_message(
-    out <- suppressWarnings(add_biomass(data, species, site)),
-    paste0(setdiff(names(out), names(data)), collapse = ".*")
+  expect_output(
+    suppressWarnings(add_biomass(data, species, site)),
+    "rowid, species, site, biomass"
   )
 })
 
@@ -99,9 +98,9 @@ test_that("add_biomass informs returned value is in [kg]", {
   trees <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
-  expect_message(
+  expect_output(
     suppressWarnings(add_biomass(trees, species, site = "scbi")),
-    "`biomass`.*kg"
+    "biomass.*in.*kg"
   )
 })
 
@@ -121,19 +120,17 @@ test_that("add_biomass is sensitive to `dbh_unit`", {
   )
 })
 
-test_that("add_biomass informs guessed dbh units and given `biomass` units", {
+test_that("add_biomass informs guessed dbh units", {
   trees <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
-  expect_message(
-    suppressWarnings(add_biomass(trees, species, site = "scbi")),
-    "Guessing `dbh`.*in.*mm"
-  )
-  expect_message(
-    suppressWarnings(add_biomass(trees, species, site = "scbi")),
-    "`biomass`.*in.*kg"
+  expect_output(
+    add_biomass(trees, species, site = "scbi"),
+    "Guessing dbh.*in.*mm"
   )
 })
+
+
 
 context("add_component_biomass")
 

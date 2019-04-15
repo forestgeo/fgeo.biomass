@@ -3,7 +3,7 @@ add_equations_impl <- function(data, dbh_unit) {
     data$dbh, from = dbh_unit, to = "mm", quietly = TRUE
   )
 
-  inform("* Matching equations by site and species.")
+  ui_done("Matching equations by site and species.")
   eqn <- suppressMessages(fgeo.biomass::default_eqn(allodb::master_tidy()))
   eqn_from_here <- replace_site(
     eqn, from = "any-temperate-north america", to = unique(data$site)
@@ -12,7 +12,7 @@ add_equations_impl <- function(data, dbh_unit) {
   # .by <- c("sp", "site")
   matched <- left_join(data, eqn_from_here, by = .by)
 
-  inform("* Refining equations according to dbh.")
+  ui_done("Refining equations according to {ui_field('dbh')}.")
   matched$dbh_in_range <- is_in_range(
     matched$dbh, min = matched$dbh_min_mm, max = matched$dbh_max_mm
   )
@@ -20,7 +20,7 @@ add_equations_impl <- function(data, dbh_unit) {
   refined <- suppressMessages(left_join(data, in_range))
   refined$dbh_in_range <- NULL
 
-  inform("* Using generic equations where expert equations can't be found.")
+  ui_done("Using generic equations where expert equations can't be found.")
   out <- prefer_expert_equations(refined)
 
   warn_if_species_missmatch(out, eqn_from_here)
@@ -51,17 +51,9 @@ add_equations_memoised <- memoise::memoise(add_equations_impl)
 #'
 #' add_equations(census_species, dbh_unit = "mm")
 #' @family constructors
-add_equations <- function(data, dbh_unit = NULL) {
+add_equations <- function(data, dbh_unit = guess_dbh_unit(data$dbh)) {
   check_crucial_names(data, c("species", "site", "rowid"))
-
-  if (is.null(dbh_unit)) {
-    dbh_unit <- guess_dbh_unit(data$dbh)
-    inform(glue("
-      Guessing `dbh` in [{dbh_unit}] (required to find dbh-specific equations).
-    "))
-    inform_provide_dbh_units_manually()
-  }
-
+  inform_if_guessed_dbh_unit(dbh_unit)
   add_equations_memoised(data, dbh_unit = dbh_unit)
 }
 

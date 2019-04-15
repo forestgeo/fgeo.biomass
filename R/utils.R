@@ -1,3 +1,14 @@
+inform_if_guessed_dbh_unit <- function(dbh_unit) {
+  if (inherits(dbh_unit, "guessed")) {
+    ui_done("Guessing {ui_field('dbh')} in [{dbh_unit}].")
+    ui_info(
+      "You may provide the {ui_field('dbh')} unit manually via the argument\\
+      {ui_code('dbh_unit')}."
+    )
+  }
+  invisible(dbh_unit)
+}
+
 pull_region <- function(region, regions) {
   stopifnot(length(region) == 1)
   grep(region, regions, value = TRUE, ignore.case = TRUE)
@@ -8,8 +19,11 @@ pull_chr <- function(x, pattern) {
 }
 
 inform_new_columns <- function(new, old) {
-  cols <- collapse_single_quote(setdiff(names(new), names(old)))
-  inform(glue("Adding new columns:\n{cols}"))
+  cols <- ui_field(setdiff(names(new), names(old)))
+  ui_done(
+  "Adding new columns:
+    {cols}"
+  )
 }
 
 collapse_single_quote <- function(x) {
@@ -42,10 +56,6 @@ has_multiple_stems <- function(data) {
 
 low <- function(x) {
   rlang::set_names(x, tolower)
-}
-
-inform_provide_dbh_units_manually <- function() {
-  inform("You may provide the `dbh` unit manually via the argument `dbh_unit`.")
 }
 
 prefer_false <- function(x) {

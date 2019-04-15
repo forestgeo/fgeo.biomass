@@ -78,7 +78,9 @@ test_that("add_equations does not warn if dbh in [mm]", {
     filter(!is.na(dbh)) %>%
     add_species(fgeo.biomass::scbi_species, "scbi")
 
-  warnings <- paste0(purrr::quietly(add_equations)(data)$warnings, collapse = ", ")
+  warnings <- paste0(
+    purrr::quietly(add_equations)(data)$warnings, collapse = ", "
+  )
   expect_false(grepl("should be.*mm", warnings))
 })
 
@@ -104,7 +106,7 @@ test_that("add_equations guesses dbh units in [mm]", {
     dplyr::sample_n(100) %>%
     add_species(fgeo.biomass::scbi_species, "scbi")
 
-  expect_message(
+  expect_output(
     suppressWarnings(add_equations(cns_sp)),
     "Guessing.*dbh.*in.*mm"
   )

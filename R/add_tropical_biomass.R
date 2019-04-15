@@ -25,6 +25,7 @@
 #' biomass of tropical trees_, Global Change Biology, 20 (10), 3177-3190
 #'
 #' @examples
+#' library(dplyr)
 #' library(fgeo.biomass)
 #'
 #' data <- fgeo.biomass::scbi_stem_tiny_tree
@@ -41,6 +42,15 @@ add_tropical_biomass <- function(data,
                                  latitude = NULL,
                                  longitude = NULL,
                                  dbh_unit = guess_dbh_unit(data$dbh)) {
+  check_add_tropical_biomass(
+    data = data,
+    species = species,
+    latitude = latitude,
+    longitude = longitude,
+    region = region,
+    dbh_unit = dbh_unit
+  )
+
   inform_if_guessed_dbh_unit(dbh_unit)
 
   if (!identical(unclass(dbh_unit), "cm")) {
@@ -49,26 +59,27 @@ add_tropical_biomass <- function(data,
 
   out <- add_wood_density(data, species)
 
-  has_cordinates <- !is.null(latitude) && !is.null(longitude)
-  if (!has_cordinates) {
-    if (is.null(region)) {
-      abort("Must provide `region`; or `latitude` and `longitude`.")
-    }
-
+  if (!has_coordinates(latitude, longitude)) {
+    ui_done(
+      "Using {ui_code('region')} \\
+      (ignoring {ui_code('latitude')} and {ui_code('longitude')})."
+    )
     out$biomass <- BIOMASS::computeAGB(
       out$dbh,
       WD = out$wd_mean,
       H = get_height_list(out, region = region)$H
     )
   } else {
-    inform("Ignoring `region` and using `latitude` and `longitude`.")
-
+    ui_done(
+      "Using {ui_code('latitude')} and {ui_code('longitude')} \\
+      (ignoring {ui_code('region')})."
+    )
     out$latitude <- latitude
     out$longitude <- longitude
     out$biomass <- BIOMASS::computeAGB(
       out$dbh,
       WD = out$wd_mean,
-      coord = cbind(out$longitude, out$latitude)
+      coord = out[c("longitude", "latitude")]
     )
   }
 
@@ -77,6 +88,44 @@ add_tropical_biomass <- function(data,
 
   inform_new_columns(out, data)
   tibble::as_tibble(out)
+}
+
+check_add_tropical_biomass <- function(data,
+                                       species,
+                                       latitude,
+                                       longitude,
+                                       region,
+                                       dbh_unit) {
+  force(data)
+  force(species)
+
+  # Check region and coordinates
+  if (!has_coordinates(latitude, longitude) && is.null(region)) {
+    usethis::ui_stop(
+      "`region` or both `latitude` and `longitude` must be non-NULL"
+    )
+  }
+
+  if (!is.null(region)) {
+    if (!length(region) == 1L) {
+      usethis::ui_stop("`region` must be a single character string.")
+    }
+
+    if (!any(grepl(region, height_regions(), ignore.case = TRUE))) {
+      usethis::ui_stop(
+        "`region` ({usethis::ui_value(region)}) must be one of these:
+          {usethis::ui_field(height_regions())}"
+      )
+    }
+  }
+
+  if (!length(dbh_unit) == 1L) {
+    usethis::ui_stop("`dbh_unit` must be a single character string.")
+  }
+}
+
+has_coordinates <- function(latitude, longitude) {
+  !is.null(latitude) && !is.null(longitude)
 }
 
 get_height_list <- function(data, region = "Pantropical") {
