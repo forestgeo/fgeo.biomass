@@ -33,11 +33,11 @@
 #' try(guess_dbh_unit(c(8.9, 500)))
 guess_dbh_unit <- function(x) {
   if (all(is.na(x))) {
-    abort("Can't guess `dbh` units.")
+    ui_stop("Can't guess {ui_field('dbh')} units.")
   }
 
   if (!is.numeric(x)) {
-    abort("`x` must be numeric.")
+    ui_stop("{ui_field('x')} must be numeric.")
   }
 
   if (min(x, na.rm = TRUE) < 1.1 && max(x, na.rm = TRUE) < 500) {
@@ -48,7 +48,7 @@ guess_dbh_unit <- function(x) {
     return(new_guessed("mm"))
   }
 
-  abort("Can't guess `dbh` units.")
+  ui_stop("Can't guess {ui_field('dbh')} units.")
 }
 
 new_guessed <- function(x) {

@@ -55,7 +55,6 @@ test_that("add_tropical_biomass fails elegantly", {
     add_tropical_biomass(data, species, dbh_unit = c("cm", "mm")),
     "must be.*single character string"
   )
-
 })
 
 test_that("add_tropical_biomass returns `longitude`, `latitude`", {

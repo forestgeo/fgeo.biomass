@@ -25,7 +25,10 @@ add_species <- function(data, species, site) {
   out$site <- tolower(site)
 
   if (rlang::has_name(out, "rowid")) {
-    abort("`census` must not contain a column named `rowid`. Please remove it.")
+    ui_stop(
+      "{ui_field('census')} must not contain a column named  \\
+      {ui_field('rowid)}. Please remove it."
+    )
   }
   out <- tibble::rowid_to_column(out)
 
