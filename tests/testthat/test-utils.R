@@ -1,3 +1,16 @@
+context("can_find_bioclimatic_params")
+
+test_that("can_find_bioclimatic_params works as epected", {
+  expect_false(
+    can_find_bioclimatic_params(NA_real_, -52)
+  )
+  # expect_false(can_find_bioclimatic_params(4, NA))
+  # expect_false(can_find_bioclimatic_params(999, -999))
+  #
+  # expect_true(can_find_bioclimatic_params(38.899947, -77.034333))
+  expect_true(can_find_bioclimatic_params(4, -52))
+})
+
 context("has_multiple_stems")
 
 test_that("has_multiple_stems returns true if dealing with stem table", {

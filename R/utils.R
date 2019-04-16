@@ -1,3 +1,10 @@
+can_find_bioclimatic_params <- function(latitude, longitude) {
+  params <- suppressWarnings(
+    BIOMASS::getBioclimParam(cbind(longitude, latitude))
+  )
+  !all(purrr::map_lgl(params, ~ all(is.na(.x))))
+}
+
 inform_if_guessed_dbh_unit <- function(dbh_unit) {
   if (inherits(dbh_unit, "guessed")) {
     ui_done("Guessing {ui_field('dbh')} in [{dbh_unit}].")
