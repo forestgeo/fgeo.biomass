@@ -177,14 +177,14 @@ row_biomass_from_dba <- function(data, .data, dbh_unit, biomass_unit) {
 
 warn_life_form_if_tree_table <- function(data) {
   if (!has_multiple_stems(data)) {
-    warn("Detected a single stem per tree. Do you need a multi-stem table?")
+    ui_warn("Detected a single stem per tree. Do you need a multi-stem table?")
 
     if (any(grepl("tree", data$life_form))) {
-      warn("* For trees, `biomass` is that of the main stem.")
+      ui_warn("* For trees, `biomass` is that of the main stem.")
     }
 
     if (any(grepl("shrub", data$life_form))) {
-      warn("* For shrubs, `biomass` is that of the entire shrub.")
+      ui_warn("* For shrubs, `biomass` is that of the entire shrub.")
     }
   }
 

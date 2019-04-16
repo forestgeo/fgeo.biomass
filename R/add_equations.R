@@ -66,10 +66,10 @@ warn_if_species_missmatch <- function(data, eqn) {
 
   if (sum(!.matching) > 0) {
     missmatching <- paste0(sort(unique(to_match[!.matching])), collapse = ", ")
-    warn(glue("
+    ui_warn("
       Can't find equations matching these species:
       {missmatching}
-    "))
+    ")
   }
 
   invisible(data)
@@ -78,9 +78,9 @@ warn_if_species_missmatch <- function(data, eqn) {
 warn_if_missing_equations <- function(data) {
   all_missing <- tapply(data$eqn_id, data$rowid, function(x) all(is.na(x)))
   if (sum(all_missing) > 0) {
-    warn(glue(
+    ui_warn(
       "Can't find equations for {sum(all_missing)} rows (inserting `NA`)."
-    ))
+    )
   }
 
   invisible(data)

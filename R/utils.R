@@ -89,13 +89,11 @@ warn_if_errors <- function(x, problem) {
       unique() %>%
       glue::glue_collapse(sep = "\n")
 
-    warn(
-      glue(
-        "{problem} \\
-        (inserting {length(non_null)} missing values):
-        {error_msg}"
-      )
-      )
+    ui_warn(
+      "{problem} \\
+      (inserting {length(non_null)} missing values):
+      {error_msg}"
+    )
   }
 
   invisible(x)

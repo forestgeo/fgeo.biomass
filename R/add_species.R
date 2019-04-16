@@ -38,11 +38,9 @@ add_species <- function(data, species, site) {
 warn_sp_missmatch <- function(census, species) {
   missing_codes <- sort(setdiff(unique(census$sp), unique(species$sp)))
   if (length(missing_codes) > 0) {
-    warn(
-      glue(
-        "Can't find matching species names for these codes:
-        {paste0(missing_codes, collapse = ', ')}"
-      )
+    ui_warn(
+      "Can't find matching species names for these codes:
+      {paste0(missing_codes, collapse = ', ')}"
     )
   }
 
@@ -52,7 +50,7 @@ warn_sp_missmatch <- function(census, species) {
 warn_missing_species <- function(x) {
   n_na <- is.na(x)
   if (any(n_na)) {
-    warn(glue("`species` has {sum(n_na)} missing values"))
+    ui_warn("`species` has {sum(n_na)} missing values")
   }
 
   invisible(x)
