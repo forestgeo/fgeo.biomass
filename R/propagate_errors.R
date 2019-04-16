@@ -4,7 +4,7 @@ propagete_errors <- function(data, n = 1000) {
     D = data$dbh,
     WD = data$wd_mean,
     errWD = data$wd_sd,
-    coord = data[c("latitude", "longitude")]
+    coord = data[c("longitude", "latitude")]
   )
 
   if (all(is.na(out$AGB_simu))) {

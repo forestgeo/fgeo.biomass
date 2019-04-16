@@ -75,7 +75,7 @@ test_that("add_tropical_biomass errs with bad `longitude`, `latitude`", {
 
   expect_error(
     add_tropical_biomass(data, species, latitude = -999, longitude = -58),
-    "must be valid"
+    "Invalid values of .*latitude.*longitude"
   )
 })
 

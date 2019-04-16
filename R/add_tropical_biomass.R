@@ -78,8 +78,9 @@ add_tropical_biomass <- function(data,
     out$longitude <- longitude
     if (!can_find_bioclimatic_params(out$latitude, out$longitude)) {
       ui_stop(
-        "All values of {ui_field('latitude')} and {ui_field('longitude')} \\
-        must be valid (e.g. 4 and -52)."
+        "Invalid values of {ui_field('latitude')} and/or {ui_field('longitude')}.
+        Ensure your coordinates work with \\
+        {ui_code('BIOMASS::getBioclimParam()')}."
       )
     }
 
@@ -160,3 +161,4 @@ height_regions <- function() {
     "Pantropical"
   )
 }
+
