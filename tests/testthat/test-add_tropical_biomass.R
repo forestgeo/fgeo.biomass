@@ -2,7 +2,7 @@ context("add_tropical_biomass")
 
 library(dplyr)
 
-test_that("add_tropical_biomass errs elegantly", {
+test_that("add_tropical_biomass fails elegantly", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
@@ -12,6 +12,24 @@ test_that("add_tropical_biomass errs elegantly", {
       data, species, region = NULL, latitude = -38, longitude = -58
     ),
     NA
+  )
+
+  expect_error(
+    add_tropical_biomass(dplyr::rename(data, bad = dbh), species),
+    "Ensure.*dbh"
+  )
+  expect_error(
+    add_tropical_biomass(dplyr::rename(data, bad = sp), species),
+    "Ensure.*sp"
+  )
+
+  expect_error(
+    add_tropical_biomass(data, dplyr::rename(species, bad = Species)),
+    "Ensure.*species"
+  )
+  expect_error(
+    add_tropical_biomass(data, dplyr::rename(species, bad = Genus)),
+    "Ensure.*genus"
   )
 
   expect_error(add_tropical_biomass(), "data.*missing")

@@ -15,7 +15,7 @@ pull_region <- function(region, regions) {
 }
 
 pull_chr <- function(x, pattern) {
-  grep(pattern, x, value = TRUE, ignore.case = TRUE)
+  grep(glue("^{pattern}$"), x, value = TRUE, ignore.case = TRUE)
 }
 
 inform_new_columns <- function(new, old) {

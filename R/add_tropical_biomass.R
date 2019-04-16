@@ -99,6 +99,8 @@ check_add_tropical_biomass <- function(data,
   force(data)
   force(species)
 
+  check_crucial_names(data, c("dbh"))
+
   # Check region and coordinates
   if (!has_coordinates(latitude, longitude) && is.null(region)) {
     usethis::ui_stop(
