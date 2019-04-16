@@ -6,6 +6,11 @@ propagete_errors <- function(data, n = 1000) {
     errWD = data$wd_sd,
     coord = data[c("latitude", "longitude")]
   )
+
+  if (all(is.na(out$AGB_simu))) {
+    ui_warn("Invalid simulations")
+  }
+
   out
 }
 

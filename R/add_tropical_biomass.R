@@ -76,6 +76,13 @@ add_tropical_biomass <- function(data,
     )
     out$latitude <- latitude
     out$longitude <- longitude
+    if (!can_find_bioclimatic_params(out$latitude, out$longitude)) {
+      ui_stop(
+        "All values of {ui_field('latitude')} and {ui_field('longitude')} \\
+        must be valid (e.g. 4 and -52)."
+      )
+    }
+
     out$biomass <- BIOMASS::computeAGB(
       out$dbh,
       WD = out$wd_mean,

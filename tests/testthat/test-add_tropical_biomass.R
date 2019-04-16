@@ -70,6 +70,16 @@ test_that("add_tropical_biomass returns `longitude`, `latitude`", {
   expect_true(has_names_lat_long)
 })
 
+test_that("add_tropical_biomass errs with bad `longitude`, `latitude`", {
+  data <- fgeo.biomass::scbi_stem_tiny_tree
+  species <- fgeo.biomass::scbi_species
+
+  expect_error(
+    add_tropical_biomass(data, species, latitude = -999, longitude = -58),
+    "must be valid"
+  )
+})
+
 test_that("add_tropical_biomass works with `longitude`, `latitude`", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
