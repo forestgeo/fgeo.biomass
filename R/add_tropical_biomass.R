@@ -78,8 +78,11 @@ add_tropical_biomass <- function(data,
     out$longitude <- longitude
     if (!can_find_bioclimatic_params(out$latitude, out$longitude)) {
       ui_stop(
-        "Invalid values of {ui_field('latitude')} and/or {ui_field('longitude')}.
-        Ensure your coordinates work with \\
+        "Invalid values of {ui_field('latitude')} and/or \\
+        {ui_field('longitude')}."
+      )
+      ui_todo(
+        "Ensure your coordinates work with \\
         {ui_code('BIOMASS::getBioclimParam()')}."
       )
     }
