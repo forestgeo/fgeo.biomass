@@ -1,3 +1,39 @@
+#' Title
+#'
+#' @param data The output of [add_tropical_biomass()].
+#' @inheritParams BIOMASS::AGBmonteCarlo
+#' @param dbh_sd This variable can take three kind of values, indicating how to
+#'   propagate the errors on diameter measurements: a single numerical value or
+#'   a vector of the same size as D, both representing the standard deviation
+#'   associated with the diameter measurements or "chave2004" (an important
+#'   error on 5 percent of the measures, a smaller error on 95 percent of the
+#'   trees).
+#' @param height_model
+#'
+#' @return A list with the following components:
+#'  * `meanAGB`: Mean stand AGB value following the error propagation
+#'  * `medAGB`: Median stand AGB value following the error propagation
+#'  * `sdAGB`: Standard deviation of the stand AGB value following the error propagation
+#'  * `credibilityAGB`: Credibility interval at 95% of the stand AGB value following the error propagation
+#'  * `AGB_simu`: Matrix with the AGB of the trees (rows) times the n iterations (columns)
+#' @export
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' data <- fgeo.biomass::scbi_tree1 %>%
+#'   slice(1:100)
+#' species <- fgeo.biomass::scbi_species
+#'
+#' biomass <- add_tropical_biomass(
+#'   data = data,
+#'   species = species,
+#'   latitude = 4,
+#'   longitude = -52
+#' )
+#'
+#' out <- propagete_errors(biomass, n = 50, height_model = NULL)
+#' str(out)
 propagete_errors <- function(data,
                              n = 1000,
                              dbh_sd = NULL,
