@@ -1,13 +1,23 @@
 context("can_find_bioclimatic_params")
 
+test_that("is_tropical with value lower than |23.0| returns TRUE", {
+  expect_true(is_tropical(-23))
+  expect_true(is_tropical(23))
+  expect_true(is_tropical(0))
+  expect_true(is_tropical(15))
+  expect_true(is_tropical(-15))
+
+  expect_equal(is_tropical(1:2), c(TRUE, TRUE))
+  expect_equal(is_tropical(c(1, 40)), c(TRUE, FALSE))
+  expect_equal(is_tropical(NA, na.rm = TRUE), logical(0))
+
+  expect_false(is_tropical(-23.5))
+})
+
 test_that("can_find_bioclimatic_params works as epected", {
   expect_false(
     can_find_bioclimatic_params(NA_real_, -52)
   )
-  # expect_false(can_find_bioclimatic_params(4, NA))
-  # expect_false(can_find_bioclimatic_params(999, -999))
-  #
-  # expect_true(can_find_bioclimatic_params(38.899947, -77.034333))
   expect_true(can_find_bioclimatic_params(4, -52))
 })
 

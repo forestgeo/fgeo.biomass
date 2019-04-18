@@ -2,15 +2,28 @@ context("add_tropical_biomass")
 
 library(dplyr)
 
+test_that("add_tropical_biomass warns tropical coordinates", {
+  data <- fgeo.biomass::scbi_stem_tiny_tree
+  species <- fgeo.biomass::scbi_species
+  expect_warning(
+    add_tropical_biomass(data, species, latitude = -34, longitude = -58),
+    "latitude.*should be tropical"
+  )
+  expect_warning(
+    add_tropical_biomass(data, species, latitude = 4, longitude = -58),
+    NA
+  )
+})
+
 test_that("add_tropical_biomass fails elegantly", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
   # ok
   expect_error(
-    add_tropical_biomass(
+    suppressWarnings(add_tropical_biomass(
       data, species, region = NULL, latitude = -38, longitude = -58
-    ),
+    )),
     NA
   )
 
@@ -61,7 +74,9 @@ test_that("add_tropical_biomass returns `longitude`, `latitude`", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
-  out <- add_tropical_biomass(data, species, latitude = -34, longitude = -58)
+  out <- suppressWarnings(
+    add_tropical_biomass(data, species, latitude = -34, longitude = -58)
+  )
   has_names_lat_long <- c("latitude", "longitude") %>%
     purrr::map_lgl(~ hasName(out, .x)) %>%
     all()
@@ -74,7 +89,9 @@ test_that("add_tropical_biomass errs with bad `longitude`, `latitude`", {
   species <- fgeo.biomass::scbi_species
 
   expect_error(
-    add_tropical_biomass(data, species, latitude = -999, longitude = -58),
+    suppressWarnings(
+      add_tropical_biomass(data, species, latitude = -999, longitude = -58)
+    ),
     "Invalid values of .*latitude.*longitude"
   )
 })
@@ -84,7 +101,9 @@ test_that("add_tropical_biomass works with `longitude`, `latitude`", {
   species <- fgeo.biomass::scbi_species
 
   expect_error(
-    add_tropical_biomass(data, species, latitude = -34, longitude = -58),
+    suppressWarnings(
+      add_tropical_biomass(data, species, latitude = -34, longitude = -58)
+    ),
     NA
   )
 })

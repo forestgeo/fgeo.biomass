@@ -76,6 +76,11 @@ add_tropical_biomass <- function(data,
     )
     out$latitude <- latitude
     out$longitude <- longitude
+
+    if (!all(is_tropical(out$latitude))) {
+      ui_warn("All {ui_code('latitude')} values should be tropical.")
+    }
+
     if (!can_find_bioclimatic_params(out$latitude, out$longitude)) {
       ui_stop(
         "Invalid values of {ui_field('latitude')} and/or \\

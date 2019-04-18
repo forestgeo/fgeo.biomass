@@ -1,3 +1,8 @@
+is_tropical <- function(x, na.rm = TRUE) {
+  if (na.rm) x <- x[!is.na(x)]
+  abs(x) < 23.5
+}
+
 can_find_bioclimatic_params <- function(latitude, longitude) {
   params <- suppressWarnings(
     BIOMASS::getBioclimParam(cbind(longitude, latitude))
