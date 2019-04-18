@@ -5,6 +5,7 @@
 #' @importFrom glue glue glue_collapse
 #' @importFrom rlang abort warn inform %||%
 #' @importFrom usethis ui_info ui_done ui_field ui_code ui_warn ui_stop ui_todo
+#' @importFrom usethis ui_value
 NULL
 
 globalVariables(c(".data", "."))

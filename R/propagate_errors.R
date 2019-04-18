@@ -1,4 +1,9 @@
-#' Title
+#' Propagate errors in above-ground biomass (AGB).
+#'
+#' This functions is warps [BIOMASS::AGBmonteCarlo()], which you may use
+#' directly for more options.
+#'
+#' @inherit BIOMASS::AGBmonteCarlo
 #'
 #' @param data The output of [add_tropical_biomass()].
 #' @inheritParams BIOMASS::AGBmonteCarlo
@@ -8,14 +13,18 @@
 #'   associated with the diameter measurements or "chave2004" (an important
 #'   error on 5 percent of the measures, a smaller error on 95 percent of the
 #'   trees).
-#' @param height_model
+#' @param height_model Model used to estimate tree height from tree diameter
+#'   (output from [model_height()], see example).
+#' @return A list with the following elements:
+#'  * `meanAGB`: Mean stand AGB value following the error propagation.
+#'  * `medAGB`: Median stand AGB value following the error propagation.
+#'  * `sdAGB`: Standard deviation of the stand AGB value following the error
+#'  propagation.
+#'  * `credibilityAGB`: Credibility interval at 95% of the stand AGB value
+#'  following the error propagation.
+#'  * `AGB_simu`: Matrix with the AGB of the trees (rows) times the n iterations
+#'  (columns).
 #'
-#' @return A list with the following components:
-#'  * `meanAGB`: Mean stand AGB value following the error propagation
-#'  * `medAGB`: Median stand AGB value following the error propagation
-#'  * `sdAGB`: Standard deviation of the stand AGB value following the error propagation
-#'  * `credibilityAGB`: Credibility interval at 95% of the stand AGB value following the error propagation
-#'  * `AGB_simu`: Matrix with the AGB of the trees (rows) times the n iterations (columns)
 #' @export
 #'
 #' @examples
@@ -25,6 +34,14 @@
 #'   slice(1:100)
 #' species <- fgeo.biomass::scbi_species
 #'
+#' # Using `region` (default)
+#' biomass <- add_tropical_biomass(data, species)
+#' model <- model_height(biomass)
+#' str(
+#'   propagate_errors(biomass, n = 50, height_model = model)
+#' )
+#'
+#' # Using `latitude` and `longitude`
 #' biomass <- add_tropical_biomass(
 #'   data = data,
 #'   species = species,
@@ -32,9 +49,26 @@
 #'   longitude = -52
 #' )
 #'
-#' out <- propagete_errors(biomass, n = 50, height_model = NULL)
+#' model <- model_height(biomass)
+#'
+<<<<<<< HEAD
+<<<<<<< HEAD
 #' str(out)
-propagete_errors <- function(data,
+=======
+#' # Asks to confirm using the model instead of coordinates
+#' if (interactive()) {
+#'   str(
+#'     propagate_errors(biomass, n = 50, height_model = model)
+#'   )
+#' }
+>>>>>>> 84b556a... Fix propagate_errors()'s example to run only in interactive sessions
+=======
+#' # Asks to confirm using the model instead of coordinates
+#' str(
+#'   propagate_errors(biomass, n = 50, height_model = model)
+#' )
+>>>>>>> 7e7523a... add_tropical_biomass() now informs which region it uses
+propagate_errors <- function(data,
                              n = 1000,
                              dbh_sd = NULL,
                              height_model = NULL) {

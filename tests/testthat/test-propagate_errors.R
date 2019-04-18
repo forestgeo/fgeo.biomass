@@ -25,7 +25,7 @@ test_that("propagate_errors is sensitive to `height_model`", {
   rm(tmp)
 
   expect_error(
-    propagete_errors(
+    propagate_errors(
       data = select(biomass, -.data$latitude, -.data$longitude),
       n = 50,
       height_model = this_model
@@ -37,7 +37,6 @@ test_that("propagate_errors is sensitive to `height_model`", {
 test_that("propagate_errors is sensitive to `height_model`", {
   data <- fgeo.biomass::scbi_tree1 %>%
     slice(1:100)
-  # data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
   biomass <- add_tropical_biomass(
@@ -48,7 +47,7 @@ test_that("propagate_errors is sensitive to `height_model`", {
   )
 
   expect_error(
-    out <- propagete_errors(biomass, n = 50, height_model = NULL),
+    out <- propagate_errors(biomass, n = 50, height_model = NULL),
     NA
   )
 
@@ -65,9 +64,9 @@ test_that("propagate_errors is sensitive to `height_model`", {
   expect_false(
     identical(
       withr::with_seed(1,
-        propagete_errors(biomass, n = 50, height_model = NULL)
+        propagate_errors(biomass, n = 50, height_model = NULL)
       ),
-      withr::with_seed(1, propagete_errors(
+      withr::with_seed(1, propagate_errors(
         select(biomass, -latitude, -longitude),
         n = 50,
         height_model = model
@@ -88,23 +87,23 @@ test_that("propagate_errors is sensitive to `dbh_sd` or similar", {
   )
 
   expect_identical(
-      withr::with_seed(1, propagete_errors(biomass, n = 50, dbh_sd = NULL)),
-      withr::with_seed(1, propagete_errors(biomass, n = 50, dbh_sd = NULL))
+      withr::with_seed(1, propagate_errors(biomass, n = 50, dbh_sd = NULL)),
+      withr::with_seed(1, propagate_errors(biomass, n = 50, dbh_sd = NULL))
   )
 
   expect_false(
     identical(
         withr::with_seed(1,
-          propagete_errors(biomass, n = 50, dbh_sd = NULL)
+          propagate_errors(biomass, n = 50, dbh_sd = NULL)
         ),
         withr::with_seed(1,
-          propagete_errors(biomass, n = 50, dbh_sd = "chave2004")
+          propagate_errors(biomass, n = 50, dbh_sd = "chave2004")
         )
     )
   )
 
   expect_is(
-    out <- propagete_errors(biomass, n = 50, dbh_sd = "chave2004"),
+    out <- propagate_errors(biomass, n = 50, dbh_sd = "chave2004"),
     "list"
   )
   expect_false(is.null(out))
@@ -126,7 +125,7 @@ test_that("propagate_errors with lat, long returns a valid list", {
   )
 
   expect_is(
-    out <- propagete_errors(biomass, n = 50),
+    out <- propagate_errors(biomass, n = 50),
     "list"
   )
   expect_false(is.null(out))
@@ -155,7 +154,7 @@ test_that("propagate_errors with lat, long and bci data returns a valid list", {
   )
 
   expect_is(
-    out <- propagete_errors(biomass, n = 200),
+    out <- propagate_errors(biomass, n = 200),
     "list"
   )
   expect_false(is.null(out))

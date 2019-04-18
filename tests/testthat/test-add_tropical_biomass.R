@@ -99,6 +99,21 @@ test_that("add_tropical_biomass informs new columns", {
   )
 })
 
+test_that("add_tropical_biomass informs if using region", {
+  data <- fgeo.biomass::scbi_stem_tiny_tree
+  species <- fgeo.biomass::scbi_species
+
+  expect_output(
+    add_tropical_biomass(data, species),
+    "Using.*Pantropical.*region"
+  )
+
+  expect_output(
+    add_tropical_biomass(data, species, region = "SAmerica"),
+    "Using.*SAmerica.*region"
+  )
+})
+
 test_that("add_tropical_biomass can take region insensitive to case", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species

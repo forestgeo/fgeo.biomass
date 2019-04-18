@@ -61,7 +61,7 @@ add_tropical_biomass <- function(data,
 
   if (!has_coordinates(latitude, longitude)) {
     ui_done(
-      "Using {ui_code('region')} \\
+      "Using {ui_value(region)} {ui_code('region')} \\
       (ignoring {ui_code('latitude')} and {ui_code('longitude')})."
     )
     out$biomass <- BIOMASS::computeAGB(
