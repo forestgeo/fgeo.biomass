@@ -51,28 +51,26 @@
 #'
 #' model <- model_height(biomass)
 #'
-<<<<<<< HEAD
-<<<<<<< HEAD
 #' str(out)
-=======
 #' # Asks to confirm using the model instead of coordinates
 #' if (interactive()) {
 #'   str(
 #'     propagate_errors(biomass, n = 50, height_model = model)
 #'   )
 #' }
->>>>>>> 84b556a... Fix propagate_errors()'s example to run only in interactive sessions
-=======
-#' # Asks to confirm using the model instead of coordinates
-#' str(
-#'   propagate_errors(biomass, n = 50, height_model = model)
-#' )
->>>>>>> 7e7523a... add_tropical_biomass() now informs which region it uses
 propagate_errors <- function(data,
                              n = 1000,
                              dbh_sd = NULL,
                              height_model = NULL) {
   check_crucial_names(data, c("dbh", "wd_mean", "wd_sd"))
+
+  if (is.null(height_model) &&
+      suppressWarnings(!has_coordinates(data$latitude, data$longitude))) {
+    ui_stop(
+      "Must provide a {ui_code('height_model')} or {ui_code('data')} \\
+      must include {ui_field('latitude')} and {ui_field('longitude')}."
+    )
+  }
 
   use_coordinates <- FALSE
   if (is.null(height_model) &&
@@ -96,6 +94,12 @@ propagate_errors <- function(data,
     use_model <- TRUE
   }
 
+  inform_propagating_errors("wood density")
+
+  if (!is.null(dbh_sd)) {
+    inform_propagating_errors("diameter")
+  }
+
   if (use_coordinates) {
     check_crucial_names(data, c("wd_mean", "wd_sd", "latitude", "longitude"))
     out <- BIOMASS::AGBmonteCarlo(
@@ -116,6 +120,7 @@ propagate_errors <- function(data,
       )
     }
 
+    inform_propagating_errors("height")
     out <- BIOMASS::AGBmonteCarlo(
       n = n,
       D = data$dbh,
@@ -131,5 +136,9 @@ propagate_errors <- function(data,
   }
 
   out
+}
+
+inform_propagating_errors <- function(x) {
+  ui_done("Propagating errors on measurements of {x}.")
 }
 

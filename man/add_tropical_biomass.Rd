@@ -55,9 +55,12 @@ species <- fgeo.biomass::scbi_species
 
 add_tropical_biomass(data, species, region = "pantropical")
 
+# Not running to reduce build check-time
+\dontrun{
 data \%>\%
   add_tropical_biomass(species, latitude = -34, longitude = -58) \%>\%
   select(biomass, everything())
+}
 }
 \references{
 Chave et al. (2014) \emph{Improved allometric models to estimate the aboveground

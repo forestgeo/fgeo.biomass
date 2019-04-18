@@ -1,7 +1,7 @@
 ---
 output: github_document 
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -23,11 +23,11 @@ set.seed(1)
 [![Coverage status](https://coveralls.io/repos/github/forestgeo/fgeo.biomass/badge.svg)](https://coveralls.io/r/forestgeo/fgeo.biomass?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/fgeo.biomass)](https://cran.r-project.org/package=fgeo.biomass)
 
-The goal of __fgeo.biomass__ is to calculate biomass using best available allometric-equations from the [__allodb__](https://forestgeo.github.io/allodb/) package. 
+The goal of fgeo.biomass is to calculate biomass using [ForestGEO](https://forestgeo.si.edu/) data and equations from either the [BIOMASS package](https://CRAN.R-project.org/package=BIOMASS) or the [allodb package](https://forestgeo.github.io/allodb/). 
 
-## Warning
+* The BIOMASS package is applicable to tropical forests. It was first [published on CRAN in 2016](https://cran.r-project.org/) and on [Methods on Ecology and Evolution in 2017](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12753). fgeo.biomass provides the main features of BIOMASS with a simpler interface, consistent with all [fgeo packages](https://forestgeo.github.io/fgeo/).
 
-This package is not ready for research. We are now building a [Minimum Viable Product](https://en.wikipedia.org/wiki/Minimum_viable_product), with just enough features to collect feedback from alpha users and redirect our effort. The resulting biomass is still meaningless. For a working product see the [BIOMASS](https://CRAN.R-project.org/package=BIOMASS) package.
+* The allodb package is work in progress, and aims to provide expert-selected allometric equations, both for tropical and temperate forests. fgeo.biomass provides a simple interface to automate the process of finding the right equation(s) for each stem and computing biomass. 
 
 ## Installation
 
@@ -37,7 +37,8 @@ Install the development version of **fgeo.biomass** with:
 # install.packages("devtools")
 devtools::install_github("forestgeo/fgeo.biomass")
 ```
-## Example
+
+## Setup
 
 In addition to the fgeo.biomass package we will use dplyr and ggplot2 for data wrangling and plotting.
 
@@ -47,12 +48,105 @@ library(dplyr)
 library(fgeo.biomass)
 ```
 
+## fgeo.biomass wrapping BIOMASS
+
+We'll use data from the [Barro Colorado Island, Panama](https://forestgeo.si.edu/sites/neotropics/barro-colorado-island) (BCI). We first pick alive trees and drop missing `dbh` values as we can't calculate biomass for them.
+
+```{r}
+bci_tree <- as_tibble(bciex::bci12t7mini) %>% 
+  filter(status == "A", !is.na(dbh))
+bci_tree
+```
+
+We also need species data.
+
+```{r}
+bci_species <- as_tibble(bciex::bci_species)
+bci_species
+```
+
+`add_tropical_biomass()` adds biomass to your census data.
+
+```{r}
+biomass <- add_tropical_biomass(bci_tree, bci_species)
+biomass
+```
+
+You may also provide a specific `region` or `latitude` and `longitude`.
+
+```{r}
+biomass <- add_tropical_biomass(
+  bci_tree, 
+  bci_species,
+  latitude = 9.154965, 
+  longitude = -79.845884
+)
+
+biomass %>% 
+  select(biomass, everything())
+```
+
+`propagate_errors()` allows you to propagate errors.
+
+```{r}
+str(
+  propagate_errors(biomass)
+)
+```
+
+`model_height()` allows you to create a height model, which you can use to propagate height errors. This is what the entire pipeline looks like:
+
+```{r}
+model <- model_height(bci_tree)
+
+errors <- bci_tree %>% 
+  add_tropical_biomass(bci_species) %>% 
+  propagate_errors(height_model = model)
+
+str(errors)
+```
+
+If you pass `latitude` and `longitude` to `add_tropical_biomass(), and then you pass a `height_model` to `propagate_errors()`, then you will need to ignore the coordinates. On an interactive session, you should see something like this:
+
+![](https://i.imgur.com/dhHCYJN.png)
+
+```{r}
+if (interactive()) {
+  errors <- bci_tree %>% 
+    add_tropical_biomass(
+      bci_species, 
+      latitude = 9.154965, 
+      longitude = -79.845884
+    ) %>% 
+    propagate_errors(height_model = model)
+  
+  str(errors)
+}
+```
+
+`add_wood_density()` adds wood density to your census data. It is not limited to tropical forests, and has support for all of these regions: `r glue::glue_collapse(fgeo.biomass:::wd_regions(), sep = ", ", last = ", and ")`.
+
+```{r}
+wood_density <- add_wood_density(bci_tree, bci_species)
+
+wood_density %>% 
+  select(starts_with("wd_"), everything())
+```
+
+The BIOMASS package provides a tool to correct taxonomic names. fgeo.biomass does not include that feature. You may use BIOMASS directly or the more focused [taxize package](https://cran.r-project.org/web/packages/taxize/taxize.pdf).
+
+##  fgeo.biomass wrapping allodb
+
+## Warning
+
+These features are not ready for research. We are now building a [Minimum Viable Product](https://en.wikipedia.org/wiki/Minimum_viable_product), with just enough features to collect feedback from alpha users and redirect our effort. The resulting biomass is still meaningless.
+
 We'll use the `add_biomass()` with these inputs:
 
 1. A ForestGEO-like _stem_ or _tree_ table.
 2. A _species_ table (internally used to look up the Latin species names from the species codes in the `sp` column of the census table).
 
-We'll use data from the [Smithsonian Conservation Biology Institute](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute) (SCBI). We first pick alive trees and drop missing `dbh` values as we can't calculate biomass for them.
+We'll use data from the [Smithsonian Conservation Biology Institute, USA](https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute) (SCBI). We first pick alive trees and drop missing `dbh` values as we can't calculate biomass for them.
 
 ```{r}
 census <- fgeo.biomass::scbi_tree1 %>% 
@@ -139,12 +233,36 @@ detailed_biomass %>%
   print(n = Inf)
 ```
 
+## Biomass via BIOMASS versus allodb
+
+```{r}
+temperate_biomass <- add_biomass(census, species, site = "scbi")
+
+# Incorrect but possible
+tropical_biomass <- add_tropical_biomass(census, species)
+
+dbh_biomsss <- tibble(
+  dbh = temperate_biomass$dbh,
+  species = temperate_biomass$species,
+  temperate_biomass = temperate_biomass$biomass, 
+  tropical_biomass = tropical_biomass$biomass
+)
+```
+
+```{r, fig.height=14}
+dbh_biomsss %>% 
+  ggplot(aes(x = dbh)) +
+  geom_point(aes(y = tropical_biomass), size = 1.5, color = "grey") +
+  geom_point(aes(y = temperate_biomass), size = 1) +
+  facet_wrap("species", ncol = 4) +
+  ylab("Biomass [kg] (via the BIOMASS (grey) and allodb (black) packages)") +
+  xlab("dbh [mm]") +
+  theme_bw()
+```
+
 ## General information
 
 * [Getting help](SUPPORT.md).
 * [Contributing](CONTRIBUTING.md).
 * [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Related project
-
-* [BIOMASS](https://CRAN.R-project.org/package=BIOMASS)

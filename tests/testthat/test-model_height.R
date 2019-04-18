@@ -1,5 +1,7 @@
 context("model_height")
 
+library(dplyr)
+
 test_that("model_height errs eloquently", {
   data <- fgeo.biomass::scbi_tree1 %>%
     slice(1:100)

@@ -33,9 +33,12 @@
 #'
 #' add_tropical_biomass(data, species, region = "pantropical")
 #'
+#' # Not running to reduce build check-time
+#' \dontrun{
 #' data %>%
 #'   add_tropical_biomass(species, latitude = -34, longitude = -58) %>%
 #'   select(biomass, everything())
+#' }
 add_tropical_biomass <- function(data,
                                  species,
                                  region = "Pantropical",
@@ -97,7 +100,7 @@ add_tropical_biomass <- function(data,
     )
   }
 
-  inform("Biomass is given in [kg].")
+  ui_info("Biomass is given in [kg].")
   out$biomass <- convert_units(out$biomass, from = "Mg", to = "kg")
 
   inform_new_columns(out, data)
@@ -115,22 +118,26 @@ check_add_tropical_biomass <- function(data,
 
   check_crucial_names(data, c("dbh"))
 
-  # Check region and coordinates
   if (!has_coordinates(latitude, longitude) && is.null(region)) {
     usethis::ui_stop(
-      "`region` or both `latitude` and `longitude` must be non-NULL"
+      "{ui_code('region')} or both {ui_code('latitude')} and \\
+      {ui_code('longitude')} must be non-NULL"
     )
   }
 
   if (!is.null(region)) {
     if (!length(region) == 1L) {
-      usethis::ui_stop("`region` must be a single character string.")
+      usethis::ui_stop(
+        "{ui_code('region')} ({usethis::ui_value(region)}) must be a single \\
+        character string."
+      )
     }
 
     if (!any(grepl(region, height_regions(), ignore.case = TRUE))) {
       usethis::ui_stop(
-        "`region` ({usethis::ui_value(region)}) must be one of these:
-          {usethis::ui_field(height_regions())}"
+        "{ui_code('region')} ({usethis::ui_value(region)}) must be one of \\
+        these:
+        {usethis::ui_field(height_regions())}"
       )
     }
   }
@@ -167,4 +174,3 @@ height_regions <- function() {
     "Pantropical"
   )
 }
-

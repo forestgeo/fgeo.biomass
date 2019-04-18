@@ -2,6 +2,49 @@ context("propagate_errors")
 
 library(dplyr)
 
+test_that("propagate_errors informs propagated errors", {
+  data <- fgeo.biomass::scbi_tree1 %>%
+    slice(1:100)
+  species <- fgeo.biomass::scbi_species
+  biomass <- add_tropical_biomass(data, species)
+
+  model <- model_height(biomass)
+  expect_output(
+    propagate_errors(
+      biomass, n = 50, height_model = model, dbh_sd = "chave2004"
+    ),
+    "Propagating.*diameter"
+  )
+
+  expect_output(
+    propagate_errors(biomass, n = 50, height_model = model),
+    "Propagating.*height"
+  )
+
+  expect_output(
+    propagate_errors(biomass, n = 50, height_model = model),
+    "Propagating.*wood density"
+  )
+})
+
+test_that("propagate_errors errs elegantly if `height_model` is missing", {
+  data <- fgeo.biomass::scbi_tree1 %>%
+    slice(1:100)
+  species <- fgeo.biomass::scbi_species
+
+  biomass <- add_tropical_biomass(data, species)
+  model <- model_height(biomass)
+  expect_error(
+    propagate_errors(biomass, n = 50, height_model = model),
+    NA
+  )
+
+  expect_error(
+    propagate_errors(biomass, n = 50, height_model = NULL),
+    "Must provide a.*height_model.*or.*latitude.*and.*longitude"
+  )
+})
+
 test_that("propagate_errors is sensitive to `height_model`", {
   data <- fgeo.biomass::scbi_tree1 %>%
     slice(1:100)

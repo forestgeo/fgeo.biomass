@@ -178,17 +178,9 @@ test_that("add_tropical_biomass informs if guessing dbh unit", {
   data <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
 
-  # Don't expect `message`
-  message <- "Guessing dbh in "
-  msg <- purrr::quietly(add_tropical_biomass)(
-    as.data.frame(data), species, dbh_unit = "mm"
-  )$messages
-  expect_false(grepl(message, glue_collapse(msg)))
-
-  # Do expect `message`
   expect_output(
     add_tropical_biomass(as.data.frame(data), species),
-    message
+    "Guessing dbh"
   )
 })
 

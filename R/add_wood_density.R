@@ -51,7 +51,8 @@ add_wood_density <- function(data, species, family = TRUE, region = "World") {
   species_ <- low(species)[c("sp", "family", "genus", "species")]
   data_ <- left_join(data, species_, by = "sp")
 
-  inform("Wood density given in [g/cm^3].")
+  ui_info("Wood density given in [g/cm^3].")
+
   wd <- suppressMessages(
     BIOMASS::getWoodDensity(
       genus = data_$genus,

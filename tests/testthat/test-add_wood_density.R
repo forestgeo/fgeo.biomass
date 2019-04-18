@@ -21,7 +21,7 @@ test_that("add_wood_density can take region insensity to case", {
 test_that("add_wood_density informs wood density in [g/cm^3]", {
   tree <- fgeo.biomass::scbi_stem_tiny_tree
   species <- fgeo.biomass::scbi_species
-  expect_message(
+  expect_output(
     add_wood_density(tree, species),
     "density.*g.cm.3"
   )
