@@ -65,23 +65,12 @@ biomass <- add_tropical_biomass(
 
 model <- model_height(biomass)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-str(out)
-=======
 # Asks to confirm using the model instead of coordinates
 if (interactive()) {
   str(
     propagate_errors(biomass, n = 50, height_model = model)
   )
 }
->>>>>>> 84b556a... Fix propagate_errors()'s example to run only in interactive sessions
-=======
-# Asks to confirm using the model instead of coordinates
-str(
-  propagate_errors(biomass, n = 50, height_model = model)
-)
->>>>>>> 7e7523a... add_tropical_biomass() now informs which region it uses
 }
 \references{
 Chave, J. et al. (2004). \emph{Error propagation and scaling for tropical forest biomass estimates}.

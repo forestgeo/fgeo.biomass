@@ -51,7 +51,6 @@
 #'
 #' model <- model_height(biomass)
 #'
-#' str(out)
 #' # Asks to confirm using the model instead of coordinates
 #' if (interactive()) {
 #'   str(
