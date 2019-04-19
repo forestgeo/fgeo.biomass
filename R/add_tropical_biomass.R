@@ -60,10 +60,8 @@ add_tropical_biomass <- function(data,
   out <- add_wood_density(data, species)
 
   if (!has_coordinates(latitude, longitude)) {
-    ui_done(
-      "Using {ui_value(region)} {ui_code('region')} \\
-      (ignoring {ui_code('latitude')} and {ui_code('longitude')})."
-    )
+    ui_done("Using {ui_value(region)} {ui_code('region')}.")
+
     out$biomass <- BIOMASS::computeAGB(
       out$dbh,
       WD = out$wd_mean,
