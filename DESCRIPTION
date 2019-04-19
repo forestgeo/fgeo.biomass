@@ -60,7 +60,8 @@ Suggests:
     covr (>= 3.2.1),
     rmarkdown,
     spelling (>= 2.0),
-    testthat (>= 2.0.1)
+    testthat (>= 2.0.1),
+    ggplot2
 Remotes: 
     forestgeo/allodb
 Additional_repositories: https://forestgeo.github.io/drat/

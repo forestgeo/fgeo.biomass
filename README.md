@@ -504,7 +504,7 @@ temperate_biomass <- add_biomass(census, species, site = "scbi")
 #> <U+2714> Adding new columns:
 #>   rowid, species, site, biomass
 
-# Incorrect but possible
+# Warning: Aplying tropical equations to a temperate forest for comparison
 tropical_biomass <- add_tropical_biomass(census, species)
 #> <U+2714> Guessing dbh in [mm].
 #> i You may provide the dbh unit manually via the argument`dbh_unit`.
@@ -540,4 +540,4 @@ dbh_biomsss %>%
 
   - [Getting help](SUPPORT.md).
   - [Contributing](CONTRIBUTING.md).
-  - [Contributor Code of Conduct](CODE_OF_CONDUCT.md)
+  - [Contributor Code of Conduct](CODE_OF_CONDUCT.md).

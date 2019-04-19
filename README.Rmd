@@ -238,7 +238,7 @@ detailed_biomass %>%
 ```{r}
 temperate_biomass <- add_biomass(census, species, site = "scbi")
 
-# Incorrect but possible
+# Warning: Aplying tropical equations to a temperate forest for comparison
 tropical_biomass <- add_tropical_biomass(census, species)
 
 dbh_biomsss <- tibble(
@@ -264,5 +264,5 @@ dbh_biomsss %>%
 
 * [Getting help](SUPPORT.md).
 * [Contributing](CONTRIBUTING.md).
-* [Contributor Code of Conduct](CODE_OF_CONDUCT.md)
+* [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
 
