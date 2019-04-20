@@ -57,13 +57,15 @@ Imports:
     tidyselect,
     usethis
 Suggests: 
+    bciex (>= 0.0.0.9000),
     covr (>= 3.2.1),
+    ggplot2,
     rmarkdown,
     spelling (>= 2.0),
-    testthat (>= 2.0.1),
-    ggplot2
+    testthat (>= 2.0.1)
 Remotes: 
-    forestgeo/allodb
+    forestgeo/allodb,
+    forestgeo/bciex
 Additional_repositories: https://forestgeo.github.io/drat/
 Encoding: UTF-8
 Language: en-US
