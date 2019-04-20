@@ -4,13 +4,19 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//index.html</loc>
   </url>
   <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_biomass.html</loc>
+  </url>
+  <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_equations.html</loc>
+  </url>
+  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_species.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_evaluate.html</loc>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_tropical_biomass.html</loc>
   </url>
   <url>
-    <loc>https://forestgeo.github.io/fgeo.biomass//reference/allo_find.html</loc>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/add_wood_density.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/allodb_cols.html</loc>
@@ -31,7 +37,13 @@
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/guess_dbh_unit.html</loc>
   </url>
   <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/model_height.html</loc>
+  </url>
+  <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>https://forestgeo.github.io/fgeo.biomass//reference/propagate_errors.html</loc>
   </url>
   <url>
     <loc>https://forestgeo.github.io/fgeo.biomass//reference/scbi.html</loc>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add allometric equations to a census dataset. — add_equations • fgeo.biomass</title>
+<title>Find allometric equations in allodb or in a custom equations-table. — add_equations • fgeo.biomass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Add allometric equations to a census dataset. — add_equations" />
+<meta property="og:title" content="Find allometric equations in allodb or in a custom equations-table. — add_equations" />
 
-<meta property="og:description" content="This function adds columns to uniquely identify each row of a census dataset,
-and each equation from allodb -- so you can look it up on the database." />
+<meta property="og:description" content="Find allometric equations in allodb or in a custom equations-table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,55 +111,55 @@ and each equation from allodb -- so you can look it up on the database." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add allometric equations to a census dataset.</h1>
+    <h1>Find allometric equations in allodb or in a custom equations-table.</h1>
     <small class="dont-index">Source: <a href='https://github.com/forestgeo/fgeo.biomass/blob/master/R/add_equations.R'><code>R/add_equations.R</code></a></small>
     <div class="hidden name"><code>add_equations.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function adds columns to uniquely identify each row of a census dataset,
-and each equation from <strong>allodb</strong> -- so you can look it up on the database.</p>
+    <p>Find allometric equations in allodb or in a custom equations-table.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_equations</span>(<span class='no'>census</span>, <span class='no'>equations</span>)</pre>
+    <pre class="usage"><span class='fu'>add_equations</span>(<span class='no'>data</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='fu'><a href='guess_dbh_unit.html'>guess_dbh_unit</a></span>(<span class='no'>data</span>$<span class='no'>dbh</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>census</th>
-      <td><p>A ForestGEO-like census dataframe.</p></td>
+      <th>data</th>
+      <td><p>A dataframe as those created with <code><a href='add_species.html'>add_species()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>equations</th>
-      <td><p>An equations dataframe with unique <code>rowid</code>s.</p></td>
+      <th>dbh_unit</th>
+      <td><p>Character string giving the unit of dbh values, e.g. "mm"
+(see <code><a href='valid_units.html'>valid_units()</a></code>).</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe with all columns from <code>census</code> plus additional columns
-<code>rowid</code>, <code>eqn</code> <code>equation_id</code>.</p>
+    <p>A nested dataframe with each row containing the data of an equation
+type.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other functions to manipulate equations: <code><a href='allo_evaluate.html'>allo_evaluate</a></code>,
-  <code><a href='allo_find.html'>allo_find</a></code>, <code><a href='allo_lookup.html'>allo_lookup</a></code></p></div>
+    <div class='dont-index'><p>Other constructors: <code><a href='add_species.html'>add_species</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>census</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample.html'>sample_n</a></span>(<span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_tree1</a></span>, <span class='fl'>30</span>)
 <span class='no'>species</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>fgeo.biomass</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/fgeo.biomass/topics/scbi'>scbi_species</a></span>
+<span class='no'>census_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='add_species.html'>add_species</a></span>(
+  <span class='no'>census</span>, <span class='no'>species</span>,
+  <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>
+)
 
-<span class='no'>single_best</span> <span class='kw'>&lt;-</span> <span class='no'>census</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_species.html'>add_species</a></span>(<span class='no'>species</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"scbi"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='allo_find.html'>allo_find</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/unnest.html'>unnest</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='handle_multiple_rowid.html'>fixme_drop_duplicated_rowid</a></span>()</div><div class='output co'>#&gt; <span class='message'>Adding `site`.</span></div><div class='output co'>#&gt; <span class='message'>Overwriting `sp`; it now stores Latin species names.</span></div><div class='output co'>#&gt; <span class='message'>Adding `rowid`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't find equations matching these species (inserting 2 missing values):</span>
-#&gt; <span class='warning'>quercus prinus, unidentified unk</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = sp, site.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping 5 rows with duplicated `rowid` values.</span></div><div class='input'>
-<span class='fu'>add_equations</span>(<span class='no'>census</span>, <span class='no'>single_best</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = "rowid"</span></div><div class='output co'>#&gt; # A tibble: 30 x 23
+<span class='fu'>add_equations</span>(<span class='no'>census_species</span>, <span class='kw'>dbh_unit</span> <span class='kw'>=</span> <span class='st'>"mm"</span>)</div><div class='output co'>#&gt; ✔ Matching equations by site and species.
+#&gt; ✔ Refining equations according to dbh.
+#&gt; ✔ Using generic equations where expert equations can't be found.</div><div class='output co'>#&gt; <span class='warning'>Warning:   Can't find equations matching these species:</span>
+#&gt; <span class='warning'>  unidentified unk</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Can't find equations for 19 rows (inserting `NA`).</span></div><div class='output co'>#&gt; # A tibble: 30 x 34
 #&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx     gy DBHID CensusID
 #&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
 #&gt;  1     1   3253   3253 22229 1       astr  0223     37.7 443     6204        1
@@ -173,9 +172,12 @@ and each equation from <strong>allodb</strong> -- so you can look it up on the d
 #&gt;  8     8  11671  11671 92527 1       litu  0930    177   599.   16406        1
 #&gt;  9     9  29517  29517 2004… 1       libe  2003    388.   44.7  38264        1
 #&gt; 10    10  31113  31113 2027… 1       ceoc  2027    399.  538.   40100        1
-#&gt; # … with 20 more rows, and 12 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
+#&gt; # … with 20 more rows, and 23 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;,
 #&gt; #   ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;,
-#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, eqn &lt;chr&gt;, equation_id &lt;chr&gt;</div></pre>
+#&gt; #   status &lt;chr&gt;, agb &lt;dbl&gt;, species &lt;chr&gt;, site &lt;chr&gt;, eqn_id &lt;chr&gt;,
+#&gt; #   eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;, anatomic_relevance &lt;chr&gt;,
+#&gt; #   dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;, dbh_min_mm &lt;dbl&gt;, dbh_max_mm &lt;dbl&gt;,
+#&gt; #   is_generic &lt;lgl&gt;, life_form &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -86,229 +86,405 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#calculate-biomass" class="anchor"></a><img src="https://i.imgur.com/vTLlhbp.png" align="right" height="88"> Calculate biomass</h1></div>
 
-<p>The goal of <strong>fgeo.biomass</strong> is to calculate biomass using best available allometric-equations from the <a href="https://forestgeo.github.io/allodb/"><strong>allodb</strong></a> package.</p>
-<div id="warning" class="section level2">
-<h2 class="hasAnchor">
-<a href="#warning" class="anchor"></a>Warning</h2>
-<p>This package is not ready for research. We are now building a <a href="https://en.wikipedia.org/wiki/Minimum_viable_product">Minimum Viable Product</a>, with just enough features to collect feedback from alpha users and redirect our effort. The resulting biomass is still meaningless. For a working product see the <a href="https://CRAN.R-project.org/package=BIOMASS">BIOMASS</a> package.</p>
-</div>
+<p>The goal of fgeo.biomass is to calculate biomass using <a href="https://forestgeo.si.edu/">ForestGEO</a> data and equations from either the <a href="https://CRAN.R-project.org/package=BIOMASS">BIOMASS package</a> or the <a href="https://forestgeo.github.io/allodb/">allodb package</a>.</p>
+<ul>
+<li><p>The BIOMASS package is applicable to tropical forests. It was first <a href="https://cran.r-project.org/">published on CRAN in 2016</a> and on <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12753">Methods on Ecology and Evolution in 2017</a>. fgeo.biomass provides the main features of BIOMASS with a simpler interface, consistent with all <a href="https://forestgeo.github.io/fgeo/">fgeo packages</a>.</p></li>
+<li><p>The allodb package is work in progress, and aims to provide expert-selected allometric equations, both for tropical and temperate forests. fgeo.biomass provides a simple interface to automate the process of finding the right equation(s) for each stem and computing biomass.</p></li>
+</ul>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install the development version of <strong>fgeo.biomass</strong> with:</p>
-<pre><code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports"># install.packages("devtools")
-devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
+<pre><code># install.packages("devtools")
+devtools::install_github("forestgeo/fgeo.biomass")</code></pre>
 </div>
-<div id="example" class="section level2">
+<div id="setup" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>In addition to <strong>fgeo.biomass</strong>, here we will use some other general purpose packages for manipulating data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fgeo.biomass)</a>
+<a href="#setup" class="anchor"></a>Setup</h2>
+<p>In addition to the fgeo.biomass package we will use dplyr and ggplot2 for data wrangling and plotting.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyr)</a></code></pre></div>
-<p>As an example, we will use census and species datasets from the ForestGEO plot at the <a href="https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute">Smithsonian Conservation Biology Institute</a> (SCBI). This is a relatively large dataset. For a quick example we’ll pick just a few rows.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">census &lt;-<span class="st"> </span>fgeo.biomass<span class="op">::</span>scbi_tree1 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="co"># Pick a few rows for speed</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample_n</a></span>(<span class="dv">5000</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">census</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; # A tibble: 5,000 x 20</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;    treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;     &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  1  31496     NA 1033… &lt;NA&gt;    libe  1006    188.  111.     NA       NA</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  2   5275   5275 40807 1       astr  0410     75.7 194.   8647        1</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  3  33221     NA 1431… &lt;NA&gt;    libe  1402    271.   39      NA       NA</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  4  15915  15915 1207… 1       libe  1205    222.   84.2 21733        1</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;  5   9024   9024 72385 1       quve  0729    130.  565.  13299        1</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;  6  16118  16118 1210… 1       libe  1205    224.   90   22016        1</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  7   3120   3120 22089 1       qupr  0219     22.5 364.   6040        1</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  8  26828  26828 1815… 1       libe  1802    349.   40   35035        1</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  9   4847   4847 40092 1       libe  0402     60.6  23.5  8116        1</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; 10  22169  22169 1524… 1       cofl  1522    294.  434.  29308        1</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; # … with 4,990 more rows, and 10 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; #   hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; #   nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;</span></a></code></pre></div>
-<p>To match the census data with the best available allometric-equations we need (a) the name of the ForestGEO site (here “scbi”), and (b) each species’ Latin name. But instead of Latin names, ForestGEO’s <em>census</em> tables record species codes.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># To search for specific columns in the datasets</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">sp_or_latin &lt;-<span class="st"> "^sp$|^Latin$"</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">census <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(sp_or_latin))</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; # A tibble: 5,000 x 1</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;    sp   </span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;    &lt;chr&gt;</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt;  1 libe </span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt;  2 astr </span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;  3 libe </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  4 libe </span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  5 quve </span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;  6 libe </span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt;  7 qupr </span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt;  8 libe </span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt;  9 libe </span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; 10 cofl </span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; # … with 4,990 more rows</span></a></code></pre></div>
-<p>The species’ Latin names are recorded in <em>species</em> tables.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">species &lt;-<span class="st"> </span>fgeo.biomass<span class="op">::</span>scbi_species</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">species <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(sp_or_latin))</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; # A tibble: 73 x 2</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;    sp    Latin               </span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;               </span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  1 acne  Acer negundo        </span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  2 acpl  Acer platanoides    </span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  3 acru  Acer rubrum         </span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  4 acsp  Acer sp             </span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  5 aial  Ailanthus altissima </span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  6 amar  Amelanchier arborea </span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  7 astr  Asimina triloba     </span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  8 beth  Berberis thunbergii </span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;  9 caca  Carpinus caroliniana</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; 10 caco  Carya cordiformis   </span></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; # … with 63 more rows</span></a></code></pre></div>
-<p>We can then add species’ Latin names to the census data by joining the <em>census</em> and <em>species</em> tables. We may do that with <code><a href="https://dplyr.tidyverse.org/reference/join.html">dplyr::left_join()</a></code> but <code><a href="reference/add_species.html">fgeo.biomass::add_species()</a></code> is more specialized.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">census_species &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/add_species.html">add_species</a></span>(species, <span class="st">"scbi"</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Adding `site`.</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Overwriting `sp`; it now stores Latin species names.</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Adding `rowid`.</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(sp_or_latin))</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; # A tibble: 5,000 x 1</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;    sp              </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  * &lt;chr&gt;           </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  1 lindera benzoin </span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  2 asimina triloba </span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;  3 lindera benzoin </span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  4 lindera benzoin </span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;  5 quercus velutina</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt;  6 lindera benzoin </span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt;  7 quercus prinus  </span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt;  8 lindera benzoin </span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt;  9 lindera benzoin </span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; 10 cornus florida  </span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; # … with 4,990 more rows</span></a></code></pre></div>
-<div id="finding-the-best-available-allometric-equations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#finding-the-best-available-allometric-equations" class="anchor"></a>Finding the best available allometric-equations</h3>
-<p>Before we added the Latin name of each species to the census data into the <code>sp</code> column. Now we want to find the best available allometric-equations for as many rows as possible with <code><a href="reference/allo_find.html">allo_find()</a></code>. We may not have allometric equations form all species. Although the code will eventually fall back to more general equations, for now we just drop the rows that don’t match the available species for the specified site.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">equations &lt;-<span class="st"> </span>census_species <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_find.html">allo_find</a></span>()</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;   Guessing `dbh` in [mm] (required to find dbh-specific equations).</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; You may provide the `dbh` unit manually via the argument `dbh_unit`.</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; * Matching equations by site and species.</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; * Refining equations according to dbh.</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; * Using generic equations where expert equations can't be found.</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Warning:   Can't find equations matching these species:</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;   carya sp, crataegus sp, quercus prinus, quercus sp, ulmus sp, unidentified unk</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Warning: Can't find equations for 3267 rows (inserting `NA`).</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12">equations</a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; # A tibble: 5,042 x 33</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;    rowid treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;  1     1  31496     NA 1033… &lt;NA&gt;    lind… 1006    188.  111.     NA</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;  2     2   5275   5275 40807 1       asim… 0410     75.7 194.   8647</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;  3     3  33221     NA 1431… &lt;NA&gt;    lind… 1402    271.   39      NA</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;  4     4  15915  15915 1207… 1       lind… 1205    222.   84.2 21733</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt;  5     5   9024   9024 72385 1       quer… 0729    130.  565.  13299</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt;  6     6  16118  16118 1210… 1       lind… 1205    224.   90   22016</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt;  7     7   3120   3120 22089 1       quer… 0219     22.5 364.   6040</span></a>
-<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt;  8     8  26828  26828 1815… 1       lind… 1802    349.   40   35035</span></a>
-<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt;  9     9   4847   4847 40092 1       lind… 0402     60.6  23.5  8116</span></a>
-<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; 10    10  22169  22169 1524… 1       corn… 1522    294.  434.  29308</span></a>
-<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt; # … with 5,032 more rows, and 23 more variables: CensusID &lt;int&gt;,</span></a>
-<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">#&gt; #   dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">#&gt; #   codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">#&gt; #   site &lt;chr&gt;, eqn_id &lt;chr&gt;, eqn &lt;chr&gt;, eqn_source &lt;chr&gt;, eqn_type &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">#&gt; #   anatomic_relevance &lt;chr&gt;, dbh_unit &lt;chr&gt;, bms_unit &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#&gt; #   dbh_min_mm &lt;dbl&gt;, dbh_max_mm &lt;dbl&gt;, is_generic &lt;lgl&gt;, life_form &lt;chr&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fgeo.biomass)</a></code></pre></div>
 </div>
-<div id="calculating-biomass" class="section level3">
-<h3 class="hasAnchor">
-<a href="#calculating-biomass" class="anchor"></a>Calculating biomass</h3>
-<p>For the rows for which an equation was found in <strong>allodb</strong>, we can now calculate biomass. <code><a href="reference/allo_evaluate.html">allo_evaluate()</a></code> evaluates each allometric equation by replacing the literal string “dbh” with the corresponding value for each row in the <code>dbh</code> column, then doing the actual computation and storing the result in the the new <code>biomass</code> column.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">biomass &lt;-<span class="st"> </span>equations <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/allo_evaluate.html">allo_evaluate</a></span>()</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; Warning:   Detected a single stem per tree. Consider these properties of the result:</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;   * For trees, `biomass` is that of the main stem.</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt;   * For shrubs, `biomass` is that of the entire shrub.</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;   Do you need a multi-stem table?</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; Guessing `dbh` in [mm]</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; You may provide the `dbh` unit manually via the argument `dbh_unit`.</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; Converting `dbh` based on `dbh_unit`.</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; `biomass` values are given in [kg].</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">biomass</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; # A tibble: 5,000 x 2</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;    rowid biomass</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;    &lt;int&gt;   &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;  1     1    NA  </span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;  2     2    NA  </span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt;  3     3    NA  </span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt;  4     4    NA  </span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  5     5  6102. </span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  6     6    NA  </span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  7     7    NA  </span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  8     8    NA  </span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt;  9     9    NA  </span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; 10    10    11.2</span></a>
-<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; # … with 4,990 more rows</span></a>
-<a class="sourceLine" id="cb8-26" data-line-number="26"></a>
-<a class="sourceLine" id="cb8-27" data-line-number="27">with_biomass &lt;-<span class="st"> </span>biomass <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">right_join</a></span>(equations)</a>
-<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; Joining, by = "rowid"</span></a>
-<a class="sourceLine" id="cb8-29" data-line-number="29"></a>
-<a class="sourceLine" id="cb8-30" data-line-number="30">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(eqn, dbh, biomass)</a>
-<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; # A tibble: 5,042 x 3</span></a>
-<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt;    eqn                                     dbh biomass</span></a>
-<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt;    &lt;chr&gt;                                 &lt;dbl&gt;   &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt;  1 &lt;NA&gt;                                   NA      NA  </span></a>
-<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt;  2 &lt;NA&gt;                                   16.8    NA  </span></a>
-<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt;  3 &lt;NA&gt;                                   NA      NA  </span></a>
-<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt;  4 &lt;NA&gt;                                   22.2    NA  </span></a>
-<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt;  5 10^(1.00005 + 2.10621 * (log10(dbh))) 777.   6102. </span></a>
-<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt;  6 &lt;NA&gt;                                   13.5    NA  </span></a>
-<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt;  7 &lt;NA&gt;                                  115.     NA  </span></a>
-<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt;  8 &lt;NA&gt;                                   15.3    NA  </span></a>
-<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt;  9 &lt;NA&gt;                                   10.3    NA  </span></a>
-<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; 10 3.08355 * (dbh^2)^1.14915              62.9    11.2</span></a>
-<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; # … with 5,032 more rows</span></a></code></pre></div>
-<p>Commonly we would further summarize the result. For that you can use the <strong>dplyr</strong> package or any general purpose tool. For example, this summary gives the total biomass for each species in descending order.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(sp) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span>(<span class="dt">total_biomass =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(biomass, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span>(total_biomass))</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; # A tibble: 56 x 2</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt;    sp                      total_biomass</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;    &lt;chr&gt;                           &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt;  1 quercus velutina              152651.</span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt;  2 liriodendron tulipifera       128100.</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;  3 quercus alba                   36867.</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  4 juglans nigra                  26420.</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  5 quercus rubra                  25122.</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  6 carya glabra                   23915.</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  7 carya tomentosa                16351.</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  8 fraxinus americana             13937.</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  9 carya ovalis                   13270.</span></a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt; 10 carya cordiformis              11583.</span></a>
-<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; # … with 46 more rows</span></a></code></pre></div>
+<div id="fgeo-biomass-wrapping-biomass" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fgeo-biomass-wrapping-biomass" class="anchor"></a>fgeo.biomass wrapping BIOMASS</h2>
+<p>We’ll use data from the <a href="https://forestgeo.si.edu/sites/neotropics/barro-colorado-island">Barro Colorado Island, Panama</a> (BCI). We first pick alive trees and drop missing <code>dbh</code> values as we can’t calculate biomass for them.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bci_tree &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(bciex<span class="op">::</span>bci12t7mini) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(status <span class="op">==</span><span class="st"> "A"</span>, <span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(dbh))</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">bci_tree</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; # A tibble: 538 x 20</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt;    treeID stemID tag   StemTag sp    quadrat    gx    gy MeasureID CensusID</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;     &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;int&gt;    &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;  1    858      1 0008… ""      apei… 4402     899.  42         766      171</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  2   1129      1 0011… ""      quar… 4308     867. 163.        995      171</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  3   2143      1 0021… ""      beil… 3715     744  305.       1829      171</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  4   2388     10 0023… 1       lueh… 3622     724. 447.       2007      171</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  5   4448      1 0044… ""      sima… 2321     477. 428.       3741      171</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  6   5877      1 0059… ""      quar… 1303     280.  70.4      4800      171</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;  7   6487      1 0065… ""      alse… 1108     221. 178.       5226      171</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;  8   8651      1 0105… ""      hyba… 4811     974. 228.       6832      171</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  9   9480      1 0114… ""      fara… 4814     977. 290        7373      171</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; 10  10179     11 0121… &lt;NA&gt;    hyba… 4819     979. 395.       7898      171</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; # … with 528 more rows, and 10 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; #   hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; #   nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;</span></a></code></pre></div>
+<p>We also need species data.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">bci_species &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(bciex<span class="op">::</span>bci_species)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">bci_species</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1,414 x 13</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;    sp    Latin Genus Species Family SpeciesID SubspeciesID Authority</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt;        &lt;int&gt; &lt;chr&gt;    </span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;  1 call… Call… Call… laxa    Fabac…       131            1 (Benth.)…</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;  2 pout… Pout… Pout… glomer… Sapot…       811            2 (Miq.) R…</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;  3 pout… Pout… Pout… glomer… Sapot…       811            3 (Miq.) R…</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt;  4 prot… Prot… Prot… tenuif… Burse…       828            4 (I.M. Jo…</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt;  5 soro… Soro… Soro… pubive… Morac…       959            5 Hensl.   </span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;  6 soro… Soro… Soro… pubive… Morac…       959            6 Hensl.   </span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  7 swar… Swar… Swar… simplex Fabac…       980            7 (Raddi) …</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  8 hibi… Tali… Tali… tiliac… Malva…       997            9 (Arruda)…</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;  9 quar… Quar… Quar… astero… Malva…       871           10 (Pittier…</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; 10 inga… Inga… Inga  ciliata Fabac…      1278           11 T.D.Penn.</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; # … with 1,404 more rows, and 5 more variables: IDLevel &lt;chr&gt;, syn &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; #   subsp &lt;chr&gt;, wsg &lt;dbl&gt;, wsglevel &lt;chr&gt;</span></a></code></pre></div>
+<p><code><a href="reference/add_tropical_biomass.html">add_tropical_biomass()</a></code> adds biomass to your census data.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">biomass &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_tropical_biomass.html">add_tropical_biomass</a></span>(bci_tree, bci_species)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; ℹ Wood density given in [g/cm^3].</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; ✔ Using 'Pantropical' `region`.</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; ℹ Biomass is given in [kg].</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; ✔ Adding new columns:</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;   family, genus, species, wd_level, wd_mean, wd_sd, biomass</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">biomass</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; # A tibble: 538 x 27</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;    treeID stemID tag   StemTag sp    quadrat    gx    gy MeasureID CensusID</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;     &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;int&gt;    &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  1    858      1 0008… ""      apei… 4402     899.  42         766      171</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  2   1129      1 0011… ""      quar… 4308     867. 163.        995      171</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  3   2143      1 0021… ""      beil… 3715     744  305.       1829      171</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;  4   2388     10 0023… 1       lueh… 3622     724. 447.       2007      171</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;  5   4448      1 0044… ""      sima… 2321     477. 428.       3741      171</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt;  6   5877      1 0059… ""      quar… 1303     280.  70.4      4800      171</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt;  7   6487      1 0065… ""      alse… 1108     221. 178.       5226      171</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt;  8   8651      1 0105… ""      hyba… 4811     974. 228.       6832      171</span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt;  9   9480      1 0114… ""      fara… 4814     977. 290        7373      171</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; 10  10179     11 0121… &lt;NA&gt;    hyba… 4819     979. 395.       7898      171</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; # … with 528 more rows, and 17 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; #   hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt; #   nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;, family &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt; #   genus &lt;chr&gt;, species &lt;chr&gt;, wd_level &lt;chr&gt;, wd_mean &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt; #   wd_sd &lt;dbl&gt;, biomass &lt;dbl&gt;</span></a></code></pre></div>
+<p>You may also provide a specific <code>region</code> or <code>latitude</code> and <code>longitude</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">biomass &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_tropical_biomass.html">add_tropical_biomass</a></span>(</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  bci_tree, </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  bci_species,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="dt">latitude =</span> <span class="fl">9.154965</span>, </a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="dt">longitude =</span> <span class="fl">-79.845884</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; ℹ Wood density given in [g/cm^3].</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; ✔ Using `latitude` and `longitude` (ignoring `region`).</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; ℹ Biomass is given in [kg].</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; ✔ Adding new columns:</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;   family, genus, species, wd_level, wd_mean, wd_sd, latitude, longitude, biomass</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(biomass, <span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">everything</a></span>())</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; # A tibble: 538 x 29</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt;    biomass treeID stemID tag   StemTag sp    quadrat    gx    gy MeasureID</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt;      &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt;  1 2397.      858      1 0008… ""      apei… 4402     899.  42         766</span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt;  2 1884.     1129      1 0011… ""      quar… 4308     867. 163.        995</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt;  3  264.     2143      1 0021… ""      beil… 3715     744  305.       1829</span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt;  4  911.     2388     10 0023… 1       lueh… 3622     724. 447.       2007</span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt;  5  961.     4448      1 0044… ""      sima… 2321     477. 428.       3741</span></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt;  6 2473.     5877      1 0059… ""      quar… 1303     280.  70.4      4800</span></a>
+<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt;  7  570.     6487      1 0065… ""      alse… 1108     221. 178.       5226</span></a>
+<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt;  8    2.12   8651      1 0105… ""      hyba… 4811     974. 228.       6832</span></a>
+<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt;  9   16.0    9480      1 0114… ""      fara… 4814     977. 290        7373</span></a>
+<a class="sourceLine" id="cb6-29" data-line-number="29"><span class="co">#&gt; 10    2.49  10179     11 0121… &lt;NA&gt;    hyba… 4819     979. 395.       7898</span></a>
+<a class="sourceLine" id="cb6-30" data-line-number="30"><span class="co">#&gt; # … with 528 more rows, and 19 more variables: CensusID &lt;int&gt;, dbh &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb6-31" data-line-number="31"><span class="co">#&gt; #   pom &lt;chr&gt;, hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb6-32" data-line-number="32"><span class="co">#&gt; #   nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;, family &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb6-33" data-line-number="33"><span class="co">#&gt; #   genus &lt;chr&gt;, species &lt;chr&gt;, wd_level &lt;chr&gt;, wd_mean &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb6-34" data-line-number="34"><span class="co">#&gt; #   wd_sd &lt;dbl&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;</span></a></code></pre></div>
+<p><code><a href="reference/propagate_errors.html">propagate_errors()</a></code> allows you to propagate errors.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="kw"><a href="reference/propagate_errors.html">propagate_errors</a></span>(biomass)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; ✔ Propagating errors on measurements of wood density.</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; List of 5</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;  $ meanAGB       : num 20.9</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;  $ medAGB        : num 20.6</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;  $ sdAGB         : num 2.32</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;  $ credibilityAGB: Named num [1:2] 16.8 26.2</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;   ..- attr(*, "names")= chr [1:2] "2.5%" "97.5%"</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;  $ AGB_simu      : num [1:538, 1:1000] 1.49 1.907 0.219 1.487 1.125 ...</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;   .. ..$ : NULL</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;   .. ..$ : chr [1:1000] "203" "817" "977" "933" ...</span></a></code></pre></div>
+<p><code><a href="reference/model_height.html">model_height()</a></code> allows you to create a height model, which you can use to propagate height errors. This is what the entire pipeline looks like:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/model_height.html">model_height</a></span>(bci_tree)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; ℹ Using `method` log1 (other methods: log2, weibull, michaelis).</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">errors &lt;-<span class="st"> </span>bci_tree <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="reference/add_tropical_biomass.html">add_tropical_biomass</a></span>(bci_species) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="reference/propagate_errors.html">propagate_errors</a></span>(<span class="dt">height_model =</span> model)</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; ℹ Wood density given in [g/cm^3].</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; ✔ Using 'Pantropical' `region`.</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; ℹ Biomass is given in [kg].</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; ✔ Adding new columns:</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;   family, genus, species, wd_level, wd_mean, wd_sd, biomass</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; ✔ Propagating errors on measurements of wood density.</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; ✔ Propagating errors on measurements of height.</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(errors)</a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; List of 5</span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  $ meanAGB       : num 21.6</span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  $ medAGB        : num 21.4</span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  $ sdAGB         : num 2.09</span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  $ credibilityAGB: Named num [1:2] 18.1 26.2</span></a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt;   ..- attr(*, "names")= chr [1:2] "2.5%" "97.5%"</span></a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt;  $ AGB_simu      : num [1:538, 1:1000] 2.506 0.881 0.376 1.277 1.019 ...</span></a></code></pre></div>
+<p>If you pass <code>latitude</code> and <code>longitude</code> to <code>add_tropical_biomass(), and then you pass a</code>height_model<code>to</code>propagate_errors()`, then you will need to ignore the coordinates. On an interactive session, you should see something like this:</p>
+<p><img src="https://i.imgur.com/dhHCYJN.png"></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/interactive">interactive</a></span>()) {</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  errors &lt;-<span class="st"> </span>bci_tree <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="reference/add_tropical_biomass.html">add_tropical_biomass</a></span>(</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">      bci_species, </a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">      <span class="dt">latitude =</span> <span class="fl">9.154965</span>, </a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">      <span class="dt">longitude =</span> <span class="fl">-79.845884</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">    ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="st">    </span><span class="kw"><a href="reference/propagate_errors.html">propagate_errors</a></span>(<span class="dt">height_model =</span> model)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">  </a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">  <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(errors)</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">}</a></code></pre></div>
+<p><code><a href="reference/add_wood_density.html">add_wood_density()</a></code> adds wood density to your census data. It is not limited to tropical forests, and has support for all of these regions: AfricaExtraTrop, AfricaTrop, Australia, AustraliaTrop, CentralAmericaTrop, China, Europe, India, Madagascar, Mexico, NorthAmerica, Oceania, SouthEastAsia, SouthEastAsiaTrop, SouthAmericaExtraTrop, SouthAmericaTrop, and World.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">wood_density &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_wood_density.html">add_wood_density</a></span>(bci_tree, bci_species)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; ℹ Wood density given in [g/cm^3].</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">wood_density <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="st">"wd_"</span>), <span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">everything</a></span>())</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; # A tibble: 538 x 26</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;    wd_level wd_mean  wd_sd treeID stemID tag   StemTag sp    quadrat    gx</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;    &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  1 genus      0.255 0.0941    858      1 0008… ""      apei… 4402     899.</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  2 species    0.454 0.0708   1129      1 0011… ""      quar… 4308     867.</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  3 genus      0.563 0.0941   2143      1 0021… ""      beil… 3715     744 </span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  4 species    0.417 0.0708   2388     10 0023… 1       lueh… 3622     724.</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  5 species    0.383 0.0708   4448      1 0044… ""      sima… 2321     477.</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;  6 species    0.454 0.0708   5877      1 0059… ""      quar… 1303     280.</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt;  7 species    0.536 0.0708   6487      1 0065… ""      alse… 1108     221.</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;  8 species    0.67  0.0708   8651      1 0105… ""      hyba… 4811     974.</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt;  9 species    0.584 0.0708   9480      1 0114… ""      fara… 4814     977.</span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; 10 species    0.67  0.0708  10179     11 0121… &lt;NA&gt;    hyba… 4819     979.</span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; # … with 528 more rows, and 16 more variables: gy &lt;dbl&gt;, MeasureID &lt;int&gt;,</span></a>
+<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="co">#&gt; #   CensusID &lt;int&gt;, dbh &lt;dbl&gt;, pom &lt;chr&gt;, hom &lt;dbl&gt;, ExactDate &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="co">#&gt; #   DFstatus &lt;chr&gt;, codes &lt;chr&gt;, nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="co">#&gt; #   agb &lt;dbl&gt;, family &lt;chr&gt;, genus &lt;chr&gt;, species &lt;chr&gt;</span></a></code></pre></div>
+<p>The BIOMASS package provides a tool to correct taxonomic names. fgeo.biomass does not include that feature. You may use BIOMASS directly or the more focused <a href="https://cran.r-project.org/web/packages/taxize/taxize.pdf">taxize package</a>.</p>
 </div>
-<div id="issues" class="section level3">
-<h3 class="hasAnchor">
-<a href="#issues" class="anchor"></a>Issues</h3>
-<p>Our progress is recorded in this <a href="https://github.com/forestgeo/allodb/projects/4">Kanban project board</a>. Because we still don’t support some features, the the biomass result currently is invalid and excludes some trees.</p>
-<p>Issues that result in invalid biomass:</p>
+<div id="fgeo-biomass-wrapping-allodb" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fgeo-biomass-wrapping-allodb" class="anchor"></a>fgeo.biomass wrapping allodb</h2>
+</div>
+<div id="warning" class="section level2">
+<h2 class="hasAnchor">
+<a href="#warning" class="anchor"></a>Warning</h2>
+<p>These features are not ready for research. We are now building a <a href="https://en.wikipedia.org/wiki/Minimum_viable_product">Minimum Viable Product</a>, with just enough features to collect feedback from alpha users and redirect our effort. The resulting biomass is still meaningless.</p>
+<p>We’ll use the <code><a href="reference/add_biomass.html">add_biomass()</a></code> with these inputs:</p>
+<ol style="list-style-type: decimal">
+<li>A ForestGEO-like <em>stem</em> or <em>tree</em> table.</li>
+<li>A <em>species</em> table (internally used to look up the Latin species names from the species codes in the <code>sp</code> column of the census table).</li>
+</ol>
+<p>We’ll use data from the <a href="https://forestgeo.si.edu/sites/north-america/smithsonian-conservation-biology-institute">Smithsonian Conservation Biology Institute, USA</a> (SCBI). We first pick alive trees and drop missing <code>dbh</code> values as we can’t calculate biomass for them.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">census &lt;-<span class="st"> </span>fgeo.biomass<span class="op">::</span>scbi_tree1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(status <span class="op">==</span><span class="st"> "A"</span>, <span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(dbh))</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">census</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; # A tibble: 30,050 x 20</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;    treeID stemID tag   StemTag sp    quadrat    gx    gy DBHID CensusID</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;     &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;  1      1      1 10079 1       libe  0104     3.70  73       1        1</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt;  2      2      2 10168 1       libe  0103    17.3   58.9     3        1</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt;  3      3      3 10567 1       libe  0110     9    197.      5        1</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt;  4      4      4 12165 1       nysy  0122    14.2  428.      7        1</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt;  5      5      5 12190 1       havi  0122     9.40 436.      9        1</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt;  6      6      6 12192 1       havi  0122     1.30 434      13        1</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt;  7      8      8 12261 1       libe  0125    18    484.     17        1</span></a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt;  8      9      9 12456 1       vipr  0130    18    598.     19        1</span></a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt;  9     10     10 12551 1       astr  0132     5.60 628.     22        1</span></a>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; 10     11     11 12608 1       astr  0132    13.3  623.     24        1</span></a>
+<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; # … with 30,040 more rows, and 10 more variables: dbh &lt;dbl&gt;, pom &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; #   hom &lt;dbl&gt;, ExactDate &lt;chr&gt;, DFstatus &lt;chr&gt;, codes &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; #   nostems &lt;dbl&gt;, date &lt;dbl&gt;, status &lt;chr&gt;, agb &lt;dbl&gt;</span></a></code></pre></div>
+<p>We now use <code><a href="reference/add_biomass.html">add_biomass()</a></code> to add biomass to our census dataset.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">species &lt;-<span class="st"> </span>fgeo.biomass<span class="op">::</span>scbi_species</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">with_biomass &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/add_biomass.html">add_biomass</a></span>(species, <span class="dt">site =</span> <span class="st">"SCBI"</span>)</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; ℹ biomass values are given in [kg].</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; ✔ Matching equations by site and species.</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; ✔ Refining equations according to dbh.</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; ✔ Using generic equations where expert equations can't be found.</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; Warning:   Can't find equations matching these species:</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt;   acer sp, carya sp, crataegus sp, fraxinus sp, quercus sp, ulmus sp, unidentified unk</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; Warning: Can't find equations for 15028 rows (inserting `NA`).</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; Warning: Detected a single stem per tree. Do you need a multi-stem table?</span></a>
+<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; Warning: * For trees, `biomass` is that of the main stem.</span></a>
+<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; Warning: * For shrubs, `biomass` is that of the entire shrub.</span></a>
+<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; ✔ Adding new columns:</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt;   rowid, species, site, biomass</span></a></code></pre></div>
+<p>We are warned that we are using a tree-table (as opposed to a stem-table), and informed about how to interpret the resulting <code>biomass</code> values for trees and shrubs.</p>
+<p>Some equations couldn’t be found. There may be two reasons:</p>
 <ul>
-<li>We still don’t handle units correctly (<a href="https://github.com/forestgeo/allodb/issues/42" class="uri">https://github.com/forestgeo/allodb/issues/42</a>).</li>
+<li>Some stems in the data belong to species with no matching species in allodb.</li>
+<li>Some stems in the data belong to species that do match species in allodb but the available equations were designed for a dbh range that doesn’t include actual dbh values in the data.</li>
 </ul>
-<p>Issues that result in data loss:</p>
-<ul>
-<li><p>The output excludes equations that apply to only part of a tree instead of the whole tree (<a href="https://github.com/forestgeo/allodb/issues/63" class="uri">https://github.com/forestgeo/allodb/issues/63</a>, <a href="https://github.com/forestgeo/fgeo.biomass/issues/9" class="uri">https://github.com/forestgeo/fgeo.biomass/issues/9</a>).</p></li>
-<li><p>We exclude equations from shrubs (<a href="https://github.com/forestgeo/allodb/issues/41" class="uri">https://github.com/forestgeo/allodb/issues/41</a>).</p></li>
-</ul>
+<p>Here are the most interesting columns of the result:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(treeID, species, biomass)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; # A tibble: 30,050 x 3</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt;    treeID species              biomass</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;                  &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;  1      1 lindera benzoin       NA    </span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;  2      2 lindera benzoin       NA    </span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;  3      3 lindera benzoin       NA    </span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt;  4      4 nyssa sylvatica       58.5  </span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt;  5      5 hamamelis virginiana  17.6  </span></a>
+<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt;  6      6 hamamelis virginiana   0.400</span></a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;  7      8 lindera benzoin        5.69 </span></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt;  8      9 viburnum prunifolium  NA    </span></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#&gt;  9     10 asimina triloba       NA    </span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#&gt; 10     11 asimina triloba       NA    </span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt; # … with 30,040 more rows</span></a></code></pre></div>
+<p>Let’s now visualize the relationship between <code>dbh</code> and b<code>biomass</code> by <code>species</code> (black points), in comparison with <code>agb</code> (above ground biomass) values calculated with allometric equations for tropical trees (grey points).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="co"># Convert agb from [Mg] to [kg]</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">agb_kg =</span> agb <span class="op">*</span><span class="st"> </span><span class="fl">1e3</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> dbh)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">y =</span> agb_kg), <span class="dt">size =</span> <span class="fl">1.5</span>, <span class="dt">color =</span> <span class="st">"grey"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">y =</span> biomass), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"black"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/facet_wrap">facet_wrap</a></span>(<span class="st">"species"</span>, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"Reference `agb` (grey) and calculated `biomass` (black) in [kg]"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">xlab</a></span>(<span class="st">"dbh [mm]"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; Warning: Removed 15028 rows containing missing values (geom_point).</span></a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-14-1.png" width="700"></p>
+<p>Above, the species for which <code>biomass</code> couldn’t be calculated show no black points, although they do show grey reference-points.</p>
+<p>To better understand the distribution of <code>biomass</code> values for each species we can use a box-plot.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">with_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(species, biomass)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_boxplot">geom_boxplot</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"biomass [kg]"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/coord_flip">coord_flip</a></span>()</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; Warning: Removed 15028 rows containing non-finite values (stat_boxplot).</span></a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-15-1.png" width="700"></p>
+<p>For some species the maximum <code>dbh</code> for which <code>biomass</code> was calculated is much lower than the maximum <code>dbh</code> value for which the reference <code>agb</code> was calculated. This is because most equations in <strong>allodb</strong> are defined for a specific range of <code>dbh</code> values. Eventually <strong>allodb</strong> might provide equations beyond the <code>dbh</code> limits currently available.</p>
+<p>To explore this issue, here we use <code><a href="reference/add_biomass.html">add_component_biomass()</a></code> which allows us to see intermediary results that <code><a href="reference/add_biomass.html">add_biomass()</a></code> doesn’t show.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">detailed_biomass &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/warning">suppressWarnings</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/message">suppressMessages</a></span>(</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="kw"><a href="reference/add_biomass.html">add_component_biomass</a></span>(census, species, <span class="dt">site =</span> <span class="st">"SCBI"</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">))</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt; ℹ biomass values are given in [kg].</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co"># Maximum `dbh` values by species</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11">max_by_species &lt;-<span class="st"> </span>detailed_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(species, dbh_max_mm) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(species) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span>(dbh_max_mm)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span>() <span class="op">==</span><span class="st"> </span>1L) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span>()</a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co"># `dbh` is above the maximum limit, so `biomass` is missing (agb has a value)</span></a>
+<a class="sourceLine" id="cb16-19" data-line-number="19">detailed_biomass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(dbh <span class="op">&gt;</span><span class="st"> </span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>dbh_max_mm) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(max_by_species) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">agb_kg =</span> agb <span class="op">*</span><span class="st"> </span><span class="fl">1e3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(species, biomass, agb, dbh, dbh_max_mm) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-25" data-line-number="25"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(species) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-26" data-line-number="26"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="dt">n =</span> <span class="ot">Inf</span>)</a>
+<a class="sourceLine" id="cb16-27" data-line-number="27"><span class="co">#&gt; Joining, by = "species"</span></a>
+<a class="sourceLine" id="cb16-28" data-line-number="28"><span class="co">#&gt; # A tibble: 23 x 5</span></a>
+<a class="sourceLine" id="cb16-29" data-line-number="29"><span class="co">#&gt;    species                 biomass   agb   dbh dbh_max_mm</span></a>
+<a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co">#&gt;    &lt;chr&gt;                     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb16-31" data-line-number="31"><span class="co">#&gt;  1 fagus grandifolia            NA 13.7  1030.        890</span></a>
+<a class="sourceLine" id="cb16-32" data-line-number="32"><span class="co">#&gt;  2 fraxinus americana           NA 14.2  1053.        550</span></a>
+<a class="sourceLine" id="cb16-33" data-line-number="33"><span class="co">#&gt;  3 liriodendron tulipifera      NA  8.24 1012.        650</span></a>
+<a class="sourceLine" id="cb16-34" data-line-number="34"><span class="co">#&gt;  4 liriodendron tulipifera      NA 11.2  1159.        650</span></a>
+<a class="sourceLine" id="cb16-35" data-line-number="35"><span class="co">#&gt;  5 liriodendron tulipifera      NA 10.3  1118.        650</span></a>
+<a class="sourceLine" id="cb16-36" data-line-number="36"><span class="co">#&gt;  6 liriodendron tulipifera      NA 10.6  1135.        650</span></a>
+<a class="sourceLine" id="cb16-37" data-line-number="37"><span class="co">#&gt;  7 liriodendron tulipifera      NA  8.48 1025.        650</span></a>
+<a class="sourceLine" id="cb16-38" data-line-number="38"><span class="co">#&gt;  8 liriodendron tulipifera      NA 15.9  1365.        650</span></a>
+<a class="sourceLine" id="cb16-39" data-line-number="39"><span class="co">#&gt;  9 liriodendron tulipifera      NA  8.12 1006.        650</span></a>
+<a class="sourceLine" id="cb16-40" data-line-number="40"><span class="co">#&gt; 10 liriodendron tulipifera      NA 11.5  1173.        650</span></a>
+<a class="sourceLine" id="cb16-41" data-line-number="41"><span class="co">#&gt; 11 liriodendron tulipifera      NA 11.5  1174.        650</span></a>
+<a class="sourceLine" id="cb16-42" data-line-number="42"><span class="co">#&gt; 12 liriodendron tulipifera      NA  9.02 1054         650</span></a>
+<a class="sourceLine" id="cb16-43" data-line-number="43"><span class="co">#&gt; 13 liriodendron tulipifera      NA 13.9  1280.        650</span></a>
+<a class="sourceLine" id="cb16-44" data-line-number="44"><span class="co">#&gt; 14 quercus alba                 NA 15.0  1018.        890</span></a>
+<a class="sourceLine" id="cb16-45" data-line-number="45"><span class="co">#&gt; 15 quercus rubra                NA 27.7  1418.        890</span></a>
+<a class="sourceLine" id="cb16-46" data-line-number="46"><span class="co">#&gt; 16 quercus rubra                NA 28.2  1432.        890</span></a>
+<a class="sourceLine" id="cb16-47" data-line-number="47"><span class="co">#&gt; 17 quercus rubra                NA 25.5  1366.        890</span></a>
+<a class="sourceLine" id="cb16-48" data-line-number="48"><span class="co">#&gt; 18 quercus rubra                NA 17.3  1143.        890</span></a>
+<a class="sourceLine" id="cb16-49" data-line-number="49"><span class="co">#&gt; 19 quercus rubra                NA 21.9  1272.        890</span></a>
+<a class="sourceLine" id="cb16-50" data-line-number="50"><span class="co">#&gt; 20 quercus velutina             NA 16.1  1107         890</span></a>
+<a class="sourceLine" id="cb16-51" data-line-number="51"><span class="co">#&gt; 21 quercus velutina             NA 26.6  1393.        890</span></a>
+<a class="sourceLine" id="cb16-52" data-line-number="52"><span class="co">#&gt; 22 quercus velutina             NA 15.6  1092.        890</span></a>
+<a class="sourceLine" id="cb16-53" data-line-number="53"><span class="co">#&gt; 23 quercus velutina             NA 31.6  1511.        890</span></a></code></pre></div>
 </div>
+<div id="biomass-via-biomass-versus-allodb" class="section level2">
+<h2 class="hasAnchor">
+<a href="#biomass-via-biomass-versus-allodb" class="anchor"></a>Biomass via BIOMASS versus allodb</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">temperate_biomass &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_biomass.html">add_biomass</a></span>(census, species, <span class="dt">site =</span> <span class="st">"scbi"</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#&gt; ℹ biomass values are given in [kg].</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt; Warning: Detected a single stem per tree. Do you need a multi-stem table?</span></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#&gt; Warning: * For trees, `biomass` is that of the main stem.</span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">#&gt; Warning: * For shrubs, `biomass` is that of the entire shrub.</span></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">#&gt; ✔ Adding new columns:</span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">#&gt;   rowid, species, site, biomass</span></a>
+<a class="sourceLine" id="cb17-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co"># Warning: Aplying tropical equations to a temperate forest for comparison</span></a>
+<a class="sourceLine" id="cb17-14" data-line-number="14">tropical_biomass &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_tropical_biomass.html">add_tropical_biomass</a></span>(census, species)</a>
+<a class="sourceLine" id="cb17-15" data-line-number="15"><span class="co">#&gt; ✔ Guessing dbh in [mm].</span></a>
+<a class="sourceLine" id="cb17-16" data-line-number="16"><span class="co">#&gt; ℹ You may provide the dbh unit manually via the argument`dbh_unit`.</span></a>
+<a class="sourceLine" id="cb17-17" data-line-number="17"><span class="co">#&gt; ℹ Wood density given in [g/cm^3].</span></a>
+<a class="sourceLine" id="cb17-18" data-line-number="18"><span class="co">#&gt; ✔ Using 'Pantropical' `region`.</span></a>
+<a class="sourceLine" id="cb17-19" data-line-number="19"><span class="co">#&gt; ℹ Biomass is given in [kg].</span></a>
+<a class="sourceLine" id="cb17-20" data-line-number="20"><span class="co">#&gt; ✔ Adding new columns:</span></a>
+<a class="sourceLine" id="cb17-21" data-line-number="21"><span class="co">#&gt;   family, genus, species, wd_level, wd_mean, wd_sd, biomass</span></a>
+<a class="sourceLine" id="cb17-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb17-23" data-line-number="23">dbh_biomsss &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
+<a class="sourceLine" id="cb17-24" data-line-number="24">  <span class="dt">dbh =</span> temperate_biomass<span class="op">$</span>dbh,</a>
+<a class="sourceLine" id="cb17-25" data-line-number="25">  <span class="dt">species =</span> temperate_biomass<span class="op">$</span>species,</a>
+<a class="sourceLine" id="cb17-26" data-line-number="26">  <span class="dt">temperate_biomass =</span> temperate_biomass<span class="op">$</span>biomass, </a>
+<a class="sourceLine" id="cb17-27" data-line-number="27">  <span class="dt">tropical_biomass =</span> tropical_biomass<span class="op">$</span>biomass</a>
+<a class="sourceLine" id="cb17-28" data-line-number="28">)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">dbh_biomsss <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> dbh)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">y =</span> tropical_biomass), <span class="dt">size =</span> <span class="fl">1.5</span>, <span class="dt">color =</span> <span class="st">"grey"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">y =</span> temperate_biomass), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/facet_wrap">facet_wrap</a></span>(<span class="st">"species"</span>, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"Biomass [kg] (via the BIOMASS (grey) and allodb (black) packages)"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">xlab</a></span>(<span class="st">"dbh [mm]"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt; Warning: Removed 15028 rows containing missing values (geom_point).</span></a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-18-1.png" width="700"></p>
 </div>
 <div id="general-information" class="section level2">
 <h2 class="hasAnchor">
@@ -321,29 +497,6 @@ devtools::install_github("forestgeo/fgeo.biomass")</a></code></pre>
 <li>
 <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>.</li>
 </ul>
-</div>
-<div id="related-project" class="section level2">
-<h2 class="hasAnchor">
-<a href="#related-project" class="anchor"></a>Related project</h2>
-<ul>
-<li><a href="https://CRAN.R-project.org/package=BIOMASS">BIOMASS</a></li>
-</ul>
-<pre><code>A BibTeX entry for LaTeX users is
-
-  @Article{,
-    title = {BIOMASS : an {R} package for estimating above-ground biomass and its uncertainty in tropical forests},
-    volume = {8},
-    issn = {2041210X},
-    url = {http://doi.wiley.com/10.1111/2041-210X.12753},
-    doi = {10.1111/2041-210X.12753},
-    language = {en},
-    number = {9},
-    urldate = {2018-12-13},
-    journal = {Methods in Ecology and Evolution},
-    author = {Maxime Rejou-Mechain and Ariane Tanguy and Camille Piponiot and Jerome Chave and Bruno Herault},
-    editor = {Sarah Goslee},
-    year = {2017},
-  }</code></pre>
 </div>
 </div>
   </div>

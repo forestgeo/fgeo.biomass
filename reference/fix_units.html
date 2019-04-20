@@ -149,13 +149,14 @@ flags invalid unknown units.</p>
 <span class='fu'>fix_units</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] "mm"    "cm"    "m"     "inch"  "inch2" "cm2"   "FIXME"</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(
   <span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>$<span class='no'>dbh_units_original</span>
-)</div><div class='output co'>#&gt; [1] "cm"   "inch" "mm"  </div><div class='input'>
+)</div><div class='output co'>#&gt; [1] "inch" "cm"   "mm"  </div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(
   <span class='fu'>fix_units</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>$<span class='no'>dbh_units_original</span>)
-)</div><div class='output co'>#&gt; [1] "cm"   "inch" "mm"  </div><div class='input'>
+)</div><div class='output co'>#&gt; [1] "inch" "cm"   "mm"  </div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(
   <span class='fu'>fix_units</span>(<span class='kw pkg'>allodb</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/allodb/topics/equations'>equations</a></span>$<span class='no'>biomass_units_original</span>)
-)</div><div class='output co'>#&gt; [1] "g"          "kg"         "lbs"        "Mg"         "metric_ton"</div></pre>
+)</div><div class='output co'>#&gt; [1] "lbs"        "metric_ton" "FIXME"      "g"          "kg"        
+#&gt; [6] "Mg"        </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
