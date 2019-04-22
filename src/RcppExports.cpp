@@ -5,22 +5,22 @@
 
 using namespace Rcpp;
 
-// convert_unitsC
-NumericVector convert_unitsC(NumericVector x, String from, String to);
-RcppExport SEXP _fgeo_biomass_convert_unitsC(SEXP xSEXP, SEXP fromSEXP, SEXP toSEXP) {
+// convert_distance
+NumericVector convert_distance(NumericVector x, String from, String to);
+RcppExport SEXP _fgeo_biomass_convert_distance(SEXP xSEXP, SEXP fromSEXP, SEXP toSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< String >::type from(fromSEXP);
     Rcpp::traits::input_parameter< String >::type to(toSEXP);
-    rcpp_result_gen = Rcpp::wrap(convert_unitsC(x, from, to));
+    rcpp_result_gen = Rcpp::wrap(convert_distance(x, from, to));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_fgeo_biomass_convert_unitsC", (DL_FUNC) &_fgeo_biomass_convert_unitsC, 3},
+    {"_fgeo_biomass_convert_distance", (DL_FUNC) &_fgeo_biomass_convert_distance, 3},
     {NULL, NULL, 0}
 };
 
