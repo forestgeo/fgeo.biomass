@@ -55,7 +55,8 @@ Imports:
     tibble (>= 2.0.1),
     tidyr (>= 0.8.2),
     tidyselect,
-    usethis
+    usethis,
+    Rcpp
 Suggests: 
     bciex (>= 0.0.0.9000),
     covr (>= 3.2.1),
@@ -72,3 +73,5 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+LinkingTo: 
+    Rcpp
