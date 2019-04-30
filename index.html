@@ -216,15 +216,15 @@ devtools::install_github("forestgeo/fgeo.biomass")</code></pre>
 <a class="sourceLine" id="cb7-3" data-line-number="3">)</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; ✔ Propagating errors on measurements of wood density.</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; List of 5</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;  $ meanAGB       : num 20.9</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;  $ meanAGB       : num 20.8</span></a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;  $ medAGB        : num 20.6</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;  $ sdAGB         : num 2.32</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;  $ credibilityAGB: Named num [1:2] 16.8 26.2</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;  $ sdAGB         : num 2.27</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;  $ credibilityAGB: Named num [1:2] 17 25.8</span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;   ..- attr(*, "names")= chr [1:2] "2.5%" "97.5%"</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;  $ AGB_simu      : num [1:538, 1:1000] 1.49 1.907 0.219 1.487 1.125 ...</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;  $ AGB_simu      : num [1:538, 1:1000] 2.092 0.934 0.16 0.583 0.944 ...</span></a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></a>
 <a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;   .. ..$ : NULL</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;   .. ..$ : chr [1:1000] "203" "817" "977" "933" ...</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;   .. ..$ : chr [1:1000] "207" "404" "82.1" "557.1" ...</span></a></code></pre></div>
 <p><code><a href="reference/model_height.html">model_height()</a></code> allows you to create a height model, which you can use to propagate height errors. This is what the entire pipeline looks like:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="reference/model_height.html">model_height</a></span>(bci_tree)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; ℹ Using `method` log1 (other methods: log2, weibull, michaelis).</span></a>
@@ -244,12 +244,12 @@ devtools::install_github("forestgeo/fgeo.biomass")</code></pre>
 <a class="sourceLine" id="cb8-16" data-line-number="16"></a>
 <a class="sourceLine" id="cb8-17" data-line-number="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(errors)</a>
 <a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; List of 5</span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  $ meanAGB       : num 21.6</span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  $ medAGB        : num 21.4</span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  $ sdAGB         : num 2.09</span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  $ credibilityAGB: Named num [1:2] 18.1 26.2</span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  $ meanAGB       : num 21.5</span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  $ medAGB        : num 21.3</span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  $ sdAGB         : num 2.1</span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  $ credibilityAGB: Named num [1:2] 18.1 26.1</span></a>
 <a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt;   ..- attr(*, "names")= chr [1:2] "2.5%" "97.5%"</span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt;  $ AGB_simu      : num [1:538, 1:1000] 2.506 0.881 0.376 1.277 1.019 ...</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt;  $ AGB_simu      : num [1:538, 1:1000] 1.374 1.836 0.286 0.489 0.641 ...</span></a></code></pre></div>
 <p>If you pass <code>latitude</code> and <code>longitude</code> to <code>add_tropical_biomass(), and then you pass a</code>height_model<code>to</code>propagate_errors()`, then you will need to ignore the coordinates. On an interactive session, you should see something like this:</p>
 <p><img src="https://i.imgur.com/dhHCYJN.png"></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/interactive">interactive</a></span>()) {</a>
