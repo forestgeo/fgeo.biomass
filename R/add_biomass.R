@@ -5,7 +5,7 @@
 #' @template dbh_unit
 #' @param biomass_unit Character string giving the output unit e.g. "kg".
 #'
-#' @return A dataframe with a single row by each value of `rowid`.
+#' @return Return a dataframe with a single row by each value of `rowid`.
 #' @export
 #'
 #' @examples
