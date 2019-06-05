@@ -53,6 +53,13 @@ library(fgeo.biomass)
 We'll use data from the [Barro Colorado Island, Panama](https://forestgeo.si.edu/sites/neotropics/barro-colorado-island) (BCI). We first pick alive trees and drop missing `dbh` values as we can't calculate biomass for them.
 
 ```{r}
+if (!requireNamespace("bciex", quietly = TRUE)) {
+  stop(
+    "For this example, you must first install the bciex package with:\n",
+    "devtools::install_github('forestgeo/bciex')"
+  )
+}
+
 bci_tree <- as_tibble(bciex::bci12t7mini) %>% 
   filter(status == "A", !is.na(dbh))
 bci_tree
